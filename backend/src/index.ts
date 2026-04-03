@@ -19,7 +19,21 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(helmet())
-app.use(cors({ origin: process.env.FRONTEND_URL }))
+
+// Flexible CORS support for multiple origins (comma-separated FRONTEND_URL)
+const allowedOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : ['http://localhost:3000']
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      console.error(`CORS blocked for origin: ${origin}`)
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}))
 app.use(morgan('dev'))
 app.use(express.json())
 
