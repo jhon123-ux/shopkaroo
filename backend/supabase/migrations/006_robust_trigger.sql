@@ -1,13 +1,45 @@
--- 1. Performance: Indexing for fast email lookups on orders
-CREATE INDEX IF NOT EXISTS idx_orders_customer_email 
-  ON public.orders(customer_email);
+-- ===================================================
+-- PRODUCTION SYNC: Shopkaroo Multi-Fix Migration
+-- 1. Creates Offer Banner Table (if missing)
+-- 2. Performance Indexing for Guest User Tracking
+-- 3. Robust Auth Trigger for Signup/Linking
+-- ===================================================
 
--- 2. Robust Trigger Function: explicitly qualified, case-insensitive, and error-tolerant
+-- PART A: Banner System Creation
+CREATE TABLE IF NOT EXISTS public.offer_banner (
+  id          uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  title       text NOT NULL DEFAULT 'Up to 30% Off',
+  subtitle    text DEFAULT 'On selected bedroom & living room furniture. This week only.',
+  badge_text  text DEFAULT 'LIMITED TIME OFFER',
+  cta_text    text DEFAULT 'Shop Now',
+  cta_link    text DEFAULT '/furniture/living-room',
+  end_date    timestamptz NOT NULL,
+  is_active   boolean DEFAULT true,
+  created_at  timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.offer_banner ENABLE ROW LEVEL SECURITY;
+
+DO $$ 
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'offer_banner' AND policyname = 'Public read active offer') THEN
+    CREATE POLICY "Public read active offer" ON public.offer_banner FOR SELECT USING (is_active = true);
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'offer_banner' AND policyname = 'Service role full access offer') THEN
+    CREATE POLICY "Service role full access offer" ON public.offer_banner FOR ALL USING (auth.role() = 'service_role');
+  END IF;
+END $$;
+
+-- PART B: User Auth Reliability & Performance
+CREATE INDEX IF NOT EXISTS idx_orders_customer_email ON public.orders(customer_email);
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON public.orders(user_id);
+
+-- Robust Trigger Function: qualifies public schema, case-insensitive, error isolation
 CREATE OR REPLACE FUNCTION public.link_guest_orders()
 RETURNS trigger AS $$
 BEGIN
-  -- Link all orders with matching email to new user (Case-Insensitive)
-  -- If this fails for any reason, notice it but don't stop the signup
+  -- 1. LINK GUEST ORDERS (Case-Insensitive)
   BEGIN
     UPDATE public.orders
     SET user_id = new.id
@@ -17,7 +49,7 @@ BEGIN
     RAISE NOTICE 'Failed to link guest orders for user %: %', new.id, SQLERRM;
   END;
 
-  -- Create profile (Ensure it doesn't fail the signup)
+  -- 2. CREATE PROFILE
   BEGIN
     INSERT INTO public.profiles (id, full_name, created_at, updated_at)
     VALUES (
@@ -35,13 +67,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Re-attach trigger
+-- PART C: Trigger Attachment
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.link_guest_orders();
 
--- Ensure Banner exists for resilience
+-- PART D: Seed fallback if table was empty
 INSERT INTO public.offer_banner 
 (title, subtitle, badge_text, cta_text, cta_link, end_date, is_active)
 SELECT 
