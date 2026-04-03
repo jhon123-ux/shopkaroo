@@ -11,7 +11,9 @@ export const getOfferBanner = async (req: Request, res: Response): Promise<void>
       .maybeSingle()
 
     if (error) {
-      res.status(400).json({ error: error.message })
+      console.error('OfferBanner fetch failed:', error.message)
+      // Return 200 with data: null to allow frontend fallback instead of 400 error
+      res.json({ data: null })
       return
     }
 
