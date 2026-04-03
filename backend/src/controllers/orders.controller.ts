@@ -95,9 +95,10 @@ export const createOrder = async (req: Request, res: Response) => {
 
     // Send confirmation email if email provided
     if (customer_email && customer_email.includes('@')) {
+      const fromAddress = 'Shopkaroo <onboarding@resend.dev>'
       try {
-        await resend.emails.send({
-          from: 'Shopkaroo <onboarding@resend.dev>',
+        const { data, error } = await resend.emails.send({
+          from: fromAddress,
           to: customer_email,
           replyTo: 'hello@shopkaroo.com',
           subject: `✅ Order Confirmed — ${orderNumber} | Shopkaroo`,
@@ -111,8 +112,14 @@ export const createOrder = async (req: Request, res: Response) => {
             delivery_fee: delivery_fee || 0
           })
         })
-      } catch (emailError) {
-        console.error('Email send failed:', emailError)
+
+        if (error) {
+          console.error('[Resend Error] Confirmation Failed:', JSON.stringify(error, null, 2))
+        } else {
+          console.log('[Resend Success] Confirmation Sent:', data?.id)
+        }
+      } catch (emailError: any) {
+        console.error('[Resend Exception] Confirmation:', emailError.message)
       }
     }
 
@@ -193,11 +200,13 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
   const notif = STATUS_NOTIFICATIONS[newStatus]
   if (!notif) return
 
+  const fromAddress = 'Shopkaroo <onboarding@resend.dev>'
+
   // Email Notification
   if (order.customer_email) {
     try {
-      await resend.emails.send({
-        from: 'Shopkaroo Orders <onboarding@resend.dev>',
+      const { data, error } = await resend.emails.send({
+        from: fromAddress,
         to: order.customer_email,
         subject: `${notif.emoji} ${notif.title} — ${order.order_number} | Shopkaroo`,
         html: orderStatusTemplate({
@@ -212,8 +221,14 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
           items: order.items || []
         })
       })
-    } catch (e) {
-      console.error('Status email error:', e)
+
+      if (error) {
+        console.error('[Resend Error] Status Email Failed:', JSON.stringify(error, null, 2))
+      } else {
+        console.log('[Resend Success] Status Email Sent:', data?.id)
+      }
+    } catch (e: any) {
+      console.error('[Resend Exception] Status Email:', e.message)
     }
   }
 
@@ -228,11 +243,17 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
         `Track: shopkaroo-seven.vercel.app/my-orders`
       )
       
-      await fetch(
+      const response = await fetch(
         `https://api.callmebot.com/whatsapp.php?phone=${order.phone}&text=${msg}&apikey=${process.env.CALLMEBOT_API_KEY}`
       )
-    } catch (e) {
-      console.error('WhatsApp notify error:', e)
+      
+      if (!response.ok) {
+        console.error('[WhatsApp Error] Status:', response.statusText)
+      } else {
+        console.log('[WhatsApp Success] Notification Sent to:', order.phone)
+      }
+    } catch (e: any) {
+      console.error('[WhatsApp Exception] Notification:', e.message)
     }
   }
 }
