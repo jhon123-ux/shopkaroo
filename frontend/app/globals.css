@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6C3FC5;
+  --color-primary-dark: #5530A8;
+  --color-primary-soft: #A78BFA;
+  --color-primary-tint: #EDE6FA;
+  --color-surface: #F7F5FF;
+  --color-background: #FFFFFF;
+  --color-text: #1A1A2E;
+  --color-text-muted: #6B7280;
+  --color-cod-green: #4CAF7D;
+  --color-border: #E5E0F5;
+  
+  --font-heading: var(--font-syne), sans-serif;
+  --font-body: var(--font-epilogue), sans-serif;
+  
+  --shadow-custom: 0 4px 24px rgba(108, 63, 197, 0.10);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+::selection {
+  background-color: var(--color-primary-soft);
+  color: white;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none; 
+}
+
