@@ -3,7 +3,21 @@
 import { useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
+import { Suspense } from 'react'
+
 export default function OrderConfirmedPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-[#6C3FC5] border-t-transparent rounded-full" />
+      </div>
+    }>
+      <OrderConfirmedContent />
+    </Suspense>
+  )
+}
+
+function OrderConfirmedContent() {
   const params = useParams()
   const searchParams = useSearchParams()
   const orderId = params?.orderId as string

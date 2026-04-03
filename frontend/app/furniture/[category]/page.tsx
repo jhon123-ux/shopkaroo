@@ -62,7 +62,21 @@ const MOCK_PRODUCTS: Product[] = [
 const ALL_MATERIALS = ['Sheesham Wood', 'Engineered Wood', 'Fabric', 'Metal', 'Glass', 'Leather']
 const ALL_CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan']
 
+import { Suspense } from 'react'
+
 export default function CategoryPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin w-10 h-10 border-4 border-[#6C3FC5] border-t-transparent rounded-full" />
+      </div>
+    }>
+      <CategoryContent />
+    </Suspense>
+  )
+}
+
+function CategoryContent() {
   const params = useParams()
   const router = useRouter()
   const searchParams = useSearchParams()
