@@ -175,3 +175,92 @@ export const orderConfirmationTemplate = (order: {
 </html>
   `
 }
+
+export const orderStatusTemplate = (data: {
+  order_number: string
+  customer_name: string
+  status: string
+  title: string
+  message: string
+  emoji: string
+  city: string
+  total_pkr: number
+  items: any[]
+}) => `
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0; background:#F7F5FF;font-family:sans-serif;">
+<div style="max-width:600px;margin:40px auto; background:#fff;border-radius:16px; overflow:hidden; box-shadow:0 4px 24px rgba(108,63,197,.10);">
+
+  <div style="background:linear-gradient( 135deg,#6C3FC5,#5530A8); padding:32px 40px;">
+    <h1 style="color:#fff;font-size:24px; font-weight:800;margin:0;">
+      Shopkaroo
+    </h1>
+  </div>
+
+  <div style="padding:32px 40px; text-align:center; border-bottom:1px solid #E5E0F5;">
+    <div style="font-size:56px; margin-bottom:16px;">
+      ${data.emoji}
+    </div>
+    <h2 style="color:#1A1A2E;font-size:22px; font-weight:800;margin:0 0 8px 0;">
+      ${data.title}
+    </h2>
+    <p style="color:#6B7280;font-size:14px; margin:0;line-height:1.6;">
+      ${data.message}
+    </p>
+  </div>
+
+  <div style="padding:24px 40px;">
+    <div style="background:#F7F5FF; border-radius:12px;padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="color:#6B7280;font-size:13px;">
+        Order Number
+      </span>
+      <span style="color:#6C3FC5;font-size:18px; font-weight:800; letter-spacing:1px;">
+        ${data.order_number}
+      </span>
+    </div>
+
+    ${data.items.map((item: any) => `
+      <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #E5E0F5;">
+        <span style="color:#1A1A2E; font-size:13px;">
+          ${item.name} × ${item.qty}
+        </span>
+        <span style="color:#6C3FC5; font-size:13px;font-weight:700;">
+          Rs. ${(item.price_pkr * item.qty).toLocaleString()}
+        </span>
+      </div>
+    `).join('')}
+
+    <div style="display:flex; justify-content:space-between; margin-top:16px;padding-top:16px; border-top:2px solid #E5E0F5;">
+      <span style="font-size:15px; font-weight:700;color:#1A1A2E;">
+        Total
+      </span>
+      <span style="font-size:20px; font-weight:800;color:#6C3FC5;">
+        Rs. ${data.total_pkr.toLocaleString()}
+      </span>
+    </div>
+  </div>
+
+  <div style="padding:0 40px 28px; text-align:center;">
+    <a href="https://shopkaroo.com/my-orders"
+      style="display:inline-block; background:#6C3FC5;color:#fff; font-size:14px;font-weight:700; padding:14px 36px;border-radius:12px; text-decoration:none;">
+      View My Orders →
+    </a>
+  </div>
+
+  <div style="padding:16px 40px; border-top:1px solid #E5E0F5; text-align:center;">
+    <a href="https://wa.me/923001234567?text=Hi Shopkaroo! My order number is ${data.order_number}"
+      style="display:inline-block; background:#4CAF7D;color:#fff; font-size:13px;font-weight:700; padding:10px 24px;border-radius:10px; text-decoration:none;">
+      💬 WhatsApp Support
+    </a>
+  </div>
+
+  <div style="background:#1A1A2E; padding:20px 40px;text-align:center;">
+    <p style="color:rgba(255,255,255,.4); font-size:12px;margin:0;">
+      © 2025 Shopkaroo · shopkaroo.com
+    </p>
+  </div>
+</div>
+</body>
+</html>
+`

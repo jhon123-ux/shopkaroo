@@ -25,9 +25,13 @@ const getCategoryEmoji = (category: string) => {
   }
 }
 
+import useAuthStore from '@/lib/authStore'
+import { supabase } from '@/lib/supabase'
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCartStore()
+  const { user } = useAuthStore()
 
   const [mounted, setMounted] = useState(false)
   const [name, setName] = useState('')
@@ -43,6 +47,37 @@ export default function CheckoutPage() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Auto-fill from Auth and Last Order
+  useEffect(() => {
+    if (!user) return
+    
+    // 1. Initial auth values
+    setEmail(user.email || '')
+    if (user.user_metadata?.full_name) {
+      setName(user.user_metadata.full_name)
+    }
+    
+    // 2. Fetch last order for shipping details
+    const fetchLastOrder = async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('customer_name, phone, city, address')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+      
+      if (data) {
+        if (!name) setName(data.customer_name)
+        setPhone(data.phone || '')
+        setCity(data.city || '')
+        setAddress(data.address || '')
+      }
+    }
+    
+    fetchLastOrder()
+  }, [user, name])
 
   useEffect(() => {
     if (mounted && items.length === 0 && !loading) {
@@ -95,7 +130,8 @@ export default function CheckoutPage() {
 
       const payload = {
         customer_name: name,
-        customer_email: email || undefined,
+        customer_email: user?.email || email || undefined,
+        user_id: user?.id || null,
         phone,
         city,
         address,
@@ -120,7 +156,7 @@ export default function CheckoutPage() {
 
       // Order Success
       const orderNumber = data.data.order_number
-      const emailParam = email ? `?email=${encodeURIComponent(email)}` : ''
+      const emailParam = (user?.email || email) ? `?email=${encodeURIComponent(user?.email || email)}` : ''
       
       router.push(`/order-confirmed/${orderNumber}${emailParam}`)
       

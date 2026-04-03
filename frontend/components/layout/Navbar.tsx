@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
+import { useState, useRef, useEffect } from 'react'
 
 const navLinks = [
   { name: 'Home', slug: '' },
@@ -12,11 +13,23 @@ const navLinks = [
 ]
 
 export default function Navbar() {
+  const { user, signOut } = useAuthStore()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   
   useEffect(() => {
     setMounted(true)
+
+    // Close dropdown on outside click
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
   }, [])
 
   const totalItems = useCartStore(state => state.getTotalItems())
@@ -46,10 +59,10 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Icons (Search, Cart, Mobile Menu) */}
+           {/* Icons (Search, Cart, Auth, Mobile Menu) */}
           <div className="flex items-center space-x-4">
             {/* Search Icon */}
-            <button aria-label="Search" className="text-text-muted hover:text-primary transition-colors">
+            <button aria-label="Search" className="text-text-muted hover:text-primary transition-colors cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
@@ -66,6 +79,60 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+
+            {/* Auth section */}
+            {!user ? (
+              <div className="hidden md:flex items-center gap-3">
+                <Link href="/login" className="text-sm font-semibold text-[#6C3FC5] hover:underline">
+                  Sign In
+                </Link>
+                <Link href="/signup" className="bg-[#6C3FC5] text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#5530A8] transition-all shadow-md shadow-[#6C3FC5]/20">
+                  Sign Up
+                </Link>
+              </div>
+            ) : (
+              <div className="relative" ref={dropdownRef}>
+                <button 
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-2 cursor-pointer group"
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#6C3FC5] text-white text-xs font-black flex items-center justify-center shadow-lg shadow-[#6C3FC5]/10 group-hover:scale-105 transition-transform">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-bold text-[#1A1A2E] hidden lg:block max-w-[100px] truncate">
+                    {user.user_metadata?.full_name?.split(' ')[0] || 'User'}
+                  </span>
+                  <svg className={`w-4 h-4 text-[#6B7280] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-[#E5E0F5] z-[60] overflow-hidden animate-slideUp">
+                    <div className="px-4 py-3 border-b border-[#E5E0F5] bg-[#F7F5FF]">
+                      <p className="text-[10px] font-black text-[#6B7280] uppercase tracking-widest mb-0.5">Signed in as</p>
+                      <p className="text-xs font-bold text-[#1A1A2E] truncate">{user.email}</p>
+                    </div>
+                    <div className="py-2">
+                      <Link href="/my-orders" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#1A1A2E] hover:bg-[#F7F5FF] transition-colors">
+                        <span className="text-lg">📦</span> My Orders
+                      </Link>
+                      <Link href="/profile" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#1A1A2E] hover:bg-[#F7F5FF] transition-colors">
+                        <span className="text-lg">👤</span> My Profile
+                      </Link>
+                    </div>
+                    <div className="border-t border-[#E5E0F5] pt-1 pb-1">
+                      <button 
+                        onClick={() => { signOut(); setDropdownOpen(false); }}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+                      >
+                        <span className="text-lg">🚪</span> Sign Out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <div className="flex items-center md:hidden ml-2">

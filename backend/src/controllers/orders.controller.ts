@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { supabase } from '../lib/supabase'
 import { Resend } from 'resend'
-import { orderConfirmationTemplate } from '../lib/emailTemplates'
+import { orderConfirmationTemplate, orderStatusTemplate } from '../lib/emailTemplates'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -40,6 +40,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const {
       customer_name,
       customer_email,
+      user_id,
       phone,
       city,
       address,
@@ -75,6 +76,7 @@ export const createOrder = async (req: Request, res: Response) => {
         order_number: orderNumber,
         customer_name,
         customer_email: customer_email || null,
+        user_id: user_id || null,
         phone,
         city,
         address,
@@ -96,7 +98,7 @@ export const createOrder = async (req: Request, res: Response) => {
       try {
         await resend.emails.send({
           from: 'Shopkaroo <onboarding@resend.dev>',
-          to: 'jhoncarter.cedarfinancial@gmail.com',
+          to: customer_email,
           replyTo: 'hello@shopkaroo.com',
           subject: `✅ Order Confirmed — ${orderNumber} | Shopkaroo`,
           html: orderConfirmationTemplate({
@@ -109,22 +111,10 @@ export const createOrder = async (req: Request, res: Response) => {
             delivery_fee: delivery_fee || 0
           })
         })
-        console.log(`Confirmation email sent to ${customer_email}`)
       } catch (emailError) {
-        // Don't fail order if email fails
         console.error('Email send failed:', emailError)
       }
     }
-
-    // WhatsApp notification to admin via console
-    console.log(`
-      🛒 NEW ORDER: ${orderNumber}
-      Customer: ${customer_name} (${phone})
-      City: ${city}
-      Total: Rs. ${total_pkr}
-      Items: ${items.length} items
-      Email: ${customer_email || 'Not provided'}
-    `)
 
     return res.status(201).json({ data: order })
 
@@ -142,14 +132,19 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     const { id } = req.params
     const { status } = req.body
 
-    // 1. Only allow status field to be updated
-    // 2. Valid status values
     const validStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled']
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status value' })
     }
 
-    const { data: order, error } = await supabase
+    // Get current order to check for status change
+    const { data: current } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    const { data: updated, error } = await supabase
       .from('orders')
       .update({ status })
       .eq('id', id)
@@ -160,9 +155,84 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Failed to update order' })
     }
 
-    // 3. Return updated order
-    return res.json({ data: order })
+    // Send notifications if status changed
+    if (current?.status !== status) {
+      sendStatusNotifications(updated, status).catch(console.error)
+    }
+
+    return res.json({ data: updated })
   } catch (error) {
     return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+const STATUS_NOTIFICATIONS: Record<string, { title: string, message: string, emoji: string }> = {
+  confirmed: {
+    emoji: '✅',
+    title: 'Order Confirmed!',
+    message: "Your order has been confirmed. We'll start preparing it right away."
+  },
+  shipped: {
+    emoji: '🚚',
+    title: 'Order Shipped!',
+    message: 'Your order is on its way! Expected delivery in 2-5 business days.'
+  },
+  delivered: {
+    emoji: '🎉',
+    title: 'Order Delivered!',
+    message: 'Your order has been delivered! Enjoy your new furniture.'
+  },
+  cancelled: {
+    emoji: '❌',
+    title: 'Order Cancelled',
+    message: 'Your order has been cancelled. Contact us on WhatsApp if you have questions.'
+  }
+}
+
+const sendStatusNotifications = async (order: any, newStatus: string) => {
+  const notif = STATUS_NOTIFICATIONS[newStatus]
+  if (!notif) return
+
+  // Email Notification
+  if (order.customer_email) {
+    try {
+      await resend.emails.send({
+        from: 'Shopkaroo Orders <onboarding@resend.dev>',
+        to: order.customer_email,
+        subject: `${notif.emoji} ${notif.title} — ${order.order_number} | Shopkaroo`,
+        html: orderStatusTemplate({
+          order_number: order.order_number,
+          customer_name: order.customer_name,
+          status: newStatus,
+          title: notif.title,
+          message: notif.message,
+          emoji: notif.emoji,
+          city: order.city,
+          total_pkr: order.total_pkr,
+          items: order.items || []
+        })
+      })
+    } catch (e) {
+      console.error('Status email error:', e)
+    }
+  }
+
+  // WhatsApp Notification (CallMeBot)
+  if (order.phone && process.env.CALLMEBOT_API_KEY) {
+    try {
+      const msg = encodeURIComponent(
+        `${notif.emoji} *Shopkaroo Order Update*\n\n` +
+        `Order: *${order.order_number}*\n` +
+        `Status: *${newStatus.toUpperCase()}*\n\n` +
+        `${notif.message}\n\n` +
+        `Track: shopkaroo-seven.vercel.app/my-orders`
+      )
+      
+      await fetch(
+        `https://api.callmebot.com/whatsapp.php?phone=${order.phone}&text=${msg}&apikey=${process.env.CALLMEBOT_API_KEY}`
+      )
+    } catch (e) {
+      console.error('WhatsApp notify error:', e)
+    }
   }
 }

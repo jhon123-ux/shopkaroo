@@ -3,6 +3,8 @@ import { Syne, Epilogue } from 'next/font/google'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 
+import AuthProvider from '@/components/auth/AuthProvider'
+
 const syne = Syne({ 
   subsets: ['latin'], 
   variable: '--font-syne',
@@ -28,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${epilogue.variable} ${syne.variable} flex flex-col min-h-screen font-body antialiased`} suppressHydrationWarning>
-        <ConditionalLayout>
-          {children}
-        </ConditionalLayout>
+        <AuthProvider>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+        </AuthProvider>
       </body>
     </html>
   )

@@ -65,7 +65,7 @@ export default function AdminOrdersPage() {
       // Update states locally automatically avoiding hard resets
       setSelectedOrder(data)
       setOrders(orders.map(o => o.id === data.id ? data : o))
-      showToast(`Status updated to ${status}`, 'success')
+      showToast(`✅ Status updated — Customer notified via email & WhatsApp`, 'success')
       
     } catch (err) {
       showToast('Error updating status', 'error')
