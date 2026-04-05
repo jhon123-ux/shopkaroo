@@ -65,7 +65,7 @@ export default function SignupPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="text-2xl font-bold italic text-[#1C1410] font-heading block mb-8">
-            Shopkaroo
+            Shopkarro
           </Link>
           <h1 className="text-[32px] font-bold text-[#1C1410] font-heading mb-3">
             Join the Collection

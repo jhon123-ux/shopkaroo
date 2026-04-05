@@ -185,7 +185,7 @@ export default function CheckoutPage() {
 
   const whatsappOrderUrl = () => {
     const itemsList = items.map(i => `${i.name} x${i.quantity}`).join(', ')
-    const msg = `Hi Shopkaroo! I'd like to place an order:
+    const msg = `Hi Shopkarro! I'd like to place an order:
 Items: ${itemsList}
 Total: Rs. ${totalPrice.toLocaleString()}
 Name: ${name}
@@ -202,7 +202,7 @@ Address: ${address}`
       <header className="py-6 border-b border-[#E8E2D9] bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold italic text-[#1C1410] font-heading">
-            Shopkaroo
+            Shopkarro
           </Link>
 
           <div className="hidden md:flex items-center gap-6">

@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Logo & Tagline */}
           <div className="col-span-1 md:col-span-1">
             <h3 className="font-heading italic font-bold text-[28px] text-white mb-6">
-              Shopkaroo
+              Shopkarro
             </h3>
             <p className="text-white/50 text-[14px] leading-relaxed mb-6 font-body">
               Crafting premium furniture for every Pakistani home. Browse elegantly designed pieces and pay conveniently with cash on delivery nationwide.
@@ -62,7 +62,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center text-white/60">
                 <span className="mr-4 opacity-50">📧</span> 
-                hello@shopkaroo.com
+                hello@shopkarro.com
               </li>
               <li className="flex items-center text-white/60">
                 <span className="mr-4 opacity-50">🕐</span> 
@@ -74,7 +74,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-24 pt-10 border-t border-white/5 flex flex-col items-center justify-between text-[12px] text-white/30 sm:flex-row font-body">
-          <p>© {currentYear} Shopkaroo. All rights reserved.</p>
+          <p>© {currentYear} Shopkarro. All rights reserved.</p>
           <div className="mt-6 sm:mt-0 flex items-center space-x-6">
             <span>Designed for Pakistan</span> 
             <span className="text-[#2D6A4F] font-semibold tracking-wide uppercase text-[10px]">✓ Cash on Delivery Only</span>

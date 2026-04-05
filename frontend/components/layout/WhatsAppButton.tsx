@@ -5,7 +5,7 @@ export default function WhatsAppButton() {
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || defaultNumber
   
   // Create a proper message URI encoding
-  const msg = encodeURIComponent('Hi Shopkaroo! I need some help choosing furniture.')
+  const msg = encodeURIComponent('Hi Shopkarro! I need some help choosing furniture.')
   const whatsappUrl = `https://wa.me/${number}?text=${msg}`
 
   return (

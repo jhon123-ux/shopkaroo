@@ -61,7 +61,7 @@ function LoginForm() {
         {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="text-2xl font-bold italic text-[#1C1410] font-heading block mb-8">
-            Shopkaroo
+            Shopkarro
           </Link>
           <h1 className="text-[32px] font-bold text-[#1C1410] font-heading mb-3">
             Welcome Back
@@ -143,7 +143,7 @@ function LoginForm() {
         {/* Footer Link */}
         <div className="text-center mt-12 bg-[#FAF7F4] p-4 rounded-[2px] border border-[#E8E2D9]">
           <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
-            New to Shopkaroo?{' '}
+            New to Shopkarro?{' '}
             <Link href="/signup" className="text-[#4A2C6E] hover:underline ml-2">
               Create Account →
             </Link>

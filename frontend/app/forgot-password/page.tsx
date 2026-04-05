@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <p className="text-[#6C3FC5] font-extrabold text-2xl mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>
-            Shopkaroo
+            Shopkarro
           </p>
           <h1 className="text-2xl font-extrabold text-[#1A1A2E]" style={{ fontFamily: 'Syne, sans-serif' }}>
             Forgot password?

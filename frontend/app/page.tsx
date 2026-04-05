@@ -4,7 +4,7 @@ import CategorySection from '@/components/home/CategorySection'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 import NewArrivalsStrip from '@/components/home/NewArrivalsStrip'
 import OfferBanner from '@/components/home/OfferBanner'
-import WhyShopkaroo from '@/components/home/WhyShopkaroo'
+import WhyShopkarro from '@/components/home/WhyShopkarro'
 import CustomerReviews from '@/components/home/CustomerReviews'
 import WhatsAppCTA from '@/components/home/WhatsAppCTA'
 
@@ -17,7 +17,7 @@ export default function HomePage() {
       <FeaturedProducts />
       <NewArrivalsStrip />
       <OfferBanner />
-      <WhyShopkaroo />
+      <WhyShopkarro />
       <CustomerReviews />
       <WhatsAppCTA />
     </main>

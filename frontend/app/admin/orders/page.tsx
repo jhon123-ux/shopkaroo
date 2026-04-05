@@ -135,7 +135,7 @@ export default function AdminOrdersPage() {
   }
 
   // Generate WhatsApp routing parameter securely
-  const wpText = selectedOrder ? encodeURIComponent(`Greetings ${selectedOrder.customer_name}, this is regarding your Shopkaroo order ${selectedOrder.order_number}...`) : ''
+  const wpText = selectedOrder ? encodeURIComponent(`Greetings ${selectedOrder.customer_name}, this is regarding your Shopkarro order ${selectedOrder.order_number}...`) : ''
 
   return (
     <div className="relative font-body">

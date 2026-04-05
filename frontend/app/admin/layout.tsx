@@ -55,7 +55,7 @@ export default function AdminLayout({
           border-white/5">
           <p className="text-white font-bold italic
             text-[24px] font-heading" >
-            Shopkaroo
+            Shopkarro
           </p>
           <p className="text-white/30 text-[9px] mt-2 
             font-bold uppercase tracking-[4px]">

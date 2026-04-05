@@ -1,6 +1,6 @@
 import { Truck, Banknote, ShieldCheck } from 'lucide-react'
 
-export default function WhyShopkaroo() {
+export default function WhyShopkarro() {
   const cards = [
     {
       icon: <Truck size={24} className="text-[#4A2C6E]" />,
@@ -25,7 +25,7 @@ export default function WhyShopkaroo() {
         
         <div className="text-center mb-20">
           <h2 className="text-[36px] font-bold font-heading text-[#1C1410] mb-4">
-            Why Choose Shopkaroo?
+            Why Choose Shopkarro?
           </h2>
           <p className="text-[#6B6058] text-lg font-body max-w-xl mx-auto opacity-80">
             Precision craftsmanship and reliable delivery for every home.
