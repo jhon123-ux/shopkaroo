@@ -67,7 +67,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     // Generate order number SKR-YYYY-XXXX
     const year = new Date().getFullYear()
-    const { count } = await supabase
+    const { count } = await supabaseAdmin
       .from('orders')
       .select('*', { count: 'exact', head: true })
     
@@ -76,7 +76,7 @@ export const createOrder = async (req: Request, res: Response) => {
     ).padStart(4, '0')}`
 
     // Insert order
-    const { data: order, error } = await supabase
+    const { data: order, error } = await supabaseAdmin
       .from('orders')
       .insert({
         order_number: orderNumber,
