@@ -1,11 +1,24 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { 
+  CheckCircle, 
+  Trash2, 
+  Star, 
+  MessageSquare, 
+  Package, 
+  User, 
+  Clock,
+  Filter,
+  Search,
+  XCircle
+} from 'lucide-react'
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
+  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
+  const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null)
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
@@ -20,7 +33,7 @@ export default function AdminReviewsPage() {
       setReviews(data.data || [])
     } catch (err) {
       console.error(err)
-      showToast('Failed to load reviews', 'error')
+      showToast('Registry Sync Error', 'error')
     } finally {
       setLoading(false)
     }
@@ -35,46 +48,50 @@ export default function AdminReviewsPage() {
     setTimeout(() => setToast(null), 3000)
   }
 
-  const handleUpdateStatus = async (id: string, is_approved: boolean) => {
+  const handleApprove = async (id: string) => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
-      const res = await fetch(`${backendUrl}/api/reviews/${id}`, {
+      const res = await fetch(`${backendUrl}/api/reviews/${id}/approve`, {
         method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || ''
-        },
-        body: JSON.stringify({ is_approved })
-      })
-
-      if (!res.ok) throw new Error('Update failed')
-      
-      const { data } = await res.json()
-      setReviews(reviews.map(r => r.id === id ? data : r))
-      showToast(is_approved ? 'Sentiment Approved' : 'Sentiment Restricted', 'success')
-    } catch (err) {
-      showToast('Synchronization Error', 'error')
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Acknowledge: Final deletion of this sentiment record?')) return
-    
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    try {
-      const res = await fetch(`${backendUrl}/api/reviews/${id}`, {
-        method: 'DELETE',
         headers: { 'x-admin-auth': adminToken || '' }
       })
 
-      if (!res.ok) throw new Error('Delete failed')
+      if (!res.ok) throw new Error('Authorization failed')
       
-      setReviews(reviews.filter(r => r.id !== id))
-      showToast('Record purged from registry.', 'success')
+      const { data } = await res.json()
+      setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: true } : r))
+      showToast('Sentiment Authorized', 'success')
     } catch (err) {
-      showToast('Purge Protocol Failed', 'error')
+      showToast('Protocol Error', 'error')
     }
   }
+
+  const handleReject = async (id: string) => {
+    if (!confirm('Acknowledge: Final rejection of this record?')) return
+    
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    try {
+      const res = await fetch(`${backendUrl}/api/reviews/${id}/reject`, {
+        method: 'PATCH',
+        headers: { 'x-admin-auth': adminToken || '' }
+      })
+
+      if (!res.ok) throw new Error('Rejection failed')
+      
+      setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: false } : r))
+      showToast('Sentiment Restricted', 'success')
+    } catch (err) {
+      showToast('Protocol Error', 'error')
+    }
+  }
+
+  const filteredReviews = reviews.filter(r => {
+    if (activeTab === 'all') return true
+    if (activeTab === 'pending') return r.is_approved === null
+    if (activeTab === 'approved') return r.is_approved === true
+    if (activeTab === 'rejected') return r.is_approved === false
+    return true
+  })
 
   return (
     <div className="relative font-body text-left">
@@ -83,7 +100,7 @@ export default function AdminReviewsPage() {
         <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
           toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
+          <span>{toast.type === 'success' ? <CheckCircle size={16} /> : <XCircle size={16} />}</span>
           {toast.message}
         </div>
       )}
@@ -92,101 +109,143 @@ export default function AdminReviewsPage() {
       <div className="flex justify-between items-end mb-12">
         <div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Sentiment Curation</p>
-          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Customer Reviews</h2>
+          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Reviews</h2>
         </div>
-        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 min-w-[200px] text-right">
-          {reviews.filter(r => !r.is_approved).length} PENDING MODERATION
-        </p>
+        <div className="flex flex-col items-end">
+          <p className="text-[#4A2C6E] text-[13px] font-bold uppercase tracking-[2px]">
+            {reviews.filter(r => r.is_approved === null).length} Pending Audit
+          </p>
+        </div>
       </div>
 
-      {/* STATS STRIP */}
-      <div className="grid grid-cols-3 gap-8 mb-12">
+      {/* TABS */}
+      <div className="flex gap-10 border-b border-[#E8E2D9] mb-12">
         {[
-          { label: 'Total Records', value: reviews.length, color: '#1C1410' },
-          { label: 'Pending Audit', value: reviews.filter(r => !r.is_approved).length, color: '#4A2C6E' },
-          { label: 'Market Visible', value: reviews.filter(r => r.is_approved).length, color: '#2D6A4F' }
-        ].map((stat, i) => (
-          <div key={i} className="bg-white border border-[#E8E2D9] p-8 rounded-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-            <p className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[3px] mb-2 opacity-40">{stat.label}</p>
-            <p className="text-[32px] font-bold font-heading leading-none" style={{ color: stat.color }}>{stat.value}</p>
-          </div>
+          { id: 'all', label: 'All Reviews' },
+          { id: 'pending', label: 'Pending' },
+          { id: 'approved', label: 'Approved' },
+          { id: 'rejected', label: 'Rejected' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`pb-4 text-[11px] font-bold uppercase tracking-[2.5px] transition-all relative ${
+              activeTab === tab.id 
+                ? 'text-[#4A2C6E]' 
+                : 'text-[#6B6058] opacity-40 hover:opacity-100'
+            }`}
+          >
+            {tab.label}
+            {activeTab === tab.id && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4A2C6E] animate-slideUp" />
+            )}
+          </button>
         ))}
       </div>
 
-      {/* REVIEWS LIST */}
-      <div className="space-y-8">
-        {loading ? (
-          Array(3).fill(0).map((_, i) => (
-            <div key={i} className="h-48 bg-white border border-[#FAF7F4] animate-pulse" />
-          ))
-        ) : reviews.length === 0 ? (
-          <div className="bg-white border border-[#E8E2D9] p-24 text-center opacity-40 uppercase tracking-[4px] font-bold text-[12px]">
-            No records located in sentiment registry.
-          </div>
-        ) : (
-          reviews.map(review => (
-            <div key={review.id} className={`bg-white border border-[#E8E2D9] p-10 flex flex-col md:flex-row gap-10 transition-all shadow-sm ${!review.is_approved ? 'ring-1 ring-[#D4CCC2]' : ''}`}>
-              
-              {/* CONTENT */}
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex gap-1">
-                    {Array.from({length: 5}).map((_, i) => (
-                      <span key={i} className={`text-[18px] ${i < review.rating ? 'text-[#4A2C6E]' : 'text-[#D4CCC2]'}`}>★</span>
-                    ))}
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-[2px] opacity-40">
-                    SCORING: {review.rating}.0 / 5.0
-                  </span>
-                </div>
-
-                <blockquote className="text-[#1C1410] text-[20px] font-heading font-medium mb-8 leading-relaxed italic pr-12">
-                  "{review.comment}"
-                </blockquote>
-
-                <div className="flex items-center gap-4 pt-8 border-t border-[#FAF7F4]">
-                  <div className="w-12 h-12 bg-[#FAF7F4] border border-[#E8E2D9] flex items-center justify-center text-[#1C1410] font-bold text-[15px] font-heading tracking-widest ring-1 ring-[#1C1410]/5">
-                    {review.name?.charAt(0) || 'U'}
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#1C1410] text-[12px] uppercase tracking-[2px]">{review.name}</p>
-                    <p className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[1px] opacity-40 mt-1">Verified Audit • {new Date(review.created_at).toLocaleDateString()}</p>
-                  </div>
-                  <div className="ml-auto flex items-center gap-4 bg-[#FAF7F4] px-6 py-3 border border-[#E8E2D9]">
-                    <span className="text-[9px] font-bold text-[#6B6058] uppercase tracking-[2px] opacity-40">EXHIBIT:</span>
-                    <span className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] max-w-[180px] truncate">{review.products?.name || 'Protocol Entry'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* ACTIONS */}
-              <div className="flex flex-row md:flex-col justify-center gap-4 shrink-0 pt-8 md:pt-0 border-t md:border-t-0 md:border-l border-[#FAF7F4] md:pl-10">
-                {!review.is_approved ? (
-                  <button 
-                    onClick={() => handleUpdateStatus(review.id, true)}
-                    className="flex-1 bg-[#2D6A4F] text-white px-10 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-xl active:scale-95 transition-all"
-                  >
-                    Authorize
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => handleUpdateStatus(review.id, false)}
-                    className="flex-1 border border-[#D4CCC2] text-[#6B6058] px-10 py-5 font-bold uppercase tracking-[3px] text-[11px] hover:bg-[#FAF7F4] shadow-sm transition-all"
-                  >
-                    Restrict
-                  </button>
-                )}
-                <button 
-                  onClick={() => handleDelete(review.id)}
-                  className="px-10 py-5 text-[#DC2626] font-bold uppercase tracking-[3px] text-[11px] hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
-                >
-                  Purge
-                </button>
-              </div>
-
-            </div>
-          ))
-        )}
+      {/* TABLE */}
+      <div className="bg-white border border-[#E8E2D9] rounded-0 overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
+              <tr>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Product</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Rating</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Statement</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Status</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40 text-right">Command</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#FAF7F4]">
+              {loading ? (
+                Array(5).fill(0).map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td colSpan={6} className="px-8 py-8 h-16 bg-white" />
+                  </tr>
+                ))
+              ) : filteredReviews.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-8 py-24 text-center">
+                    <p className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[4px] opacity-20">No matching sentiment records</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredReviews.map(review => (
+                  <tr key={review.id} className="hover:bg-[#FAF7F4]/30 transition-colors">
+                    <td className="px-8 py-6 max-w-[200px]">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 skeleton bg-[#F2EDE6] rounded-0 flex-shrink-0 flex items-center justify-center opacity-40">
+                          <Package size={14} />
+                        </div>
+                        <span className="font-bold text-[#1C1410] truncate text-[13px]">{review.products?.name || 'Unknown Item'}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#F0EBF8] text-[#4A2C6E] font-bold rounded-0 flex items-center justify-center text-[11px] font-heading">
+                          {review.name?.charAt(0)}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-[#1C1410] text-[13px]">{review.name}</span>
+                          <span className="text-[10px] text-[#6B6058] opacity-40 font-bold uppercase tracking-wider">{new Date(review.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex gap-0.5">
+                        {Array.from({length: 5}).map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={12} 
+                            fill={i < review.rating ? "#4A2C6E" : "none"} 
+                            className={i < review.rating ? "text-[#4A2C6E]" : "text-[#D4CCC2]"} 
+                          />
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-8 py-6 max-w-[300px]">
+                      <p className="text-[#6B6058] text-[13px] italic line-clamp-2 leading-relaxed">"{review.comment}"</p>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className={`inline-flex px-3 py-1.5 rounded-0 border text-[9px] font-bold uppercase tracking-[2px] font-mono ${
+                        review.is_approved === true ? 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]' :
+                        review.is_approved === false ? 'bg-[#FEF2F2] text-[#991B1B] border-[rgba(153,27,27,0.1)]' :
+                        'bg-[#FFFBEB] text-[#D97706] border-[rgba(217,119,6,0.1)]'
+                      }`}>
+                        {review.is_approved === true ? 'Approved' :
+                         review.is_approved === false ? 'Rejected' :
+                         'Pending'}
+                      </div>
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <div className="flex justify-end gap-3">
+                        {review.is_approved !== true && (
+                          <button 
+                            onClick={() => handleApprove(review.id)}
+                            className="w-9 h-9 bg-[#EBF7F0] text-[#2D6A4F] flex items-center justify-center rounded-[3px] border border-[rgba(45,106,79,0.1)] hover:bg-[#2D6A4F] hover:text-white transition-all active:scale-90"
+                            title="Authorize Sentiment"
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                        )}
+                        {review.is_approved !== false && (
+                          <button 
+                            onClick={() => handleReject(review.id)}
+                            className="w-9 h-9 bg-[#FEF2F2] text-[#991B1B] flex items-center justify-center rounded-[3px] border border-[rgba(153,27,27,0.1)] hover:bg-[#991B1B] hover:text-white transition-all active:scale-90"
+                            title="Restrict Sentiment"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

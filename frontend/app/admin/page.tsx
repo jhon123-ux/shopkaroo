@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Package, ShoppingCart, Clock, ImageIcon } from 'lucide-react'
+import { Package, ShoppingCart, Clock, ImageIcon, Star } from 'lucide-react'
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
     products: 0,
     orders: 0,
     pending: 0,
-    banners: 0
+    banners: 0,
+    pendingReviews: 0
   })
   const [recentOrders, setRecentOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -22,24 +23,28 @@ export default function AdminDashboardPage() {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         const headers = { 'x-admin-auth': adminToken || '' }
         
-        const [prodRes, orderRes, bannerRes] = await Promise.all([
+        const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
           fetch(`${backendUrl}/api/products?all=true`, { headers }),
           fetch(`${backendUrl}/api/orders?all=true`, { headers }),
-          fetch(`${backendUrl}/api/banners?all=true`, { headers })
+          fetch(`${backendUrl}/api/banners?all=true`, { headers }),
+          fetch(`${backendUrl}/api/reviews/admin`, { headers })
         ])
 
         const prodData = prodRes.ok ? await prodRes.json() : { count: 0 }
         const orderData = orderRes.ok ? await orderRes.json() : { data: [] }
         const bannerData = bannerRes.ok ? await bannerRes.json() : { data: [] }
+        const revData = revRes.ok ? await revRes.json() : { data: [] }
 
         const pendingOrders = (orderData.data || []).filter((o: any) => o.status === 'pending').length
         const activeBanners = (bannerData.data || []).filter((b: any) => b.is_active).length
+        const pendingReviews = (revData.data || []).filter((r: any) => r.is_approved === null).length
 
         setStats({
           products: prodData.count || (prodData.data || []).length || 0,
           orders: orderData.count !== undefined ? orderData.count : (orderData.data || []).length,
           pending: pendingOrders,
-          banners: activeBanners
+          banners: activeBanners,
+          pendingReviews: pendingReviews
         })
 
         setRecentOrders((orderData.data || []).slice(0, 5))
@@ -94,6 +99,16 @@ export default function AdminDashboardPage() {
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
           <p className="font-heading font-bold text-[48px] text-[#2D6A4F] leading-none">
             {loading ? '—' : stats.banners}
+          </p>
+        </div>
+
+        <div className="bg-[#FFFBEB] rounded-0 p-8 border border-[rgba(217,119,6,0.1)] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity text-[#D97706]">
+            <Star size={28} />
+          </div>
+          <p className="text-[#D97706] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Sentiment Audit</p>
+          <p className="font-heading font-bold text-[48px] text-[#D97706] leading-none">
+            {loading ? '—' : stats.pendingReviews}
           </p>
         </div>
       </div>

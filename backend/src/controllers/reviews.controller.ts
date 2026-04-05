@@ -5,8 +5,9 @@ export const getReviews = async (req: Request, res: Response) => {
   try {
     const { product_id, limit = 20 } = req.query
     
+    // FETCH APPROVED REVIEWS ONLY
     let query = supabase.from('reviews').select('*')
-      .eq('is_approved', true)
+      .eq('is_approved', true) 
       .order('created_at', { ascending: false })
       .limit(Number(limit))
 
@@ -37,7 +38,7 @@ export const createReview = async (req: Request, res: Response) => {
       name,
       rating,
       comment,
-      is_approved: false // Pending by default
+      is_approved: null // Pending by default
     }).select().single()
     
     if (error) throw error
@@ -74,6 +75,36 @@ export const updateReviewStatus = async (req: Request, res: Response) => {
       
     if (error) throw error
     res.json({ data })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const approveReview = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { data, error } = await supabase.from('reviews')
+      .update({ is_approved: true })
+      .eq('id', id)
+      .select().single()
+      
+    if (error) throw error
+    res.json({ data })
+  } catch (error: any) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+export const rejectReview = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { data, error } = await supabase.from('reviews')
+      .update({ is_approved: false }) // FALSE = Rejected
+      .eq('id', id)
+      .select().single()
+      
+    if (error) throw error
+    res.json({ message: 'Review rejected', data })
   } catch (error: any) {
     res.status(500).json({ error: error.message })
   }

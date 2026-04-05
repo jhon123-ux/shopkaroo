@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getReviews, createReview, getAllReviewsAdmin, updateReviewStatus, deleteReview } from '../controllers/reviews.controller'
+import { getReviews, createReview, getAllReviewsAdmin, updateReviewStatus, deleteReview, approveReview, rejectReview } from '../controllers/reviews.controller'
 
 const router = Router()
 
@@ -68,6 +68,40 @@ router.get('/admin', getAllReviewsAdmin)
  *         description: Updated review
  */
 router.patch('/:id', updateReviewStatus)
+
+/**
+ * @swagger
+ * /api/reviews/{id}/approve:
+ *   patch:
+ *     summary: Approve a review
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string, format: uuid }
+ *     responses:
+ *       200:
+ *         description: Approved review
+ */
+router.patch('/:id/approve', approveReview)
+
+/**
+ * @swagger
+ * /api/reviews/{id}/reject:
+ *   patch:
+ *     summary: Reject a review
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string, format: uuid }
+ *     responses:
+ *       200:
+ *         description: Message and rejected review
+ */
+router.patch('/:id/reject', rejectReview)
 
 /**
  * @swagger
