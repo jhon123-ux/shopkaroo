@@ -28,11 +28,11 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'text-[#D97706] bg-[#FFFBEB] border-[#FDE68A]',
-  confirmed: 'text-[#2563EB] bg-[#EFF6FF] border-[#BFDBFE]',
-  shipped: 'text-[#0284C7] bg-[#F0F9FF] border-[#BAE6FD]',
-  delivered: 'text-[#4CAF7D] bg-[#F0FDF4] border-[#BBF7D0]',
-  cancelled: 'text-[#DC2626] bg-[#FEF2F2] border-[#FECACA]'
+  pending: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
+  confirmed: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
+  shipped: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
+  delivered: 'text-[#2D6A4F] bg-[#EBF7F0] border-[rgba(45,106,79,0.1)]',
+  cancelled: 'text-[#DC2626] bg-[#FEF2F2] border-red-100'
 }
 
 export default function MyOrdersPage() {
@@ -68,60 +68,59 @@ export default function MyOrdersPage() {
 
   if (loading || fetching) {
     return (
-      <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#6C3FC5] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F5FF] py-10">
-      <div className="max-w-3xl mx-auto px-6">
+    <div className="min-h-screen bg-[#FAF7F4] py-16 md:py-24 font-body">
+      <div className="max-w-4xl mx-auto px-6">
         
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-extrabold text-[#1A1A2E]" style={{fontFamily:'Syne,sans-serif'}}>
-            My Orders
+        <div className="mb-16 text-center">
+          <h1 className="text-[40px] font-bold text-[#1C1410] font-heading mb-4">
+            Order Collection
           </h1>
-          <p className="text-[#6B7280] mt-1">
-            {orders.length} order{orders.length !== 1 ? 's' : ''}
+          <p className="text-[#6B6058] text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
+            {orders.length} ARCHIVED PURCHASES
           </p>
         </div>
 
         {/* Empty state */}
         {orders.length === 0 && (
-          <div className="bg-white rounded-2xl border border-[#E5E0F5] p-16 text-center shadow-lg">
-            <div className="text-6xl mb-4">🛒</div>
-            <h2 className="text-2xl font-bold text-[#1A1A2E] mb-2" style={{fontFamily:'Syne,sans-serif'}}>
-              No orders yet
+          <div className="bg-white rounded-0 border border-[#E8E2D9] p-20 text-center shadow-sm">
+            <div className="text-5xl mb-8 opacity-20">📦</div>
+            <h2 className="text-[24px] font-bold text-[#1C1410] mb-3 font-heading uppercase tracking-widest">
+              No Orders Found
             </h2>
-            <p className="text-[#6B7280] mb-8">
-              Start shopping to see your orders here
+            <p className="text-[#6B6058] mb-10 font-body opacity-60">
+              Your purchase history is currently empty.
             </p>
             <Link href="/"
-              className="bg-[#6C3FC5] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#5530A8] transition inline-block shadow-md shadow-[#6C3FC5]/20"
-              style={{fontFamily:'Syne,sans-serif'}}>
-              Shop Now
+              className="bg-[#4A2C6E] text-white px-10 py-4 rounded-[3px] font-bold uppercase tracking-[2px] text-[13px] hover:bg-[#3A1F57] transition-all shadow-xl hover:-translate-y-1 active:scale-95 inline-block">
+              Browse Collection
             </Link>
           </div>
         )}
 
         {/* Orders list */}
-        <div className="space-y-6">
+        <div className="space-y-10">
           {orders.map((order) => {
             const stepIndex = STATUS_STEPS.indexOf(order.status)
             const isCancelled = order.status === 'cancelled'
 
             return (
-              <div key={order.id} className="bg-white rounded-2xl border border-[#E5E0F5] p-6 shadow-md hover:shadow-lg transition-shadow">
+              <div key={order.id} className="bg-white rounded-0 border border-[#E8E2D9] p-8 md:p-10 shadow-sm transition-all hover:shadow-md">
                 
                 {/* Top row */}
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-between items-start mb-10 pb-6 border-b border-[#FAF7F4]">
                   <div>
-                    <p className="font-bold text-[#6C3FC5] text-lg" style={{fontFamily:'Syne,sans-serif'}}>
-                      {order.order_number}
+                    <p className="font-bold text-[#1C1410] text-[18px] font-heading tracking-widest uppercase mb-1">
+                      Order {order.order_number}
                     </p>
-                    <p className="text-xs text-[#6B7280] mt-0.5">
+                    <p className="text-[12px] text-[#6B6058] uppercase tracking-widest opacity-60 font-bold">
                       {new Date(order.created_at).toLocaleDateString('en-PK', {
                         day: 'numeric',
                         month: 'long',
@@ -129,38 +128,47 @@ export default function MyOrdersPage() {
                       })}
                     </p>
                   </div>
-                  <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${STATUS_COLORS[order.status] || STATUS_COLORS.pending}`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-[2px] px-4 py-2 rounded-[2px] border ${STATUS_COLORS[order.status] || STATUS_COLORS.pending}`}>
                     {STATUS_LABELS[order.status] || order.status}
                   </span>
                 </div>
 
                 {/* Items */}
-                <div className="border-t border-[#E5E0F5] pt-4 mb-4">
+                <div className="space-y-4 mb-10">
                   {order.items?.map((item: any, i: number) => (
-                    <div key={i} className="flex justify-between text-sm py-1.5 px-1 rounded-lg hover:bg-[#F7F5FF] transition-colors">
-                      <span className="text-[#1A1A2E] font-medium">
-                        {item.name} <span className="text-[#6B7280] ml-1">× {item.qty}</span>
-                      </span>
-                      <span className="font-bold text-[#6C3FC5]">
-                        Rs. {(item.price_pkr * item.qty).toLocaleString()}
+                    <div key={i} className="flex justify-between items-center group">
+                      <div className="flex flex-col">
+                        <span className="text-[#1C1410] font-bold text-[15px] font-heading group-hover:text-[#4A2C6E] transition-colors">
+                          {item.name}
+                        </span>
+                        <span className="text-[11px] text-[#6B6058] uppercase tracking-widest font-bold opacity-40 mt-1">Quantity: {item.qty}</span>
+                      </div>
+                      <span className="font-bold text-[#4A2C6E] text-[14px]">
+                        { (item.price_pkr * item.qty).toLocaleString() } PKR
                       </span>
                     </div>
                   ))}
                 </div>
 
-                {/* Total + Place */}
-                <div className="flex justify-between items-center mb-8 bg-[#F7F5FF] p-3 rounded-xl border border-[#E5E0F5]/50">
-                  <span className="text-[#6B7280] text-xs font-bold">
-                    📍 {order.city}
-                  </span>
-                  <p className="font-black text-[#1A1A2E] text-lg" style={{fontFamily:'Syne,sans-serif'}}>
-                    Total: <span className="text-[#6C3FC5]">Rs. {order.total_pkr.toLocaleString()}</span>
-                  </p>
+                {/* Total + Location */}
+                <div className="flex justify-between items-center mb-12 bg-[#FAF7F4] p-6 rounded-0 border border-[#E8E2D9]">
+                  <div className="flex flex-col">
+                    <span className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Destination</span>
+                    <span className="text-[#1C1410] font-bold text-[13px] uppercase tracking-widest leading-none flex items-center gap-2">
+                       {order.city}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1 block">Grand Total</span>
+                    <p className="font-bold text-[#4A2C6E] text-[24px] font-heading leading-none">
+                      {order.total_pkr.toLocaleString()} <span className="text-[14px]">PKR</span>
+                    </p>
+                  </div>
                 </div>
 
                 {/* Status Timeline */}
                 {!isCancelled && (
-                  <div className="pt-4 border-t border-[#E5E0F5]">
+                  <div className="pt-8 border-t border-[#FAF7F4]">
                     <div className="flex items-center justify-between px-2">
                       {STATUS_STEPS.map((step, i) => {
                         const isCompleted = i <= stepIndex
@@ -170,19 +178,23 @@ export default function MyOrdersPage() {
                           <div key={step} className="flex flex-col items-center flex-1 relative">
                             {/* Connector Line */}
                             {i > 0 && (
-                              <div className={`absolute right-1/2 top-[13.5px] w-full h-[3px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-[#6C3FC5]' : 'bg-[#E5E0F5]'}`} />
+                              <div className={`absolute right-1/2 top-[10px] w-full h-[1px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-[#4A2C6E]' : 'bg-[#E8E2D9]'}`} />
                             )}
                             
-                            {/* Circle */}
-                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-500 z-10 shadow-sm ${
-                              isCompleted ? 'bg-[#6C3FC5] text-white' : 'bg-[#E5E0F5] text-[#9CA3AF]'
-                            } ${isActive ? 'ring-4 ring-[#EDE6FA] scale-110' : ''}`}>
-                              {isCompleted ? '✓' : i + 1}
+                            {/* Dot */}
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-700 z-10 ${
+                              isCompleted ? 'bg-[#4A2C6E]' : 'bg-[#E8E2D9]'
+                            } ${isActive ? 'ring-8 ring-[#F0EBF8] scale-110' : ''}`}>
+                              {isCompleted && (
+                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="text-white">
+                                  <path d="M1 4L4 7L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              )}
                             </div>
                             
                             {/* Label */}
-                            <p className={`text-[10px] font-bold mt-2.5 text-center transition-colors duration-300 ${
-                              isActive ? 'text-[#6C3FC5]' : isCompleted ? 'text-[#1A1A2E]' : 'text-[#9CA3AF]'
+                            <p className={`text-[9px] font-bold mt-4 text-center transition-all duration-300 uppercase tracking-widest ${
+                              isActive ? 'text-[#4A2C6E] scale-105' : isCompleted ? 'text-[#1C1410]' : 'text-[#6B6058] opacity-40'
                             }`}>
                               {STATUS_LABELS[step]}
                             </p>
@@ -195,13 +207,14 @@ export default function MyOrdersPage() {
 
                 {/* Cancelled state */}
                 {isCancelled && (
-                  <div className="bg-[#FEF2F2] rounded-xl p-4 text-center border border-[#FECACA] animate-pulse">
-                    <p className="text-[#DC2626] text-sm font-bold flex items-center justify-center gap-2">
-                      <span>❌</span> This order was cancelled
-                    </p>
-                    <p className="text-[#DC2626]/70 text-xs mt-1">
-                      Contact us on WhatsApp if you have questions regarding this order.
-                    </p>
+                  <div className="bg-[#FEF2F2] rounded-0 p-6 text-center border border-red-100 flex flex-col items-center gap-3">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm">✕</div>
+                    <div>
+                      <p className="text-[#DC2626] text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
+                      <p className="text-[#DC2626]/60 text-[11px] mt-1 font-body">
+                        Please contact Concierge via WhatsApp for clarification.
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>

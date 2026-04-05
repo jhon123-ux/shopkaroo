@@ -62,10 +62,9 @@ export default function AdminOrdersPage() {
       
       const { data } = await res.json()
       
-      // Update states locally automatically avoiding hard resets
       setSelectedOrder(data)
       setOrders(orders.map(o => o.id === data.id ? data : o))
-      showToast(`✅ Status updated — Customer notified via email & WhatsApp`, 'success')
+      showToast(`SUCCESS: Order status updated. Notifications despatched.`, 'success')
       
     } catch (err) {
       showToast('Error updating status', 'error')
@@ -111,204 +110,195 @@ export default function AdminOrdersPage() {
   // Dynamic CSS Generator for specific status pillars
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A]'
-      case 'confirmed': return 'bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE]'
-      case 'shipped': return 'bg-[#F0F9FF] text-[#0284C7] border border-[#BAE6FD]'
-      case 'delivered': return 'bg-[#F0FDF4] text-[#4CAF7D] border border-[#BBF7D0]'
-      case 'cancelled': return 'bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'pending': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
+      case 'confirmed': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
+      case 'shipped': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
+      case 'delivered': return 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]'
+      case 'cancelled': return 'bg-red-50 text-red-600 border-red-100'
+      default: return 'bg-gray-50 text-gray-400 border-gray-100'
     }
   }
 
   // Generate WhatsApp routing parameter securely
-  const wpText = selectedOrder ? encodeURIComponent(`Hi ${selectedOrder.customer_name}! Regarding your Shopkaroo order ${selectedOrder.order_number}`) : ''
+  const wpText = selectedOrder ? encodeURIComponent(`Greetings ${selectedOrder.customer_name}, this is regarding your Shopkaroo order ${selectedOrder.order_number}...`) : ''
 
   return (
     <div className="relative font-body">
 
       {/* TOAST SYSTEM */}
       {toast && (
-        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 animate-slideUp text-white font-medium ${
-          toast.type === 'success' ? 'bg-[#1A1A2E]' : 'bg-[#DC2626]'
+        <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
+          toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✅' : '❌'}</span>
+          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
           {toast.message}
         </div>
       )}
 
       {/* HEADER SECTION */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-end mb-12">
         <div>
-          
-          <p className="text-[#6B7280] text-sm mt-1">{filteredOrders.length} total orders</p>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Vault Registry</p>
+          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] leading-none uppercase tracking-widest">Transactions</h2>
         </div>
-        <button className="border border-[#E5E0F5] bg-white text-[#6B7280] px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 hover:bg-[#F7F5FF] transition-colors shadow-sm">
-          ↓ Export CSV
+        <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Master Export
         </button>
       </div>
 
       {/* TOP AGGREGATE STATS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border border-[#E5E0F5] rounded-2xl p-5 shadow-sm">
-          <p className="font-heading font-extrabold text-3xl text-[#6C3FC5]">{orders.length}</p>
-          <p className="text-[#6B7280] font-medium text-sm mt-0.5">Total Orders</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Total Volume</p>
+          <p className="font-heading font-bold text-[36px] text-[#1C1410] leading-none">{orders.length}</p>
         </div>
-        <div className="bg-[#FFFBEB] border border-[#FDE68A] rounded-2xl p-5 shadow-sm relative overflow-hidden">
-          <p className="font-heading font-extrabold text-3xl text-[#D97706] relative z-10">{orders.filter(o => o.status === 'pending').length}</p>
-          <p className="text-[#92400E] font-medium text-sm mt-0.5 relative z-10">Pending</p>
-          <div className="absolute top-2 right-2 text-4xl opacity-10">⏳</div>
+        <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Awaiting Action</p>
+          <p className="font-heading font-bold text-[36px] text-[orange] leading-none">{orders.filter(o => o.status === 'pending').length}</p>
         </div>
-        <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl p-5 shadow-sm relative overflow-hidden">
-          <p className="font-heading font-extrabold text-3xl text-[#2563EB] relative z-10">{orders.filter(o => o.status === 'shipped').length}</p>
-          <p className="text-[#1E40AF] font-medium text-sm mt-0.5 relative z-10">Shipped</p>
-          <div className="absolute top-2 right-2 text-4xl opacity-10">🚚</div>
+        <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">In Transit</p>
+          <p className="font-heading font-bold text-[36px] text-[#4A2C6E] leading-none">{orders.filter(o => o.status === 'shipped').length}</p>
         </div>
-        <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded-2xl p-5 shadow-sm relative overflow-hidden">
-          <p className="font-heading font-extrabold text-3xl text-[#4CAF7D] relative z-10">{orders.filter(o => o.status === 'delivered').length}</p>
-          <p className="text-[#166534] font-medium text-sm mt-0.5 relative z-10">Delivered</p>
-          <div className="absolute top-2 right-2 text-4xl opacity-10">✅</div>
+        <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Fulfilled</p>
+          <p className="font-heading font-bold text-[36px] text-[#2D6A4F] leading-none">{orders.filter(o => o.status === 'delivered').length}</p>
         </div>
       </div>
 
       {/* DYNAMIC FILTER ROW */}
-      <div className="flex gap-4 mb-6 flex-wrap">
-        <input 
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by order # or customer..."
-          className="flex-1 min-w-[200px] border border-[#E5E0F5] bg-white rounded-xl px-4 py-3 text-sm focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5] outline-none shadow-sm"
-        />
-        <div className="relative min-w-[140px]">
+      <div className="flex gap-4 mb-10 flex-wrap">
+        <div className="flex-1 min-w-[280px] relative">
+          <input 
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search identifier or customer signature..."
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#4A2C6E] outline-none shadow-sm font-body"
+          />
+        </div>
+        <div className="relative min-w-[160px]">
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full border border-[#E5E0F5] bg-white rounded-xl px-4 py-3 text-sm appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6C3FC5] focus:border-transparent outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
           >
-            <option value="all">All Status</option>
+            <option value="all">Pipeline Status</option>
             <option value="pending">Pending</option>
             <option value="confirmed">Confirmed</option>
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
             <option value="cancelled">Cancelled</option>
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
         </div>
-        <div className="relative min-w-[140px]">
+        <div className="relative min-w-[160px]">
           <select 
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="w-full border border-[#E5E0F5] bg-white rounded-xl px-4 py-3 text-sm appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6C3FC5] focus:border-transparent outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
           >
-            <option value="all">All Cities</option>
+            <option value="all">Territory</option>
             <option value="Karachi">Karachi</option>
             <option value="Lahore">Lahore</option>
             <option value="Islamabad">Islamabad</option>
             <option value="Faisalabad">Faisalabad</option>
-            <option value="Other">Other</option>
+            <option value="Other">Other Territories</option>
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
         </div>
-        <div className="relative min-w-[140px]">
+        <div className="relative min-w-[160px]">
           <select 
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full border border-[#E5E0F5] bg-white rounded-xl px-4 py-3 text-sm appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6C3FC5] focus:border-transparent outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
           >
-            <option value="all">All Time</option>
+            <option value="all">Temporal Filter</option>
             <option value="today">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
+            <option value="week">Weekly</option>
+            <option value="month">Monthly</option>
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
         </div>
       </div>
 
       {/* CORE DATA TABLE */}
-      <div className="bg-white rounded-2xl border border-[#E5E0F5] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+      <div className="bg-white rounded-0 border border-[#E8E2D9] overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-[#F7F5FF] border-b border-[#E5E0F5]">
+            <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
               <tr>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Order #</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Customer</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">City</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Items</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Total</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Status</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Date</th>
-                <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide font-bold">Actions</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Identifier</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Geo</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Inventory</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Valuation</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Pipeline</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Chronology</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Command</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                // Skeletons
                 Array(6).fill(0).map((_, i) => (
-                  <tr key={i} className="border-b border-[#E5E0F5] animate-pulse">
-                    <td className="px-6 py-4"><div className="w-24 h-4 bg-gray-200 rounded"></div></td>
-                    <td className="px-6 py-4"><div className="w-32 h-4 bg-gray-200 rounded"></div><div className="w-20 h-3 bg-gray-100 rounded mt-2"></div></td>
-                    <td className="px-6 py-4"><div className="w-20 h-4 bg-gray-200 rounded"></div></td>
-                    <td className="px-6 py-4"><div className="w-16 h-4 bg-gray-200 rounded"></div></td>
-                    <td className="px-6 py-4"><div className="w-20 h-4 bg-gray-200 rounded"></div></td>
-                    <td className="px-6 py-4"><div className="w-20 h-6 bg-gray-200 rounded-full"></div></td>
-                    <td className="px-6 py-4"><div className="w-24 h-4 bg-gray-200 rounded"></div></td>
-                    <td className="px-6 py-4"><div className="w-16 h-8 bg-gray-200 rounded-lg"></div></td>
+                  <tr key={i} className="border-b border-[#FAF7F4] animate-pulse">
+                    <td className="px-8 py-8"><div className="w-20 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-32 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-20 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-16 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-20 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-20 h-6 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-24 h-4 bg-gray-100 rounded-[2px]" /></td>
+                    <td className="px-8 py-8"><div className="w-16 h-8 bg-gray-100 rounded-[2px]" /></td>
                   </tr>
                 ))
               ) : filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-24 text-center">
-                    <div className="text-6xl mb-4 text-[#6B7280]/20">🛒</div>
-                    <h3 className="font-heading font-bold text-2xl text-[#1A1A2E]">No orders found</h3>
-                    <p className="text-[#6B7280] mt-2 mb-6 text-sm">Adjust your filters or wait for new purchases to roll in.</p>
+                  <td colSpan={8} className="px-8 py-24 text-center">
+                    <div className="text-4xl mb-6 opacity-10">📦</div>
+                    <h3 className="font-heading font-bold text-[20px] text-[#1C1410] uppercase tracking-widest leading-none">Registry Empty</h3>
+                    <p className="text-[#6B6058] mt-4 text-[13px] opacity-60">No transactions match your current filters.</p>
                   </td>
                 </tr>
               ) : (
                 filteredOrders.map(o => (
-                  <tr key={o.id} className="border-b border-[#E5E0F5] last:border-0 hover:bg-[#F7F5FF] transition">
-                    <td className="px-6 py-4 font-mono font-bold text-[#6C3FC5] text-sm">{o.order_number}</td>
-                    <td className="px-6 py-4">
-                      <p className="font-bold text-[#1A1A2E] text-sm">{o.customer_name}</p>
-                      <p className="text-xs text-[#6B7280] font-medium mt-0.5">{o.phone}</p>
-                      {o.customer_email && <p className="text-[11px] text-[#6B7280] font-mono mt-0.5">{o.customer_email}</p>}
+                  <tr key={o.id} className="border-b border-[#FAF7F4] last:border-0 hover:bg-[#FAF7F4]/50 transition-colors">
+                    <td className="px-8 py-6 font-mono font-bold text-[#4A2C6E] text-[13px] tracking-widest">{o.order_number}</td>
+                    <td className="px-8 py-6">
+                      <p className="font-bold text-[#1C1410] text-[14px]">{o.customer_name}</p>
+                      <p className="text-[11px] text-[#6B6058] font-bold opacity-40 mt-1 uppercase tracking-wider">{o.phone}</p>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-[#1A1A2E]">{o.city}</td>
-                    <td className="px-6 py-4">
-                      <p className="text-sm font-bold text-[#6B7280]">{o.items?.length || 0} items</p>
-                      <p className="text-xs text-[#9CA3AF] line-clamp-1 mt-0.5 font-medium">{o.items?.[0]?.name}</p>
+                    <td className="px-8 py-6 text-[12px] font-bold text-[#1C1410] uppercase tracking-widest">{o.city}</td>
+                    <td className="px-8 py-6">
+                      <p className="text-[14px] font-bold text-[#6B6058]">{o.items?.length || 0} Units</p>
                     </td>
-                    <td className="px-6 py-4 font-bold text-[#6C3FC5] font-heading text-base">Rs. {o.total_pkr?.toLocaleString()}</td>
-                    <td className="px-6 py-4">
-                      <span className={`text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full ${getStatusStyle(o.status)}`}>
+                    <td className="px-8 py-6 font-bold text-[#4A2C6E] font-heading text-[16px]">{o.total_pkr?.toLocaleString()} PKR</td>
+                    <td className="px-8 py-6">
+                      <span className={`text-[9px] uppercase tracking-[2px] font-bold px-4 py-2 rounded-0 border ${getStatusStyle(o.status)}`}>
                         {o.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <p className="text-sm font-semibold text-[#6B7280]">
-                        {new Date(o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    <td className="px-8 py-6">
+                      <p className="text-[11px] font-bold text-[#1C1410] uppercase tracking-widest">
+                        {new Date(o.created_at).toLocaleDateString('en-PK', { day: '2-digit', month: 'short' })}
                       </p>
-                      <p className="text-xs text-[#9CA3AF] mt-0.5 font-medium">
-                        {new Date(o.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                      <p className="text-[10px] text-[#6B6058] mt-1 font-bold opacity-40 tracking-widest uppercase">
+                        {new Date(o.created_at).toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-8 py-6 text-right">
                       <button 
                         onClick={() => setSelectedOrder(o)}
-                        className="bg-[#EDE6FA] text-[#6C3FC5] px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-[#6C3FC5] hover:text-white transition active:scale-95"
+                        className="bg-white border border-[#E8E2D9] text-[#1C1410] px-5 py-2 rounded-[2px] text-[10px] font-bold uppercase tracking-widest hover:bg-[#1C1410] hover:text-white transition-all active:scale-95 shadow-sm"
                       >
-                        View
+                        Details
                       </button>
                     </td>
                   </tr>
@@ -321,36 +311,37 @@ export default function AdminOrdersPage() {
 
       {/* DETAIL MODAL OVERLAY */}
       {selectedOrder && (
-        <div className="fixed inset-0 bg-black/60 z-50 overflow-y-auto flex items-start justify-center pt-10 pb-10 px-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl relative animate-slideUp">
+        <div className="fixed inset-0 bg-[#1C1410]/60 z-50 overflow-y-auto flex items-start justify-center pt-12 pb-12 px-6 backdrop-blur-md">
+          <div className="bg-white rounded-0 max-w-3xl w-full p-12 md:p-16 shadow-[0_30px_100px_rgba(0,0,0,0.2)] relative animate-slideUp">
             
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="font-heading font-black text-2xl text-[#6C3FC5]">{selectedOrder.order_number}</h2>
-                <p className="text-sm text-[#6B7280] font-medium mt-1">
-                  Placed on {new Date(selectedOrder.created_at).toLocaleString()}
+            <div className="flex justify-between items-start mb-12">
+              <div className="text-left">
+                <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] opacity-40 mb-2">Vault Manifest</p>
+                <h2 className="font-heading font-bold text-[32px] text-[#1C1410] leading-none uppercase tracking-widest">{selectedOrder.order_number}</h2>
+                <p className="text-[12px] text-[#6B6058] mt-4 opacity-80 font-bold uppercase tracking-widest">
+                  Archived on {new Date(selectedOrder.created_at).toLocaleString('en-PK', { dateStyle: 'full', timeStyle: 'short' })}
                 </p>
               </div>
-              <div className="flex items-center gap-4">
-                <span className={`text-[11px] uppercase tracking-wider font-bold px-4 py-2 rounded-full ${getStatusStyle(selectedOrder.status)}`}>
+              <div className="flex items-center gap-6">
+                <span className={`text-[10px] uppercase tracking-[2px] font-bold px-5 py-2.5 rounded-0 border ${getStatusStyle(selectedOrder.status)}`}>
                   {selectedOrder.status}
                 </span>
-                <button onClick={() => setSelectedOrder(null)} className="text-[#6B7280] hover:bg-[#F7F5FF] w-8 h-8 rounded-full flex items-center justify-center text-2xl font-light hover:text-[#1A1A2E] transition-colors">&times;</button>
+                <button onClick={() => setSelectedOrder(null)} className="text-[#1C1410] w-12 h-12 flex items-center justify-center text-4xl font-light hover:bg-[#FAF7F4] transition-colors">&times;</button>
               </div>
             </div>
 
             {/* STATUS MUTATION SUITE */}
-            <div className="bg-[#F7F5FF] rounded-2xl p-5 mb-6 border border-[#E5E0F5]">
-              <p className="font-mono text-[10px] font-bold tracking-widest text-[#6C3FC5] uppercase mb-4 opacity-80">Update Delivery Pipeline Status</p>
-              <div className="flex gap-2 flex-wrap">
+            <div className="bg-[#FAF7F4] rounded-0 p-8 mb-10 border border-[#E8E2D9] text-left">
+              <p className="text-[10px] font-bold tracking-[3px] text-[#4A2C6E] uppercase mb-6 opacity-60">Synchronize Protocol Status</p>
+              <div className="flex gap-4 flex-wrap">
                 {['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(st => (
                   <button
                     key={st}
                     onClick={() => updateOrderStatus(st)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-all ${
+                    className={`px-6 py-3 rounded-0 text-[10px] font-bold uppercase tracking-[2px] transition-all border ${
                       selectedOrder.status === st 
-                        ? 'bg-[#6C3FC5] text-white shadow-md'
-                        : 'border border-[#E5E0F5] bg-white text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5]'
+                        ? 'bg-[#4A2C6E] text-white border-[#4A2C6E] shadow-lg scale-105'
+                        : 'border-[#E8E2D9] bg-white text-[#6B6058] hover:border-[#1C1410] hover:text-[#1C1410]'
                     }`}
                   >
                     {st}
@@ -360,48 +351,46 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* CUSTOMER META INFO */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-[#F7F5FF] rounded-2xl p-5 border border-[#E5E0F5]">
-                <p className="font-mono text-[10px] tracking-widest text-[#6B7280] font-bold uppercase mb-2">Customer Entity</p>
-                <p className="font-bold text-[#1A1A2E] text-lg leading-tight mb-1">{selectedOrder.customer_name}</p>
-                <p className="text-sm text-[#6B7280] font-medium font-mono">{selectedOrder.phone}</p>
-                <p className="text-[13px] text-[#6B7280] font-mono mt-1 w-full truncate">{selectedOrder.customer_email || 'No email provided'}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12 text-left">
+              <div className="bg-[#FAF7F4] rounded-0 p-8 border border-[#E8E2D9]">
+                <p className="text-[10px] tracking-[3px] text-[#6B6058] font-bold uppercase mb-4 opacity-40">Entity Signature</p>
+                <p className="font-bold text-[#1C1410] text-[18px] leading-tight mb-2 font-heading tracking-widest uppercase">{selectedOrder.customer_name}</p>
+                <p className="text-[13px] text-[#1C1410] font-bold opacity-60 tracking-[2px] mb-2">{selectedOrder.phone}</p>
+                <p className="text-[12px] text-[#6B6058] font-bold opacity-40 underline underline-offset-4">{selectedOrder.customer_email || 'NO_IDENTIFIER'}</p>
               </div>
-              <div className="bg-[#F7F5FF] rounded-2xl p-5 border border-[#E5E0F5]">
-                <p className="font-mono text-[10px] tracking-widest text-[#6B7280] font-bold uppercase mb-2">Delivery Geo</p>
-                <p className="font-bold text-[#1A1A2E] text-base leading-snug mb-1">{selectedOrder.city}</p>
-                <p className="text-sm text-[#6B7280] leading-relaxed line-clamp-3">{selectedOrder.address}</p>
+              <div className="bg-[#FAF7F4] rounded-0 p-8 border border-[#E8E2D9]">
+                <p className="text-[10px] tracking-[3px] text-[#6B6058] font-bold uppercase mb-4 opacity-40">Dispatch Geo</p>
+                <p className="font-bold text-[#1C1410] text-[14px] uppercase tracking-[2px] mb-3">{selectedOrder.city}</p>
+                <p className="text-[13px] text-[#6B6058] leading-relaxed opacity-80">{selectedOrder.address}</p>
               </div>
             </div>
 
             {/* CORE RECEIPT ITEMS */}
-            <div className="mb-8">
-              <h3 className="font-heading font-extrabold text-[#1A1A2E] text-lg mb-4 border-b border-[#E5E0F5] pb-3">Line Items Packed</h3>
-              <div className="flex flex-col gap-3">
+            <div className="mb-12 text-left">
+              <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-8 border-b border-[#FAF7F4] pb-5">Manifest Contents</h3>
+              <div className="space-y-6">
                 {selectedOrder.items?.map((item: any, idx: number) => (
-                  <div key={idx} className="flex justify-between items-center py-2.5 border-b border-[#E5E0F5] last:border-0 hover:bg-gray-50/50 px-2 rounded-lg transition-colors">
+                  <div key={idx} className="flex justify-between items-center group">
                     <div>
-                      <p className="text-sm font-bold text-[#1A1A2E]">{item.name}</p>
-                      <p className="text-xs text-[#6B7280] font-medium mt-1 uppercase tracking-wider bg-[#EDE6FA] inline-block px-2 py-0.5 rounded-md text-[#6C3FC5]">QTY: {item.qty}</p>
+                      <p className="text-[15px] font-bold text-[#1C1410] font-heading group-hover:text-[#4A2C6E] transition-colors">{item.name}</p>
+                      <p className="text-[10px] text-[#6B6058] font-bold mt-2 uppercase tracking-[2px] opacity-40">Unit Count: {item.qty}</p>
                     </div>
-                    <p className="font-bold text-[#6C3FC5] font-heading text-base">Rs. {(item.price_pkr * item.qty).toLocaleString()}</p>
+                    <p className="font-bold text-[#4A2C6E] text-[15px]">{ (item.price_pkr * item.qty).toLocaleString() } PKR</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex justify-between items-center mt-6 pt-5 border-t-2 border-[#E5E0F5] px-2 bg-[#F7F5FF] rounded-xl p-4">
-                <p className="font-heading font-bold text-[#1A1A2E] text-lg">Subtotal Revenue</p>
-                <p className="font-heading font-black text-2xl text-[#6C3FC5]">Rs. {selectedOrder.total_pkr?.toLocaleString()}</p>
+              <div className="flex justify-between items-center mt-12 bg-[#1C1410] p-8 rounded-0">
+                <p className="font-bold text-white uppercase tracking-[4px] text-[11px] opacity-40">Cumulative Valuation</p>
+                <p className="font-heading font-bold text-[28px] text-white leading-none">{selectedOrder.total_pkr?.toLocaleString()} <span className="text-[14px]">PKR</span></p>
               </div>
             </div>
 
             {/* ORDER NOTES */}
             {selectedOrder.notes && (
-              <div className="bg-[#FFFBEB] rounded-2xl p-5 border border-[#FDE68A] mb-8 shadow-sm">
-                <p className="font-bold text-[#92400E] text-sm mb-1.5 flex items-center gap-2 tracking-wide uppercase">
-                  <span className="text-lg">📝</span> Delivery Notes Bound
-                </p>
-                <p className="text-sm text-[#92400E]/90 leading-relaxed font-medium pl-6">{selectedOrder.notes}</p>
+              <div className="bg-[#FFFBEB] rounded-0 p-8 border border-[#FDE68A] mb-12 text-left">
+                <p className="text-[#92400E] text-[10px] font-bold tracking-[3px] uppercase mb-4 opacity-60">Field Intelligence</p>
+                <p className="text-[14px] text-[#92400E] italic leading-relaxed pl-6 border-l-2 border-[#D97706]/20">{selectedOrder.notes}</p>
               </div>
             )}
 
@@ -409,12 +398,12 @@ export default function AdminOrdersPage() {
             <a 
               href={`https://wa.me/${selectedOrder.phone.replace(/^0/, '92')}?text=${wpText}`}
               target="_blank" rel="noopener noreferrer"
-              className="w-full bg-[#4CAF7D] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 text-lg hover:bg-[#388E3C] transition-all shadow-md active:scale-95"
+              className="w-full bg-[#1C1410] text-white py-6 rounded-0 font-bold uppercase tracking-[3px] text-[13px] flex items-center justify-center gap-4 hover:bg-[#33221b] transition-all shadow-xl active:scale-95"
             >
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
               </svg>
-              Contact Customer on WhatsApp
+              Initiate Customer Engagement
             </a>
 
           </div>

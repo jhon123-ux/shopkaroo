@@ -87,9 +87,9 @@ export default function HeroSlider() {
   const banner = displayBanners[currentSlide]
 
   return (
-    <div className="bg-[#F7F5FF] px-3 py-3 md:px-6 md:py-6 w-full">
+    <div className="bg-[#FAF7F4] px-4 py-4 md:px-5 md:py-5 w-full">
       <section 
-        className="relative min-h-screen w-full flex items-center overflow-hidden bg-[#1A1A2E] rounded-2xl shadow-2xl"
+        className="relative min-h-[85vh] w-full flex items-center overflow-hidden bg-[#1C1410] rounded-[6px] shadow-sm transition-all duration-500"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -97,7 +97,7 @@ export default function HeroSlider() {
       {displayBanners.map((b, idx) => (
         <div
           key={`bg-${b.id}`}
-          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${idx === currentSlide ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === currentSlide ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
         >
           {b.bg_image_url ? (
             <>
@@ -113,7 +113,7 @@ export default function HeroSlider() {
           ) : (
             <div 
               className="absolute inset-0 z-0" 
-              style={{ background: `linear-gradient(135deg, ${b.badge_color}40, #1A1A2E)` }}
+              style={{ background: `linear-gradient(135deg, ${b.badge_color}40, #1C1410)` }}
             >
               <div className="absolute inset-0 z-0" style={{ background: b.bg_overlay }}></div>
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
@@ -123,21 +123,20 @@ export default function HeroSlider() {
       ))}
 
       {/* Content Container */}
-      <div className="max-w-7xl mx-auto pl-6 md:pl-8 xl:pl-16 pr-6 w-full relative z-10 flex items-center justify-start min-h-screen">
-        <div className="max-w-2xl w-full">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-20 w-full relative z-10 flex items-center justify-start min-h-[85vh]">
+        <div className="max-w-2xl w-full py-20">
           
           {/* Badge */}
           {banner.badge_text && (
             <div 
               key={`badge-${currentSlide}`}
-              className="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full border border-white/20 backdrop-blur-sm animate-slideUp"
-              style={{ background: `${banner.badge_color}40` }}
+              className="inline-flex items-center gap-2 mb-8 animate-slideUp"
             >
               <span 
-                className="w-2 h-2 rounded-full animate-pulse shadow-lg"
+                className="w-1.5 h-1.5 rounded-full"
                 style={{ background: banner.badge_color }}
               ></span>
-              <span className="font-mono text-xs tracking-widest uppercase text-white font-bold drop-shadow-md">
+              <span className="font-body text-[10px] tracking-[3px] uppercase text-white font-bold opacity-80">
                 {banner.badge_text}
               </span>
             </div>
@@ -146,7 +145,7 @@ export default function HeroSlider() {
           {/* Title */}
           <h1 
             key={`title-${currentSlide}`}
-            className="font-heading font-extrabold tracking-tight text-3xl md:text-4xl lg:text-5xl xl:text-7xl text-white leading-tight animate-slideUp drop-shadow-lg"
+            className="font-heading font-black text-4xl md:text-5xl lg:text-7xl text-white leading-[1.1] animate-slideUp"
           >
             {banner.title}
           </h1>
@@ -154,7 +153,7 @@ export default function HeroSlider() {
           {/* Subtitle */}
           <p 
             key={`sub-${currentSlide}`}
-            className="font-body text-white/90 text-xl mt-4 mb-10 max-w-xl leading-relaxed animate-slideUp drop-shadow-md"
+            className="font-body text-white/75 text-lg md:text-xl mt-6 mb-12 max-w-lg leading-relaxed animate-slideUp"
             style={{ animationDelay: '150ms' }}
           >
             {banner.subtitle}
@@ -168,7 +167,7 @@ export default function HeroSlider() {
           >
             <Link 
               href={banner.cta_primary_link}
-              className="bg-white text-[#1A1A2E] px-10 py-4 rounded-xl font-bold font-heading text-base text-center shadow-xl hover:bg-[#EDE6FA] hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
+              className="bg-white text-[#1C1410] px-10 py-4 rounded-[3px] font-bold font-body text-sm text-center shadow-lg hover:bg-[#F2EDE6] transition-all duration-300 active:scale-95"
             >
               {banner.cta_primary_text}
             </Link>
@@ -176,7 +175,7 @@ export default function HeroSlider() {
             {banner.cta_secondary_text && (
               <Link
                 href={banner.cta_secondary_link}
-                className="border-2 border-white/60 text-white px-10 py-4 rounded-xl font-semibold font-body text-base text-center hover:bg-white/10 hover:border-white transition-all duration-300 active:scale-95 backdrop-blur-sm"
+                className="border-[1.5px] border-white text-white px-10 py-4 rounded-[3px] font-semibold font-body text-sm text-center hover:bg-white/10 transition-all duration-300 active:scale-95"
               >
                 {banner.cta_secondary_text}
               </Link>
@@ -186,25 +185,25 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Navigation Arrows (Only show if multiple slides) */}
+      {/* Navigation Arrows */}
       {displayBanners.length > 1 && (
         <>
           <button 
             onClick={prevSlide}
-            className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/25 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-white/50"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center text-white/50 hover:text-white transition-all opacity-0 md:group-hover:opacity-100"
             aria-label="Previous slide"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-10 h-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </button>
           
           <button 
             onClick={nextSlide}
-            className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center bg-white/10 border border-white/20 backdrop-blur-sm hover:bg-white/25 hover:scale-105 transition-all outline-none focus:ring-2 focus:ring-white/50"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center text-white/50 hover:text-white transition-all opacity-0 md:group-hover:opacity-100"
             aria-label="Next slide"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-10 h-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
@@ -213,25 +212,17 @@ export default function HeroSlider() {
 
       {/* Dots Indicator */}
       {displayBanners.length > 1 && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/20 px-3 py-2 rounded-full backdrop-blur-sm border border-white/10">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
           {displayBanners.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentSlide(idx)}
-              className={`rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-8 h-2 shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'bg-white/40 w-2 h-2 hover:bg-white/60'}`}
+              className={`transition-all duration-500 rounded-[1px] ${idx === currentSlide ? 'bg-white w-6 h-[1.5px]' : 'bg-white/40 w-[6px] h-[1.5px] hover:bg-white/60'}`}
               aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
         </div>
       )}
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center animate-float pointer-events-none opacity-60">
-        <span className="text-white text-xs tracking-[0.2em] font-mono mb-2 drop-shadow-md uppercase">Scroll</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-white">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
-      </div>
 
     </section>
     </div>

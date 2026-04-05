@@ -53,78 +53,84 @@ export default function AdminDashboardPage() {
   }, [])
 
   return (
-    <div>
+    <div className="font-body">
 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">📦</div>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Total Inventory</p>
+          <p className="font-heading font-bold text-[48px] text-[#1C1410] leading-none">
+            {loading ? '—' : stats.products}
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div className="bg-white rounded-2xl p-6 border border-[#E5E0F5] shadow-sm">
-          <div className="text-3xl mb-3">📦</div>
-          <p className="font-heading font-extrabold text-4xl text-[#6C3FC5]">
-            {loading ? '-' : stats.products}
+        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">🛒</div>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
+          <p className="font-heading font-bold text-[48px] text-[#4A2C6E] leading-none">
+            {loading ? '—' : stats.orders}
           </p>
-          <p className="text-[#6B7280] text-sm mt-1 font-medium">Total Products</p>
         </div>
-        <div className="bg-white rounded-2xl p-6 border border-[#E5E0F5] shadow-sm">
-          <div className="text-3xl mb-3">🛒</div>
-          <p className="font-heading font-extrabold text-4xl text-[#6C3FC5]">
-            {loading ? '-' : stats.orders}
+
+        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">⏳</div>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Queue</p>
+          <p className="font-heading font-bold text-[48px] text-[orange] leading-none">
+            {loading ? '—' : stats.pending}
           </p>
-          <p className="text-[#6B7280] text-sm mt-1 font-medium">Total Orders</p>
         </div>
-        <div className="bg-white rounded-2xl p-6 border border-[#E5E0F5] shadow-sm">
-          <div className="text-3xl mb-3">⏳</div>
-          <p className="font-heading font-extrabold text-4xl text-[#D97706]">
-            {loading ? '-' : stats.pending}
+
+        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">🖼️</div>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
+          <p className="font-heading font-bold text-[48px] text-[#2D6A4F] leading-none">
+            {loading ? '—' : stats.banners}
           </p>
-          <p className="text-[#6B7280] text-sm mt-1 font-medium">Pending Orders</p>
-        </div>
-        <div className="bg-white rounded-2xl p-6 border border-[#E5E0F5] shadow-sm">
-          <div className="text-3xl mb-3">🖼️</div>
-          <p className="font-heading font-extrabold text-4xl text-[#4CAF7D]">
-            {loading ? '-' : stats.banners}
-          </p>
-          <p className="text-[#6B7280] text-sm mt-1 font-medium">Active Banners</p>
         </div>
       </div>
 
-      <h2 className="font-heading font-bold text-xl text-[#1A1A2E] mb-4">Recent Orders</h2>
-      <div className="bg-white rounded-2xl border border-[#E5E0F5] overflow-hidden shadow-sm">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="font-heading font-bold text-[22px] text-[#1C1410] uppercase tracking-widest leading-none">Latest Transactions</h2>
+        <div className="h-px bg-[#E8E2D9] flex-1 mx-8 opacity-40"></div>
+      </div>
+
+      <div className="bg-white rounded-0 border border-[#E8E2D9] overflow-hidden shadow-sm">
         <table className="w-full text-sm">
-          <thead className="bg-[#F7F5FF] border-b border-[#E5E0F5]">
+          <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
             <tr>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">Order #</th>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">Customer</th>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">City</th>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">Total</th>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">Status</th>
-              <th className="px-6 py-4 text-left font-mono text-xs text-[#6C3FC5] uppercase tracking-wide">Date</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Identifier</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Location</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Valuation</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Status</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Created</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-6 py-6 text-center text-[#6B7280]">Loading orders...</td>
+                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">Syncing live data...</td>
               </tr>
             ) : recentOrders.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-6 text-center text-[#6B7280]">No orders found.</td>
+                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">No active transactions found.</td>
               </tr>
             ) : (
               recentOrders.map((o: any) => (
-                <tr key={o.id} className="border-b border-[#E5E0F5] last:border-0 hover:bg-[#F7F5FF] transition">
-                  <td className="px-6 py-4 font-mono font-medium text-[#1A1A2E]">{o.order_number}</td>
-                  <td className="px-6 py-4 text-[#6B7280]">{o.customer_name}</td>
-                  <td className="px-6 py-4 text-[#6B7280]">{o.city}</td>
-                  <td className="px-6 py-4 font-bold text-[#6C3FC5] Syne">Rs. {o.total_pkr?.toLocaleString()}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      o.status === 'pending' ? 'bg-[#FFF9E6] text-[#D97706]' : 'bg-[#E5E0F5] text-[#1A1A2E]'
+                <tr key={o.id} className="border-b border-[#FAF7F4] last:border-0 hover:bg-[#FAF7F4]/50 transition-colors">
+                  <td className="px-8 py-6 font-mono font-bold text-[13px] text-[#1C1410] tracking-widest">{o.order_number}</td>
+                  <td className="px-8 py-6 text-[#6B6058] font-bold text-[13px]">{o.customer_name}</td>
+                  <td className="px-8 py-6 text-[#6B6058] font-medium text-[12px] uppercase tracking-wider">{o.city}</td>
+                  <td className="px-8 py-6 font-bold text-[#4A2C6E] font-heading text-[15px]">{o.total_pkr?.toLocaleString()} PKR</td>
+                  <td className="px-8 py-6">
+                    <span className={`px-4 py-1.5 rounded-0 text-[9px] font-bold uppercase tracking-[2px] border ${
+                      o.status === 'pending' ? 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]' : 'bg-white text-[#1C1410] border-[#E8E2D9]'
                     }`}>
                       {o.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-[#6B7280] text-xs">
-                    {new Date(o.created_at).toLocaleDateString()}
+                  <td className="px-8 py-6 text-[#6B6058] text-[11px] font-bold uppercase tracking-widest opacity-40">
+                    {new Date(o.created_at).toLocaleDateString('en-PK', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
                 </tr>
               ))

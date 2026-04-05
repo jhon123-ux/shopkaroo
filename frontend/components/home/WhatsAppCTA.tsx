@@ -1,20 +1,20 @@
 export default function WhatsAppCTA() {
   return (
     <section 
-      className="py-20 flex justify-center items-center"
-      style={{ background: 'linear-gradient(135deg, #6C3FC5, #5530A8)' }}
+      className="py-24 flex justify-center items-center"
+      style={{ background: 'linear-gradient(135deg, #4A2C6E, #3A1F57)' }}
     >
-      <div className="max-w-4xl mx-auto px-4 text-center">
+      <div className="max-w-4xl mx-auto px-6 text-center">
         
-        <div className="text-5xl mb-6 select-none animate-bounce-short">
+        <div className="text-4xl mb-8 select-none opacity-90">
           💬
         </div>
         
-        <h2 className="text-4xl md:text-5xl font-extrabold font-heading text-white mb-4">
+        <h2 className="text-[42px] md:text-[56px] font-bold font-heading text-white mb-6 leading-tight">
           Need Help Choosing?
         </h2>
         
-        <p className="text-white/80 text-lg font-body mt-3 mb-10 max-w-lg mx-auto leading-relaxed">
+        <p className="text-white/75 text-lg font-body mt-4 mb-12 max-w-lg mx-auto leading-relaxed">
           Our furniture experts are ready to help you find the perfect piece for your home.
         </p>
         
@@ -22,9 +22,9 @@ export default function WhatsAppCTA() {
           href="https://wa.me/923001234567" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center bg-[#4CAF7D] text-white px-10 py-5 rounded-xl font-bold font-heading text-lg hover:bg-green-600 transition-all shadow-[0_8px_30px_rgb(76,175,125,0.3)] hover:-translate-y-1 active:scale-95"
+          className="inline-flex items-center justify-center bg-[#25D366] text-white px-12 py-5 rounded-[3px] font-bold font-body text-base hover:bg-[#1fba59] transition-all shadow-lg active:scale-95"
         >
-          Chat on WhatsApp <span className="ml-2 font-body text-xl">→</span>
+          Chat on WhatsApp <span className="ml-3 font-body text-xl">→</span>
         </a>
 
       </div>

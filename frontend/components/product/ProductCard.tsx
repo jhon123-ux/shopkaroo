@@ -54,22 +54,21 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
   }
 
   return (
-    <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
+    <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-white rounded-[4px] border border-[#E8E2D9] overflow-hidden hover:border-[#4A2C6E] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
       
       {/* TOP — Square Image Area */}
       <div 
-        className="w-full h-64 relative overflow-hidden flex items-center justify-center bg-gray-50"
-        style={{ background: 'linear-gradient(135deg, #EDE6FA, #F7F5FF)' }}
+        className="w-full h-65 relative overflow-hidden flex items-center justify-center bg-[#F2EDE6]"
       >
         {product.images && product.images.length > 0 ? (
           <Image 
             src={product.images[0]} 
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
           />
         ) : (
-          <div className="text-7xl opacity-60 group-hover:scale-105 transition-transform duration-500 select-none pointer-events-none">
+          <div className="text-7xl opacity-60 group-hover:scale-[1.04] transition-transform duration-500 select-none pointer-events-none">
             {getEmoji(product.category)}
           </div>
         )}
@@ -77,11 +76,11 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         {/* Top left badge */}
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
           {isSale ? (
-            <span className="bg-[#DC2626] text-white text-xs px-2.5 py-1 rounded-full font-mono font-bold shadow-sm">
+            <span className="bg-[#1C1410] text-white text-[10px] px-[10px] py-[4px] rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
               SALE
             </span>
           ) : isNew ? (
-            <span className="bg-[#6C3FC5] text-white text-xs px-2.5 py-1 rounded-full font-mono font-bold shadow-sm">
+            <span className="bg-[#4A2C6E] text-white text-[10px] px-[10px] py-[4px] rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
               NEW
             </span>
           ) : null}
@@ -90,7 +89,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         {/* Top right Wishlist button */}
         <button 
           onClick={(e) => { e.preventDefault(); /* Wishlist logic later */ }}
-          className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full flex items-center justify-center hover:bg-white text-[#6B7280] hover:text-red-500 opacity-0 md:opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+          className="absolute top-3 right-3 z-10 bg-white/92 border border-[#E8E2D9] w-[34px] h-[34px] rounded-[3px] flex items-center justify-center text-[#6B6058] hover:text-[#4A2C6E] hover:border-[#4A2C6E] opacity-0 group-hover:opacity-100 transition-all shadow-sm"
           aria-label="Add to wishlist"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -100,56 +99,53 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
       </div>
 
       {/* BOTTOM — Product Info */}
-      <div className="p-4 flex flex-col items-start min-h-[148px]">
+      <div className="p-[14px_16px_16px] flex flex-col items-start">
         
-        {/* Row 1 — Product name */}
-        <h3 className="font-heading font-semibold text-base text-[#1A1A2E] line-clamp-1 mb-2">
+        {/* Category tag */}
+        <span className="text-[10px] font-semibold font-body tracking-[2px] uppercase text-[#6B6058] mb-[6px] block">
+          {product.category.replace('-', ' ')}
+        </span>
+
+        {/* Product name */}
+        <h3 className="font-heading font-semibold text-[16px] text-[#1C1410] line-clamp-2 leading-[1.35] mb-[10px]">
           {product.name}
         </h3>
 
-        {/* Row 2 — Price row */}
-        <div className="flex items-center justify-between w-full mb-2">
-          <div className="flex items-end gap-2">
-            {isSale ? (
-               <>
-                 <span className="text-[#6C3FC5] font-bold text-lg font-heading">
-                   {formatPrice(product.sale_price!)}
-                 </span>
-                 <span className="text-[#6B7280] text-xs line-through mb-0.5">
-                   {formatPrice(product.price_pkr)}
-                 </span>
-               </>
-            ) : (
-               <span className="text-[#6C3FC5] font-bold text-lg font-heading">
+        {/* Price row */}
+        <div className="flex items-center gap-2 mb-2">
+          {isSale ? (
+             <>
+               <span className="text-[#4A2C6E] font-bold text-[18px] font-heading">
+                 {formatPrice(product.sale_price!)}
+               </span>
+               <span className="text-[#A89890] text-[13px] font-body line-through">
                  {formatPrice(product.price_pkr)}
                </span>
-            )}
-          </div>
+             </>
+          ) : (
+             <span className="text-[#1C1410] font-bold text-[18px] font-heading">
+               {formatPrice(product.price_pkr)}
+             </span>
+          )}
         </div>
 
-        {/* Row 3 — COD Badge */}
-        <div className="mt-1 inline-flex items-center gap-1 bg-[#F0FDF4] text-[#16A34A] text-xs px-2.5 py-1 rounded-full border border-[#BBF7D0] shadow-sm font-medium">
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-          Cash on Delivery
+        {/* Trust row */}
+        <div className="mt-2 inline-flex items-center gap-1 bg-[#EBF7F0] text-[#2D6A4F] text-[11px] px-2 py-[3px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-medium">
+          ✓ COD
         </div>
 
-        {/* Row 4 — Add to Cart button */}
+        {/* Add to Cart button */}
         <button 
           onClick={handleAddToCart}
-          className="w-full bg-[#6C3FC5] text-white py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#5530A8] transition-all duration-300 opacity-100 md:opacity-0 translate-y-0 md:translate-y-3 md:group-hover:opacity-100 md:group-hover:translate-y-0 mt-3"
+          className="w-full bg-[#4A2C6E] text-white py-[10px] rounded-[3px] border border-[#4A2C6E] font-semibold font-body text-[13px] tracking-[0.3px] flex items-center justify-center gap-2 hover:bg-[#3A1F57] transition-all duration-150 mt-3 md:opacity-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
           Add to Cart
         </button>
       </div>
 
       {showToast && (
-        <div className="fixed top-24 right-6 z-[100] bg-[#1A1A2E] text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 md:animate-slideUp">
-          <span className="text-[#4CAF7D] font-bold">✓</span> Added to cart!
+        <div className="fixed top-24 right-6 z-[100] bg-[#1C1410] text-white px-4 py-3 rounded-[3px] shadow-xl flex items-center gap-2 animate-slideUp">
+          <span className="text-[#2D6A4F] font-bold">✓</span> Added to cart
         </div>
       )}
 

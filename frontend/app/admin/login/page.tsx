@@ -17,15 +17,12 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
-      // We verify credentials against authorized admin accounts.
-      // In a production Supabase setup, use authenticated signIn methods.
-      
       if (email === 'admin@shopkaroo.com' && password === 'shopkaroo2025') {
         localStorage.setItem('admin_token', 'shopkaroo_admin_access_token_v1')
         document.cookie = "admin_auth=true; path=/;"
         router.push('/admin')
       } else {
-        throw new Error('Invalid email or password')
+        throw new Error('Credential mismatch detected.')
       }
     } catch (err: any) {
       setError(err.message)
@@ -35,67 +32,76 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center p-6">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center p-8 font-body text-left">
+      <div className="max-w-md w-full relative z-10">
         
         {/* LOGO AREA */}
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <span className="text-4xl text-[#6C3FC5]">🛋️</span>
-            <span className="text-3xl font-heading font-extrabold text-[#1A1A2E]">Shopkaroo</span>
+        <div className="text-center mb-16">
+          <Link href="/" className="inline-block mb-10 group">
+            <span className="text-[42px] font-heading font-bold text-[#1C1410] uppercase tracking-[12px] transition-all group-hover:tracking-[16px]">SHOPKAROO</span>
           </Link>
-          <h1 className="text-xl font-bold text-[#1A1A2E] opacity-70 uppercase tracking-widest font-mono">
-            Admin Portal
+          <div className="h-px bg-[#1C1410]/10 w-24 mx-auto mb-6" />
+          <h1 className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[5px] opacity-60">
+            Internal Archive Access
           </h1>
         </div>
 
         {/* LOGIN CARD */}
-        <div className="bg-white rounded-3xl p-10 shadow-[0_20px_50px_rgba(108,63,197,0.1)] border border-[#E5E0F5]">
-          <h2 className="text-2xl font-black text-[#1A1A2E] mb-8 font-heading">Sign In</h2>
+        <div className="bg-white rounded-0 p-12 shadow-[0_40px_100px_rgba(28,20,16,0.08)] border border-[#E8E2D9]">
+          <h2 className="text-[20px] font-bold text-[#1C1410] mb-12 font-heading uppercase tracking-[4px]">Sign In</h2>
           
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-10">
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2 font-mono uppercase tracking-tight">Email Address</label>
+              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Personnel Identifier</label>
               <input 
                 type="email" 
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@shopkaroo.com"
-                className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none transition-shadow"
+                className="w-full border-b border-[#D4CCC2] bg-transparent rounded-0 px-0 py-4 text-[14px] focus:border-[#1C1410] outline-none transition-all placeholder:opacity-20"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2 font-mono uppercase tracking-tight">Password</label>
+              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Access Protocol (Password)</label>
               <input 
                 type="password" 
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none transition-shadow"
+                className="w-full border-b border-[#D4CCC2] bg-transparent rounded-0 px-0 py-4 text-[14px] focus:border-[#1C1410] outline-none transition-all placeholder:opacity-20"
               />
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-bold border border-red-100 flex items-center gap-2">
-                <span>⚠️</span> {error}
+              <div className="bg-white text-[#DC2626] py-4 border-l-2 border-l-[#DC2626] px-4 text-[11px] font-bold uppercase tracking-[1px] flex items-center gap-3">
+                <span className="text-[14px]">✕</span> {error}
               </div>
             )}
 
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-[#6C3FC5] text-white py-4 rounded-xl font-black text-lg hover:bg-[#5530A8] transition-all shadow-xl shadow-[#6C3FC5]/20 active:scale-95 disabled:opacity-50"
+              className="w-full bg-[#1C1410] text-white py-5 rounded-0 font-bold uppercase tracking-[4px] text-[12px] hover:bg-[#33221b] transition-all shadow-2xl active:scale-95 disabled:opacity-30"
             >
-              {loading ? 'Authenticating...' : 'Enter Dashboard'}
+              {loading ? 'AUTHENTICATING...' : 'AUTHORIZE ENTRY'}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-[#6B7280] text-xs font-medium">
-            Restricted access. Use your authorized shop credentials.
-          </p>
+          <div className="mt-12 pt-8 border-t border-[#FAF7F4] text-center">
+             <p className="text-[#6B6058] text-[9px] font-bold uppercase tracking-[2px] opacity-30 leading-relaxed max-w-[240px] mx-auto">
+               RESTRICTED ACCESS PROTOCOL. UNAUTHORIZED ENTRY ATTEMPTS LOGGED BY SYSTEM.
+             </p>
+          </div>
+        </div>
+
+        {/* FOOTER LINK */}
+        <div className="mt-12 text-center">
+          <Link href="/" className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[3px] opacity-40 hover:opacity-100 transition-opacity">
+            ← Return to Public Showroom
+          </Link>
         </div>
 
       </div>

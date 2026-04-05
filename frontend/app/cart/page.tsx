@@ -34,18 +34,18 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <main className="bg-white min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-32">
-        <div className="text-8xl mb-6 select-none">🛒</div>
-        <h1 className="text-3xl font-extrabold font-heading text-[#1A1A2E]">
-          Your cart is empty
+        <div className="text-6xl mb-8 opacity-20 select-none grayscale">🛒</div>
+        <h1 className="text-[32px] font-bold font-heading text-[#1C1410] mb-4">
+          Your Collection is Empty
         </h1>
-        <p className="text-[#6B7280] mt-3 mb-8">
-          Looks like you haven't added anything yet
+        <p className="text-[#6B6058] font-body text-base max-w-sm mx-auto opacity-70 mb-10">
+          Discover our curated pieces and start building your dream home today.
         </p>
         <button 
           onClick={() => router.push('/furniture/living-room')}
-          className="bg-[#6C3FC5] text-white px-10 py-4 rounded-2xl font-bold text-lg font-heading hover:bg-[#5530A8] transition-all shadow-md hover:-translate-y-0.5 active:scale-95"
+          className="bg-[#4A2C6E] text-white px-12 py-4 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-lg active:scale-95"
         >
-          Start Shopping
+          Explore Collection
         </button>
       </main>
     )
@@ -53,83 +53,87 @@ export default function CartPage() {
 
   // CART WITH ITEMS
   return (
-    <main className="bg-white min-h-screen relative pb-32 md:pb-10">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+    <main className="bg-white min-h-screen relative pb-40 md:pb-24">
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
         
         {/* Page Title */}
-        <h1 className="text-3xl font-extrabold font-heading text-[#1A1A2E] mb-2 shadow-sm drop-shadow-sm">
-          My Cart
-        </h1>
-        <p className="text-[#6B7280] text-base mb-8">{getTotalItems()} items</p>
+        <div className="mb-12 border-b border-[#E8E2D9] pb-8 flex flex-col items-center md:items-start">
+          <h1 className="text-[40px] font-bold font-heading text-[#1C1410]">
+            My Cart
+          </h1>
+          <p className="text-[#6B6058] font-body text-[14px] uppercase tracking-[3px] font-semibold opacity-60 mt-2">{getTotalItems()} Items Selected</p>
+        </div>
 
         {/* Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* LEFT — CART ITEMS */}
-          <div className="md:col-span-2 flex flex-col">
+          <div className="lg:col-span-8 flex flex-col gap-6">
             {items.map(item => {
               const price = item.sale_price ?? item.price_pkr
               
               return (
-                <div key={item.id} className="bg-white rounded-2xl p-5 border border-[#E5E0F5] flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-4 w-full relative hover:shadow-sm transition-shadow">
+                <div key={item.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] flex flex-col sm:flex-row items-center gap-8 w-full relative transition-all duration-300 hover:border-[#4A2C6E]/30">
                   
                   {/* Image area */}
-                  <div className="w-24 h-24 flex-shrink-0 bg-[#F7F5FF] rounded-xl overflow-hidden relative flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #EDE6FA, #F7F5FF)' }}>
+                  <div className="w-28 h-28 flex-shrink-0 bg-[#F2EDE6] rounded-0 overflow-hidden relative border border-[#E8E2D9]">
                     {item.images && item.images.length > 0 ? (
                       <Image 
                         src={item.images[0]} 
                         alt={item.name}
                         fill
-                        className="object-cover"
+                        className="object-contain p-2"
                       />
                     ) : (
-                      <span className="text-3xl select-none opacity-80">{getCategoryEmoji(item.category)}</span>
+                      <div className="absolute inset-0 flex items-center justify-center grayscale opacity-10">
+                        <span className="text-4xl">{getCategoryEmoji(item.category)}</span>
+                      </div>
                     )}
                   </div>
 
                   {/* Item info */}
-                  <div className="flex-1 w-full">
-                    <span className="inline-block text-[10px] font-mono uppercase tracking-widest font-bold text-[#6C3FC5] bg-[#EDE6FA] px-2.5 py-1 rounded-full mb-2 border border-[#d5c6f6]">
+                  <div className="flex-1 w-full text-center sm:text-left">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-[2px] text-[#4A2C6E] bg-[#F0EBF8] px-3 py-1.5 rounded-[2px] mb-4 font-body">
                       {item.category.replace('-', ' ')}
                     </span>
-                    <h3 className="font-heading font-semibold text-[#1A1A2E] text-base line-clamp-1 pr-6 pb-1">
+                    <h3 className="font-heading font-bold text-[#1C1410] text-[18px] md:text-[22px] mb-2 pr-6">
                       {item.name}
                     </h3>
-                    <p className="text-sm text-[#6B7280] font-medium">
-                      {formatPrice(price)} per item
+                    <p className="text-[13px] text-[#6B6058] font-body opacity-70">
+                      {formatPrice(price)} per unit
                     </p>
                   </div>
 
-                  {/* Desktop Right Controls (Responsive stacked on mobile) */}
-                  <div className="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-5 mt-2 sm:mt-0">
+                  {/* Controls */}
+                  <div className="w-full sm:w-auto flex flex-col items-center sm:items-end gap-6 justify-center">
                     
                     {/* Quantity controls */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center border border-[#E8E2D9] rounded-[3px] overflow-hidden">
                       <button 
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="w-8 h-8 rounded-lg border border-[#E5E0F5] flex items-center justify-center hover:border-[#6C3FC5] text-lg font-bold transition-colors bg-white text-[#1A1A2E]"
+                        className="w-10 h-10 flex items-center justify-center hover:bg-[#FAF7F4] text-[#1C1410] transition-colors bg-white font-body text-lg border-r border-[#E8E2D9]"
                       >
-                        -
+                        −
                       </button>
-                      <div className="font-bold text-[#1A1A2E] w-8 text-center bg-transparent font-heading">
+                      <div className="font-bold text-[#1C1410] w-12 text-center font-body text-[14px]">
                         {item.quantity}
                       </div>
                       <button 
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-8 h-8 rounded-lg border border-[#E5E0F5] flex items-center justify-center hover:border-[#6C3FC5] text-lg font-bold transition-colors bg-white text-[#1A1A2E]"
+                        className="w-10 h-10 flex items-center justify-center hover:bg-[#FAF7F4] text-[#1C1410] transition-colors bg-white font-body text-lg border-l border-[#E8E2D9]"
                       >
                         +
                       </button>
                     </div>
 
                     {/* Item total */}
-                    <div className="text-right sm:min-w-[100px] flex flex-col sm:items-end">
-                      <p className="font-bold text-[#6C3FC5] text-lg font-heading">
+                    <div className="text-center sm:text-right">
+                      <p className="font-heading font-bold text-[#4A2C6E] text-[20px]">
                         {formatPrice(price * item.quantity)}
                       </p>
                       <button 
                         onClick={() => removeItem(item.id)}
-                        className="text-[#DC2626] text-xs hover:underline cursor-pointer font-medium mt-1 uppercase tracking-wider"
+                        className="text-[#6B6058] text-[11px] hover:text-[#DC2626] cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body inline-block underline underline-offset-4"
                       >
                         Remove
                       </button>
@@ -143,79 +147,82 @@ export default function CartPage() {
             {items.length > 0 && (
               <button 
                 onClick={clearCart}
-                className="text-[#DC2626] text-sm font-semibold hover:underline cursor-pointer mt-2 w-max px-2 py-1"
+                className="text-[#6B6058] text-[12px] font-bold hover:text-[#DC2626] transition-colors cursor-pointer w-max uppercase tracking-[2px] font-body self-center md:self-start py-2"
               >
-                Clear all items
+                Clear Collection
               </button>
             )}
           </div>
 
           {/* RIGHT — ORDER SUMMARY */}
-          <div className="md:col-span-1 relative mt-4 md:mt-0">
-            <div className="md:sticky md:top-24 bg-white rounded-2xl p-6 border border-[#E5E0F5] shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-              <h2 className="font-heading font-bold text-xl text-[#1A1A2E] mb-6 border-b border-[#E5E0F5] pb-4">Order Summary</h2>
+          <div className="lg:col-span-4 lg:relative">
+            <div className="lg:sticky lg:top-28 bg-[#FAF7F4] rounded-0 p-8 border border-[#E8E2D9] shadow-sm">
+              <h2 className="font-heading font-bold text-[22px] text-[#1C1410] mb-8 uppercase tracking-widest text-center">Summary</h2>
               
-              <div className="flex justify-between text-sm mb-4">
-                <span className="text-[#6B7280] font-medium">Subtotal ({getTotalItems()} items)</span>
-                <span className="text-[#1A1A2E] font-bold">{formatPrice(getTotalPrice())}</span>
-              </div>
-              
-              <div className="flex justify-between text-sm mb-4">
-                <span className="text-[#6B7280] font-medium">Delivery</span>
-                <span className="text-[#4CAF7D] font-bold">Free</span>
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-[14px] font-body">
+                  <span className="text-[#6B6058] font-semibold opacity-70">Subtotal ({getTotalItems()} Items)</span>
+                  <span className="text-[#1C1410] font-bold">{formatPrice(getTotalPrice())}</span>
+                </div>
+                
+                <div className="flex justify-between text-[14px] font-body">
+                  <span className="text-[#6B6058] font-semibold opacity-70">Premium Delivery</span>
+                  <span className="text-[#2D6A4F] font-bold uppercase tracking-wider text-[11px]">Complimentary</span>
+                </div>
               </div>
 
-              <div className="border-t border-[#E5E0F5] my-5"></div>
+              <div className="border-t border-[#E8E2D9] mb-8"></div>
 
-              <div className="flex justify-between mb-8 items-center bg-[#F7F5FF] p-3 rounded-lg border border-[#E5E0F5]">
-                <span className="font-heading font-bold text-lg text-[#1A1A2E]">Total</span>
-                <span className="font-heading font-extrabold text-2xl text-[#6C3FC5]">{formatPrice(getTotalPrice())}</span>
+              <div className="flex flex-col gap-2 mb-10 items-center">
+                <span className="font-body font-bold text-[11px] text-[#6B6058] uppercase tracking-[3px] opacity-60">Grand Total</span>
+                <span className="font-heading font-bold text-[36px] text-[#4A2C6E] leading-none">{formatPrice(getTotalPrice())}</span>
               </div>
 
               {/* COD notice */}
-              <div className="bg-[#F0FDF4] border border-[#BBF7D0] rounded-xl p-4 mb-6 flex items-start gap-3 shadow-sm">
-                <span className="text-[#4CAF7D] text-lg mt-0.5 font-bold">✓</span>
+              <div className="bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-[3px] p-5 mb-8 flex items-start gap-4">
+                <span className="text-[#2D6A4F] text-lg mt-0.5 font-bold">✓</span>
                 <div>
-                  <p className="font-bold text-[#166534] text-sm">Cash on Delivery</p>
-                  <p className="text-[#166534]/80 text-[13px] mt-1 leading-snug">
-                    Pay when your furniture arrives. No online payment required.
+                  <p className="font-bold text-[#2D6A4F] text-[12px] font-body uppercase tracking-wider">Cash on Delivery</p>
+                  <p className="text-[#2D6A4F]/70 text-[13px] mt-1 leading-relaxed font-body">
+                    Pay at your doorstep. No prepayment required.
                   </p>
                 </div>
               </div>
 
               <button 
                 onClick={() => router.push('/checkout')}
-                className="hidden md:flex w-full bg-[#6C3FC5] text-white py-4 rounded-2xl font-bold text-lg font-heading hover:bg-[#5530A8] transition-all shadow-md hover:-translate-y-0.5 active:scale-95 items-center justify-center gap-2"
+                className="hidden md:flex w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-lg active:scale-95 items-center justify-center gap-3"
               >
-                Proceed to Checkout
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                Complete Order
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
               </button>
               
-              <button 
-                onClick={() => router.push('/furniture/living-room')}
-                className="hidden md:block w-full text-center text-[#6C3FC5] text-sm font-semibold hover:underline mt-4"
+              <Link 
+                href="/furniture/living-room"
+                className="hidden md:block w-full text-center text-[#6B6058] text-[12px] font-bold hover:text-[#4A2C6E] transition-colors mt-6 uppercase tracking-[1px] font-body"
               >
-                ← Continue Shopping
-              </button>
+                ← Back to Gallery
+              </Link>
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* MOBILE DEFAULT FIX FOR STICKY BOTTOM CHECKOUT */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E5E0F5] px-4 pt-3 pb-5 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] animate-slideUp">
-        <div className="flex justify-between items-center mb-3 px-1">
-          <span className="text-[#6B7280] font-semibold text-sm">Total</span>
-          <span className="font-heading font-extrabold text-xl text-[#6C3FC5]">{formatPrice(getTotalPrice())}</span>
+      {/* MOBILE BOTTOM CHECKOUT */}
+      <div className="lg:hidden fixed bottom-12 left-0 right-0 z-50 bg-white border-t border-[#E8E2D9] px-6 pt-5 pb-8 shadow-[0_-10px_30px_rgba(28,20,16,0.1)] animate-slideUp">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col">
+            <span className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
+            <span className="font-heading font-bold text-[24px] text-[#4A2C6E]">{formatPrice(getTotalPrice())}</span>
+          </div>
+          <button 
+            onClick={() => router.push('/checkout')}
+            className="bg-[#4A2C6E] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-md active:scale-95 flex items-center justify-center gap-2"
+          >
+            Checkout
+          </button>
         </div>
-        <button 
-          onClick={() => router.push('/checkout')}
-          className="w-full bg-[#6C3FC5] text-white py-3.5 rounded-xl font-bold text-base font-heading hover:bg-[#5530A8] transition-all focus:ring active:scale-95 flex items-center justify-center gap-2"
-        >
-          Proceed to Checkout
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </button>
       </div>
 
     </main>

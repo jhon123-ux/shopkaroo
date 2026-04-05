@@ -1,35 +1,42 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @theme {
-  --color-primary: #6C3FC5;
-  --color-primary-dark: #5530A8;
-  --color-primary-soft: #A78BFA;
-  --color-primary-tint: #EDE6FA;
-  --color-surface: #F7F5FF;
-  --color-background: #FFFFFF;
-  --color-text: #1A1A2E;
-  --color-text-muted: #6B7280;
-  --color-cod-green: #4CAF7D;
-  --color-border: #E5E0F5;
+  --color-primary:         #4A2C6E;
+  --color-primary-dark:    #3A1F57;
+  --color-primary-soft:    #7B5EA7;
+  --color-primary-tint:    #F0EBF8;
+  --color-surface:         #F2EDE6;
+  --color-background:      #FAF7F4;
+  --color-bg-white:        #FFFFFF;
+  --color-text:            #1C1410;
+  --color-text-muted:      #6B6058;
+  --color-cod-green:       #2D6A4F;
+  --color-cod-bg:          #EBF7F0;
+  --color-border:          #E8E2D9;
+  --color-border-input:    #D4CCC2;
   
-  --font-heading: var(--font-syne), sans-serif;
-  --font-body: var(--font-epilogue), sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
   
-  --shadow-custom: 0 4px 24px rgba(108, 63, 197, 0.10);
+  --shadow-sm: 0 1px 4px rgba(28,20,16,0.06);
+  --shadow-md: 0 4px 20px rgba(28,20,16,0.10);
 }
 
 * {
   box-sizing: border-box;
+  --radius-sm: 3px;
+  --radius-md: 4px;
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-body);
+  background-color: #FAF7F4;
+  color: #1C1410;
+  font-family: 'DM Sans', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 ::selection {

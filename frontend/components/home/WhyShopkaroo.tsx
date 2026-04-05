@@ -18,15 +18,15 @@ export default function WhyShopkaroo() {
   ]
 
   return (
-    <section className="bg-[#F7F5FF] py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-[#FAF7F4] py-24 border-b border-[#E8E2D9]">
+      <div className="max-w-7xl mx-auto px-6">
         
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold font-heading text-[#1A1A2E] mb-3">
+        <div className="text-center mb-20">
+          <h2 className="text-[36px] font-bold font-heading text-[#1C1410] mb-4">
             Why Choose Shopkaroo?
           </h2>
-          <p className="text-[#6B7280] text-lg font-body max-w-2xl mx-auto">
-            Everything you need to shop with confidence
+          <p className="text-[#6B6058] text-lg font-body max-w-xl mx-auto opacity-80">
+            Precision craftsmanship and reliable delivery for every home.
           </p>
         </div>
 
@@ -34,17 +34,17 @@ export default function WhyShopkaroo() {
           {cards.map((card, idx) => (
             <div 
               key={idx} 
-              className="bg-white rounded-2xl p-8 border border-[#E5E0F5] hover:border-[#6C3FC5] hover:shadow-lg transition-all duration-300 group"
+              className="bg-white rounded-[4px] p-8 border border-[#E8E2D9] hover:border-[#4A2C6E] transition-all duration-300 group"
             >
-              <div className="w-16 h-16 bg-[#EDE6FA] rounded-2xl flex items-center justify-center mb-6 text-4xl group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-inner">
+              <div className="w-[52px] h-[52px] bg-[#F0EBF8] rounded-[3px] flex items-center justify-center mb-8 text-2xl group-hover:scale-105 transition-transform duration-300">
                 {card.icon}
               </div>
               
-              <h3 className="font-heading font-bold text-xl text-[#1A1A2E] mb-3">
+              <h3 className="font-heading font-semibold text-[18px] text-[#1C1410] mb-4">
                 {card.title}
               </h3>
               
-              <p className="text-[#6B7280] text-base leading-relaxed font-body">
+              <p className="text-[#6B6058] text-[14px] leading-relaxed font-body">
                 {card.desc}
               </p>
             </div>

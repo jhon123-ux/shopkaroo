@@ -8,8 +8,8 @@ import { Suspense } from 'react'
 export default function OrderConfirmedPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#6C3FC5] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
       </div>
     }>
       <OrderConfirmedContent />
@@ -24,98 +24,103 @@ function OrderConfirmedContent() {
   const email = searchParams?.get('email')
 
   return (
-    <main className="bg-[#F7F5FF] min-h-[85vh] flex flex-col items-center justify-center p-6 text-center font-body relative overflow-hidden">
+    <main className="bg-[#FAF7F4] min-h-[90vh] flex flex-col items-center justify-center p-6 text-center font-body relative overflow-hidden">
       
-      {/* Decorative background blobs */}
-      <div className="absolute w-[500px] h-[500px] bg-[#6C3FC5]/5 rounded-full blur-3xl -top-20 -left-20 pointer-events-none"></div>
-      <div className="absolute w-[400px] h-[400px] bg-[#4CAF7D]/5 rounded-full blur-3xl bottom-0 right-0 pointer-events-none"></div>
+      {/* Subtle brand texture or decoration */}
+      <div className="absolute w-[800px] h-[800px] bg-[#4A2C6E]/[0.02] rounded-full blur-3xl -top-40 -left-40 pointer-events-none shrink-0"></div>
+      <div className="absolute w-[600px] h-[600px] bg-[#2D6A4F]/[0.02] rounded-full blur-3xl -bottom-20 -right-20 pointer-events-none shrink-0"></div>
 
-      <div className="max-w-2xl w-full bg-white rounded-3xl border border-[#E5E0F5] shadow-xl p-8 md:p-12 relative z-10 animate-slideUp">
+      <div className="max-w-3xl w-full bg-white rounded-0 border border-[#E8E2D9] shadow-sm p-10 md:p-20 relative z-10 animate-slideUp">
         
-        {/* Animated Checkmark */}
-        <div className="mx-auto w-24 h-24 bg-[#F0FDF4] border-4 border-[#BBF7D0] rounded-full flex items-center justify-center mb-6 shadow-sm">
-          <span className="text-5xl drop-shadow-sm">✅</span>
+        {/* Success Icon */}
+        <div className="mx-auto w-24 h-24 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-0 flex items-center justify-center mb-10 shadow-sm">
+          <svg width="40" height="30" viewBox="0 0 20 15" fill="none" className="text-[#2D6A4F]">
+            <path d="M1 7L7 13L19 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
 
-        <h1 className="font-heading font-extrabold text-3xl md:text-4xl text-[#1A1A2E] mb-3">
-          Order Placed Successfully!
+        <h1 className="font-heading font-bold text-[36px] md:text-[48px] text-[#1C1410] mb-4 leading-tight">
+          Thank You
         </h1>
         
-        <p className="text-[#6B7280] font-medium text-lg mb-2">Order Number:</p>
-        <p className="text-[#6C3FC5] font-black text-2xl font-mono tracking-wider bg-[#F7F5FF] inline-block px-4 py-2 rounded-xl border border-[#E5E0F5]">
-          {orderId || 'PENDING'}
+        <p className="text-[#6B6058] text-[14px] uppercase tracking-[4px] font-semibold opacity-60 mb-10">
+          Your Collection is being prepared
         </p>
+
+        <div className="flex flex-col items-center gap-2 mb-12">
+            <span className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40">Reference Code</span>
+            <p className="text-[#4A2C6E] font-bold text-[24px] font-mono tracking-[4px] bg-[#FAF7F4] inline-block px-8 py-3 rounded-[2px] border border-[#E8E2D9]">
+            {orderId || 'PENDING'}
+            </p>
+        </div>
 
         {/* Email Notice */}
         {email && (
-          <div className="bg-[#F0FDF4] rounded-2xl p-5 mt-8 border border-[#BBF7D0] shadow-sm text-left flex gap-3 items-start max-w-md mx-auto">
-            <span className="text-2xl pt-0.5">📧</span>
-            <div>
-              <p className="text-[#166534] font-bold text-sm leading-tight">Confirmation email sent to</p>
-              <p className="text-[#166534] font-bold text-sm mb-1">{email}</p>
-              <p className="text-[#166534]/80 font-medium text-xs">
-                Check your inbox for order details and tracking information.
-              </p>
+          <div className="bg-[#FAF7F4] rounded-0 p-8 mb-16 border border-[#E8E2D9] text-left flex gap-6 items-start max-w-lg mx-auto">
+            <div className="bg-white w-12 h-12 flex items-center justify-center flex-shrink-0 border border-[#E8E2D9] shadow-sm">
+              <span className="text-xl opacity-40">📧</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-[#1C1410] font-bold text-[12px] uppercase tracking-wider mb-1">Confirmation Despatched</p>
+              <p className="text-[#6B6058] text-[14px] mb-4 opacity-80">{email}</p>
               
-              <div className="mt-4 pt-4 border-t border-[#166534]/10">
-                <p className="text-[#1A1A2E] font-medium text-[11px] uppercase tracking-wider mb-1">💡 Pro Tip</p>
+              <div className="pt-4 border-t border-[#E8E2D9]">
                 <Link 
                   href={`/signup?email=${encodeURIComponent(email)}&ref=checkout`}
-                  className="text-[#6C3FC5] font-bold text-sm hover:underline flex items-center gap-1"
+                  className="text-[#4A2C6E] font-bold text-[13px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
                 >
-                  Create a free account to track orders 
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  Create Account To Track <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </Link>
               </div>
             </div>
           </div>
         )}
 
-        {/* What Happens Next */}
-        <div className="mt-10 max-w-md mx-auto text-left">
-          <h3 className="font-heading font-bold text-[#1A1A2E] text-lg border-b border-[#E5E0F5] pb-3 mb-5">
-            What happens next?
+        {/* Timeline of Luxury Delivery */}
+        <div className="max-w-lg mx-auto text-left py-10 border-y border-[#FAF7F4]">
+          <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-8 text-center">
+            The Journey
           </h3>
           
-          <div className="flex flex-col gap-4">
-            <div className="flex gap-4 items-center">
-              <div className="w-10 h-10 rounded-full bg-[#EDE6FA] text-[#6C3FC5] flex items-center justify-center font-bold text-xl flex-shrink-0">📞</div>
-              <div>
-                <p className="font-bold text-[#1A1A2E] text-sm">We'll call to confirm</p>
-                <p className="text-xs text-[#6B7280] font-medium">Within the next hour</p>
+          <div className="space-y-6">
+            <div className="flex gap-6 items-start">
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">01</div>
+              <div className="pt-1">
+                <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Verification Call</p>
+                <p className="text-[14px] text-[#6B6058] opacity-60">Our concierge will contact you within 60 minutes.</p>
               </div>
             </div>
-            <div className="flex gap-4 items-center">
-              <div className="w-10 h-10 rounded-full bg-[#EDE6FA] text-[#6C3FC5] flex items-center justify-center font-bold text-xl flex-shrink-0">📦</div>
-              <div>
-                <p className="font-bold text-[#1A1A2E] text-sm">Order is prepared</p>
-                <p className="text-xs text-[#6B7280] font-medium">Takes 1-2 business days</p>
+            <div className="flex gap-6 items-start">
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">02</div>
+              <div className="pt-1">
+                <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Curation & Transit</p>
+                <p className="text-[14px] text-[#6B6058] opacity-60">Hand-curated packaging takes 24-48 hours.</p>
               </div>
             </div>
-            <div className="flex gap-4 items-center">
-              <div className="w-10 h-10 rounded-full bg-[#EDE6FA] text-[#6C3FC5] flex items-center justify-center font-bold text-xl flex-shrink-0">🚚</div>
-              <div>
-                <p className="font-bold text-[#1A1A2E] text-sm">Delivered to your door</p>
-                <p className="text-xs text-[#6B7280] font-medium">Within 2-5 business days</p>
+            <div className="flex gap-6 items-start">
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">03</div>
+              <div className="pt-1">
+                <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Final Delivery</p>
+                <p className="text-[14px] text-[#6B6058] opacity-60">Arriving at your doorstep within 3-5 business days.</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 justify-center">
+        <div className="mt-16 flex flex-col sm:flex-row items-center gap-6 justify-center">
           <Link 
             href="/"
-            className="w-full sm:w-auto px-8 py-3.5 bg-[#6C3FC5] text-white rounded-xl font-bold font-heading hover:bg-[#5530A8] transition-all shadow-md active:scale-95"
+            className="w-full sm:w-auto px-12 py-5 bg-[#4A2C6E] text-white rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#3A1F57] transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-center"
           >
-            Continue Shopping
+            Explore Collection
           </Link>
           <a 
             href={`https://wa.me/923001234567?text=Hi! I just placed order ${orderId} and want to track its status.`}
             target="_blank" rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-3.5 border-2 border-[#4CAF7D] text-[#166534] bg-[#F0FDF4] rounded-xl font-bold font-heading hover:bg-[#4CAF7D] hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-10 py-5 border border-[#2D6A4F] text-[#2D6A4F] bg-[#EBF7F0] rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#2D6A4F] hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
           >
-            💬 Track via WhatsApp
+            Concierge WhatsApp
           </a>
         </div>
 

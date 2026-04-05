@@ -5,54 +5,49 @@ export default function CategorySection() {
     {
       id: 'living-room',
       name: 'Living Room',
-      icon: '🛋️',
       count: '48 Products',
-      gradient: 'linear-gradient(135deg, #6C3FC5, #8B5CF6)',
+      gradient: 'linear-gradient(135deg, #4A2C6E, #7B5EA7)',
       link: '/furniture/living-room'
     },
     {
       id: 'bedroom',
       name: 'Bedroom',
-      icon: '🛏️',
       count: '36 Products',
-      gradient: 'linear-gradient(135deg, #5530A8, #7C3AED)',
+      gradient: 'linear-gradient(135deg, #3A1F57, #5D4480)',
       link: '/furniture/bedroom'
     },
     {
       id: 'office',
       name: 'Office',
-      icon: '🪑',
       count: '24 Products',
-      gradient: 'linear-gradient(135deg, #4C1D95, #6D28D9)',
+      gradient: 'linear-gradient(135deg, #1C1410, #4A2C6E)',
       link: '/furniture/office'
     },
     {
       id: 'dining',
       name: 'Dining',
-      icon: '🍽️',
       count: '18 Products',
-      gradient: 'linear-gradient(135deg, #7C3AED, #A78BFA)',
+      gradient: 'linear-gradient(135deg, #2D1B40, #7B5EA7)',
       link: '/furniture/dining'
     }
   ]
 
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-24">
+      <div className="max-w-7xl mx-auto px-6">
         
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold font-heading text-[#1A1A2E]">
+        <div className="mb-16">
+          <h2 className="text-[36px] font-bold font-heading text-[#1C1410]">
             Shop by Room
           </h2>
-          <div className="w-16 h-1 bg-[#6C3FC5] mx-auto mt-3 rounded-full"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((cat) => (
             <Link 
               key={cat.id} 
               href={cat.link}
-              className="group relative h-[240px] rounded-2xl overflow-hidden cursor-pointer hover:scale-105 hover:shadow-2xl transition-all duration-300 block"
+              className="group relative h-[200px] rounded-[4px] overflow-hidden cursor-pointer hover:scale-[1.03] hover:shadow-xl transition-all duration-300 block"
             >
               {/* Background gradient */}
               <div 
@@ -64,13 +59,12 @@ export default function CategorySection() {
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
 
               {/* Content */}
-              <div className="absolute inset-0 p-6 flex flex-col justify-center text-white text-left z-10 w-full">
-                <div className="text-6xl mb-4 drop-shadow-sm">{cat.icon}</div>
-                <h3 className="font-heading font-extrabold text-2xl drop-shadow-sm">{cat.name}</h3>
-                <p className="text-white/80 text-base mt-2">{cat.count}</p>
+              <div className="absolute inset-0 p-6 flex flex-col justify-end text-white text-left z-10 w-full">
+                <h3 className="font-heading font-bold text-[20px] drop-shadow-sm leading-tight">{cat.name}</h3>
+                <p className="text-white/60 text-[13px] font-body mt-1">{cat.count}</p>
                 
-                <div className="absolute bottom-5 left-6 text-white/70 text-sm font-medium flex items-center">
-                   Explore <span className="ml-1 text-lg leading-none">→</span>
+                <div className="absolute bottom-4 right-4 text-white/50 text-[12px] font-body font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                   Explore <span className="ml-1 text-base leading-none">→</span>
                 </div>
               </div>
             </Link>

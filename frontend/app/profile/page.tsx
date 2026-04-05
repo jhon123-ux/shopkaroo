@@ -75,7 +75,7 @@ export default function ProfilePage() {
 
       if (error) throw error
       
-      setMessage({ type: 'success', text: '✅ Profile updated successfully!' })
+      setMessage({ type: 'success', text: 'SUCCESS: Profile updated successfully.' })
       
       // Also update auth metadata if name changed
       await supabase.auth.updateUser({
@@ -86,98 +86,98 @@ export default function ProfilePage() {
       setMessage({ type: 'error', text: err.message || 'Failed to update profile' })
     } finally {
       setSaving(false)
+      // Clear message after 5s
+      setTimeout(() => setMessage(null), 5000)
     }
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#6C3FC5] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F5FF] py-12">
-      <div className="max-w-2xl mx-auto px-6">
+    <div className="min-h-screen bg-[#FAF7F4] py-16 md:py-24 font-body">
+      <div className="max-w-3xl mx-auto px-6">
         
         {/* Header */}
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-extrabold text-[#1A1A2E]" style={{fontFamily:'Syne,sans-serif'}}>
-            My Profile
+        <div className="mb-16 text-center">
+          <h1 className="text-[40px] font-bold text-[#1C1410] font-heading mb-4">
+            My Account
           </h1>
-          <p className="text-[#6B7280] mt-2">
-            Manage your personal information and default shipping details
+          <p className="text-[#6B6058] text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
+            Personal Details & Shipping Defaults
           </p>
         </div>
 
         {/* Profile Form */}
-        <div className="bg-white rounded-3xl border border-[#E5E0F5] p-8 md:p-10 shadow-xl relative overflow-hidden">
-          {/* Accent decoration */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#6C3FC5]/5 rounded-bl-full -z-0"></div>
+        <div className="bg-white rounded-0 border border-[#E8E2D9] p-10 md:p-14 shadow-sm relative overflow-hidden">
           
-          <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+          <form onSubmit={handleSubmit} className="space-y-10 relative z-10">
             
             {/* Success/Error Message */}
             {message && (
               <div className={`${
-                message.type === 'success' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#166534]' : 'bg-[#FEF2F2] border-[#FECACA] text-[#DC2626]'
-              } border text-sm font-bold rounded-2xl p-5 animate-slideUp`}>
+                message.type === 'success' ? 'bg-[#EBF7F0] border-[rgba(45,106,79,0.1)] text-[#2D6A4F]' : 'bg-[#FEF2F2] border-red-100 text-[#DC2626]'
+              } border text-[12px] font-bold uppercase tracking-wide rounded-[2px] p-5 animate-slideUp text-center`}>
                 {message.text}
               </div>
             )}
 
             {/* Email (Read Only) */}
-            <div className="bg-[#F7F5FF] rounded-2xl p-4 border border-[#E5E0F5]/50">
-              <label className="block text-[10px] font-black text-[#6B7280] uppercase tracking-widest mb-1">
-                Account Email
+            <div className="bg-[#FAF7F4] rounded-0 p-5 border border-[#E8E2D9] text-left">
+              <label className="block text-[10px] font-bold text-[#6B6058] uppercase tracking-[2px] mb-2 opacity-60">
+                Registered Email
               </label>
-              <p className="text-base font-bold text-[#1A1A2E]">
+              <p className="text-[15px] font-bold text-[#1C1410] font-heading">
                 {user?.email}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Full Name</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] text-left">Full Name</label>
                 <input 
                   required
                   type="text"
                   value={formData.fullName}
                   onChange={e => setFormData({...formData, fullName: e.target.value})}
-                  className="w-full border border-[#E5E0F5] rounded-2xl px-5 py-4 text-sm focus:ring-4 focus:ring-[#6C3FC5]/10 focus:border-[#6C3FC5] outline-none transition-all font-medium"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body"
                 />
               </div>
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Phone Number</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] text-left">Phone Number</label>
                 <input 
                   type="tel"
                   placeholder="03XXXXXXXXX"
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
-                  className="w-full border border-[#E5E0F5] rounded-2xl px-5 py-4 text-sm focus:ring-4 focus:ring-[#6C3FC5]/10 focus:border-[#6C3FC5] outline-none transition-all font-medium"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body font-mono tracking-wider"
                 />
               </div>
             </div>
 
             {/* City */}
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Default City</label>
+              <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] text-left">Default Shipping City</label>
               <div className="relative">
                 <select 
                   value={formData.city}
                   onChange={e => setFormData({...formData, city: e.target.value})}
-                  className="w-full border border-[#E5E0F5] rounded-2xl px-5 py-4 text-sm focus:ring-4 focus:ring-[#6C3FC5]/10 focus:border-[#6C3FC5] outline-none transition-all font-bold appearance-none bg-white pr-12 cursor-pointer"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body"
                 >
-                  <option value="">Select your city</option>
+                  <option value="">Select city</option>
                   <option value="Karachi">Karachi</option>
                   <option value="Lahore">Lahore</option>
                   <option value="Islamabad">Islamabad</option>
-                  <option value="Faisalabad">Faisalabad</option>
                   <option value="Rawalpindi">Rawalpindi</option>
+                  <option value="Faisalabad">Faisalabad</option>
                   <option value="Multan">Multan</option>
                   <option value="Peshawar">Peshawar</option>
                   <option value="Quetta">Quetta</option>
@@ -185,9 +185,9 @@ export default function ProfilePage() {
                   <option value="Gujranwala">Gujranwala</option>
                   <option value="Other">Other</option>
                 </select>
-                <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#6C3FC5]">
+                <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#1C1410] opacity-40">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
@@ -195,32 +195,32 @@ export default function ProfilePage() {
 
             {/* Address */}
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Default Shipping Address</label>
+              <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] text-left">Default Shipping Address</label>
               <textarea 
-                rows={3}
-                placeholder="House No, Street, Area..."
+                rows={4}
+                placeholder="Complete address (House, Street, Area...)"
                 value={formData.address}
                 onChange={e => setFormData({...formData, address: e.target.value})}
-                className="w-full border border-[#E5E0F5] rounded-2xl px-5 py-4 text-sm focus:ring-4 focus:ring-[#6C3FC5]/10 focus:border-[#6C3FC5] outline-none transition-all font-medium resize-none"
+                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body resize-none leading-relaxed"
               />
             </div>
 
             {/* Submit Button */}
-            <div className="pt-4">
+            <div className="pt-6">
               <button 
                 type="submit" 
                 disabled={saving}
-                className="w-full bg-[#6C3FC5] text-white py-4 rounded-2xl font-bold font-heading text-lg hover:bg-[#5530A8] transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-xl shadow-[#6C3FC5]/20 group"
+                className="w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 shadow-xl"
               >
                 {saving ? (
                   <>
-                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Saving Changes...
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    Sychronizing...
                   </>
                 ) : (
                   <>
-                    <span>Save Profile</span>
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span>Update Collection Profile</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
                   </>

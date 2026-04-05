@@ -51,14 +51,14 @@ export default function AdminReviewsPage() {
       
       const { data } = await res.json()
       setReviews(reviews.map(r => r.id === id ? data : r))
-      showToast(is_approved ? 'Review approved!' : 'Review hidden', 'success')
+      showToast(is_approved ? 'Sentiment Approved' : 'Sentiment Restricted', 'success')
     } catch (err) {
-      showToast('Action failed', 'error')
+      showToast('Synchronization Error', 'error')
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this review permanently?')) return
+    if (!confirm('Acknowledge: Final deletion of this sentiment record?')) return
     
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
@@ -70,117 +70,117 @@ export default function AdminReviewsPage() {
       if (!res.ok) throw new Error('Delete failed')
       
       setReviews(reviews.filter(r => r.id !== id))
-      showToast('Review deleted permanently', 'success')
+      showToast('Record purged from registry.', 'success')
     } catch (err) {
-      showToast('Delete failed', 'error')
+      showToast('Purge Protocol Failed', 'error')
     }
   }
 
   return (
-    <div className="p-8 font-body">
+    <div className="relative font-body text-left">
       {/* TOAST SYSTEM */}
       {toast && (
-        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 animate-slideUp text-white font-medium ${
-          toast.type === 'success' ? 'bg-[#1A1A2E]' : 'bg-[#DC2626]'
+        <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
+          toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✅' : '❌'}</span>
+          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
           {toast.message}
         </div>
       )}
 
       {/* HEADER */}
-      <div className="mb-10">
-        
-        <p className="text-[#6B7280] text-sm mt-1">
-          {reviews.filter(r => !r.is_approved).length} pending moderation • {reviews.length} total
+      <div className="flex justify-between items-end mb-12">
+        <div>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Sentiment Curation</p>
+          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Customer Reviews</h2>
+        </div>
+        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 min-w-[200px] text-right">
+          {reviews.filter(r => !r.is_approved).length} PENDING MODERATION
         </p>
       </div>
 
       {/* STATS STRIP */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white border p-6 rounded-2xl shadow-sm">
-          <p className="text-[#6B7280] text-xs font-bold uppercase tracking-widest mb-1">Total</p>
-          <p className="text-3xl font-black text-[#1A1A2E]">{reviews.length}</p>
-        </div>
-        <div className="bg-[#FFFBEB] border border-[#FDE68A] p-6 rounded-2xl shadow-sm">
-          <p className="text-[#92400E] text-xs font-bold uppercase tracking-widest mb-1">Pending</p>
-          <p className="text-3xl font-black text-[#D97706]">{reviews.filter(r => !r.is_approved).length}</p>
-        </div>
-        <div className="bg-[#F0FDF4] border border-[#BBF7D0] p-6 rounded-2xl shadow-sm">
-          <p className="text-[#166534] text-xs font-bold uppercase tracking-widest mb-1">Approved</p>
-          <p className="text-3xl font-black text-[#4CAF7D]">{reviews.filter(r => r.is_approved).length}</p>
-        </div>
+      <div className="grid grid-cols-3 gap-8 mb-12">
+        {[
+          { label: 'Total Records', value: reviews.length, color: '#1C1410' },
+          { label: 'Pending Audit', value: reviews.filter(r => !r.is_approved).length, color: '#4A2C6E' },
+          { label: 'Market Visible', value: reviews.filter(r => r.is_approved).length, color: '#2D6A4F' }
+        ].map((stat, i) => (
+          <div key={i} className="bg-white border border-[#E8E2D9] p-8 rounded-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+            <p className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[3px] mb-2 opacity-40">{stat.label}</p>
+            <p className="text-[32px] font-bold font-heading leading-none" style={{ color: stat.color }}>{stat.value}</p>
+          </div>
+        ))}
       </div>
 
       {/* REVIEWS LIST */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="space-y-8">
         {loading ? (
           Array(3).fill(0).map((_, i) => (
-            <div key={i} className="h-48 bg-white border rounded-2xl animate-pulse"></div>
+            <div key={i} className="h-48 bg-white border border-[#FAF7F4] animate-pulse" />
           ))
         ) : reviews.length === 0 ? (
-          <div className="bg-white border rounded-2xl p-20 text-center text-[#6B7280]">
-            <span className="text-5xl block mb-4">⭐</span>
-            No reviews submitted yet.
+          <div className="bg-white border border-[#E8E2D9] p-24 text-center opacity-40 uppercase tracking-[4px] font-bold text-[12px]">
+            No records located in sentiment registry.
           </div>
         ) : (
           reviews.map(review => (
-            <div key={review.id} className={`bg-white border rounded-2xl p-6 shadow-sm flex flex-col md:flex-row gap-6 transition-all ${!review.is_approved ? 'border-l-4 border-l-[#D97706]' : 'border-l-4 border-l-[#4CAF7D]'}`}>
+            <div key={review.id} className={`bg-white border border-[#E8E2D9] p-10 flex flex-col md:flex-row gap-10 transition-all shadow-sm ${!review.is_approved ? 'ring-1 ring-[#D4CCC2]' : ''}`}>
               
               {/* CONTENT */}
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex gap-1">
                     {Array.from({length: 5}).map((_, i) => (
-                      <span key={i} className={`text-lg ${i < review.rating ? 'text-yellow-400' : 'text-gray-200'}`}>★</span>
+                      <span key={i} className={`text-[18px] ${i < review.rating ? 'text-[#4A2C6E]' : 'text-[#D4CCC2]'}`}>★</span>
                     ))}
                   </div>
-                  <span className="bg-[#F7F5FF] text-[#6C3FC5] text-[10px] font-bold uppercase px-2 py-0.5 rounded-md font-mono">
-                    Rating: {review.rating}/5
+                  <span className="text-[10px] font-bold uppercase tracking-[2px] opacity-40">
+                    SCORING: {review.rating}.0 / 5.0
                   </span>
                 </div>
 
-                <p className="text-[#1A1A2E] text-lg font-heading font-medium mb-4 italic">
+                <blockquote className="text-[#1C1410] text-[20px] font-heading font-medium mb-8 leading-relaxed italic pr-12">
                   "{review.comment}"
-                </p>
+                </blockquote>
 
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#F7F5FF] flex items-center justify-center text-[#6C3FC5] font-bold border border-[#E5E0F5]">
+                <div className="flex items-center gap-4 pt-8 border-t border-[#FAF7F4]">
+                  <div className="w-12 h-12 bg-[#FAF7F4] border border-[#E8E2D9] flex items-center justify-center text-[#1C1410] font-bold text-[15px] font-heading tracking-widest ring-1 ring-[#1C1410]/5">
                     {review.name?.charAt(0) || 'U'}
                   </div>
                   <div>
-                    <p className="font-bold text-[#1A1A2E] text-sm uppercase tracking-tight">{review.name}</p>
-                    <p className="text-[#6B7280] text-xs font-medium">Verified Customer • {new Date(review.created_at).toLocaleDateString()}</p>
+                    <p className="font-bold text-[#1C1410] text-[12px] uppercase tracking-[2px]">{review.name}</p>
+                    <p className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[1px] opacity-40 mt-1">Verified Audit • {new Date(review.created_at).toLocaleDateString()}</p>
                   </div>
-                  <div className="ml-auto flex items-center gap-2 bg-[#F7F5FF] px-3 py-1.5 rounded-xl border border-[#E5E0F5]">
-                    <span className="text-xs font-bold text-[#6B7280]">Product:</span>
-                    <span className="text-xs font-black text-[#6C3FC5] uppercase font-mono max-w-[120px] truncate">{review.products?.name || 'Unknown Item'}</span>
+                  <div className="ml-auto flex items-center gap-4 bg-[#FAF7F4] px-6 py-3 border border-[#E8E2D9]">
+                    <span className="text-[9px] font-bold text-[#6B6058] uppercase tracking-[2px] opacity-40">EXHIBIT:</span>
+                    <span className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] max-w-[180px] truncate">{review.products?.name || 'Protocol Entry'}</span>
                   </div>
                 </div>
               </div>
 
               {/* ACTIONS */}
-              <div className="flex flex-row md:flex-col justify-center gap-3 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-[#E5E0F5] md:pl-6">
+              <div className="flex flex-row md:flex-col justify-center gap-4 shrink-0 pt-8 md:pt-0 border-t md:border-t-0 md:border-l border-[#FAF7F4] md:pl-10">
                 {!review.is_approved ? (
                   <button 
                     onClick={() => handleUpdateStatus(review.id, true)}
-                    className="flex-1 bg-[#4CAF7D] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#3d8b64] transition active:scale-95 shadow-lg shadow-[#4CAF7D]/20"
+                    className="flex-1 bg-[#2D6A4F] text-white px-10 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-xl active:scale-95 transition-all"
                   >
-                    Approve
+                    Authorize
                   </button>
                 ) : (
                   <button 
                     onClick={() => handleUpdateStatus(review.id, false)}
-                    className="flex-1 border border-[#E5E0F5] text-[#6B7280] px-6 py-3 rounded-xl font-bold text-sm hover:bg-gray-50 transition active:scale-95"
+                    className="flex-1 border border-[#D4CCC2] text-[#6B6058] px-10 py-5 font-bold uppercase tracking-[3px] text-[11px] hover:bg-[#FAF7F4] shadow-sm transition-all"
                   >
-                    Unapprove
+                    Restrict
                   </button>
                 )}
                 <button 
                   onClick={() => handleDelete(review.id)}
-                  className="bg-[#FEF2F2] text-[#DC2626] px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#DC2626] hover:text-white transition active:scale-95"
+                  className="px-10 py-5 text-[#DC2626] font-bold uppercase tracking-[3px] text-[11px] hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
                 >
-                  Delete
+                  Purge
                 </button>
               </div>
 

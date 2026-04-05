@@ -41,7 +41,6 @@ export default function AdminOfferBannerPage() {
       .then(r => r.json())
       .then(data => {
         if (data.data) {
-          // Format date for datetime-local input
           const formattedDate = new Date(data.data.end_date).toISOString().slice(0, 16)
           setBanner({ ...data.data, end_date: formattedDate })
         }
@@ -81,7 +80,7 @@ export default function AdminOfferBannerPage() {
 
   const handleSave = async () => {
     if (!banner.id) {
-      showToast('No banner ID found to update.', 'error')
+      showToast('Identifier signature not located.', 'error')
       return
     }
 
@@ -96,14 +95,14 @@ export default function AdminOfferBannerPage() {
         },
         body: JSON.stringify({
           ...banner,
-          end_date: new Date(banner.end_date).toISOString() // Send back as full ISO
+          end_date: new Date(banner.end_date).toISOString()
         })
       })
 
       if (!res.ok) throw new Error('Save failed')
-      showToast('Offer banner updated successfully!')
+      showToast('Promotional manifest updated.')
     } catch (err) {
-      showToast('Failed to save changes.', 'error')
+      showToast('Synchronization failed.', 'error')
       console.error(err)
     } finally {
       setSaving(false)
@@ -112,165 +111,155 @@ export default function AdminOfferBannerPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="w-8 h-8 border-4 border-[#6C3FC5]/30 border-t-[#6C3FC5] rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center py-32 opacity-40 font-bold uppercase tracking-[4px] text-[12px]">
+        <span className="animate-pulse">Retrieving promotional logs...</span>
       </div>
     )
   }
 
   return (
-    <div className="max-w-2xl mx-auto pb-16">
+    <div className="max-w-3xl mx-auto pb-24 font-body">
       
-      {/* TOAST */}
+      {/* TOAST SYSTEM */}
       {toast && (
-        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 animate-slideUp text-white font-medium ${
-          toast.type === 'success' ? 'bg-[#1A1A2E]' : 'bg-[#DC2626]'
+        <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
+          toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✅' : '❌'}</span>
+          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
           {toast.message}
         </div>
       )}
 
+      {/* HEADER */}
+      <div className="text-left mb-12">
+        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Storefront Promotions</p>
+        <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Promotionals</h2>
+      </div>
+
       {/* EDIT FORM */}
-      <div className="bg-white rounded-2xl border border-[#E5E0F5] p-8 shadow-sm mb-10">
-        <div className="grid grid-cols-1 gap-6">
+      <div className="bg-white rounded-0 border border-[#E8E2D9] p-12 shadow-sm mb-16 text-left">
+        <div className="grid grid-cols-1 gap-10">
           
           <div>
-            <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Banner Title</label>
+            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Announcement Designation</label>
             <input 
               type="text" 
               value={banner.title}
               onChange={e => setBanner({...banner, title: e.target.value})}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none"
-              placeholder="e.g. Up to 30% Off"
+              className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body"
+              placeholder="e.g. Seasonal Clearance"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Subtitle</label>
+            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Exhibition Narrative</label>
             <textarea 
               rows={2}
               value={banner.subtitle}
               onChange={e => setBanner({...banner, subtitle: e.target.value})}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none resize-none"
-              placeholder="On selected furniture..."
+              className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body h-24"
+              placeholder="Descriptive details for the front-facing banner..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Badge Text</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Inscription Badge</label>
               <input 
                 type="text" 
                 value={banner.badge_text}
                 onChange={e => setBanner({...banner, badge_text: e.target.value})}
-                className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none text-xs font-mono uppercase"
+                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-bold uppercase tracking-[3px] outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-[#1A1A2E] mb-2">CTA Button Text</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Action Designation</label>
               <input 
                 type="text" 
                 value={banner.cta_text}
                 onChange={e => setBanner({...banner, cta_text: e.target.value})}
-                className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none"
+                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] font-bold uppercase tracking-[2px] outline-none"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-[#1A1A2E] mb-2">CTA Link</label>
-            <input 
-              type="text" 
-              value={banner.cta_link}
-              onChange={e => setBanner({...banner, cta_link: e.target.value})}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none font-mono"
-            />
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Target Protocol (Link)</label>
+              <input 
+                type="text" 
+                value={banner.cta_link}
+                onChange={e => setBanner({...banner, cta_link: e.target.value})}
+                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-mono opacity-60 outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Temporal Expiry (Date & Time)</label>
+              <input 
+                type="datetime-local" 
+                value={banner.end_date}
+                onChange={e => setBanner({...banner, end_date: e.target.value})}
+                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[13px] font-bold uppercase tracking-[2px] outline-none"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Offer End Date & Time</label>
-            <input 
-              type="datetime-local" 
-              value={banner.end_date}
-              onChange={e => setBanner({...banner, end_date: e.target.value})}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none"
-            />
-            <div className="mt-3 bg-[#F7F5FF] rounded-xl px-4 py-2 border border-[#E5E0F5] flex items-center justify-between">
-              <span className="text-xs font-bold text-[#6C3FC5] font-mono">LIVE COUNTDOWN PREVIEW:</span>
-              <div className="flex gap-2 font-black text-[#1A1A2E] text-xs font-mono uppercase tracking-tighter">
+          <div className="bg-[#FAF7F4] p-8 border border-[#E8E2D9] flex items-center justify-between">
+              <span className="text-[10px] font-bold text-[#4A2C6E] uppercase tracking-[3px] opacity-60 italic">Real-Time Synchronization Preview:</span>
+              <div className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest">
                 {previewTimeLeft.days}d {previewTimeLeft.hours}h {previewTimeLeft.minutes}m {previewTimeLeft.seconds}s
               </div>
-            </div>
           </div>
 
-          <div className="pt-2">
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-12 h-6 rounded-full relative transition-colors ${banner.is_active ? 'bg-[#6C3FC5]' : 'bg-[#D1D5DB]'}`}>
-                <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all ${banner.is_active ? 'left-7' : 'left-1'}`}></div>
-              </div>
-              <input 
-                type="checkbox" 
-                checked={banner.is_active} 
-                onChange={e => setBanner({...banner, is_active: e.target.checked})}
-                className="hidden" 
-              />
-              <span className="text-sm font-bold text-[#1A1A2E]">Banner is active on homepage</span>
-            </label>
+          <div className="pt-4 flex items-center justify-between border-t border-[#FAF7F4]">
+            <div className="flex items-center gap-4"><button type="button" onClick={() => setBanner({...banner, is_active: !banner.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner transition-all ${banner.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${banner.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Market Visibility Active</span></div>
+            <button 
+              onClick={handleSave}
+              disabled={saving}
+              className="bg-[#1C1410] text-white px-12 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-2xl disabled:opacity-30 active:scale-95 transition-all w-full md:w-auto flex items-center justify-center gap-4"
+            >
+              {saving ? 'SYNCHRONIZING...' : 'SYNCHRONIZE MANIFEST'}
+            </button>
           </div>
-
-          <button 
-            onClick={handleSave}
-            disabled={saving}
-            className="w-full bg-[#6C3FC5] text-white py-4 rounded-xl font-bold font-heading hover:bg-[#5530A8] transition-all disabled:opacity-70 mt-4 shadow-lg shadow-[#6C3FC5]/20 flex justify-center items-center gap-2 active:scale-[0.98]"
-          >
-            {saving ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                Saving Changes...
-              </>
-            ) : (
-              'Save Changes'
-            )}
-          </button>
         </div>
       </div>
 
       {/* LIVE PREVIEW AREA */}
-      <div className="border-t border-[#E5E0F5] pt-10">
-        <h3 className="font-heading font-black text-[#1A1A2E] text-lg mb-6 flex items-center gap-2">
-          <span className="w-2 h-2 bg-[#6C3FC5] rounded-full animate-ping"></span>
-          Live Preview
-        </h3>
+      <div className="border-t border-[#FAF7F4] pt-16">
+        <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-10 opacity-40 text-left">Real-Time Visualization</h3>
         
-        <div className="rounded-3xl overflow-hidden shadow-2xl relative group" style={{ background: 'linear-gradient(135deg, #DC2626 0%, #6C3FC5 100%)' }}>
-          <div className="p-8 md:p-10 text-center">
-            <span className="inline-block bg-white/20 text-white text-[10px] px-3 py-1 rounded-full font-mono tracking-widest mb-3 font-bold border border-white/30 backdrop-blur-sm">
-              {banner.badge_text || 'BADGE TEXT'}
-            </span>
-            <h4 className="text-3xl font-extrabold font-heading text-white mb-2">
-              {banner.title || 'Offer Title'}
-            </h4>
-            <p className="text-white/80 text-sm font-body max-w-sm mx-auto mb-6">
-              {banner.subtitle || 'Subtitle describes the terms of your limited time furniture offer.'}
-            </p>
-            <div className="bg-white text-[#6C3FC5] px-6 py-2.5 rounded-lg font-bold text-sm inline-block shadow-lg">
-              {banner.cta_text || 'Shop Now'}
-            </div>
+        <div className="rounded-0 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.15)] relative group bg-[#1C1410]">
+          <div className="p-16 md:p-20 text-center relative z-10">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#4A2C6E]/60 to-[#1C1410]/95 z-0" />
             
-            {/* Countdown Preview */}
-            <div className="mt-8 flex justify-center gap-2">
-              {[
-                { l: 'Days', v: previewTimeLeft.days },
-                { l: 'Hrs', v: previewTimeLeft.hours },
-                { l: 'Min', v: previewTimeLeft.minutes },
-                { l: 'Sec', v: previewTimeLeft.seconds }
-              ].map((item, idx) => (
-                <div key={idx} className="bg-white/10 px-3 py-2 rounded-lg border border-white/10 min-w-[50px]">
-                  <div className="text-white font-black text-lg">{String(item.v).padStart(2, '0')}</div>
-                  <div className="text-white/60 text-[9px] uppercase font-bold">{item.l}</div>
-                </div>
-              ))}
+            <div className="relative z-20">
+              <span className="inline-block bg-white/10 text-white text-[10px] px-4 py-1.5 rounded-0 font-bold tracking-[3px] mb-8 border border-white/20 uppercase">
+                {banner.badge_text || 'BADGE_INSCRIPTION'}
+              </span>
+              <h4 className="text-[42px] font-bold font-heading text-white mb-6 uppercase tracking-widest leading-none drop-shadow-2xl">
+                {banner.title || 'Exhibition Title'}
+              </h4>
+              <p className="text-white/70 text-[15px] font-body max-w-sm mx-auto mb-12 italic leading-relaxed">
+                {banner.subtitle || 'Promotional narrative details for front-facing exhibits.'}
+              </p>
+              <div className="bg-white text-[#1C1410] px-10 py-4 rounded-0 font-bold text-[12px] uppercase tracking-[3px] inline-block shadow-2xl active:scale-95 transition-all">
+                {banner.cta_text || 'DISCOVER'}
+              </div>
+              
+              {/* Countdown Preview */}
+              <div className="mt-20 flex justify-center gap-6">
+                {[
+                  { l: 'Days', v: previewTimeLeft.days },
+                  { l: 'Hrs', v: previewTimeLeft.hours },
+                  { l: 'Min', v: previewTimeLeft.minutes },
+                  { l: 'Sec', v: previewTimeLeft.seconds }
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-white/5 px-6 py-4 rounded-0 border border-white/10 min-w-[80px]">
+                    <div className="text-white font-heading font-bold text-[24px] mb-1">{String(item.v).padStart(2, '0')}</div>
+                    <div className="text-white/30 text-[9px] uppercase font-bold tracking-[2px]">{item.l}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

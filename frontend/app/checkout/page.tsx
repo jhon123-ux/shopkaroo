@@ -185,79 +185,79 @@ Address: ${address}`
   }
 
   return (
-    <main className="bg-[#F7F5FF] min-h-screen pb-32 md:pb-10 font-body">
+    <main className="bg-[#FAF7F4] min-h-screen pb-32 md:pb-20 font-body">
       
       {/* HEADER */}
-      <header className="py-4 border-b border-[#E5E0F5] bg-white sticky top-0 z-50">
+      <header className="py-6 border-b border-[#E8E2D9] bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="text-xl font-extrabold text-[#6C3FC5] font-heading">
+          <Link href="/" className="text-2xl font-bold italic text-[#1C1410] font-heading">
             Shopkaroo
           </Link>
 
-          <div className="hidden md:flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-[#6C3FC5]">
-              <span className="font-bold">✓</span> Cart
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#2D6A4F]">
+              <span className="w-5 h-5 bg-[#EBF7F0] rounded-full flex items-center justify-center text-[10px]">✓</span> Cart
             </div>
-            <div className="w-12 h-px bg-[#E5E0F5]"></div>
-            <div className="flex items-center gap-2 text-sm text-[#6C3FC5] font-semibold">
-              <span className="w-4 h-4 rounded-full bg-[#6C3FC5] inline-block"></span> Delivery
+            <div className="w-8 h-px bg-[#D4CCC2]"></div>
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#4A2C6E]">
+              <span className="w-5 h-5 bg-[#4A2C6E] text-white rounded-full flex items-center justify-center text-[10px]">2</span> Shipping
             </div>
-            <div className="w-12 h-px bg-[#E5E0F5]"></div>
-            <div className="flex items-center gap-2 text-sm text-[#9CA3AF]">
-              <span className="w-4 h-4 rounded-full border-2 border-[#9CA3AF] inline-block"></span> Confirmed
+            <div className="w-8 h-px bg-[#D4CCC2]"></div>
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#6B6058] opacity-40">
+              <span className="w-5 h-5 border border-[#6B6058] rounded-full flex items-center justify-center text-[10px]">3</span> Confirm
             </div>
           </div>
 
-          <div className="flex items-center gap-1 text-xs text-[#6B7280] font-medium">
-            <span className="text-base">🔒</span> Secure Checkout
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[2px] text-[#6B6058] opacity-60">
+            <span className="text-base opacity-40">🔒</span> Secure Checkout
           </div>
         </div>
       </header>
 
       {/* MAIN GRID */}
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-10 grid grid-cols-1 md:grid-cols-5 gap-8">
+      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto px-6 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-5 gap-12">
         
         {/* LEFT FORM */}
-        <div className="md:col-span-3">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#E5E0F5] shadow-sm">
-            <h2 className="font-heading font-bold text-xl text-[#1A1A2E] mb-6">Delivery Information</h2>
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-0 p-8 md:p-12 border border-[#E8E2D9] shadow-sm">
+            <h2 className="font-heading font-bold text-[24px] text-[#1C1410] mb-10 uppercase tracking-widest text-center md:text-left">Shipping Details</h2>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-10">
               
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Full Name *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Full Name *</label>
                 <input 
                   type="text" 
                   value={name} onChange={e => setName(e.target.value)}
-                  placeholder="e.g. Ali Ahmed"
-                  className={`w-full border ${errors.name ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow`}
+                  placeholder="Enter your full name"
+                  className={`w-full border ${errors.name ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
                 />
-                {errors.name && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.name}</p>}
+                {errors.name && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.name}</p>}
               </div>
 
               {/* Email */}
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-bold text-[#1A1A2E]">Email Address</label>
-                  <span className="bg-[#EDE6FA] text-[#6C3FC5] text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full">Optional</span>
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Email Address</label>
+                  <span className="text-[#6B6058] text-[9px] uppercase tracking-widest font-bold opacity-40">Optional</span>
                 </div>
                 <input 
                   type="email" 
                   value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="ali@example.com"
-                  className={`w-full border ${errors.email ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow`}
+                  placeholder="your@email.com"
+                  className={`w-full border ${errors.email ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
                 />
-                {errors.email && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.email}</p>}
+                {errors.email && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.email}</p>}
                 
-                <div className="bg-[#F7F5FF] rounded-xl px-4 py-3 mt-3 flex items-start gap-3 border border-[#E5E0F5]">
-                  <span className="text-xl">📧</span>
+                <div className="bg-[#FAF7F4] rounded-[2px] px-5 py-4 mt-4 flex items-start gap-4 border border-[#E8E2D9]">
+                  <span className="text-xl opacity-40">📧</span>
                   <div>
-                    <p className="text-[#1A1A2E] text-xs font-semibold leading-relaxed">
-                      Get your order confirmation & tracking updates via email
+                    <p className="text-[#1C1410] text-[12px] font-bold uppercase tracking-wide font-body">
+                      Order Tracking Updates
                     </p>
-                    <p className="text-[#6B7280] text-[11px] mt-0.5">
-                      Create an account later to track orders anytime
+                    <p className="text-[#6B6058] text-[13px] mt-1 font-body opacity-80">
+                      Receive tracking numbers and order status via email.
                     </p>
                   </div>
                 </div>
@@ -265,29 +265,29 @@ Address: ${address}`
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Phone Number *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Contact Number *</label>
                 <input 
                   type="tel" 
                   value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder="03001234567"
+                  placeholder="03XXXXXXXXX"
                   maxLength={11}
-                  className={`w-full border ${errors.phone ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow font-mono`}
+                  className={`w-full border ${errors.phone ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-mono text-[16px] placeholder:opacity-30 tracking-widest`}
                 />
                 {errors.phone ? (
-                  <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.phone}</p>
+                  <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.phone}</p>
                 ) : (
-                  <p className="text-[#6B7280] text-xs mt-1.5 font-medium">We'll call to confirm your order</p>
+                  <p className="text-[#6B6058] text-[11px] mt-2 font-body opacity-50 uppercase tracking-widest">We will call to confirm before shipping</p>
                 )}
               </div>
 
               {/* City */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">City *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Select City *</label>
                 <div className="relative">
                   <select 
                     value={city} 
                     onChange={e => setCity(e.target.value)}
-                    className={`w-full border ${errors.city ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow bg-white appearance-none pr-10 cursor-pointer`}
+                    className={`w-full border ${errors.city ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body text-[15px]`}
                   >
                     <option value="" disabled>Select a city</option>
                     <option value="Karachi">Karachi</option>
@@ -298,58 +298,58 @@ Address: ${address}`
                     <option value="Multan">Multan</option>
                     <option value="Other">Other</option>
                   </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M4 6l4 4 4-4" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 6l4 4 4-4" stroke="#1C1410" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                 </div>
-                {errors.city && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.city}</p>}
+                {errors.city && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.city}</p>}
                 
                 {city && (
-                  <div className="inline-flex items-center gap-1.5 mt-2 bg-[#EDE6FA] text-[#6C3FC5] text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#d5c6f6] animate-slideUp">
-                    <span className="text-sm">🚚</span> {getDeliveryEstimate(city)}
+                  <div className="inline-flex items-center gap-2 mt-4 bg-[#F0EBF8] text-[#4A2C6E] text-[11px] font-bold uppercase tracking-[2px] px-4 py-2 rounded-[2px] border border-[rgba(74,44,110,0.1)] animate-slideUp">
+                    <span className="text-base opacity-60">🚚</span> Est. {getDeliveryEstimate(city)}
                   </div>
                 )}
               </div>
 
               {/* Address */}
               <div>
-                <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Full Address *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Full Shipping Address *</label>
                 <textarea 
-                  rows={3}
+                  rows={4}
                   value={address} onChange={e => setAddress(e.target.value)}
-                  placeholder="House No., Street, Area, City"
-                  className={`w-full border ${errors.address ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow resize-none`}
+                  placeholder="Apartment, House No., Street, Area"
+                  className={`w-full border ${errors.address ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed`}
                 />
-                {errors.address && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.address}</p>}
+                {errors.address && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.address}</p>}
               </div>
 
               {/* Notes */}
               <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-bold text-[#1A1A2E]">Order Notes</label>
-                  <span className="bg-[#EDE6FA] text-[#6C3FC5] text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full">Optional</span>
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Special Instructions</label>
+                  <span className="text-[#6B6058] text-[9px] uppercase tracking-widest font-bold opacity-40">Optional</span>
                 </div>
                 <textarea 
                   rows={2}
                   value={notes} onChange={e => setNotes(e.target.value)}
-                  placeholder="Special delivery instructions..."
-                  className="w-full border border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5] rounded-xl px-4 py-3 outline-none transition-shadow resize-none"
+                  placeholder="e.g. Call before delivery, handle with care..."
+                  className="w-full border border-[#D4CCC2] focus:border-[#4A2C6E] rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed"
                 />
               </div>
 
             </div>
           </div>
 
-          <div className="mt-6 bg-[#F0FDF4] border border-[#BBF7D0] rounded-2xl p-5 flex items-center gap-4 shadow-sm">
-            <div className="w-12 h-12 bg-[#4CAF7D]/10 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+          <div className="mt-8 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-[3px] p-6 flex items-center gap-5 shadow-sm">
+            <div className="w-14 h-14 bg-white/50 rounded-0 flex items-center justify-center text-2xl flex-shrink-0 border border-[#2D6A4F]/10">
               💰
             </div>
             <div>
-              <h3 className="font-heading font-bold text-[#166534] text-base">Cash on Delivery</h3>
-              <p className="text-[#166534]/80 text-sm mt-0.5 leading-snug">
-                Pay when your furniture arrives. No card or online payment needed.
+              <h3 className="font-body font-bold text-[#2D6A4F] text-[12px] uppercase tracking-[2px]">Cash on Delivery Available</h3>
+              <p className="text-[#2D6A4F]/80 text-[14px] mt-1 font-body leading-relaxed">
+                Experience risk-free shopping. Pay only when your premium furniture arrives at your doorstep.
               </p>
             </div>
           </div>
@@ -357,27 +357,27 @@ Address: ${address}`
           <button 
             type="submit"
             disabled={loading}
-            className="hidden md:flex mt-8 w-full bg-[#6C3FC5] text-white py-4 rounded-2xl font-bold text-lg font-heading hover:bg-[#5530A8] transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:-translate-y-0.5 active:scale-95 items-center justify-center gap-3 relative"
+            className="hidden md:flex mt-12 w-full bg-[#4A2C6E] text-white py-6 rounded-[3px] font-bold text-[15px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:bg-[#3A1F57] hover:-translate-y-1 active:scale-95 items-center justify-center gap-4 relative"
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                Placing your order...
+                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                Initializing...
               </>
             ) : (
-              `Place Order — Rs. ${totalPrice.toLocaleString('en-PK')}`
+              `Confirm Order — ${totalPrice.toLocaleString('en-PK')} PKR`
             )}
           </button>
 
           {submitError && (
-             <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-xl p-4 mt-4 animate-slideUp">
-               <p className="text-[#DC2626] text-sm font-medium">{submitError}</p>
+             <div className="bg-[#FEF2F2] border border-red-100 rounded-[2px] p-6 mt-6 animate-slideUp">
+               <p className="text-[#DC2626] text-[13px] font-bold uppercase tracking-wide font-body">{submitError}</p>
                <a 
                  href={whatsappOrderUrl()} 
                  target="_blank" rel="noopener noreferrer"
-                 className="text-[#4CAF7D] font-bold text-sm mt-3 inline-flex items-center gap-1 hover:underline"
+                 className="text-[#2D6A4F] font-bold text-[12px] mt-4 uppercase tracking-[2px] inline-flex items-center gap-2 hover:underline font-body"
                >
-                 Or order via WhatsApp <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                 Order via WhatsApp <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                </a>
              </div>
           )}
@@ -385,94 +385,98 @@ Address: ${address}`
         </div>
 
         {/* RIGHT ORDER SUMMARY */}
-        <div className="md:col-span-2 relative">
-          <div className="sticky top-6 bg-white rounded-2xl border border-[#E5E0F5] overflow-hidden shadow-sm">
+        <div className="lg:col-span-2 relative">
+          <div className="lg:sticky lg:top-32 bg-white rounded-0 border border-[#E8E2D9] overflow-hidden shadow-sm">
             
-            <div className="bg-[#F7F5FF] px-6 py-4 border-b border-[#E5E0F5] flex items-center">
-              <h2 className="font-heading font-bold text-[#1A1A2E] text-lg">Order Summary</h2>
-              <span className="text-xs font-semibold text-[#6C3FC5] bg-[#EDE6FA] px-2 py-0.5 rounded-full ml-auto">
-                {items.length} items
+            <div className="bg-[#FAF7F4] px-8 py-5 border-b border-[#E8E2D9] flex items-center">
+              <h2 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest">Your Items</h2>
+              <span className="text-[10px] font-bold text-[#4A2C6E] bg-[#F0EBF8] px-3 py-1 rounded-[2px] ml-auto uppercase tracking-widest">
+                {items.length} Units
               </span>
             </div>
 
-            <div className="px-6 py-4 custom-scrollbar max-h-[40vh] overflow-y-auto">
+            <div className="px-8 py-6 custom-scrollbar max-h-[50vh] overflow-y-auto">
               {items.map(item => {
                 const price = item.sale_price ?? item.price_pkr
                 return (
-                  <div key={item.id} className="flex items-center gap-4 mb-4 last:mb-0">
-                    <div className="w-14 h-14 rounded-xl bg-[#F7F5FF] flex items-center justify-center flex-shrink-0 relative overflow-hidden border border-[#E5E0F5]">
+                  <div key={item.id} className="flex items-center gap-5 mb-6 last:mb-0 border-b border-[#FAF7F4] pb-6 last:border-0 last:pb-0">
+                    <div className="w-16 h-16 rounded-0 bg-[#F2EDE6] flex items-center justify-center flex-shrink-0 relative overflow-hidden border border-[#E8E2D9]">
                       {item.images && item.images.length > 0 ? (
-                        <Image src={item.images[0]} alt={item.name} fill className="object-cover" />
+                        <Image src={item.images[0]} alt={item.name} fill className="object-contain p-1" />
                       ) : (
-                        <span className="text-2xl">{getCategoryEmoji(item.category)}</span>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                          <span className="text-2xl">{getCategoryEmoji(item.category)}</span>
+                        </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#1A1A2E] line-clamp-1">{item.name}</p>
-                      <p className="text-xs font-medium text-[#6B7280] mt-0.5">Qty: {item.quantity}</p>
+                      <p className="text-[14px] font-bold text-[#1C1410] line-clamp-1 font-heading">{item.name}</p>
+                      <p className="text-[12px] font-body text-[#6B6058] mt-1 opacity-60 uppercase tracking-widest">Qty: {item.quantity}</p>
                     </div>
-                    <p className="text-sm font-bold text-[#6C3FC5] font-heading flex-shrink-0">
-                      Rs. {(price * item.quantity).toLocaleString('en-PK')}
+                    <p className="text-[15px] font-bold text-[#4A2C6E] font-body flex-shrink-0">
+                      { (price * item.quantity).toLocaleString('en-PK') }
                     </p>
                   </div>
                 )
               })}
             </div>
 
-            <div className="px-6 pb-5 pt-4 border-t border-[#E5E0F5] bg-gray-50/50">
-              <div className="flex justify-between text-sm mb-2.5">
-                <span className="text-[#6B7280] font-medium">Subtotal</span>
-                <span className="text-[#1A1A2E] font-semibold">Rs. {totalPrice.toLocaleString('en-PK')}</span>
+            <div className="px-8 pb-8 pt-6 border-t border-[#E8E2D9] bg-[#FAF7F4]/50">
+              <div className="flex justify-between text-[14px] mb-3 font-body">
+                <span className="text-[#6B6058] font-semibold opacity-60">Subtotal</span>
+                <span className="text-[#1C1410] font-bold">{totalPrice.toLocaleString('en-PK')}</span>
               </div>
-              <div className="flex justify-between text-sm mb-4">
-                <span className="text-[#6B7280] font-medium">Delivery</span>
-                <span className="text-[#4CAF7D] font-bold">Free</span>
+              <div className="flex justify-between text-[14px] mb-4 font-body">
+                <span className="text-[#6B6058] font-semibold opacity-60">Premium Shipping</span>
+                <span className="text-[#2D6A4F] font-bold uppercase tracking-widest text-[11px]">Free</span>
               </div>
-              <div className="border-t border-[#E5E0F5] my-4"></div>
+              <div className="border-t border-[#E8E2D9] my-6"></div>
               <div className="flex justify-between items-center">
-                <span className="font-heading font-black text-[#1A1A2E] text-lg">Total</span>
-                <span className="font-heading font-black text-2xl text-[#6C3FC5]">
-                  Rs. {totalPrice.toLocaleString('en-PK')}
+                <span className="font-body font-bold text-[#6B6058] uppercase tracking-[3px] text-[11px] opacity-60">Total</span>
+                <span className="font-heading font-bold text-[28px] text-[#4A2C6E]">
+                  {totalPrice.toLocaleString('en-PK')}
                 </span>
               </div>
             </div>
 
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mt-6">
-            <div className="bg-white rounded-xl p-3 text-center border border-[#E5E0F5] shadow-sm flex flex-col items-center gap-1.5">
-              <span className="text-xl">🔒</span>
-              <span className="text-[10px] uppercase tracking-wider font-bold text-[#6B7280]">Secure Order</span>
+          <div className="grid grid-cols-3 gap-4 mt-8">
+            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
+              <span className="text-xl opacity-40">🔒</span>
+              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Secure</span>
             </div>
-            <div className="bg-white rounded-xl p-3 text-center border border-[#E5E0F5] shadow-sm flex flex-col items-center gap-1.5">
-              <span className="text-xl">📦</span>
-              <span className="text-[10px] uppercase tracking-wider font-bold text-[#6B7280]">Free Packaging</span>
+            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
+              <span className="text-xl opacity-40">📦</span>
+              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Insured</span>
             </div>
-            <div className="bg-white rounded-xl p-3 text-center border border-[#E5E0F5] shadow-sm flex flex-col items-center gap-1.5">
-              <span className="text-xl">↩️</span>
-              <span className="text-[10px] uppercase tracking-wider font-bold text-[#6B7280]">7-Day Return</span>
+            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
+              <span className="text-xl opacity-40">↩️</span>
+              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">7-Day</span>
             </div>
           </div>
         </div>
       </form>
 
       {/* MOBILE BOTTOM BAR */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E5E0F5] p-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-[#6B7280] font-semibold text-sm">Total</span>
-          <span className="font-heading font-extrabold text-lg text-[#6C3FC5]">Rs. {totalPrice.toLocaleString('en-PK')}</span>
+      <div className="lg:hidden fixed bottom-12 left-0 right-0 z-50 bg-white border-t border-[#E8E2D9] p-6 shadow-[0_-10px_30px_rgba(28,20,16,0.1)]">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col">
+            <span className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
+            <span className="font-heading font-bold text-[22px] text-[#4A2C6E]">{totalPrice.toLocaleString('en-PK')} PKR</span>
+          </div>
+          <button 
+            onClick={handleSubmit}
+            disabled={loading}
+            className="bg-[#4A2C6E] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 active:scale-95 flex justify-center items-center gap-3"
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            ) : (
+              'Confirm Order'
+            )}
+          </button>
         </div>
-        <button 
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full bg-[#6C3FC5] text-white py-3.5 rounded-xl font-bold text-base font-heading hover:bg-[#5530A8] transition-all disabled:opacity-70 active:scale-95 flex justify-center items-center gap-2"
-        >
-          {loading ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-          ) : (
-            'Place Order'
-          )}
-        </button>
       </div>
 
     </main>

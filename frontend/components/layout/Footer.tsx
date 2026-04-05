@@ -4,29 +4,29 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-[#1A1A2E] text-white pt-16 pb-8 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+    <footer className="bg-[#1C1410] text-white pt-24 pb-12 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-16">
           
           {/* Logo & Tagline */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="font-heading font-bold text-2xl text-primary-soft mb-4">
+            <h3 className="font-heading italic font-bold text-[28px] text-white mb-6">
               Shopkaroo
             </h3>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Premium quality furniture for every Pakistani home. Browse elegantly crafted pieces and pay conveniently with cash on delivery nationwide.
+            <p className="text-white/50 text-[14px] leading-relaxed mb-6 font-body">
+              Crafting premium furniture for every Pakistani home. Browse elegantly designed pieces and pay conveniently with cash on delivery nationwide.
             </p>
           </div>
 
           {/* Shop */}
           <div className="col-span-1">
-            <h4 className="font-semibold tracking-wider text-gray-300 uppercase text-sm mb-5">Shop</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Shop</h4>
+            <ul className="space-y-4">
               {['living-room', 'bedroom', 'office', 'dining'].map((slug) => (
                 <li key={slug}>
                   <Link 
                     href={`/furniture/${slug}`} 
-                    className="text-gray-400 hover:text-primary-soft transition-colors text-sm capitalize"
+                    className="text-white/60 hover:text-white/90 transition-colors text-[14px] font-body capitalize"
                   >
                     {slug.replace('-', ' ')}
                   </Link>
@@ -37,13 +37,13 @@ export default function Footer() {
 
           {/* Help */}
           <div className="col-span-1">
-            <h4 className="font-semibold tracking-wider text-gray-300 uppercase text-sm mb-5">Help</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Help</h4>
+            <ul className="space-y-4">
               {['FAQ', 'Returns & Refunds', 'Track Order', 'Privacy Policy'].map((item) => (
                 <li key={item}>
                   <Link 
                     href="/" 
-                    className="text-gray-400 hover:text-primary-soft transition-colors text-sm"
+                    className="text-white/60 hover:text-white/90 transition-colors text-[14px] font-body"
                   >
                     {item}
                   </Link>
@@ -54,18 +54,18 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="col-span-1">
-            <h4 className="font-semibold tracking-wider text-gray-300 uppercase text-sm mb-5">Contact</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center text-gray-400">
-                <span className="mr-3">📱</span> 
+            <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Contact</h4>
+            <ul className="space-y-4 text-[14px] font-body">
+              <li className="flex items-center text-white/60">
+                <span className="mr-4 opacity-50">📱</span> 
                 WhatsApp: +92-300-1234567
               </li>
-              <li className="flex items-center text-gray-400">
-                <span className="mr-3">📧</span> 
+              <li className="flex items-center text-white/60">
+                <span className="mr-4 opacity-50">📧</span> 
                 hello@shopkaroo.com
               </li>
-              <li className="flex items-center text-gray-400">
-                <span className="mr-3">🕐</span> 
+              <li className="flex items-center text-white/60">
+                <span className="mr-4 opacity-50">🕐</span> 
                 Mon–Sat, 9am–6pm PKT
               </li>
             </ul>
@@ -73,12 +73,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col items-center justify-between text-xs text-gray-500 sm:flex-row">
+        <div className="mt-24 pt-10 border-t border-white/5 flex flex-col items-center justify-between text-[12px] text-white/30 sm:flex-row font-body">
           <p>© {currentYear} Shopkaroo. All rights reserved.</p>
-          <p className="mt-4 sm:mt-0 flex items-center space-x-2">
+          <div className="mt-6 sm:mt-0 flex items-center space-x-6">
             <span>Designed for Pakistan</span> 
-            <span className="text-cod-green font-medium">✓ Cash on Delivery Only</span>
-          </p>
+            <span className="text-[#2D6A4F] font-semibold tracking-wide uppercase text-[10px]">✓ Cash on Delivery Only</span>
+          </div>
         </div>
       </div>
     </footer>
