@@ -4,8 +4,18 @@ import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import AuthProvider from '@/components/auth/AuthProvider'
 
 export const metadata: Metadata = {
-  title: 'Shopkaroo - Premium Furniture in Pakistan',
-  description: 'Shopkaroo is your go-to destination for premium furniture in Pakistan. Cash on Delivery available nationwide.',
+  title: 'Shopkarroo — Premium Furniture Pakistan',
+  description: 'Buy premium quality furniture online in Pakistan. Cash on Delivery available across 30+ cities.',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    title: 'Shopkarroo — Premium Furniture Pakistan',
+    description: 'Premium furniture delivered to your door. COD available.',
+    url: 'https://shopkarroo.com',
+    siteName: 'Shopkarroo',
+  }
 }
 
 export default function RootLayout({
