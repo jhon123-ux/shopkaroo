@@ -23,7 +23,7 @@ export default function AdminDashboardPage() {
         
         const [prodRes, orderRes, bannerRes] = await Promise.all([
           fetch(`${backendUrl}/api/products?all=true`, { headers }),
-          fetch(`${backendUrl}/api/orders`, { headers }),
+          fetch(`${backendUrl}/api/orders?all=true`, { headers }),
           fetch(`${backendUrl}/api/banners?all=true`, { headers })
         ])
 

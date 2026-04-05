@@ -27,6 +27,7 @@ export default function AdminOrdersPage() {
     try {
       const res = await fetch(`${backendUrl}/api/orders?all=true&limit=100`, { headers })
       const data = await res.json()
+      console.log('Orders response:', data)
       setOrders(data.data || [])
     } catch (err) {
       console.error(err)

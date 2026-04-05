@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 import { Resend } from 'resend'
 import { orderConfirmationTemplate, orderStatusTemplate } from '../lib/emailTemplates'
 
@@ -7,8 +7,14 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
-    let query = supabase.from('orders').select('*', { count: 'exact' }).order('created_at', { ascending: false })
+    const { all } = req.query
+    
+    // Use supabaseAdmin to bypass RLS for administrative retrieval
+    let query = supabaseAdmin.from('orders').select('*', { count: 'exact' }).order('created_at', { ascending: false })
+    
+    // If not 'all', we might want to filter, but for admin, 'all' is usually true
     const { data, count, error } = await query
+    
     if (error) throw error
     res.json({ data: data || [], count: count || 0 })
   } catch (error: any) {
@@ -19,7 +25,7 @@ export const getOrders = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { data: order, error } = await supabase
+    const { data: order, error } = await supabaseAdmin
       .from('orders')
       .select('*')
       .eq('id', id)
@@ -139,13 +145,13 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     }
 
     // Get current order to check for status change
-    const { data: current } = await supabase
+    const { data: current } = await supabaseAdmin
       .from('orders')
       .select('*')
       .eq('id', id)
       .single()
 
-    const { data: updated, error } = await supabase
+    const { data: updated, error } = await supabaseAdmin
       .from('orders')
       .update({ status })
       .eq('id', id)
