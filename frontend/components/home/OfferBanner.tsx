@@ -63,48 +63,44 @@ export default function OfferBanner() {
   if (!banner || !banner.is_active) return null
 
   return (
-    <section className="w-full py-20 relative overflow-hidden bg-[#1C1410]">
+    <section className="w-full py-12 px-5 lg:px-16 lg:py-16 relative overflow-hidden bg-[#1C1410]">
       <div className="absolute inset-0 bg-gradient-to-br from-[#4A2C6E]/40 to-transparent z-0 opacity-60" />
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-16 lg:gap-12">
           
           {/* Left Side */}
           <div className="flex-1 text-center lg:text-left">
-            <span className="inline-block bg-white/10 text-white text-[10px] px-4 py-1.5 rounded-0 font-bold tracking-[3px] mb-8 border border-white/20 uppercase">
+            <span className="inline-block bg-white/10 text-white text-[10px] px-4 py-1.5 rounded-0 font-bold tracking-[3px] mb-4 lg:mb-8 border border-white/20 uppercase mx-auto lg:mx-0">
               {banner.badge_text}
             </span>
-            <h2 className="text-[42px] font-bold font-heading text-white mb-6 uppercase tracking-widest leading-tight">
+            <h2 className="text-[32px] sm:text-[36px] lg:text-[42px] font-bold font-heading text-white mb-6 uppercase tracking-widest leading-tight text-center lg:text-left">
               {banner.title}
             </h2>
-            <p className="text-white/70 text-[16px] font-body mt-2 mb-10 max-w-lg mx-auto lg:mx-0 italic leading-relaxed">
+            <p className="text-white/70 text-[14px] lg:text-[16px] font-body mt-2 mb-10 max-w-lg mx-auto lg:mx-0 italic leading-relaxed px-4 lg:px-0 text-center lg:text-left">
               {banner.subtitle}
             </p>
-            <Link href={banner.cta_link} className="inline-block bg-white text-[#1C1410] px-10 py-5 rounded-0 font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#FAF7F4] active:scale-95 transition-all shadow-2xl">
+            <Link href={banner.cta_link} className="inline-block bg-white text-[#1C1410] px-10 py-3 lg:px-10 lg:py-5 rounded-[3px] font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#FAF7F4] active:scale-95 transition-all shadow-2xl mx-auto lg:mx-0 block lg:inline-block w-auto mb-6 lg:mb-0">
               {banner.cta_text}
             </Link>
           </div>
 
           {/* Right Side (Countdown) */}
-          <div className="flex items-center gap-6">
-            <div className="bg-white/5 rounded-0 p-8 text-center min-w-[100px] border border-white/10 backdrop-blur-sm">
-              <div className="text-[32px] font-bold text-white font-heading">{String(timeLeft.days).padStart(2, '0')}</div>
-              <div className="text-white/30 text-[9px] uppercase tracking-[3px] mt-2 font-bold">Days</div>
-            </div>
-
-            <div className="bg-white/5 rounded-0 p-8 text-center min-w-[100px] border border-white/10 backdrop-blur-sm">
-              <div className="text-[32px] font-bold text-white font-heading">{String(timeLeft.hours).padStart(2, '0')}</div>
-              <div className="text-white/30 text-[9px] uppercase tracking-[3px] mt-2 font-bold">Hours</div>
-            </div>
-
-            <div className="bg-white/5 rounded-0 p-8 text-center min-w-[100px] border border-white/10 backdrop-blur-sm">
-              <div className="text-[32px] font-bold text-white font-heading">{String(timeLeft.minutes).padStart(2, '0')}</div>
-              <div className="text-white/30 text-[9px] uppercase tracking-[3px] mt-2 font-bold">Mins</div>
-            </div>
-
-            <div className="bg-white/5 rounded-0 p-8 text-center min-w-[100px] border border-white/10 backdrop-blur-sm">
-              <div className="text-[32px] font-bold text-white font-heading">{String(timeLeft.seconds).padStart(2, '0')}</div>
-              <div className="text-white/30 text-[9px] uppercase tracking-[3px] mt-2 font-bold">Secs</div>
-            </div>
+          <div className="grid grid-cols-4 gap-2 w-full max-w-[320px] lg:max-w-none mx-auto lg:mx-0 lg:flex lg:items-center lg:gap-6 mt-6 lg:mt-0">
+            {[
+              { label: 'Days', value: timeLeft.days },
+              { label: 'Hours', value: timeLeft.hours },
+              { label: 'Mins', value: timeLeft.minutes },
+              { label: 'Secs', value: timeLeft.seconds },
+            ].map((unit, i) => (
+              <div key={i} className="bg-white/10 rounded-[4px] p-3 lg:p-8 text-center min-w-0 w-full lg:min-w-[100px] border border-white/15 backdrop-blur-sm">
+                <div className="text-2xl lg:text-3xl font-bold text-white font-heading leading-tight uppercase">
+                  {String(unit.value).padStart(2, '0')}
+                </div>
+                <div className="text-white/60 text-[8px] sm:text-[9px] uppercase tracking-[1.5px] mt-1 font-bold">
+                  {unit.label}
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
