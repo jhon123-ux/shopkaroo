@@ -5,6 +5,15 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import useCartStore from '@/lib/cartStore'
+import { 
+  ShoppingBag, 
+  Trash2, 
+  Plus, 
+  Minus, 
+  ArrowRight, 
+  ArrowLeft, 
+  Check 
+} from 'lucide-react'
 
 const formatPrice = (price: number) => 'Rs. ' + price.toLocaleString('en-PK')
 
@@ -34,7 +43,9 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <main className="bg-white min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-32">
-        <div className="text-6xl mb-8 opacity-20 select-none grayscale">🛒</div>
+        <div className="mb-8 opacity-20 select-none grayscale">
+          <ShoppingBag size={64} strokeWidth={1} />
+        </div>
         <h1 className="text-[32px] font-bold font-heading text-[#1C1410] mb-4">
           Your Collection is Empty
         </h1>
@@ -113,7 +124,7 @@ export default function CartPage() {
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="w-10 h-10 flex items-center justify-center hover:bg-[#FAF7F4] text-[#1C1410] transition-colors bg-white font-body text-lg border-r border-[#E8E2D9]"
                       >
-                        −
+                        <Minus size={16} />
                       </button>
                       <div className="font-bold text-[#1C1410] w-12 text-center font-body text-[14px]">
                         {item.quantity}
@@ -122,7 +133,7 @@ export default function CartPage() {
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="w-10 h-10 flex items-center justify-center hover:bg-[#FAF7F4] text-[#1C1410] transition-colors bg-white font-body text-lg border-l border-[#E8E2D9]"
                       >
-                        +
+                        <Plus size={16} />
                       </button>
                     </div>
 
@@ -133,9 +144,10 @@ export default function CartPage() {
                       </p>
                       <button 
                         onClick={() => removeItem(item.id)}
-                        className="text-[#6B6058] text-[11px] hover:text-[#DC2626] cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body inline-block underline underline-offset-4"
+                        className="text-[#6B6058] text-[11px] hover:text-[#DC2626] cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body flex items-center gap-1 group/remove"
                       >
-                        Remove
+                        <Trash2 size={12} className="group-hover/remove:text-[#DC2626]" /> 
+                        <span className="underline underline-offset-4">Remove</span>
                       </button>
                     </div>
                   </div>
@@ -147,9 +159,9 @@ export default function CartPage() {
             {items.length > 0 && (
               <button 
                 onClick={clearCart}
-                className="text-[#6B6058] text-[12px] font-bold hover:text-[#DC2626] transition-colors cursor-pointer w-max uppercase tracking-[2px] font-body self-center md:self-start py-2"
+                className="text-[#6B6058] text-[12px] font-bold hover:text-[#DC2626] transition-colors cursor-pointer w-max uppercase tracking-[2px] font-body self-center md:self-start py-2 flex items-center gap-2 group/clear"
               >
-                Clear Collection
+                <Trash2 size={14} className="group-hover/clear:text-[#DC2626]" /> Clear Collection
               </button>
             )}
           </div>
@@ -180,7 +192,7 @@ export default function CartPage() {
 
               {/* COD notice */}
               <div className="bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-[3px] p-5 mb-8 flex items-start gap-4">
-                <span className="text-[#2D6A4F] text-lg mt-0.5 font-bold">✓</span>
+                <Check size={18} className="text-[#2D6A4F] mt-0.5" strokeWidth={3} />
                 <div>
                   <p className="font-bold text-[#2D6A4F] text-[12px] font-body uppercase tracking-wider">Cash on Delivery</p>
                   <p className="text-[#2D6A4F]/70 text-[13px] mt-1 leading-relaxed font-body">
@@ -194,14 +206,14 @@ export default function CartPage() {
                 className="hidden md:flex w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-lg active:scale-95 items-center justify-center gap-3"
               >
                 Complete Order
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                <ArrowRight size={18} strokeWidth={2.5} />
               </button>
               
               <Link 
                 href="/furniture/living-room"
-                className="hidden md:block w-full text-center text-[#6B6058] text-[12px] font-bold hover:text-[#4A2C6E] transition-colors mt-6 uppercase tracking-[1px] font-body"
+                className="hidden md:flex w-full items-center justify-center gap-2 text-[#6B6058] text-[12px] font-bold hover:text-[#4A2C6E] transition-colors mt-6 uppercase tracking-[1px] font-body"
               >
-                ← Back to Gallery
+                <ArrowLeft size={14} /> Back to Gallery
               </Link>
             </div>
           </div>

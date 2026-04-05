@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import AuthProvider from '@/components/auth/AuthProvider'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: 'Shopkarroo — Premium Furniture Pakistan',
@@ -31,6 +32,7 @@ export default function RootLayout({
             {children}
           </ConditionalLayout>
         </AuthProvider>
+        <GoogleAnalytics gaId="G-TTR2LMCV6K" />
       </body>
     </html>
   )

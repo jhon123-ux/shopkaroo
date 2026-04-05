@@ -1,17 +1,19 @@
+import { Truck, Banknote, ShieldCheck } from 'lucide-react'
+
 export default function WhyShopkaroo() {
   const cards = [
     {
-      icon: '🚚',
+      icon: <Truck size={24} className="text-[#4A2C6E]" />,
       title: 'Delivered to Your Door',
       desc: 'We deliver across 30+ cities in Pakistan including Karachi, Lahore, Islamabad, and Faisalabad.'
     },
     {
-      icon: '💰',
+      icon: <Banknote size={24} className="text-[#4A2C6E]" />,
       title: 'Cash on Delivery',
       desc: 'No online payment required. Browse, order, and pay cash when your furniture arrives at your home.'
     },
     {
-      icon: '✅',
+      icon: <ShieldCheck size={24} className="text-[#4A2C6E]" />,
       title: 'Quality Assured',
       desc: 'Every piece is inspected before dispatch. We stand behind the quality of every item we sell.'
     }

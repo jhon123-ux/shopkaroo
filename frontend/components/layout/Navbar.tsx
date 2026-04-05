@@ -3,6 +3,8 @@ import Link from 'next/link'
 import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
 import { useState, useRef, useEffect } from 'react'
+import { Search, ShoppingBag, Menu, X, ChevronDown, Package, User, LogOut } from 'lucide-react'
+import { Product } from '@/types'
 
 const navLinks = [
   { name: 'Home', slug: '' },
@@ -18,19 +20,63 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+
+  // Search State
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Product[]>([])
+  const [searching, setSearching] = useState(false)
+  const searchTimeout = useRef<NodeJS.Timeout|null>(null)
   
   useEffect(() => {
     setMounted(true)
 
     // Close dropdown on outside click
-    const handler = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
       }
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSearchOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
+
+  const handleSearch = (query: string) => {
+    if (searchTimeout.current) clearTimeout(searchTimeout.current)
+    
+    if (!query.trim()) {
+      setSearchResults([])
+      setSearching(false)
+      return
+    }
+
+    setSearching(true)
+    searchTimeout.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?search=${encodeURIComponent(query)}&limit=8`
+        )
+        const data = await res.json()
+        setSearchResults(data.data || [])
+      } catch (err) {
+        console.error('Search error:', err)
+        setSearchResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, 300)
+  }
 
   const totalItems = useCartStore(state => state.getTotalItems())
 
@@ -62,17 +108,17 @@ export default function Navbar() {
            {/* Icons (Search, Cart, Auth, Mobile Menu) */}
           <div className="flex items-center space-x-4">
             {/* Search Icon */}
-            <button aria-label="Search" className="text-[#6B6058] hover:text-[#4A2C6E] transition-colors cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-              </svg>
+            <button 
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search" 
+              className="text-[#6B6058] hover:text-[#4A2C6E] transition-colors cursor-pointer"
+            >
+              <Search size={20} />
             </button>
             
             {/* Cart Icon */}
             <Link href="/cart" className="relative text-[#6B6058] hover:text-[#4A2C6E] transition-colors group">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-              </svg>
+              <ShoppingBag size={20} />
               {mounted && totalItems > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-[#4A2C6E] rounded-[3px] transition-colors">
                   {totalItems}
@@ -102,9 +148,7 @@ export default function Navbar() {
                   <span className="text-sm font-bold text-[#1C1410] hidden lg:block max-w-[100px] truncate">
                     {user.user_metadata?.full_name?.split(' ')[0] || 'User'}
                   </span>
-                  <svg className={`w-4 h-4 text-[#6B6058] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <ChevronDown size={14} className={`text-[#6B6058] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {dropdownOpen && (
@@ -115,10 +159,10 @@ export default function Navbar() {
                     </div>
                     <div className="py-2">
                       <Link href="/my-orders" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#1C1410] hover:bg-[#F2EDE6] transition-colors">
-                        <span className="text-lg">📦</span> My Orders
+                        <Package size={16} className="text-[#6B6058]" /> My Orders
                       </Link>
                       <Link href="/profile" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#1C1410] hover:bg-[#F2EDE6] transition-colors">
-                        <span className="text-lg">👤</span> My Profile
+                        <User size={16} className="text-[#6B6058]" /> My Profile
                       </Link>
                     </div>
                     <div className="border-t border-[#E8E2D9] pt-1 pb-1">
@@ -126,7 +170,7 @@ export default function Navbar() {
                         onClick={() => { signOut(); setDropdownOpen(false); }}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-[#991B1B] hover:bg-[#FEF2F2] transition-colors"
                       >
-                        <span className="text-lg">🚪</span> Sign Out
+                        <LogOut size={16} /> Sign Out
                       </button>
                     </div>
                   </div>
@@ -141,12 +185,7 @@ export default function Navbar() {
                 className="text-[#6B6058] hover:text-[#4A2C6E] p-1 focus:outline-none"
                 aria-label="Main menu"
               >
-                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  {isMobileMenuOpen 
-                    ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  }
-                </svg>
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
@@ -167,6 +206,110 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Search Overlay */}
+      {searchOpen && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm animate-fadeIn flex items-start justify-center pt-20 px-4"
+          onClick={() => setSearchOpen(false)}
+        >
+          <div 
+            className="bg-white w-full max-w-2xl rounded-[4px] shadow-2xl overflow-hidden animate-slideUp"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Search Field */}
+            <div className="flex items-center gap-4 px-6 py-5 border-b border-[#E8E2D9]">
+              <Search size={20} className="text-[#6B6058] flex-shrink-0" />
+              <input 
+                autoFocus
+                type="text" 
+                placeholder="Search premium furniture..." 
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                  handleSearch(e.target.value)
+                }}
+                className="flex-1 outline-none text-[#1C1410] font-body text-lg placeholder:text-[#A89890]"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => { setSearchQuery(''); setSearchResults([]); }}
+                  className="p-1 hover:bg-[#F2EDE6] rounded-full transition-colors"
+                >
+                  <X size={16} className="text-[#6B6058]" />
+                </button>
+              )}
+              <button 
+                onClick={() => setSearchOpen(false)}
+                className="text-[#6B6058] hover:text-[#1C1410] font-bold text-sm uppercase tracking-widest ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+
+            {/* Suggestions/Results */}
+            <div className="max-h-[60vh] overflow-y-auto">
+              {searching && (
+                <div className="p-12 text-center">
+                  <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full mx-auto mb-4" />
+                  <p className="text-[#6B6058] text-xs font-bold uppercase tracking-widest opacity-40">Despatching Query...</p>
+                </div>
+              )}
+
+              {!searching && searchQuery && searchResults.length === 0 && (
+                <div className="p-16 text-center">
+                  <p className="text-[#1C1410] font-heading font-bold text-xl mb-2">No items found</p>
+                  <p className="text-[#6B6058] font-body text-sm opacity-60">We couldn't find any results for "{searchQuery}".</p>
+                </div>
+              )}
+
+              {!searching && searchResults.length > 0 && (
+                <div className="py-2">
+                  <p className="px-6 py-3 text-[10px] font-black text-[#6B6058] uppercase tracking-[3px] opacity-40 border-b border-[#FAF7F4]">Matching Gallery</p>
+                  {searchResults.map(product => (
+                    <Link
+                      key={product.id}
+                      href={`/product/${product.slug}`}
+                      onClick={() => {
+                        setSearchOpen(false)
+                        setSearchQuery('')
+                        setSearchResults([])
+                      }}
+                      className="flex items-center gap-5 px-6 py-4 hover:bg-[#FAF7F4] transition-colors border-b border-[#FAF7F4] last:border-0"
+                    >
+                      <div className="w-16 h-16 bg-[#F2EDE6] rounded-0 overflow-hidden flex-shrink-0 border border-[#E8E2D9]">
+                        {product.images?.[0] ? (
+                          <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-xl">🪑</div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0 text-left">
+                        <p className="font-heading font-bold text-[#1C1410] text-[16px] line-clamp-1 truncate">{product.name}</p>
+                        <p className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[2px] mt-1 opacity-60">{product.category.replace('-', ' ')}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-[#4A2C6E] text-[15px]">
+                          Rs. {(product.sale_price || product.price_pkr).toLocaleString()}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {!searchQuery && !searching && (
+                <div className="p-16 text-center">
+                  <div className="w-20 h-20 bg-[#FAF7F4] rounded-full flex items-center justify-center mx-auto mb-6 opacity-40">
+                    <Search size={32} className="text-[#6B6058]" />
+                  </div>
+                  <p className="text-[#6B6058] font-body text-sm italic opacity-60">Architect your space. Search for beds, sofas, or dining sets...</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

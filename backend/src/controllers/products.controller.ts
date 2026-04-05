@@ -7,6 +7,12 @@ export const getProducts = async (req: Request, res: Response) => {
     if (req.query.category && req.query.category !== 'all') {
       query = query.eq('category', req.query.category)
     }
+
+    if (req.query.search) {
+      const search = req.query.search as string
+      query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`)
+    }
+
     query = query.order('created_at', { ascending: false })
     const { data, count, error } = await query
     

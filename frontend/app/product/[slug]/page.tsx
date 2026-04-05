@@ -7,6 +7,21 @@ import Image from 'next/image'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
 import useCartStore from '@/lib/cartStore'
+import { 
+  Heart, 
+  MessageCircle, 
+  ShoppingCart, 
+  Truck, 
+  Lock, 
+  Package, 
+  RotateCcw, 
+  Search, 
+  Star, 
+  Check, 
+  Plus, 
+  Minus,
+  ChevronDown
+} from 'lucide-react'
 
 const CATEGORY_NAMES: Record<string, string> = {
   'living-room': 'Living Room',
@@ -133,7 +148,9 @@ export default function ProductDetailPage() {
   if (notFound || !product) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center text-center py-20 px-6 bg-white">
-        <div className="text-6xl mb-8 opacity-20">🛋️</div>
+        <div className="text-6xl mb-8 opacity-20">
+          <Package size={80} strokeWidth={1} />
+        </div>
         <h2 className="font-heading font-bold text-3xl text-[#1C1410] mb-4">Product Not Found</h2>
         <p className="text-[#6B6058] mb-10 max-w-md font-body">Sorry, we couldn't find the piece you're looking for. It might have been moved or is no longer available.</p>
         <Link href="/furniture" className="bg-[#4A2C6E] text-white px-12 py-4 rounded-[3px] font-bold font-body hover:bg-[#3A1F57] transition-all shadow-lg active:scale-95">
@@ -149,9 +166,9 @@ export default function ProductDetailPage() {
   const isNew = (Date.now() - createdDate.getTime()) < 7 * 24 * 60 * 60 * 1000
 
   const getDeliveryEstimate = () => {
-    if (city === 'Karachi' || city === 'Lahore') return "🚚 Delivers in 2-3 business days"
-    if (city === 'Other') return "🚚 Delivers in 5-7 business days"
-    return "🚚 Delivers in 3-5 business days"
+    if (city === 'Karachi' || city === 'Lahore') return "Delivers in 2-3 business days"
+    if (city === 'Other') return "Delivers in 5-7 business days"
+    return "Delivers in 3-5 business days"
   }
 
   const whatsappMessage = encodeURIComponent(
@@ -229,7 +246,7 @@ export default function ProductDetailPage() {
             {/* Zoom Hint */}
             <div className="absolute bottom-4 right-4 bg-white/90 border border-[#E8E2D9] rounded-[3px] px-3 py-1.5 z-10 shadow-sm">
               <span className="text-[11px] text-[#6B6058] font-semibold tracking-wide uppercase font-body flex items-center gap-1.5">
-                <span className="text-base opacity-40">🔍</span> Zoom
+                <Search size={14} className="opacity-40" /> Zoom
               </span>
             </div>
           </div>
@@ -262,7 +279,9 @@ export default function ProductDetailPage() {
           </h1>
 
           <div className="flex items-center gap-3 mb-6 flex-wrap">
-            <span className="text-[#4A2C6E] text-sm tracking-widest">★★★★★</span>
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="#4A2C6E" className="text-[#4A2C6E]" />)}
+            </div>
             <span className="text-[#6B6058] text-[13px] font-body">(24 Verified Reviews)</span>
             <span className="text-[#D4CCC2] mx-1">|</span>
             <span className={`text-[12px] font-bold font-body uppercase tracking-wider ${product.stock_qty > 0 ? 'text-[#2D6A4F]' : 'text-[#DC2626]'}`}>
@@ -287,7 +306,7 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="flex items-center gap-3 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-[3px] px-5 py-4 mb-8">
-            <span className="text-[#2D6A4F] text-xl font-bold">✓</span>
+            <Check size={20} className="text-[#2D6A4F]" strokeWidth={3} />
             <div>
               <p className="font-bold text-[#2D6A4F] text-[14px] font-body uppercase tracking-wide">Cash on Delivery Available</p>
               <p className="text-[#2D6A4F]/80 text-[13px] font-body mt-0.5">Pay only when you receive your furniture at your doorstep.</p>
@@ -323,7 +342,7 @@ export default function ProductDetailPage() {
                   disabled={qty <= 1}
                   className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#4A2C6E] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
                 >
-                  −
+                  <Minus size={18} />
                 </button>
                 <div className="text-[18px] font-bold text-[#1C1410] w-14 text-center font-body">
                   {qty}
@@ -333,7 +352,7 @@ export default function ProductDetailPage() {
                   disabled={qty >= product.stock_qty}
                   className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#4A2C6E] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
                 >
-                  +
+                  <Plus size={18} />
                 </button>
               </div>
               {product.stock_qty > 0 && product.stock_qty <= 5 && (
@@ -349,17 +368,17 @@ export default function ProductDetailPage() {
               onClick={handleAddToCart}
               className="w-full bg-[#4A2C6E] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#3A1F57] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
             >
-              Add to Cart
+              <ShoppingCart size={18} /> Add to Cart
             </button>
             <a 
               href={`https://wa.me/923001234567?text=${whatsappMessage}`}
               target="_blank" rel="noopener noreferrer"
               className="w-full bg-[#25D366] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#1fba59] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
             >
-              Order via WhatsApp
+              <MessageCircle size={18} /> Order via WhatsApp
             </a>
             <button className="w-full border border-[#D4CCC2] text-[#6B6058] py-4 rounded-[3px] font-semibold text-base hover:border-[#4A2C6E] hover:text-[#4A2C6E] transition-all flex items-center justify-center gap-3 bg-white font-body">
-              Save to Wishlist
+              <Heart size={18} /> Save to Wishlist
             </button>
           </div>
 
@@ -374,19 +393,17 @@ export default function ProductDetailPage() {
                 {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="#1C1410" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <ChevronDown size={16} className="text-[#1C1410]" />
               </div>
             </div>
             <div className="bg-white rounded-[2px] p-4 border border-[#E8E2D9] text-[#1C1410] text-[14px] font-bold flex items-center gap-3 font-body">
-              <span className="text-lg opacity-60">🚚</span> {getDeliveryEstimate().replace('🚚 ', '')}
+              <Truck size={18} className="opacity-60" /> {getDeliveryEstimate()}
             </div>
             
             <div className="grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-[#E8E2D9]">
-              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1"><span className="text-base opacity-60">🔒</span> Secure COD</div>
-              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1"><span className="text-base opacity-60">📦</span> Packaging</div>
-              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1"><span className="text-base opacity-60">↩️</span> 7-Day Return</div>
+              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Lock size={14} className="opacity-60 mb-1" /> Secure COD</div>
+              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Package size={14} className="opacity-60 mb-1" /> Packaging</div>
+              <div className="text-[10px] font-bold text-[#6B6058] uppercase tracking-wider text-center flex flex-col gap-1 items-center"><RotateCcw size={14} className="opacity-60 mb-1" /> 7-Day Return</div>
             </div>
           </div>
         </div>
@@ -422,10 +439,10 @@ export default function ProductDetailPage() {
                 {product.description || "Transform your living space with our beautifully crafted furniture designed specifically for modern Pakistani homes. Built with longevity in mind, our pieces offer a seamless blend of comfort, durability, and contemporary styling."}
               </p>
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><span className="text-[#2D6A4F] text-lg">✓</span> Premium Materials</div>
-                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><span className="text-[#2D6A4F] text-lg">✓</span> Skilled Artisans</div>
-                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><span className="text-[#2D6A4F] text-lg">✓</span> Long-lasting Build</div>
-                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><span className="text-[#2D6A4F] text-lg">✓</span> Secure Delivery</div>
+                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-[#2D6A4F]" strokeWidth={3} /> Premium Materials</div>
+                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-[#2D6A4F]" strokeWidth={3} /> Skilled Artisans</div>
+                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-[#2D6A4F]" strokeWidth={3} /> Long-lasting Build</div>
+                <div className="flex items-center gap-3 text-[#1C1410] font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-[#2D6A4F]" strokeWidth={3} /> Secure Delivery</div>
               </div>
             </div>
           )}
@@ -574,22 +591,22 @@ export default function ProductDetailPage() {
           <a 
             href={`https://wa.me/923001234567?text=${whatsappMessage}`}
             target="_blank" rel="noopener noreferrer"
-            className="bg-[#25D366] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform"
+            className="bg-[#25D366] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform gap-2"
           >
-            WhatsApp
+            <MessageCircle size={18} /> WhatsApp
           </a>
           <button 
             onClick={handleAddToCart}
-            className="bg-[#4A2C6E] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform"
+            className="bg-[#4A2C6E] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform gap-2"
           >
-            Add to Cart
+            <ShoppingCart size={18} /> Cart
           </button>
         </div>
       </div>
 
       {showToast && (
         <div className="fixed top-24 right-6 z-[100] bg-[#1C1410] text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-[#4A2C6E]">
-          <span className="text-[#2D6A4F] font-bold opacity-80 uppercase tracking-widest text-[12px]">Success:</span> 
+          <Check size={16} className="text-[#2D6A4F]" strokeWidth={3} /> 
           <span className="text-[13px] font-body font-semibold">Added to your collection</span>
         </div>
       )}

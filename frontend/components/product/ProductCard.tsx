@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import useCartStore from '@/lib/cartStore'
+import { Heart, ShoppingCart, Check } from 'lucide-react'
 
 interface ProductCardProps {
   id: string
@@ -92,9 +93,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           className="absolute top-3 right-3 z-10 bg-white/92 border border-[#E8E2D9] w-[34px] h-[34px] rounded-[3px] flex items-center justify-center text-[#6B6058] hover:text-[#4A2C6E] hover:border-[#4A2C6E] opacity-0 group-hover:opacity-100 transition-all shadow-sm"
           aria-label="Add to wishlist"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
+          <Heart size={16} />
         </button>
       </div>
 
@@ -131,7 +130,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
 
         {/* Trust row */}
         <div className="mt-2 inline-flex items-center gap-1 bg-[#EBF7F0] text-[#2D6A4F] text-[11px] px-2 py-[3px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-medium">
-          ✓ COD
+          <Check size={12} strokeWidth={3} /> COD
         </div>
 
         {/* Add to Cart button */}
@@ -139,13 +138,13 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           onClick={handleAddToCart}
           className="w-full bg-[#4A2C6E] text-white py-[10px] rounded-[3px] border border-[#4A2C6E] font-semibold font-body text-[13px] tracking-[0.3px] flex items-center justify-center gap-2 hover:bg-[#3A1F57] transition-all duration-150 mt-3 md:opacity-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
         >
-          Add to Cart
+          <ShoppingCart size={15} /> Add to Cart
         </button>
       </div>
 
       {showToast && (
         <div className="fixed top-24 right-6 z-[100] bg-[#1C1410] text-white px-4 py-3 rounded-[3px] shadow-xl flex items-center gap-2 animate-slideUp">
-          <span className="text-[#2D6A4F] font-bold">✓</span> Added to cart
+          <Check size={16} className="text-[#2D6A4F]" strokeWidth={3} /> Added to cart
         </div>
       )}
 

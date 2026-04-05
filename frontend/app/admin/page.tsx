@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { Package, ShoppingCart, Clock, ImageIcon } from 'lucide-react'
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -57,7 +58,9 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
         <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">📦</div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#1C1410]">
+            <Package size={28} />
+          </div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Total Inventory</p>
           <p className="font-heading font-bold text-[48px] text-[#1C1410] leading-none">
             {loading ? '—' : stats.products}
@@ -65,7 +68,9 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">🛒</div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#4A2C6E]">
+            <ShoppingCart size={28} />
+          </div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
           <p className="font-heading font-bold text-[48px] text-[#4A2C6E] leading-none">
             {loading ? '—' : stats.orders}
@@ -73,7 +78,9 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">⏳</div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[orange]">
+            <Clock size={28} />
+          </div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Queue</p>
           <p className="font-heading font-bold text-[48px] text-[orange] leading-none">
             {loading ? '—' : stats.pending}
@@ -81,7 +88,9 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">🖼️</div>
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#2D6A4F]">
+            <ImageIcon size={28} />
+          </div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
           <p className="font-heading font-bold text-[48px] text-[#2D6A4F] leading-none">
             {loading ? '—' : stats.banners}

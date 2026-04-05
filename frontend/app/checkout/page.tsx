@@ -27,6 +27,17 @@ const getCategoryEmoji = (category: string) => {
 
 import useAuthStore from '@/lib/authStore'
 import { supabase } from '@/lib/supabase'
+import { 
+  Lock, 
+  Banknote, 
+  Truck, 
+  Check, 
+  Mail, 
+  ArrowRight, 
+  RotateCcw, 
+  Package, 
+  ChevronDown 
+} from 'lucide-react'
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -209,7 +220,7 @@ Address: ${address}`
           </div>
 
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[2px] text-[#6B6058] opacity-60">
-            <span className="text-base opacity-40">🔒</span> Secure Checkout
+            <Lock size={14} className="opacity-40" /> Secure Checkout
           </div>
         </div>
       </header>
@@ -251,7 +262,7 @@ Address: ${address}`
                 {errors.email && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.email}</p>}
                 
                 <div className="bg-[#FAF7F4] rounded-[2px] px-5 py-4 mt-4 flex items-start gap-4 border border-[#E8E2D9]">
-                  <span className="text-xl opacity-40">📧</span>
+                  <Mail size={18} className="opacity-40 mt-0.5" />
                   <div>
                     <p className="text-[#1C1410] text-[12px] font-bold uppercase tracking-wide font-body">
                       Order Tracking Updates
@@ -299,16 +310,14 @@ Address: ${address}`
                     <option value="Other">Other</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                      <path d="M4 6l4 4 4-4" stroke="#1C1410" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <ChevronDown size={18} className="text-[#1C1410]" />
                   </div>
                 </div>
                 {errors.city && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.city}</p>}
                 
                 {city && (
                   <div className="inline-flex items-center gap-2 mt-4 bg-[#F0EBF8] text-[#4A2C6E] text-[11px] font-bold uppercase tracking-[2px] px-4 py-2 rounded-[2px] border border-[rgba(74,44,110,0.1)] animate-slideUp">
-                    <span className="text-base opacity-60">🚚</span> Est. {getDeliveryEstimate(city)}
+                    <Truck size={14} className="opacity-60" /> Est. {getDeliveryEstimate(city)}
                   </div>
                 )}
               </div>
@@ -343,8 +352,8 @@ Address: ${address}`
           </div>
 
           <div className="mt-8 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-[3px] p-6 flex items-center gap-5 shadow-sm">
-            <div className="w-14 h-14 bg-white/50 rounded-0 flex items-center justify-center text-2xl flex-shrink-0 border border-[#2D6A4F]/10">
-              💰
+            <div className="w-14 h-14 bg-white/50 rounded-0 flex items-center justify-center text-[#2D6A4F] flex-shrink-0 border border-[#2D6A4F]/10">
+              <Banknote size={28} />
             </div>
             <div>
               <h3 className="font-body font-bold text-[#2D6A4F] text-[12px] uppercase tracking-[2px]">Cash on Delivery Available</h3>
@@ -377,7 +386,7 @@ Address: ${address}`
                  target="_blank" rel="noopener noreferrer"
                  className="text-[#2D6A4F] font-bold text-[12px] mt-4 uppercase tracking-[2px] inline-flex items-center gap-2 hover:underline font-body"
                >
-                 Order via WhatsApp <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                 Order via WhatsApp <ArrowRight size={14} strokeWidth={3} />
                </a>
              </div>
           )}
@@ -443,15 +452,15 @@ Address: ${address}`
 
           <div className="grid grid-cols-3 gap-4 mt-8">
             <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <span className="text-xl opacity-40">🔒</span>
+              <Lock size={20} className="opacity-40" />
               <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Secure</span>
             </div>
             <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <span className="text-xl opacity-40">📦</span>
+              <Package size={20} className="opacity-40" />
               <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Insured</span>
             </div>
             <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <span className="text-xl opacity-40">↩️</span>
+              <RotateCcw size={20} className="opacity-40" />
               <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">7-Day</span>
             </div>
           </div>

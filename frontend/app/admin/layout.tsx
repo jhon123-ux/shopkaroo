@@ -1,14 +1,25 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { 
+  LayoutDashboard, 
+  Image as ImageIcon, 
+  Tag, 
+  Package, 
+  ShoppingCart, 
+  Star, 
+  ArrowLeft, 
+  LogOut, 
+  ShieldCheck 
+} from 'lucide-react'
 
 const sidebarLinks = [
-  { href: '/admin', label: 'Overview', icon: '📊' },
-  { href: '/admin/banners', label: 'Hero Banners', icon: '🖼️' },
-  { href: '/admin/offer-banner', label: 'Promotionals', icon: '🏷️' },
-  { href: '/admin/products', label: 'Inventory', icon: '📦' },
-  { href: '/admin/orders', label: 'Transactions', icon: '🛒' },
-  { href: '/admin/reviews', label: 'Feedback', icon: '⭐' },
+  { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} /> },
+  { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={18} /> },
+  { href: '/admin/offer-banner', label: 'Promotionals', icon: <Tag size={18} /> },
+  { href: '/admin/products', label: 'Inventory', icon: <Package size={18} /> },
+  { href: '/admin/orders', label: 'Transactions', icon: <ShoppingCart size={18} /> },
+  { href: '/admin/reviews', label: 'Feedback', icon: <Star size={18} /> },
 ]
 
 export default function AdminLayout({
@@ -68,7 +79,7 @@ export default function AdminLayout({
                     : 'text-white/40 hover:bg-white/[0.03] hover:text-white'
                   }`}
               >
-                <span className="text-lg opacity-60">
+                <span className="opacity-60">
                   {link.icon}
                 </span>
                 {link.label}
@@ -84,7 +95,7 @@ export default function AdminLayout({
             className="text-white/30 text-[10px] 
             hover:text-white/70 transition uppercase tracking-[2px]
             flex items-center gap-3 font-bold">
-            ← Storefront
+            <ArrowLeft size={12} /> Storefront
           </Link>
           <button
             onClick={handleLogout}
@@ -93,7 +104,7 @@ export default function AdminLayout({
             border border-[#DC2626]/20 hover:border-[#DC2626] 
             flex items-center justify-center gap-2"
           >
-            ✕ Terminate Session
+            <LogOut size={12} /> Terminate Session
           </button>
 
           <p className="text-white/10 text-[9px] mt-6 
@@ -126,8 +137,8 @@ export default function AdminLayout({
                 <span className="text-[#1C1410] text-[12px] font-bold uppercase tracking-wider">System Administrator</span>
                 <span className="text-[#2D6A4F] text-[10px] font-bold uppercase tracking-widest">Online</span>
             </div>
-            <div className="w-10 h-10 bg-[#FAF7F4] border border-[#E8E2D9] rounded-0 flex items-center justify-center text-xl shadow-inner">
-              👑
+            <div className="w-10 h-10 bg-[#FAF7F4] border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#4A2C6E] shadow-inner">
+              <ShieldCheck size={20} />
             </div>
           </div>
         </header>

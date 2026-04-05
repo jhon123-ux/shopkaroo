@@ -2,6 +2,15 @@
 
 import { useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { 
+  CheckCircle, 
+  Mail, 
+  ArrowRight, 
+  Phone, 
+  Truck, 
+  Package, 
+  MessageCircle 
+} from 'lucide-react'
 
 import { Suspense } from 'react'
 
@@ -33,10 +42,8 @@ function OrderConfirmedContent() {
       <div className="max-w-3xl w-full bg-white rounded-0 border border-[#E8E2D9] shadow-sm p-10 md:p-20 relative z-10 animate-slideUp">
         
         {/* Success Icon */}
-        <div className="mx-auto w-24 h-24 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-0 flex items-center justify-center mb-10 shadow-sm">
-          <svg width="40" height="30" viewBox="0 0 20 15" fill="none" className="text-[#2D6A4F]">
-            <path d="M1 7L7 13L19 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+        <div className="mx-auto w-24 h-24 bg-[#EBF7F0] border border-[rgba(45,106,79,0.1)] rounded-0 flex items-center justify-center mb-10 shadow-sm text-[#2D6A4F]">
+          <CheckCircle size={48} strokeWidth={1.5} />
         </div>
 
         <h1 className="font-heading font-bold text-[36px] md:text-[48px] text-[#1C1410] mb-4 leading-tight">
@@ -58,7 +65,7 @@ function OrderConfirmedContent() {
         {email && (
           <div className="bg-[#FAF7F4] rounded-0 p-8 mb-16 border border-[#E8E2D9] text-left flex gap-6 items-start max-w-lg mx-auto">
             <div className="bg-white w-12 h-12 flex items-center justify-center flex-shrink-0 border border-[#E8E2D9] shadow-sm">
-              <span className="text-xl opacity-40">📧</span>
+              <Mail size={20} className="opacity-40" />
             </div>
             <div className="flex-1">
               <p className="text-[#1C1410] font-bold text-[12px] uppercase tracking-wider mb-1">Confirmation Despatched</p>
@@ -69,7 +76,7 @@ function OrderConfirmedContent() {
                   href={`/signup?email=${encodeURIComponent(email)}&ref=checkout`}
                   className="text-[#4A2C6E] font-bold text-[13px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
                 >
-                  Create Account To Track <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  Create Account To Track <ArrowRight size={16} strokeWidth={3} />
                 </Link>
               </div>
             </div>
@@ -84,21 +91,27 @@ function OrderConfirmedContent() {
           
           <div className="space-y-6">
             <div className="flex gap-6 items-start">
-              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">01</div>
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">
+                <Phone size={18} className="opacity-40" />
+              </div>
               <div className="pt-1">
                 <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Verification Call</p>
                 <p className="text-[14px] text-[#6B6058] opacity-60">Our concierge will contact you within 60 minutes.</p>
               </div>
             </div>
             <div className="flex gap-6 items-start">
-              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">02</div>
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">
+                <Package size={18} className="opacity-40" />
+              </div>
               <div className="pt-1">
                 <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Curation & Transit</p>
                 <p className="text-[14px] text-[#6B6058] opacity-60">Hand-curated packaging takes 24-48 hours.</p>
               </div>
             </div>
             <div className="flex gap-6 items-start">
-              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">03</div>
+              <div className="w-12 h-12 rounded-0 bg-[#FAF7F4] text-[#1C1410] flex items-center justify-center font-bold text-[14px] flex-shrink-0 border border-[#E8E2D9]">
+                <Truck size={20} className="opacity-40" />
+              </div>
               <div className="pt-1">
                 <p className="font-bold text-[#1C1410] text-[13px] uppercase tracking-wider">Final Delivery</p>
                 <p className="text-[14px] text-[#6B6058] opacity-60">Arriving at your doorstep within 3-5 business days.</p>
@@ -115,13 +128,13 @@ function OrderConfirmedContent() {
           >
             Explore Collection
           </Link>
-          <a 
-            href={`https://wa.me/923001234567?text=Hi! I just placed order ${orderId} and want to track its status.`}
-            target="_blank" rel="noopener noreferrer"
-            className="w-full sm:w-auto px-10 py-5 border border-[#2D6A4F] text-[#2D6A4F] bg-[#EBF7F0] rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#2D6A4F] hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
-          >
-            Concierge WhatsApp
-          </a>
+            <a 
+              href={`https://wa.me/923001234567?text=Hi! I just placed order ${orderId} and want to track its status.`}
+              target="_blank" rel="noopener noreferrer"
+              className="w-full sm:w-auto px-10 py-5 border border-[#2D6A4F] text-[#2D6A4F] bg-[#EBF7F0] rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#2D6A4F] hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
+            >
+              <MessageCircle size={18} /> Concierge WhatsApp
+            </a>
         </div>
 
       </div>

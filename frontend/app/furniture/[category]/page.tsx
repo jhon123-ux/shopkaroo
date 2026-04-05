@@ -5,6 +5,21 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
+import { 
+  Armchair, 
+  Bed, 
+  Lamp, 
+  Utensils, 
+  Sparkles, 
+  Tag, 
+  Home, 
+  Filter, 
+  ChevronDown, 
+  Trash2, 
+  X,
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-react'
 
 const CATEGORY_NAMES: Record<string, string> = {
   'living-room': 'Living Room',
@@ -15,13 +30,13 @@ const CATEGORY_NAMES: Record<string, string> = {
   'sale': 'Sale Items'
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  'living-room': '🛋️',
-  'bedroom': '🛏️',
-  'office': '🪑',
-  'dining': '🍽️',
-  'new': '✨',
-  'sale': '🏷️'
+const CATEGORY_ICONS: Record<string, any> = {
+  'living-room': <Armchair size={40} strokeWidth={1.5} />,
+  'bedroom': <Bed size={40} strokeWidth={1.5} />,
+  'office': <Lamp size={40} strokeWidth={1.5} />,
+  'dining': <Utensils size={40} strokeWidth={1.5} />,
+  'new': <Sparkles size={40} strokeWidth={1.5} />,
+  'sale': <Tag size={40} strokeWidth={1.5} />
 }
 
 const ALL_MATERIALS = ['Sheesham Wood', 'Engineered Wood', 'Fabric', 'Metal', 'Glass', 'Leather']
@@ -48,7 +63,7 @@ function CategoryContent() {
 
   const categorySlug = params?.category ? (params.category as string) : ''
   const categoryName = CATEGORY_NAMES[categorySlug] ?? (categorySlug ? categorySlug.replace('-', ' ') : 'All Products')
-  const categoryIcon = CATEGORY_ICONS[categorySlug] || '🏠'
+  const categoryIcon = CATEGORY_ICONS[categorySlug] || <Home size={40} strokeWidth={1.5} />
 
   // State
   const [products, setProducts] = useState<Product[]>([])
@@ -184,7 +199,7 @@ function CategoryContent() {
       <div className="bg-[#F7F5FF] py-12 border-b border-[#E5E0F5]">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
-            <div className="text-4xl mb-3 drop-shadow-sm">{categoryIcon}</div>
+            <div className="text-[#6C3FC5] mb-3 drop-shadow-sm">{categoryIcon}</div>
             <h1 className="text-4xl font-extrabold font-heading text-[#1A1A2E] capitalize">
               {categoryName}
             </h1>
@@ -205,10 +220,8 @@ function CategoryContent() {
                 <option value="price_desc">Price: High to Low</option>
                 <option value="popular">Most Popular</option>
               </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+                <ChevronDown size={18} />
               </div>
             </div>
           </div>
@@ -220,12 +233,10 @@ function CategoryContent() {
         
         {/* Mobile Filter Button */}
         <button 
-          className="md:hidden w-full bg-[#EDE6FA] text-[#6C3FC5] font-semibold py-3 rounded-xl border border-[#d9cbf6] mb-2 flex justify-center gap-2"
+          className="md:hidden w-full bg-[#EDE6FA] text-[#6C3FC5] font-semibold py-3 rounded-xl border border-[#d2c2f4] mb-2 flex justify-center gap-2 items-center"
           onClick={() => setIsMobileFilterOpen(true)}
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-          </svg>
+          <Filter size={18} />
           Filters {hasActiveFilters ? `(${activeFiltersTags.length})` : ''}
         </button>
 
@@ -247,9 +258,9 @@ function CategoryContent() {
             <div className="bg-white rounded-t-3xl w-full max-h-[85vh] overflow-y-auto px-6 py-8 relative animate-slideUp">
               <button 
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="absolute top-6 right-6 p-2 bg-gray-100 rounded-full"
+                className="absolute top-6 right-6 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
               >
-                ✕
+                <X size={20} />
               </button>
               <h2 className="text-xl font-heading font-extrabold mb-6">Filters</h2>
               <FilterContent 
@@ -280,7 +291,7 @@ function CategoryContent() {
                 <span key={tag} className="bg-[#EDE6FA] text-[#6C3FC5] font-semibold text-xs px-3 py-1.5 rounded-full flex items-center gap-1 border border-[#d2c2f4]">
                   {tag}
                   <button onClick={() => removeFilterTag(tag)} className="hover:text-red-500 ml-1 bg-white/50 rounded-full w-4 h-4 flex items-center justify-center transition-colors">
-                    ✕
+                    <X size={10} />
                   </button>
                 </span>
               ))}
@@ -303,7 +314,9 @@ function CategoryContent() {
             </div>
           ) : products.length === 0 ? (
             <div className="py-24 flex flex-col items-center justify-center text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-              <div className="text-6xl mb-4">{categoryIcon}</div>
+              <div className="text-[#6C3FC5] mb-6 opacity-20">
+                <Filter size={64} strokeWidth={1} />
+              </div>
               <h3 className="font-heading font-bold text-2xl text-[#1A1A2E]">No products found</h3>
               <p className="text-[#6B7280] mt-2 font-body max-w-sm">We couldn't find any furniture matching your exact filter choices.</p>
               {hasActiveFilters && (
@@ -326,9 +339,9 @@ function CategoryContent() {
                   <button 
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors mr-2"
+                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors mr-2 flex items-center gap-2"
                   >
-                    Previous
+                    <ChevronLeft size={16} /> Previous
                   </button>
                   
                   {[...Array(Math.min(5, totalPages))].map((_, i) => {
@@ -355,9 +368,9 @@ function CategoryContent() {
                   <button 
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors ml-2"
+                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors ml-2 flex items-center gap-2"
                   >
-                    Next
+                    Next <ChevronRight size={16} />
                   </button>
                 </div>
               )}
@@ -448,9 +461,9 @@ function FilterContent({
       {hasActiveFilters && (
         <button 
           onClick={clearAllFilters}
-          className="text-[#DC2626] text-sm font-semibold hover:underline w-full text-left flex items-center gap-1"
+          className="text-[#DC2626] text-sm font-semibold hover:underline w-full text-left flex items-center gap-2"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          <Trash2 size={16} />
           Clear All Filters
         </button>
       )}

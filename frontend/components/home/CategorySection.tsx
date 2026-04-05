@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 
 export default function CategorySection() {
   const categories = [
@@ -63,8 +64,8 @@ export default function CategorySection() {
                 <h3 className="font-heading font-bold text-[20px] drop-shadow-sm leading-tight">{cat.name}</h3>
                 <p className="text-white/60 text-[13px] font-body mt-1">{cat.count}</p>
                 
-                <div className="absolute bottom-4 right-4 text-white/50 text-[12px] font-body font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                   Explore <span className="ml-1 text-base leading-none">→</span>
+                <div className="absolute bottom-4 right-4 text-white/50 text-[12px] font-body font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                   Explore <ArrowRight size={14} />
                 </div>
               </div>
             </Link>
