@@ -1,5 +1,5 @@
 'use client'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const sidebarLinks = [
@@ -17,6 +17,15 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('admin_token')
+      document.cookie = "admin_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      router.push('/admin/login')
+    }
+  }
 
   // Don't wrap login page with admin layout
   if (pathname === '/admin/login') {
@@ -77,7 +86,17 @@ export default function AdminLayout({
             flex items-center gap-3 font-bold">
             ← Storefront
           </Link>
-          <p className="text-white/10 text-[9px] mt-4 
+          <button
+            onClick={handleLogout}
+            className="w-full mt-6 text-[#DC2626] opacity-40 hover:opacity-100 transition-all 
+            uppercase tracking-[4px] text-[9px] font-bold py-3 
+            border border-[#DC2626]/20 hover:border-[#DC2626] 
+            flex items-center justify-center gap-2"
+          >
+            ✕ Terminate Session
+          </button>
+
+          <p className="text-white/10 text-[9px] mt-6 
             uppercase tracking-widest">
             Protocol v2.4.0
           </p>
