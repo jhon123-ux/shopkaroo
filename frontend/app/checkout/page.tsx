@@ -230,7 +230,7 @@ Address: ${address}`
                 <input 
                   type="text" 
                   value={name} onChange={e => setName(e.target.value)}
-                  placeholder="Ahmed Khan"
+                  placeholder="e.g. Ali Ahmed"
                   className={`w-full border ${errors.name ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow`}
                 />
                 {errors.name && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.name}</p>}
@@ -245,7 +245,7 @@ Address: ${address}`
                 <input 
                   type="email" 
                   value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="ahmed@gmail.com"
+                  placeholder="ali@example.com"
                   className={`w-full border ${errors.email ? 'border-[#DC2626] ring-1 ring-[#DC2626]' : 'border-[#E5E0F5] focus:border-[#6C3FC5] focus:ring-1 focus:ring-[#6C3FC5]'} rounded-xl px-4 py-3 outline-none transition-shadow`}
                 />
                 {errors.email && <p className="text-[#DC2626] text-xs mt-1.5 font-medium">{errors.email}</p>}

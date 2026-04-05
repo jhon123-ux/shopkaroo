@@ -27,23 +27,10 @@ export default function OfferBanner() {
       .then(data => {
         if (data.data) {
           setBanner(data.data)
-        } else {
-          throw new Error('No active banner')
         }
       })
       .catch((err) => {
-        console.warn('OfferBanner fetch failed, using fallback:', err)
-        // Fallback if API fails
-        setBanner({
-          id: 'fallback',
-          title: 'Up to 30% Off',
-          subtitle: 'On selected bedroom & living room furniture. This week only.',
-          badge_text: 'LIMITED TIME OFFER',
-          cta_text: 'Shop Now',
-          cta_link: '/furniture/sale',
-          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          is_active: true
-        })
+        console.warn('OfferBanner fetch failed:', err)
       })
   }, [])
 

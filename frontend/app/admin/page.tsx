@@ -36,15 +36,14 @@ export default function AdminDashboardPage() {
 
         setStats({
           products: prodData.count || (prodData.data || []).length || 0,
-          orders: orderData.count !== undefined ? orderData.count : ((orderData.data || []).length || 0),
+          orders: orderData.count !== undefined ? orderData.count : (orderData.data || []).length,
           pending: pendingOrders,
           banners: activeBanners
         })
 
-        // Just fake recent orders since endpoint might not exist yet
         setRecentOrders((orderData.data || []).slice(0, 5))
       } catch (err) {
-        console.error(err)
+        console.error('Admin Fetch error:', err)
       } finally {
         setLoading(false)
       }

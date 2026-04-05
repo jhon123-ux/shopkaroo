@@ -89,7 +89,7 @@ export default function SignupPage() {
             <input 
               required
               type="text"
-              placeholder="Ahmed Khan"
+              placeholder="e.g. Ali Ahmed"
               value={formData.fullName}
               onChange={e => setFormData({...formData, fullName: e.target.value})}
               className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none transition-shadow"
@@ -102,7 +102,7 @@ export default function SignupPage() {
             <input 
               required
               type="email"
-              placeholder="ahmed@gmail.com"
+              placeholder="ali@example.com"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}
               className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none transition-shadow"

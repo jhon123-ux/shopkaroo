@@ -24,41 +24,6 @@ const CATEGORY_ICONS: Record<string, string> = {
   'sale': '🏷️'
 }
 
-const MOCK_PRODUCTS: Product[] = [
-  { 
-    id: "1", name: "Sheesham Wood Sofa Set 3 Seater", slug: "sheesham-sofa-set-3-seater", description: '', material: 'Sheesham Wood', is_active: true,
-    price_pkr: 85000, sale_price: 72000, category: "living-room", images: [], created_at: new Date().toISOString(), stock_qty: 5
-  },
-  {
-    id: "2", name: "King Size Bed Frame Walnut", slug: "king-size-bed-frame-walnut", description: '', material: 'Engineered Wood', is_active: true,
-    price_pkr: 65000, sale_price: null, category: "bedroom", images: [], created_at: new Date().toISOString(), stock_qty: 3
-  },
-  {
-    id: "3", name: "Executive Office Desk", slug: "executive-office-desk", description: '', material: 'Engineered Wood', is_active: true,
-    price_pkr: 45000, sale_price: 38000, category: "office", images: [], created_at: new Date().toISOString(), stock_qty: 8
-  },
-  {
-    id: "4", name: "6 Seater Dining Table Set", slug: "6-seater-dining-table-set", description: '', material: 'Sheesham Wood', is_active: true,
-    price_pkr: 72000, sale_price: null, category: "dining", images: [], created_at: new Date().toISOString(), stock_qty: 2
-  },
-  {
-    id: "5", name: "L-Shape Corner Sofa", slug: "l-shape-corner-sofa", description: '', material: 'Fabric', is_active: true,
-    price_pkr: 110000, sale_price: 95000, category: "living-room", images: [], created_at: new Date().toISOString(), stock_qty: 4
-  },
-  {
-    id: "6", name: "Single Bed with Storage", slug: "single-bed-with-storage", description: '', material: 'Engineered Wood', is_active: true,
-    price_pkr: 38000, sale_price: null, category: "bedroom", images: [], created_at: new Date().toISOString(), stock_qty: 6
-  },
-  {
-    id: "7", name: "Ergonomic Office Chair", slug: "ergonomic-office-chair", description: '', material: 'Fabric', is_active: true,
-    price_pkr: 28000, sale_price: 22000, category: "office", images: [], created_at: new Date().toISOString(), stock_qty: 10
-  },
-  {
-    id: "8", name: "4 Seater Dining Chair Set", slug: "4-seater-dining-chair-set", description: '', material: 'Metal', is_active: true,
-    price_pkr: 32000, sale_price: null, category: "dining", images: [], created_at: new Date().toISOString(), stock_qty: 7
-  }
-]
-
 const ALL_MATERIALS = ['Sheesham Wood', 'Engineered Wood', 'Fabric', 'Metal', 'Glass', 'Leather']
 const ALL_CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan']
 
@@ -140,29 +105,9 @@ function CategoryContent() {
         setProducts(json.data || [])
         setTotalCount(json.total || 0)
       } catch (e) {
-        // Fallback to strict mock logic matching the prompt rules exactly
-        let filtered = MOCK_PRODUCTS.filter(p => p.category === categorySlug)
-        
-        if (minPrice !== null) {
-          filtered = filtered.filter(p => (p.sale_price ?? p.price_pkr) >= minPrice)
-        }
-        if (maxPrice !== null) {
-          filtered = filtered.filter(p => (p.sale_price ?? p.price_pkr) <= maxPrice)
-        }
-        if (selectedMaterials.length > 0) {
-          filtered = filtered.filter(p => selectedMaterials.includes(p.material))
-        }
-
-        if (sort === 'price_asc') {
-          filtered.sort((a,b) => (a.sale_price ?? a.price_pkr) - (b.sale_price ?? b.price_pkr))
-        } else if (sort === 'price_desc') {
-          filtered.sort((a,b) => (b.sale_price ?? b.price_pkr) - (a.sale_price ?? a.price_pkr))
-        } else if (sort === 'newest') {
-          filtered.sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        }
-
-        setTotalCount(filtered.length)
-        setProducts(filtered.slice((currentPage - 1) * 12, currentPage * 12))
+        console.error('Fetch error:', e)
+        setProducts([])
+        setTotalCount(0)
       } finally {
         setLoading(false)
         updateURL()

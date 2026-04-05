@@ -1,58 +1,26 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
 
 export default function NewArrivalsStrip() {
-  const mockProducts: Product[] = [
-    { 
-      id: "1", name: "Sheesham Wood Sofa Set 3 Seater",
-      slug: "sheesham-sofa-set-3-seater",
-      description: '', material: '', is_active: true,
-      price_pkr: 85000, sale_price: 72000,
-      category: "living-room", images: [],
-      created_at: new Date().toISOString(), stock_qty: 5
-    },
-    {
-      id: "2", name: "King Size Bed Frame Walnut",
-      slug: "king-size-bed-frame-walnut",
-      description: '', material: '', is_active: true,
-      price_pkr: 65000, sale_price: null,
-      category: "bedroom", images: [],
-      created_at: new Date().toISOString(), stock_qty: 3
-    },
-    {
-      id: "3", name: "Executive Office Desk",
-      slug: "executive-office-desk",
-      description: '', material: '', is_active: true,
-      price_pkr: 45000, sale_price: 38000,
-      category: "office", images: [],
-      created_at: new Date().toISOString(), stock_qty: 8
-    },
-    {
-      id: "4", name: "6 Seater Dining Table Set",
-      slug: "6-seater-dining-table-set",
-      description: '', material: '', is_active: true,
-      price_pkr: 72000, sale_price: null,
-      category: "dining", images: [],
-      created_at: new Date().toISOString(), stock_qty: 2
-    },
-    {
-      id: "5", name: "L-Shape Corner Sofa",
-      slug: "l-shape-corner-sofa",
-      description: '', material: '', is_active: true,
-      price_pkr: 110000, sale_price: 95000,
-      category: "living-room", images: [],
-      created_at: new Date().toISOString(), stock_qty: 4
-    },
-    {
-      id: "6", name: "Vintage Bookshelf",
-      slug: "vintage-bookshelf",
-      description: '', material: '', is_active: true,
-      price_pkr: 32000, sale_price: null,
-      category: "office", images: [],
-      created_at: new Date().toISOString(), stock_qty: 4
-    }
-  ]
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+    fetch(`${backendUrl}/api/products?limit=6&sort=newest`)
+      .then(r => r.json())
+      .then(data => {
+        setProducts(data.data || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  if (loading || products.length === 0) return null
 
   return (
     <section className="bg-[#FFFFFF] py-20 overflow-hidden cursor-default">
@@ -76,7 +44,7 @@ export default function NewArrivalsStrip() {
         {/* Scroll Container */}
         <div className="flex gap-5 overflow-x-auto pb-6 pt-2 scrollbar-hide scroll-smooth snap-x snap-mandatory pr-4">
           
-          {mockProducts.map((product) => (
+          {products.map((product) => (
             <div key={product.id} className="min-w-[240px] max-w-[240px] snap-start mb-2">
               <ProductCard product={product} />
             </div>

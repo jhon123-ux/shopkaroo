@@ -22,48 +22,16 @@ const CATEGORY_ICONS: Record<string, string> = {
   'dining': '🍽️'
 }
 
-const MOCK_PRODUCT: Product = {
-  id: "mock-1",
-  name: "Sheesham Wood Sofa Set 3 Seater",
-  slug: "sheesham-sofa-set-3-seater",
-  description: "Premium sheesham wood sofa set crafted by skilled Pakistani artisans.",
-  price_pkr: 85000,
-  sale_price: 72000,
-  category: "living-room",
-  material: "Sheesham Wood",
-  dimensions: { L: 210, W: 85, H: 90, unit: "cm" },
-  images: [],
-  stock_qty: 5,
-  weight_kg: 85,
-  is_active: true,
-  created_at: new Date().toISOString()
-}
-
-const MOCK_RELATED: Product[] = [
-  { id: "r1", name: "L-Shape Corner Sofa", price_pkr: 110000, sale_price: 95000, category: "living-room", images: [], slug: "l-shape-corner-sofa", stock_qty: 3, created_at: new Date().toISOString(), description: '', material: '', is_active: true },
-  { id: "r2", name: "Coffee Table Sheesham", price_pkr: 18000, sale_price: null, category: "living-room", images: [], slug: "coffee-table-sheesham", stock_qty: 8, created_at: new Date().toISOString(), description: '', material: '', is_active: true },
-  { id: "r3", name: "TV Console Unit", price_pkr: 25000, sale_price: 22000, category: "living-room", images: [], slug: "tv-console-unit", stock_qty: 4, created_at: new Date().toISOString(), description: '', material: '', is_active: true },
-  { id: "r4", name: "Accent Armchair", price_pkr: 32000, sale_price: null, category: "living-room", images: [], slug: "accent-armchair", stock_qty: 6, created_at: new Date().toISOString(), description: '', material: '', is_active: true }
-]
-
-const STATIC_REVIEWS = [
-  { id: 1, name: "Ahmed Khan", city: "Lahore", rating: 5, review: "Excellent quality sofa set. Delivered in 3 days to Lahore. COD made it very easy. Highly recommend Shopkaroo!" },
-  { id: 2, name: "Sara Malik", city: "Karachi", rating: 5, review: "Ordered a king size bed. Assembly team was very professional. Will definitely order again from Shopkaroo." },
-  { id: 3, name: "Usman Ali", city: "Islamabad", rating: 5, review: "Best online furniture shop in Pakistan. Prices are fair and quality is top notch. Very happy customer." },
-  { id: 4, name: "Fatima Zahra", city: "Faisalabad", rating: 4, review: "Good experience overall. Dining table looks exactly like the photos. Fast delivery too. Recommended!" },
-  { id: 5, name: "Hassan Raza", city: "Rawalpindi", rating: 5, review: "COD option made me trust the website. Furniture quality exceeded my expectations completely." }
-]
-
 const CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan', 'Other']
 
 export default function ProductDetailPage() {
   const params = useParams()
   const slug = params?.slug ? (params.slug as string) : ''
   
-  const [product, setProduct] = useState<Product>(MOCK_PRODUCT)
-  const [related, setRelated] = useState<Product[]>(MOCK_RELATED)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [product, setProduct] = useState<Product | null>(null)
+  const [related, setRelated] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
   
   const { addItem } = useCartStore()
   const [showToast, setShowToast] = useState(false)
@@ -88,27 +56,30 @@ export default function ProductDetailPage() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        // 1. Fetch Product
-        const prodRes = await fetch(`${backendUrl}/api/products?search=${slug}`)
+        // 1. Fetch Product by slug
+        const prodRes = await fetch(`${backendUrl}/api/products?slug=${slug}`)
         const prodData = await prodRes.json()
         
-        const found = (prodData.data || []).find((p: Product) => p.slug === slug)
-        if (found) {
+        if (prodData.data && prodData.data.length > 0) {
+          const found = prodData.data[0]
           setProduct(found)
           
           // 2. Fetch Reviews once product ID is known
-          const revRes = await fetch(`${backendUrl}/api/reviews?product_id=${found.id}`)
+          const revRes = await fetch(`${backendUrl}/api/reviews?product_id=${found.id}&approved=true`)
           const revData = await revRes.json()
           setReviews(revData.data || [])
+
+          // 3. Fetch Related Products
+          const relRes = await fetch(`${backendUrl}/api/products?category=${found.category}&limit=4`)
+          const relData = await relRes.json()
+          // Filter out the current product from related
+          setRelated((relData.data || []).filter((p: Product) => p.id !== found.id))
         } else {
-          // If not found in DB, we keep MOCK_PRODUCT as fallback
-          // which is already the initial state of 'product'
-          console.warn('Real product not found, sticking to Mock.')
-          setReviews(STATIC_REVIEWS)
+          setNotFound(true)
         }
       } catch (err) {
         console.error('Fetch error:', err)
-        setError(true)
+        setNotFound(true)
       } finally {
         setLoading(false)
       }
@@ -119,7 +90,7 @@ export default function ProductDetailPage() {
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!product.id) return
+    if (!product?.id) return
 
     try {
       const res = await fetch(`${backendUrl}/api/reviews`, {
@@ -135,7 +106,6 @@ export default function ProductDetailPage() {
 
       if (res.ok) {
         setRevSubmitted(true)
-        // Reset form
         setRevName('')
         setRevComment('')
       }
@@ -160,13 +130,14 @@ export default function ProductDetailPage() {
     )
   }
 
-  if (error || (!product && !loading)) {
+  if (notFound || !product) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center py-20 px-6">
-        <div className="text-6xl mb-4">🪑</div>
-        <h2 className="font-heading font-bold text-2xl text-[#1A1A2E] mb-6">Product not found</h2>
-        <Link href="/furniture" className="bg-[#6C3FC5] text-white px-8 py-3 rounded-xl font-semibold">
-          Back to Shop
+      <div className="min-h-[70vh] flex flex-col items-center justify-center text-center py-20 px-6">
+        <div className="text-7xl mb-6">🛋️</div>
+        <h2 className="font-heading font-extrabold text-3xl text-[#1A1A2E] mb-2">Product Not Found</h2>
+        <p className="text-[#6B7280] mb-8 max-w-md">Sorry, we couldn't find the piece you're looking for. It might have been moved or is no longer available.</p>
+        <Link href="/furniture" className="bg-[#6C3FC5] text-white px-10 py-4 rounded-2xl font-bold font-heading hover:bg-[#5530A8] transition-all shadow-lg active:scale-95">
+          Back to Collection
         </Link>
       </div>
     )
