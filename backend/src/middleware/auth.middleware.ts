@@ -9,7 +9,7 @@ export const adminAuth = (req: Request, res: Response, next: NextFunction) => {
   // Check for a custom header sent by the frontend
   const authHeader = req.headers['x-admin-auth']
   
-  if (authHeader === 'mock_secure_token_123') {
+  if (authHeader === 'shopkaroo_admin_secure_v1_2025') {
     return next()
   }
 

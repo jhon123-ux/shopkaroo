@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
 
     try {
       if (email === 'admin@shopkaroo.com' && password === 'shopkaroo2025') {
-        localStorage.setItem('admin_token', 'shopkaroo_admin_access_token_v1')
+        localStorage.setItem('admin_token', 'shopkaroo_admin_secure_v1_2025')
         document.cookie = "admin_auth=true; path=/;"
         router.push('/admin')
       } else {
