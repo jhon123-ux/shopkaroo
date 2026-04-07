@@ -1,8 +1,28 @@
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { Phone, Mail, Clock } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const [categories, setCategories] = useState<{name: string, slug: string}[]>([])
+
+  useEffect(() => {
+    const fetchFooterCats = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`)
+        const data = await res.json()
+        if (data.data) {
+          setCategories(data.data.map((cat: any) => ({
+            name: cat.name,
+            slug: cat.slug
+          })))
+        }
+      } catch (err) {
+        console.error('Footer category fetch error:', err)
+      }
+    }
+    fetchFooterCats()
+  }, [])
 
   return (
     <footer className="bg-[#1C1410] text-white pt-24 pb-12 border-t border-white/5">
@@ -23,7 +43,17 @@ export default function Footer() {
           <div className="col-span-1">
             <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Shop</h4>
             <ul className="space-y-4">
-              {['living-room', 'bedroom', 'office', 'dining'].map((slug) => (
+              {categories.map((cat) => (
+                <li key={cat.slug}>
+                  <Link 
+                    href={`/furniture/${cat.slug}`} 
+                    className="text-white/60 hover:text-white/90 transition-colors text-[14px] font-body capitalize"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
+              {categories.length === 0 && ['living-room', 'bedroom', 'office', 'dining'].map((slug) => (
                 <li key={slug}>
                   <Link 
                     href={`/furniture/${slug}`} 

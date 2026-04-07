@@ -6,16 +6,9 @@ import { useState, useRef, useEffect } from 'react'
 import { Search, ShoppingBag, Menu, X, User, ChevronDown, Package, LogOut } from 'lucide-react'
 import { Product } from '@/types'
 
-const navLinks = [
-  { name: 'Home', slug: '' },
-  { name: 'Living Room', slug: 'living-room' },
-  { name: 'Bedroom', slug: 'bedroom' },
-  { name: 'Office', slug: 'office' },
-  { name: 'Dining', slug: 'dining' },
-]
-
 export default function Navbar() {
   const { user, signOut } = useAuthStore()
+  const [navLinks, setNavLinks] = useState<{name: string, slug: string}[]>([{ name: 'Home', slug: '' }])
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -30,6 +23,24 @@ export default function Navbar() {
   
   useEffect(() => {
     setMounted(true)
+
+    const fetchNavCategories = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`)
+        const data = await res.json()
+        if (data.data) {
+          const cmsLinks = data.data.map((cat: any) => ({
+            name: cat.name,
+            slug: cat.slug
+          }))
+          setNavLinks([{ name: 'Home', slug: '' }, ...cmsLinks])
+        }
+      } catch (err) {
+        console.error('Navbar category fetch error:', err)
+      }
+    }
+
+    fetchNavCategories()
 
     // Close dropdown on outside click
     const handleClickOutside = (e: MouseEvent) => {

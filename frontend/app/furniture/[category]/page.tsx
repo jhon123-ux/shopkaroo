@@ -62,14 +62,30 @@ function CategoryContent() {
   const searchParams = useSearchParams()
 
   const categorySlug = params?.category ? (params.category as string) : ''
-  const categoryName = CATEGORY_NAMES[categorySlug] ?? (categorySlug ? categorySlug.replace('-', ' ') : 'All Products')
-  const categoryIcon = CATEGORY_ICONS[categorySlug] || <Home size={40} strokeWidth={1.5} />
-
-  // State
+  
+  // CMS Category Metadata
+  const [categoryData, setCategoryData] = useState<any>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [totalCount, setTotalCount] = useState(0)
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+
+  // Fetch Category Details
+  useEffect(() => {
+    const fetchCategoryMetadata = async () => {
+      if (!categorySlug) return
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+        const res = await fetch(`${backendUrl}/api/categories?all=true`)
+        const data = await res.json()
+        const meta = data.data?.find((c: any) => c.slug === categorySlug)
+        if (meta) setCategoryData(meta)
+      } catch (err) {
+        console.error('Metadata fetch error:', err)
+      }
+    }
+    fetchCategoryMetadata()
+  }, [categorySlug])
 
   // Filter State mapped from URL
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest')
@@ -182,195 +198,168 @@ function CategoryContent() {
     else if (ALL_CITIES.includes(tag)) handleCityToggle(tag)
   }
 
+  const catName = categoryData?.name || categorySlug.replace('-', ' ')
   const totalPages = Math.ceil(totalCount / 12) || 1
-
+  
   return (
-    <main className="bg-white min-h-screen">
-      {/* PART 1 — BREADCRUMB */}
-      <div className="bg-white border-b border-[#E5E0F5] py-3">
-        <div className="max-w-7xl mx-auto px-6 flex items-center gap-2 text-sm">
-          <Link href="/" className="hover:text-[#6C3FC5] transition-colors">Home</Link>
-          <span className="text-[#6B7280]">/</span>
-          <span className="text-[#6C3FC5] font-medium capitalize">{categoryName}</span>
-        </div>
-      </div>
-
-      {/* PART 2 — PAGE HEADER */}
-      <div className="bg-[#F7F5FF] py-12 border-b border-[#E5E0F5]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div>
-            <div className="text-[#6C3FC5] mb-3 drop-shadow-sm">{categoryIcon}</div>
-            <h1 className="text-4xl font-extrabold font-heading text-[#1A1A2E] capitalize">
-              {categoryName}
-            </h1>
-            <p className="text-[#6B7280] text-base mt-2 font-body">
-              Showing {totalCount} products
-            </p>
-          </div>
-          <div className="flex flex-col gap-1 w-full md:w-auto">
-            <label className="text-xs font-mono tracking-widest text-[#6B7280] uppercase">Sort by</label>
-            <div className="relative">
-              <select 
-                value={sort}
-                onChange={handleSortChange}
-                className="w-full border border-[#E5E0F5] rounded-xl px-4 py-2.5 text-sm text-[#1A1A2E] bg-white appearance-none pr-10 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6C3FC5] focus:border-transparent outline-none font-medium"
-              >
-                <option value="newest">Newest First</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-                <option value="popular">Most Popular</option>
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                <ChevronDown size={18} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* PART 3 — MAIN CONTENT AREA */}
-      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row gap-8">
-        
-        {/* Mobile Filter Button */}
-        <button 
-          className="md:hidden w-full bg-[#EDE6FA] text-[#6C3FC5] font-semibold py-3 rounded-xl border border-[#d2c2f4] mb-2 flex justify-center gap-2 items-center"
-          onClick={() => setIsMobileFilterOpen(true)}
-        >
-          <Filter size={18} />
-          Filters {hasActiveFilters ? `(${activeFiltersTags.length})` : ''}
-        </button>
-
-        {/* LEFT — FILTER SIDEBAR (Desktop) */}
-        <aside className="hidden md:block w-64 flex-shrink-0 sticky top-24 h-max bg-white rounded-2xl border border-[#E5E0F5] p-6 shadow-sm">
-          <FilterContent 
-            localMinPrice={localMinPrice} setLocalMinPrice={setLocalMinPrice}
-            localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
-            applyPriceRange={applyPriceRange}
-            selectedMaterials={selectedMaterials} handleMaterialToggle={handleMaterialToggle}
-            selectedCities={selectedCities} handleCityToggle={handleCityToggle}
-            hasActiveFilters={hasActiveFilters} clearAllFilters={clearAllFilters}
+    <main className="bg-[#FAF7F4] min-h-screen font-body">
+      {/* LUXURY HERO HEADER */}
+      <div className="relative h-[300px] flex items-center justify-center overflow-hidden">
+        {categoryData?.image_url ? (
+          <img 
+            src={categoryData.image_url} 
+            alt={catName} 
+            className="absolute inset-0 w-full h-full object-cover" 
           />
-        </aside>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1C1410] to-[#4A2C6E]" />
+        )}
+        <div className="absolute inset-0 bg-[#1C1410]/40 backdrop-blur-[2px]" />
+        
+        <div className="relative text-center px-6">
+          <p className="text-white/60 text-[11px] font-bold uppercase tracking-[4px] mb-4">Collection Gallery</p>
+          <h1 className="text-white font-heading italic text-[48px] md:text-[64px] leading-none mb-6 capitalize">
+            {catName}
+          </h1>
+          <div className="flex items-center justify-center gap-3 text-white/40 text-[12px] font-bold uppercase tracking-widest">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <span className="opacity-20">/</span>
+            <span className="text-white">Shop {catName}</span>
+          </div>
+        </div>
+      </div>
 
-        {/* Mobile Filter Drawer */}
-        {isMobileFilterOpen && (
-          <div className="fixed inset-0 z-50 flex items-end bg-black/40 backdrop-blur-sm md:hidden">
-            <div className="bg-white rounded-t-3xl w-full max-h-[85vh] overflow-y-auto px-6 py-8 relative animate-slideUp">
-              <button 
-                onClick={() => setIsMobileFilterOpen(false)}
-                className="absolute top-6 right-6 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
-              >
-                <X size={20} />
-              </button>
-              <h2 className="text-xl font-heading font-extrabold mb-6">Filters</h2>
+      <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row gap-16">
+        
+        {/* SIDEBAR FILTERS — Minimalist Archive Style */}
+        <aside className="hidden lg:block w-72 flex-shrink-0">
+          <div className="sticky top-24 space-y-12">
+            <div>
+              <h2 className="text-[#1C1410] font-heading font-bold text-[22px] mb-8">Architect Filters</h2>
               <FilterContent 
                 localMinPrice={localMinPrice} setLocalMinPrice={setLocalMinPrice}
                 localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
-                applyPriceRange={() => { applyPriceRange(); setIsMobileFilterOpen(false); }}
+                applyPriceRange={applyPriceRange}
                 selectedMaterials={selectedMaterials} handleMaterialToggle={handleMaterialToggle}
                 selectedCities={selectedCities} handleCityToggle={handleCityToggle}
-                hasActiveFilters={hasActiveFilters} clearAllFilters={() => { clearAllFilters(); setIsMobileFilterOpen(false); }}
+                hasActiveFilters={hasActiveFilters} clearAllFilters={clearAllFilters}
               />
-              <button 
-                onClick={() => setIsMobileFilterOpen(false)}
-                className="w-full bg-[#1A1A2E] text-white py-3.5 rounded-xl font-semibold mt-6"
-              >
-                View Results
-              </button>
             </div>
-          </div>
-        )}
 
-        {/* RIGHT — PRODUCTS AREA */}
-        <div className="flex-1 min-h-[500px]">
-          
-          {/* Top bar Tags */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <div className="flex flex-wrap gap-2">
-              {activeFiltersTags.map(tag => (
-                <span key={tag} className="bg-[#EDE6FA] text-[#6C3FC5] font-semibold text-xs px-3 py-1.5 rounded-full flex items-center gap-1 border border-[#d2c2f4]">
-                  {tag}
-                  <button onClick={() => removeFilterTag(tag)} className="hover:text-red-500 ml-1 bg-white/50 rounded-full w-4 h-4 flex items-center justify-center transition-colors">
-                    <X size={10} />
+            {categoryData?.description && (
+              <div className="pt-12 border-t border-[#E8E2D9]">
+                <p className="text-[#6B6058] text-[12px] font-bold uppercase tracking-[2px] mb-4 opacity-40">Room Narrative</p>
+                <p className="text-[#6B6058] text-[14px] leading-relaxed italic opacity-80">
+                  {categoryData.description}
+                </p>
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* PRODUCTS REGISTRY */}
+        <div className="flex-1">
+          {/* Sorting & Filter Trigger (Mobile) */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 pb-6 border-b border-[#E8E2D9] gap-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40">Classification:</span>
+              <div className="flex flex-wrap gap-2">
+                {activeFiltersTags.map(tag => (
+                  <button 
+                    key={tag}
+                    onClick={() => removeFilterTag(tag)}
+                    className="bg-white border border-[#E8E2D9] text-[#1C1410] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 flex items-center gap-2 hover:border-[#4A2C6E] transition-colors"
+                  >
+                    {tag} <X size={10} className="opacity-40" />
                   </button>
-                </span>
-              ))}
+                ))}
+                {hasActiveFilters && (
+                  <button onClick={clearAllFilters} className="text-[#A89890] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 hover:text-[#DC2626]">Clear</button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 w-full sm:w-auto">
+              <button 
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="lg:hidden flex-1 sm:flex-none border border-[#E8E2D9] px-6 py-3 text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-3"
+              >
+                <Filter size={14} /> Filter
+              </button>
+              
+              <div className="relative group flex-1 sm:flex-none">
+                <select 
+                  value={sort}
+                  onChange={handleSortChange}
+                  className="w-full bg-transparent border-b border-black text-[11px] font-bold uppercase tracking-widest py-2 pr-8 focus:outline-none cursor-pointer appearance-none"
+                >
+                  <option value="newest">Latest Exhibits</option>
+                  <option value="price_asc">Price Ascending</option>
+                  <option value="price_desc">Price Descending</option>
+                  <option value="popular">Curated Popularity</option>
+                </select>
+                <ChevronDown size={12} className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" />
+              </div>
             </div>
           </div>
 
-          {/* Grid / Loading / Empty */}
+          {/* Grid Layout */}
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {[...Array(9)].map((_, i) => (
-                <div key={i} className="animate-pulse bg-gray-100 rounded-2xl h-[420px] w-full border border-gray-200">
-                  <div className="h-64 bg-gray-200 rounded-t-2xl"></div>
-                  <div className="p-4 flex flex-col gap-3">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-10 bg-gray-200 rounded-xl w-full mt-4"></div>
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="aspect-[4/5] bg-[#F2EDE6] animate-pulse rounded-0 border border-[#E8E2D9]" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="py-24 flex flex-col items-center justify-center text-center bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-              <div className="text-[#6C3FC5] mb-6 opacity-20">
-                <Filter size={64} strokeWidth={1} />
+            <div className="py-32 text-center border-2 border-dashed border-[#E8E2D9] bg-white shadow-sm">
+              <div className="text-[#1C1410] opacity-10 mb-8 flex justify-center">
+                <Filter size={80} strokeWidth={0.5} />
               </div>
-              <h3 className="font-heading font-bold text-2xl text-[#1A1A2E]">No products found</h3>
-              <p className="text-[#6B7280] mt-2 font-body max-w-sm">We couldn't find any furniture matching your exact filter choices.</p>
+              <h3 className="font-heading italic text-[32px] text-[#1C1410] mb-4">No exhibits found</h3>
+              <p className="text-[#6B6058] max-w-md mx-auto text-[14px]">Our current archive does not contain pieces matching these specifications.</p>
               {hasActiveFilters && (
-                <button onClick={clearAllFilters} className="mt-6 border-2 border-[#6C3FC5] text-[#6C3FC5] hover:bg-[#6C3FC5] hover:text-white transition-colors px-6 py-2.5 rounded-xl font-semibold">
-                  Clear Filters
-                </button>
+                <button onClick={clearAllFilters} className="mt-8 bg-[#1C1410] text-white px-8 py-4 text-[11px] font-bold uppercase tracking-widest rounded-0 shadow-lg">Refresh Registry</button>
               )}
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10">
                 {products.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
 
-              {/* PART 4 — PAGINATION */}
+              {/* PAGINATION — Minimalist Numerics */}
               {totalPages > 1 && (
-                <div className="mt-16 flex justify-center items-center gap-2">
+                <div className="mt-24 pt-12 border-t border-[#E8E2D9] flex justify-center items-center gap-6">
                   <button 
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors mr-2 flex items-center gap-2"
+                    className="p-3 border border-[#E8E2D9] hover:bg-[#FAF7F4] transition-colors disabled:opacity-20"
                   >
-                    <ChevronLeft size={16} /> Previous
+                    <ChevronLeft size={16} />
                   </button>
                   
-                  {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                    let pageNum = i + 1;
-                    if (totalPages > 5 && currentPage > 3) {
-                      pageNum = currentPage - 2 + i;
-                      if (pageNum > totalPages) return null;
-                    }
-                    return (
+                  <div className="flex gap-4">
+                    {[...Array(totalPages)].map((_, i) => (
                       <button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
-                          currentPage === pageNum 
-                            ? 'bg-[#6C3FC5] text-white shadow-md' 
-                            : 'border border-[#E5E0F5] text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5]'
+                        key={i}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`text-[12px] font-bold font-mono tracking-widest transition-all ${
+                          currentPage === (i + 1) ? 'text-[#4A2C6E] border-b-2 border-[#4A2C6E] pb-1' : 'text-[#A89890] hover:text-[#1C1410]'
                         }`}
                       >
-                        {pageNum}
+                        {String(i + 1).padStart(2, '0')}
                       </button>
-                    )
-                  })}
+                    ))}
+                  </div>
 
                   <button 
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className="border border-[#E5E0F5] px-4 py-2 rounded-xl text-sm font-semibold text-[#6B7280] hover:border-[#6C3FC5] hover:text-[#6C3FC5] disabled:opacity-40 disabled:cursor-not-allowed transition-colors ml-2 flex items-center gap-2"
+                    className="p-3 border border-[#E8E2D9] hover:bg-[#FAF7F4] transition-colors disabled:opacity-20"
                   >
-                    Next <ChevronRight size={16} />
+                    <ChevronRight size={16} />
                   </button>
                 </div>
               )}
@@ -378,6 +367,24 @@ function CategoryContent() {
           )}
         </div>
       </div>
+
+      {/* Mobile Drawer Fix */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md lg:hidden p-6 overflow-y-auto">
+          <div className="bg-white min-h-screen p-10 animate-slideUp relative shadow-2xl">
+            <button onClick={() => setIsMobileFilterOpen(false)} className="absolute top-8 right-8 text-[#1C1410] opacity-40 hover:opacity-100"><X size={28} /></button>
+            <h2 className="text-[#1C1410] font-heading font-bold text-[32px] mb-12">Filter Collection</h2>
+            <FilterContent 
+                localMinPrice={localMinPrice} setLocalMinPrice={setLocalMinPrice}
+                localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
+                applyPriceRange={() => { applyPriceRange(); setIsMobileFilterOpen(false); }}
+                selectedMaterials={selectedMaterials} handleMaterialToggle={handleMaterialToggle}
+                selectedCities={selectedCities} handleCityToggle={handleCityToggle}
+                hasActiveFilters={hasActiveFilters} clearAllFilters={() => { clearAllFilters(); setIsMobileFilterOpen(false); }}
+              />
+          </div>
+        </div>
+      )}
     </main>
   )
 }
@@ -390,69 +397,68 @@ function FilterContent({
   hasActiveFilters, clearAllFilters
 }: any) {
   return (
-    <>
-      <div className="mb-8">
-        <h4 className="font-mono text-xs tracking-widest uppercase font-bold text-[#6C3FC5] mb-4">Price Range</h4>
-        <div className="flex gap-2 items-center">
-          <div className="relative w-full">
-            <span className="absolute left-3 top-2.5 text-xs text-gray-500 font-medium">Rs.</span>
+    <div className="space-y-12">
+      <div>
+        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Price Spectrum</h4>
+        <div className="flex gap-4 items-center">
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-3 text-[10px] font-bold opacity-30">PKR</span>
             <input 
               type="number" 
               placeholder="Min" 
               value={localMinPrice}
               onChange={e => setLocalMinPrice(e.target.value)}
-              className="border border-[#E5E0F5] rounded-xl pl-8 pr-3 py-2 text-sm w-full outline-none focus:ring-2 focus:ring-[#6C3FC5]" 
+              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#4A2C6E] transition-colors" 
             />
           </div>
-          <span className="text-gray-400">-</span>
-          <div className="relative w-full">
-            <span className="absolute left-3 top-2.5 text-xs text-gray-500 font-medium">Rs.</span>
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-3 text-[10px] font-bold opacity-30">PKR</span>
             <input 
               type="number" 
               placeholder="Max" 
               value={localMaxPrice}
               onChange={e => setLocalMaxPrice(e.target.value)}
-              className="border border-[#E5E0F5] rounded-xl pl-8 pr-3 py-2 text-sm w-full outline-none focus:ring-2 focus:ring-[#6C3FC5]" 
+              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#4A2C6E] transition-colors" 
             />
           </div>
         </div>
         <button 
           onClick={applyPriceRange}
-          className="w-full bg-[#6C3FC5] text-white py-2 rounded-xl text-sm font-semibold mt-3 hover:bg-[#5530A8] transition-colors shadow-sm"
+          className="w-full bg-[#1C1410] text-white py-3.5 text-[11px] font-bold uppercase tracking-widest mt-6 hover:bg-[#4A2C6E] transition-all shadow-lg active:scale-95"
         >
-          Apply Price
+          Execute Range
         </button>
       </div>
 
-      <div className="mb-8">
-        <h4 className="font-mono text-xs tracking-widest uppercase font-bold text-[#6C3FC5] mb-4">Material</h4>
-        <div className="flex flex-col gap-1">
+      <div>
+        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Materials Archive</h4>
+        <div className="space-y-3">
           {ALL_MATERIALS.map(mat => (
-            <label key={mat} className="flex items-center gap-3 py-1.5 cursor-pointer group">
+            <label key={mat} className="flex items-center gap-4 cursor-pointer group">
               <input 
                 type="checkbox" 
                 checked={selectedMaterials.includes(mat)}
                 onChange={() => handleMaterialToggle(mat)}
-                className="w-4 h-4 rounded border-[#E5E0F5] text-[#6C3FC5] focus:ring-[#6C3FC5]" 
+                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#4A2C6E] focus:ring-0 accent-[#4A2C6E]" 
               />
-              <span className="text-sm text-[#1A1A2E] font-medium group-hover:text-[#6C3FC5] transition-colors">{mat}</span>
+              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#4A2C6E] transition-colors">{mat}</span>
             </label>
           ))}
         </div>
       </div>
 
-      <div className="mb-8">
-        <h4 className="font-mono text-xs tracking-widest uppercase font-bold text-[#6C3FC5] mb-4">Delivery City</h4>
-        <div className="flex flex-col gap-1">
+      <div>
+        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Dispatch Cities</h4>
+        <div className="space-y-3">
           {ALL_CITIES.map(city => (
-            <label key={city} className="flex items-center gap-3 py-1.5 cursor-pointer group">
+            <label key={city} className="flex items-center gap-4 cursor-pointer group">
               <input 
                 type="checkbox" 
                 checked={selectedCities.includes(city)}
                 onChange={() => handleCityToggle(city)}
-                className="w-4 h-4 rounded border-[#E5E0F5] text-[#6C3FC5] focus:ring-[#6C3FC5]" 
+                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#4A2C6E] focus:ring-0 accent-[#4A2C6E]" 
               />
-              <span className="text-sm text-[#1A1A2E] font-medium group-hover:text-[#6C3FC5] transition-colors">{city}</span>
+              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#4A2C6E] transition-colors">{city}</span>
             </label>
           ))}
         </div>
@@ -461,12 +467,11 @@ function FilterContent({
       {hasActiveFilters && (
         <button 
           onClick={clearAllFilters}
-          className="text-[#DC2626] text-sm font-semibold hover:underline w-full text-left flex items-center gap-2"
+          className="w-full border border-[#DC2626] text-[#DC2626] py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-50 transition-colors"
         >
-          <Trash2 size={16} />
-          Clear All Filters
+          Reset All Attributes
         </button>
       )}
-    </>
+    </div>
   )
 }
