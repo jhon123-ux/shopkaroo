@@ -33,19 +33,36 @@ export default function AdminOrdersPage() {
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
+  const [error, setError] = useState('')
+
   const fetchOrders = async () => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    const headers = { 'x-admin-auth': adminToken || '' }
+    const headers = { 
+      'x-admin-auth': adminToken || '',
+      'Content-Type': 'application/json'
+    }
 
     setLoading(true)
+    setError('')
     try {
-      const res = await fetch(`${backendUrl}/api/orders?all=true&limit=100`, { headers })
+      console.log('Synchronizing Request from Registry:', backendUrl)
+      const res = await fetch(`${backendUrl}/api/orders?all=true`, { 
+        method: 'GET',
+        headers,
+        cache: 'no-store'
+      })
+      
+      console.log('Administrative Response Status:', res.status)
       const data = await res.json()
-      console.log('Orders response:', data)
+      
+      if (!res.ok) throw new Error(data.error || 'Connection Failed')
+      
+      console.log('Transaction Data Desynchronized:', data)
       setOrders(data.data || [])
-    } catch (err) {
-      console.error(err)
-      showToast('Failed to load orders', 'error')
+    } catch (err: any) {
+      console.error('Critical Fetch Error — Registry Sync Failed:', err)
+      setError(err.message)
+      showToast('Data Synchronization Interrupted', 'error')
     } finally {
       setLoading(false)
     }

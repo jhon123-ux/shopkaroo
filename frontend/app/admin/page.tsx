@@ -21,35 +21,42 @@ export default function AdminDashboardPage() {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
         
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-        const headers = { 'x-admin-auth': adminToken || '' }
+        const headers = { 
+          'x-admin-auth': adminToken || '',
+          'Content-Type': 'application/json' 
+        }
         
+        console.log('Initiating Dashboard Sync Protocol...')
+
         const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
-          fetch(`${backendUrl}/api/products?all=true`, { headers }),
-          fetch(`${backendUrl}/api/orders?all=true`, { headers }),
-          fetch(`${backendUrl}/api/banners?all=true`, { headers }),
-          fetch(`${backendUrl}/api/reviews/admin`, { headers })
+          fetch(`${backendUrl}/api/products?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${backendUrl}/api/orders?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${backendUrl}/api/banners?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${backendUrl}/api/reviews/admin`, { headers, cache: 'no-store' })
         ])
 
-        const prodData = prodRes.ok ? await prodRes.json() : { count: 0 }
-        const orderData = orderRes.ok ? await orderRes.json() : { data: [] }
+        const prodData = prodRes.ok ? await prodRes.json() : { count: 0, data: [] }
+        const orderData = orderRes.ok ? await orderRes.json() : { data: [], count: 0 }
         const bannerData = bannerRes.ok ? await bannerRes.json() : { data: [] }
         const revData = revRes.ok ? await revRes.json() : { data: [] }
 
+        console.log('Order Sync Report:', { count: orderData.count, length: orderData.data?.length })
+
         const pendingOrders = (orderData.data || []).filter((o: any) => o.status === 'pending').length
         const activeBanners = (bannerData.data || []).filter((b: any) => b.is_active).length
-        const pendingReviews = (revData.data || []).filter((r: any) => r.is_approved === null).length
+        const pendingReviewsCount = (revData.data || []).filter((r: any) => r.is_approved === null).length
 
         setStats({
           products: prodData.count || (prodData.data || []).length || 0,
           orders: orderData.count !== undefined ? orderData.count : (orderData.data || []).length,
           pending: pendingOrders,
           banners: activeBanners,
-          pendingReviews: pendingReviews
+          pendingReviews: pendingReviewsCount
         })
 
         setRecentOrders((orderData.data || []).slice(0, 5))
       } catch (err) {
-        console.error('Admin Fetch error:', err)
+        console.error('Administrative Dashboard Sync Failed:', err)
       } finally {
         setLoading(false)
       }

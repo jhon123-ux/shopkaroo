@@ -30,6 +30,7 @@ export default function AdminProductsPage() {
   })
   
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadingCount, setUploadingCount] = useState(0)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
@@ -124,17 +125,33 @@ export default function AdminProductsPage() {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files; if (!files) return
+    
+    // Calculate remaining slots
+    const rem = 5 - formData.images.length
+    if (rem <= 0) {
+      showToast('Maximum 5 images reach.', 'error')
+      return
+    }
+    
+    // Filter out files beyond limit
+    const filesToUpload = Array.from(files).slice(0, rem)
+    
     setIsUploading(true)
-    for (let i = 0; i < files.length; i++) {
-      const fData = new FormData(); fData.append('image', files[i])
+    setUploadingCount(filesToUpload.length)
+    
+    for (let i = 0; i < filesToUpload.length; i++) {
+      const fData = new FormData(); fData.append('image', filesToUpload[i])
       try {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         const res = await fetch(`${backendUrl}/api/upload/product`, {
           method: 'POST', headers: { 'x-admin-auth': adminToken || '' }, body: fData
         })
         const data = await res.json()
-        if (res.ok && data.url) setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
+        if (res.ok && data.url) {
+           setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
+        }
       } catch (err) { console.error(err) }
+      setUploadingCount(prev => prev - 1)
     }
     setIsUploading(false); e.target.value = ''
   }
@@ -295,19 +312,46 @@ export default function AdminProductsPage() {
                 <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Technical Narrative</label><textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none h-32 font-body" /></div>
               </div>
               <div className="col-span-2 py-8 bg-[#FAF7F4] p-8 -mx-1 border-t border-b border-[#E8E2D9]">
-                <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[3px] block mb-6 opacity-60">Visual Assets Archive</label>
-                <div className="flex flex-wrap gap-6 items-center">
-                  <label className="cursor-pointer bg-white border-2 border-dashed border-[#D4CCC2] w-32 h-32 flex flex-col items-center justify-center hover:border-[#1C1410] transition group">
-                    <span className="text-3xl opacity-20 group-hover:opacity-100 transition">📸</span>
-                    <span className="text-[9px] font-bold uppercase tracking-[2px] mt-3 opacity-40">Upload</span>
-                    <input type="file" hidden multiple onChange={handleImageUpload} disabled={isUploading} />
-                  </label>
+                <div className="flex justify-between items-end mb-6">
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[3px] block opacity-60">Visual Assets Archive</label>
+                  <span className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[1.5px] opacity-40">{formData.images.length}/5 images</span>
+                </div>
+                
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {formData.images.length < 5 && (
+                    <label className={`cursor-pointer bg-white border-2 border-dashed border-[#D4CCC2] aspect-square flex flex-col items-center justify-center hover:border-[#1C1410] transition group relative ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      <span className="text-3xl opacity-20 group-hover:opacity-100 transition">{isUploading ? '⌛' : '📸'}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[2px] mt-3 opacity-40">{isUploading ? `Uploading ${uploadingCount}...` : 'Upload'}</span>
+                      <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                    </label>
+                  )}
+                  
                   {formData.images.map((img, idx) => (
-                    <div key={idx} className="relative w-32 h-32 border border-[#E8E2D9] group overflow-hidden shadow-inner">
+                    <div key={idx} className="relative aspect-square border border-[#E8E2D9] group overflow-hidden shadow-inner bg-white">
                       <Image src={img} alt="asset" fill className="object-cover" />
-                      <button type="button" onClick={() => removeImage(idx)} className="absolute top-0 right-0 bg-[#1C1410] text-white p-2 opacity-0 group-hover:opacity-100 transition">&times;</button>
+                      
+                      {/* Badge for main image */}
+                      {idx === 0 && (
+                        <div className="absolute bottom-1 left-1 bg-[#4A2C6E] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 shadow-md">
+                          Main
+                        </div>
+                      )}
+                      
+                      <button 
+                        type="button" 
+                        onClick={() => removeImage(idx)} 
+                        className="absolute top-1 right-1 bg-[#1C1410]/70 text-white w-6 h-6 flex items-center justify-center rounded-sm opacity-0 group-hover:opacity-100 transition-all hover:bg-[#1C1410]"
+                      >
+                        &times;
+                      </button>
                     </div>
                   ))}
+                  
+                  {formData.images.length === 5 && (
+                     <div className="aspect-square bg-white/50 border-2 border-dashed border-[#E8E2D9] flex flex-col items-center justify-center text-center p-4">
+                        <span className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[1.5px] opacity-40">Max Limit Reached</span>
+                     </div>
+                  )}
                 </div>
               </div>
               <div className="col-span-2 flex justify-between items-center mt-6 pt-10 border-t border-[#FAF7F4]">
