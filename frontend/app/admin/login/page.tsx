@@ -17,8 +17,8 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
-      if (email === 'admin@shopkaroo.com' && password === 'shopkaroo2025') {
-        localStorage.setItem('admin_token', 'shopkaroo_admin_secure_v1_2025')
+      if (email === 'admin@shopkarro.com' && password === 'shopkarro2025') {
+        localStorage.setItem('admin_token', 'shopkarro_admin_secure_v1_2025')
         document.cookie = "admin_auth=true; path=/;"
         router.push('/admin')
       } else {
@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
         {/* LOGO AREA */}
         <div className="text-center mb-16">
           <Link href="/" className="inline-block mb-10 group">
-            <span className="text-[42px] font-heading font-bold text-[#1C1410] uppercase tracking-[12px] transition-all group-hover:tracking-[16px]">SHOPKAROO</span>
+            <span className="text-[42px] font-heading font-bold text-[#1C1410] uppercase tracking-[12px] transition-all group-hover:tracking-[16px]">SHOPKARRO</span>
           </Link>
           <div className="h-px bg-[#1C1410]/10 w-24 mx-auto mb-6" />
           <h1 className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[5px] opacity-60">
@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@shopkaroo.com"
+                placeholder="admin@shopkarro.com"
                 className="w-full border-b border-[#D4CCC2] bg-transparent rounded-0 px-0 py-4 text-[14px] focus:border-[#1C1410] outline-none transition-all placeholder:opacity-20"
               />
             </div>

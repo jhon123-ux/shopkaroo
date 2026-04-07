@@ -178,7 +178,7 @@ export default function ProductDetailPage() {
   }
 
   const whatsappMessage = encodeURIComponent(
-    `Hi! I want to order: ${product.name}\nPrice: Rs. ${product.sale_price ?? product.price_pkr}\nLink: shopkaroo.com/product/${product.slug}`
+    `Hi! I want to order: ${product.name}\nPrice: Rs. ${product.sale_price ?? product.price_pkr}\nLink: shopkarro.com/product/${product.slug}`
   )
 
   const handleAddToCart = () => {

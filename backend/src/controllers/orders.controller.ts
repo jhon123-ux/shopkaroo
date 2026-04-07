@@ -258,7 +258,7 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
         `Order: *${order.order_number}*\n` +
         `Status: *${newStatus.toUpperCase()}*\n\n` +
         `${notif.message}\n\n` +
-        `Track: shopkaroo-seven.vercel.app/my-orders`
+        `Track: shopkarro.com/my-orders`
       )
       
       await fetch(
