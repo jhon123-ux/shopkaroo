@@ -149,8 +149,13 @@ export default function AdminProductsPage() {
         const data = await res.json()
         if (res.ok && data.url) {
            setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
+        } else {
+          showToast(data.error || 'Upload failed', 'error')
         }
-      } catch (err) { console.error(err) }
+      } catch (err) { 
+        console.error(err)
+        showToast('Network error during upload', 'error')
+      }
       setUploadingCount(prev => prev - 1)
     }
     setIsUploading(false); e.target.value = ''
@@ -177,11 +182,16 @@ export default function AdminProductsPage() {
         method, headers: { 'Content-Type': 'application/json', 'x-admin-auth': adminToken || '' },
         body: JSON.stringify(payload)
       })
-      if (!res.ok) throw new Error('Submission failed')
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || 'Submission failed')
+      }
+
       showToast(`Registry updated: ${formData.name}`)
       setIsModalOpen(false); fetchProducts()
-    } catch (err) {
-      showToast('Synchronization failed.', 'error')
+    } catch (err: any) {
+      showToast(err.message || 'Synchronization failed.', 'error')
     }
   }
 
@@ -321,7 +331,8 @@ export default function AdminProductsPage() {
                   {formData.images.length < 5 && (
                     <label className={`cursor-pointer bg-white border-2 border-dashed border-[#D4CCC2] aspect-square flex flex-col items-center justify-center hover:border-[#1C1410] transition group relative ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                       <span className="text-3xl opacity-20 group-hover:opacity-100 transition">{isUploading ? '⌛' : '📸'}</span>
-                      <span className="text-[9px] font-bold uppercase tracking-[2px] mt-3 opacity-40">{isUploading ? `Uploading ${uploadingCount}...` : 'Upload'}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-[2px] mt-2 opacity-40">{isUploading ? `Uploading ${uploadingCount}...` : 'Add Image'}</span>
+                      <span className="text-[7px] font-bold uppercase tracking-[1px] opacity-25 mt-1">Max 5MB • JPG/PNG</span>
                       <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
                     </label>
                   )}
