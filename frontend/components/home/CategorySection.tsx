@@ -86,7 +86,6 @@ export default function CategorySection() {
                   <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2.5px] transition-colors duration-300 group-hover:text-white">
                     Explore Collection
                   </p>
-                  <div className="h-[2px] w-8 bg-[#4A2C6E] mt-3 transition-all duration-500 group-hover:w-full"></div>
                 </div>
               </div>
             </Link>
