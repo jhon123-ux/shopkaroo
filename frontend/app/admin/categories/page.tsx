@@ -107,13 +107,20 @@ export default function AdminCategoriesPage() {
         headers: { 'x-admin-auth': adminToken || '' },
         body: fData
       })
+
       const data = await res.json()
-      if (res.ok && data.url) {
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Upload failed')
+      }
+
+      if (data.url) {
         setFormData(prev => ({ ...prev, image_url: data.url }))
         showToast('Image uploaded successfully')
       }
-    } catch (err) {
-      showToast('Upload failed', 'error')
+    } catch (err: any) {
+      console.error('Image Upload Error:', err)
+      showToast(err.message || 'Asset synchronization failed', 'error')
     } finally {
       setIsUploading(false)
     }
