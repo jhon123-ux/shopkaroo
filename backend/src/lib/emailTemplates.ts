@@ -152,7 +152,7 @@ export const orderConfirmationTemplate = (order: {
         <p style="color:#6B7280; font-size:13px; margin:0 0 12px 0;">
           Questions about your order?
         </p>
-        <a href="https://wa.me/923001234567?text=Hi! My order number is ${order.order_number}"
+        <a href="https://wa.me/923706905835?text=Hi! My order number is ${order.order_number}"
           style="display:inline-block; background:#4CAF7D; color:#ffffff; font-size:14px; font-weight:700; padding:12px 28px; border-radius:12px; text-decoration:none;">
           💬 Chat on WhatsApp
         </a>
@@ -163,7 +163,7 @@ export const orderConfirmationTemplate = (order: {
     <!-- FOOTER -->
     <div style="background:#1A1A2E; padding:24px 40px; text-align:center;">
       <p style="color:rgba(255,255,255,0.50); font-size:12px; margin:0 0 4px 0;">
-        © 2025 Shopkaroo. All rights reserved.
+        © 2026 Shopkaroo. All rights reserved.
       </p>
       <p style="color:rgba(255,255,255,0.35); font-size:11px; margin:0;">
         shopkaroo.com · Cash on Delivery Only
@@ -249,7 +249,7 @@ export const orderStatusTemplate = (data: {
   </div>
 
   <div style="padding:16px 40px; border-top:1px solid #E5E0F5; text-align:center;">
-    <a href="https://wa.me/923001234567?text=Hi Shopkaroo! My order number is ${data.order_number}"
+    <a href="https://wa.me/923706905835?text=Hi Shopkaroo! My order number is ${data.order_number}"
       style="display:inline-block; background:#4CAF7D;color:#fff; font-size:13px;font-weight:700; padding:10px 24px;border-radius:10px; text-decoration:none;">
       💬 WhatsApp Support
     </a>
@@ -257,7 +257,7 @@ export const orderStatusTemplate = (data: {
 
   <div style="background:#1A1A2E; padding:20px 40px;text-align:center;">
     <p style="color:rgba(255,255,255,.4); font-size:12px;margin:0;">
-      © 2025 Shopkaroo · shopkaroo.com
+      © 2026 Shopkaroo · shopkaroo.com
     </p>
   </div>
 </div>

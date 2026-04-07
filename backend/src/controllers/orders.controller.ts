@@ -14,6 +14,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
  */
 const SENDER_EMAIL = 'Shopkarro <onboarding@resend.dev>'
 const ADMIN_CC = 'shopkarro.ecom@gmail.com'
+const FALLBACK_REPLY_TO = 'shopkarro.ecom@gmail.com'
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
@@ -134,7 +135,12 @@ export const createOrder = async (req: Request, res: Response) => {
           })
         })
       } catch (emailError: any) {
-        console.error('Email send failed:', emailError.message)
+        console.error('❌ EMAIL SYSTEM ERROR [CONFIRMATION]:')
+        console.error('Message:', emailError.message)
+        console.error('Context:', { orderNumber, customer_email })
+        if (emailError.message.includes('onboarding')) {
+          console.warn('⚠️  SANDBOX RESTRICTION: This email can only be sent to verified Resend account owners.')
+        }
       }
     }
 
@@ -236,7 +242,11 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
         })
       })
     } catch (e: any) {
-      console.error('Status email error:', e.message)
+      console.error('❌ EMAIL SYSTEM ERROR [STATUS_UPDATE]:')
+      console.error('Message:', e.message)
+      if (e.message.includes('onboarding')) {
+        console.warn('⚠️  SANDBOX RESTRICTION active for status notifications.')
+      }
     }
   }
 
