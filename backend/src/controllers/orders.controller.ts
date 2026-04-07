@@ -12,7 +12,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
  * Verified: 'Shopkarro Orders <orders@shopkarro.com>'
  * (Update below once Cloudflare/Resend verification is complete)
  */
-const SENDER_EMAIL = 'Shopkarro <onboarding@resend.dev>'
+const SENDER_EMAIL = 'Shopkarro Orders <orders@shopkarro.com>'
 const ADMIN_CC = 'shopkarro.ecom@gmail.com'
 const FALLBACK_REPLY_TO = 'shopkarro.ecom@gmail.com'
 
