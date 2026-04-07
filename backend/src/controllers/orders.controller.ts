@@ -5,20 +5,35 @@ import { orderConfirmationTemplate, orderStatusTemplate } from '../lib/emailTemp
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+/**
+ * 🏺 Administrative Messaging Protocol
+ * -----------------------------------------
+ * Fallback: 'Shopkarro <onboarding@resend.dev>'
+ * Verified: 'Shopkarro Orders <orders@shopkarro.com>'
+ * (Update below once Cloudflare/Resend verification is complete)
+ */
+const SENDER_EMAIL = 'Shopkarro <onboarding@resend.dev>'
+const ADMIN_CC = 'shopkarro.ecom@gmail.com'
+
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const { all } = req.query
     
-    // Use supabaseAdmin to bypass RLS for administrative retrieval
-    let query = supabaseAdmin.from('orders').select('*', { count: 'exact' }).order('created_at', { ascending: false })
-    
-    // If not 'all', we might want to filter, but for admin, 'all' is usually true
-    const { data, count, error } = await query
+    // Explicitly use supabaseAdmin to bypass RLS for administrative tasks
+    const { data, count, error } = await supabaseAdmin
+      .from('orders')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
     
     if (error) throw error
-    res.json({ data: data || [], count: count || 0 })
+    
+    return res.json({ 
+      data: data || [], 
+      count: count || 0 
+    })
   } catch (error: any) {
-    res.status(500).json({ error: error.message })
+    console.error('Administrative Get Orders Error:', error)
+    return res.status(500).json({ error: error.message })
   }
 }
 
@@ -101,13 +116,13 @@ export const createOrder = async (req: Request, res: Response) => {
 
     // Send confirmation email if email provided
     if (customer_email && customer_email.includes('@')) {
-      const fromAddress = 'Shopkaroo <onboarding@resend.dev>'
       try {
         await resend.emails.send({
-          from: fromAddress,
+          from: SENDER_EMAIL,
           to: customer_email,
-          replyTo: 'hello@shopkaroo.com',
-          subject: `✅ Order Confirmed — ${orderNumber} | Shopkaroo`,
+          cc: [ADMIN_CC],
+          replyTo: 'hello@shopkarro.com',
+          subject: `✅ Order Confirmed — ${orderNumber} | Shopkarro`,
           html: orderConfirmationTemplate({
             order_number: orderNumber,
             customer_name,
@@ -162,9 +177,9 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Failed to update order' })
     }
 
-    // Send notifications if status changed
-    if (current?.status !== status) {
-      sendStatusNotifications(updated, status).catch(console.error)
+    // Explicitly send status notifications if the pipeline status has mutated
+    if (current?.status !== status && updated.customer_email) {
+      await sendStatusNotifications(updated, status)
     }
 
     return res.json({ data: updated })
@@ -200,15 +215,14 @@ const sendStatusNotifications = async (order: any, newStatus: string) => {
   const notif = STATUS_NOTIFICATIONS[newStatus]
   if (!notif) return
 
-  const fromAddress = 'Shopkaroo <onboarding@resend.dev>'
-
-  // Email Notification
+  // Email Notification Protocol
   if (order.customer_email) {
     try {
       await resend.emails.send({
-        from: fromAddress,
+        from: SENDER_EMAIL,
         to: order.customer_email,
-        subject: `${notif.emoji} ${notif.title} — ${order.order_number} | Shopkaroo`,
+        cc: [ADMIN_CC],
+        subject: `${notif.emoji} ${notif.title} — ${order.order_number} | Shopkarro`,
         html: orderStatusTemplate({
           order_number: order.order_number,
           customer_name: order.customer_name,
