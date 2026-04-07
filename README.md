@@ -26,6 +26,15 @@ Brand: Shopkaroo — shopkaroo.com
 4. Under bucket policies for BOTH buckets add:
    - Allow public read: SELECT for all
    - Allow public read: SELECT for all
+   - Allow public read: SELECT for all
+   - Allow service role write: INSERT, UPDATE, DELETE
+
+## Supabase Storage Setup (Categories):
+1. Go to Supabase Dashboard → Storage
+2. Create a new bucket named: "categories"
+3. Set bucket to PUBLIC
+4. Under bucket policies add:
+   - Allow public read: SELECT for all
    - Allow service role write: INSERT, UPDATE, DELETE
 
 ## Email System (Resend + Cloudflare)

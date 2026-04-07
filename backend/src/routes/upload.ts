@@ -164,4 +164,61 @@ router.post('/product', upload.single('image'), async (req: Request, res: Respon
   }
 })
 
+/**
+ * @swagger
+ * /api/upload/category:
+ *   post:
+ *     summary: Upload a category image to Supabase storage
+ *     tags: [Configuration]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ */
+router.post('/category', upload.single('image'), async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ error: 'No image file provided.' })
+      return
+    }
+
+    const file = req.file
+    const originalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
+    const fileName = `categories/${Date.now()}_${originalName}`
+
+    // Upload using Supabase Admin client
+    const { data, error } = await supabaseAdmin.storage
+      .from('categories')
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false
+      })
+
+    if (error) {
+      console.log('Supabase upload error:', error)
+      res.status(500).json({ 
+        error: 'Upload failed', 
+        details: error.message 
+      })
+      return
+    }
+
+    // Get public URL of the uploaded asset
+    const { data: urlData } = supabaseAdmin.storage
+      .from('categories')
+      .getPublicUrl(data.path)
+
+    res.json({ url: urlData.publicUrl })
+  } catch (error) {
+    console.error('Server upload error:', error)
+    res.status(500).json({ error: 'Internal server error during upload.' })
+  }
+})
+
 export default router
