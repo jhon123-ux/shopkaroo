@@ -105,16 +105,31 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:ml-6 md:flex md:space-x-8">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
-                className="inline-flex items-center px-1 pt-1 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#1C1410] transition-colors duration-150"
-              >
-                {link.name}
-              </Link>
-            ))}
+          <div className="hidden md:ml-6 md:flex md:space-x-8 items-center">
+            <Link 
+              href="/"
+              className="inline-flex items-center px-1 pt-1 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#1C1410] transition-colors duration-150"
+            >
+              Home
+            </Link>
+            
+            <div className="relative group py-4 pointer-events-auto">
+              <button className="inline-flex items-center gap-1 px-1 text-[14px] font-medium font-body text-[#6B6058] group-hover:text-[#1C1410] transition-colors duration-150 cursor-pointer">
+                Categories <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
+              </button>
+              
+              <div className="absolute left-0 top-[100%] w-56 bg-white border border-[#E8E2D9] rounded-[4px] py-2 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                {navLinks.filter(link => link.name !== 'Home').map((link) => (
+                  <Link 
+                    key={link.name} 
+                    href={`/furniture/${link.slug}`}
+                    className="block px-4 py-2.5 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#4A2C6E] hover:bg-[#F2EDE6] transition-colors capitalize"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
 
            {/* Icons (Search, Cart, Auth, Mobile Menu) */}
