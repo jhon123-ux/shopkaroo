@@ -74,8 +74,8 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           </div>
         )}
 
-        {/* Top left badge */}
-        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
+        {/* Top left badge stack */}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isSale ? (
             <span className="bg-[#1C1410] text-white text-[10px] px-[10px] py-[4px] rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
               SALE
@@ -85,6 +85,11 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
               NEW
             </span>
           ) : null}
+
+          {/* COD Badge relocated from bottom */}
+          <div className="inline-flex items-center gap-1 bg-[#EBF7F0]/90 backdrop-blur-sm text-[#2D6A4F] text-[10px] px-2 py-[2px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-bold shadow-sm">
+            <Check size={10} strokeWidth={3} /> COD
+          </div>
         </div>
 
         {/* Top right Wishlist button */}
@@ -128,10 +133,6 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           )}
         </div>
 
-        {/* Trust row — Moved under price */}
-        <div className="mt-1 inline-flex items-center gap-1 bg-[#EBF7F0] text-[#2D6A4F] text-[10px] px-2 py-[2px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-medium">
-          <Check size={10} strokeWidth={3} /> COD
-        </div>
 
         {/* Add to Cart button — Always visible now */}
         <button 
