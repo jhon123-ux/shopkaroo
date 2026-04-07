@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { Phone, Mail, Clock } from 'lucide-react'
 
@@ -31,9 +32,12 @@ export default function Footer() {
           
           {/* Logo & Tagline */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="font-heading italic font-bold text-[28px] text-white mb-6">
-              Shopkarro
-            </h3>
+            <div className="flex items-center gap-3 mb-6">
+              <Image src="/logo-symbol.svg" alt="Shopkarro Logo" width={36} height={36} className="invert opacity-90" />
+              <h3 className="font-heading italic font-bold text-[28px] text-white m-0">
+                Shopkarro
+              </h3>
+            </div>
             <p className="text-white/50 text-[14px] leading-relaxed mb-6 font-body">
               Crafting premium furniture for every Pakistani home. Browse elegantly designed pieces and pay conveniently with cash on delivery nationwide.
             </p>

@@ -47,7 +47,7 @@ export default function CategorySection() {
           </h2>
         </div>
 
-        <div className="flex overflow-x-auto pb-6 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:mx-0 sm:px-0 sm:pb-0">
+        <div className="flex overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:pb-0">
           {categories.map((cat) => (
             <Link 
               key={cat.id} 

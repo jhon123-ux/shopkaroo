@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
 import { useState, useRef, useEffect } from 'react'
@@ -97,7 +98,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="font-heading italic font-bold text-[22px] text-[#4A2C6E] tracking-[-0.3px]">
+            <Link href="/" className="flex flex-row items-center gap-2 font-heading italic font-bold text-[22px] text-[#4A2C6E] tracking-[-0.3px]">
+              <Image src="/logo-symbol.svg" alt="Shopkarro Logo" width={28} height={28} priority />
               Shopkarro
             </Link>
           </div>
