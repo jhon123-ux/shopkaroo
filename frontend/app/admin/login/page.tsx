@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
-      if (email === 'admin@shopkarro.com' && password === 'shopkarro2025') {
+      if (email.trim().toLowerCase() === 'admin@shopkarro.com' && password.trim() === 'shopkarro2025') {
         localStorage.setItem('admin_token', 'shopkarro_admin_secure_v1_2025')
         document.cookie = "admin_auth=true; path=/;"
         router.push('/admin')
