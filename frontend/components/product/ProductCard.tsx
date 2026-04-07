@@ -111,7 +111,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         </h3>
 
         {/* Price row */}
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-1">
           {isSale ? (
              <>
                <span className="text-[#4A2C6E] font-bold text-[18px] font-heading">
@@ -128,15 +128,15 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           )}
         </div>
 
-        {/* Trust row */}
-        <div className="mt-2 inline-flex items-center gap-1 bg-[#EBF7F0] text-[#2D6A4F] text-[11px] px-2 py-[3px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-medium">
-          <Check size={12} strokeWidth={3} /> COD
+        {/* Trust row — Moved under price */}
+        <div className="mt-1 inline-flex items-center gap-1 bg-[#EBF7F0] text-[#2D6A4F] text-[10px] px-2 py-[2px] rounded-[2px] border border-[rgba(45,106,79,0.20)] font-body font-medium">
+          <Check size={10} strokeWidth={3} /> COD
         </div>
 
-        {/* Add to Cart button */}
+        {/* Add to Cart button — Always visible now */}
         <button 
           onClick={handleAddToCart}
-          className="w-full bg-[#4A2C6E] text-white py-[10px] rounded-[3px] border border-[#4A2C6E] font-semibold font-body text-[13px] tracking-[0.3px] flex items-center justify-center gap-2 hover:bg-[#3A1F57] transition-all duration-150 mt-3 md:opacity-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
+          className="w-full mt-3 py-2.5 border border-[#E8E2D9] text-[#6B6058] group-hover:bg-[#4A2C6E] group-hover:text-white group-hover:border-[#4A2C6E] transition-all duration-200 rounded-sm text-sm font-semibold flex items-center justify-center gap-2"
         >
           <ShoppingCart size={15} /> Add to Cart
         </button>
