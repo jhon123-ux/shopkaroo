@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { 
   LayoutDashboard, 
   Image, 
-  Tag, 
+  Percent,
   Package, 
   ShoppingCart, 
   Star, 
-  Percent,
+  FolderOpen,
   ArrowLeft, 
   LogOut, 
   ShieldCheck 
@@ -17,6 +17,7 @@ import {
 const sidebarLinks = [
   { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={16} /> },
   { href: '/admin/banners', label: 'Hero Banners', icon: <Image size={16} /> },
+  { href: '/admin/categories', label: 'Categories', icon: <FolderOpen size={16} /> },
   { href: '/admin/offer-banner', label: 'Promotionals', icon: <Percent size={16} /> },
   { href: '/admin/products', label: 'Inventory', icon: <Package size={16} /> },
   { href: '/admin/orders', label: 'Transactions', icon: <ShoppingCart size={16} /> },
@@ -39,9 +40,17 @@ export default function AdminLayout({
     }
   }
 
+  // Define Title Mapping
+  const getTitle = (path: string) => {
+    const link = sidebarLinks.find(l => l.href === path)
+    if (link) return link.label
+    if (path === '/admin') return 'Overview'
+    return 'Admin'
+  }
+
   // Don't wrap login page with admin layout
   if (pathname === '/admin/login') {
-    return <>{children}</>
+     return <>{children}</>
   }
 
   return (
@@ -76,7 +85,7 @@ export default function AdminLayout({
                   px-5 py-4 rounded-0 mb-2 text-[13px]
                   transition-all duration-300 uppercase tracking-widest font-bold
                   ${isActive
-                    ? 'bg-[#4A2C6E] text-white'
+                    ? 'bg-[#4A2C6E] text-white shadow-lg'
                     : 'text-white/40 hover:bg-white/[0.03] hover:text-white'
                   }`}
               >
@@ -127,9 +136,7 @@ export default function AdminLayout({
           
           <h1 className="font-bold text-[24px] 
             text-[#1C1410] font-heading uppercase tracking-widest">
-            {sidebarLinks.find(l => 
-              l.href === pathname)?.label 
-              ?? 'Admin'}
+            {getTitle(pathname)}
           </h1>
 
           {/* Right side */}
