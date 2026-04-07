@@ -98,7 +98,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex flex-row items-center gap-2 font-heading italic font-bold text-[22px] text-[#783A3A] tracking-[-0.3px]">
+            <Link href="/" className="flex flex-row items-center gap-2 font-body italic font-bold text-[22px] text-[#783A3A] tracking-[-0.3px]">
               <Image src="/logo-symbol.svg" alt="Shopkarro Logo" width={28} height={28} priority />
               Shopkarro
             </Link>
