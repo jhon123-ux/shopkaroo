@@ -384,7 +384,7 @@ export default function ProductDetailPage() {
               <ShoppingCart size={18} /> Add to Cart
             </button>
             <a 
-              href={`https://wa.me/923001234567?text=${whatsappMessage}`}
+              href={`https://wa.me/923706905835?text=${whatsappMessage}`}
               target="_blank" rel="noopener noreferrer"
               className="w-full bg-[#25D366] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#1fba59] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
             >
@@ -679,7 +679,7 @@ export default function ProductDetailPage() {
         </div>
         <div className="flex gap-3 flex-1">
           <a 
-            href={`https://wa.me/923001234567?text=${whatsappMessage}`}
+            href={`https://wa.me/923706905835?text=${whatsappMessage}`}
             target="_blank" rel="noopener noreferrer"
             className="bg-[#25D366] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform gap-2"
           >

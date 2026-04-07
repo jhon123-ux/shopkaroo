@@ -61,7 +61,7 @@ export default function AdminBanners() {
     setFormData({
       title: '', subtitle: '', badge_text: '', badge_color: '#4A2C6E',
       cta_primary_text: 'Discover Collection', cta_primary_link: '/furniture/living-room',
-      cta_secondary_text: 'Consultation', cta_secondary_link: 'https://wa.me/923001234567',
+      cta_secondary_text: 'Consultation', cta_secondary_link: 'https://wa.me/923706905835',
       bg_image_url: null, bg_overlay: 'rgba(28,20,16,0.4)',
       sort_order: banners.length + 1, is_active: true
     })

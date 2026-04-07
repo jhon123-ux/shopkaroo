@@ -192,7 +192,7 @@ Name: ${name}
 Phone: ${phone}
 City: ${city}
 Address: ${address}`
-    return `https://wa.me/923001234567?text=${encodeURIComponent(msg)}`
+    return `https://wa.me/923706905835?text=${encodeURIComponent(msg)}`
   }
 
   return (

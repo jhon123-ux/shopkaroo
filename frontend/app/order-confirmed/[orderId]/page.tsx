@@ -129,7 +129,7 @@ function OrderConfirmedContent() {
             Explore Collection
           </Link>
             <a 
-              href={`https://wa.me/923001234567?text=Hi! I just placed order ${orderId} and want to track its status.`}
+              href={`https://wa.me/923706905835?text=Hi! I just placed order ${orderId} and want to track its status.`}
               target="_blank" rel="noopener noreferrer"
               className="w-full sm:w-auto px-10 py-5 border border-[#2D6A4F] text-[#2D6A4F] bg-[#EBF7F0] rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#2D6A4F] hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
             >
