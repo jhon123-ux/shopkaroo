@@ -142,9 +142,9 @@ export default function AdminOrdersPage() {
   // Dynamic CSS Generator for specific status pillars
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
-      case 'confirmed': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
-      case 'shipped': return 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]'
+      case 'pending': return 'bg-[#F5E8E8] text-[#783A3A] border-[rgba(120,58,58,0.1)]'
+      case 'confirmed': return 'bg-[#F5E8E8] text-[#783A3A] border-[rgba(120,58,58,0.1)]'
+      case 'shipped': return 'bg-[#F5E8E8] text-[#783A3A] border-[rgba(120,58,58,0.1)]'
       case 'delivered': return 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]'
       case 'cancelled': return 'bg-red-50 text-red-600 border-red-100'
       default: return 'bg-gray-50 text-gray-400 border-gray-100'
@@ -191,7 +191,7 @@ export default function AdminOrdersPage() {
         </div>
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
           <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">In Transit</p>
-          <p className="font-heading font-bold text-[36px] text-[#4A2C6E] leading-none">{orders.filter(o => o.status === 'shipped').length}</p>
+          <p className="font-heading font-bold text-[36px] text-[#783A3A] leading-none">{orders.filter(o => o.status === 'shipped').length}</p>
         </div>
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
           <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Fulfilled</p>
@@ -207,14 +207,14 @@ export default function AdminOrdersPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search identifier or customer signature..."
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#4A2C6E] outline-none shadow-sm font-body"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#783A3A] outline-none shadow-sm font-body"
           />
         </div>
         <div className="relative min-w-[160px]">
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Pipeline Status</option>
             <option value="pending">Pending</option>
@@ -231,7 +231,7 @@ export default function AdminOrdersPage() {
           <select 
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Territory</option>
             <option value="Karachi">Karachi</option>
@@ -248,7 +248,7 @@ export default function AdminOrdersPage() {
           <select 
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Temporal Filter</option>
             <option value="today">Today</option>
@@ -304,7 +304,7 @@ export default function AdminOrdersPage() {
               ) : (
                 filteredOrders.map(o => (
                   <tr key={o.id} className="border-b border-[#FAF7F4] last:border-0 hover:bg-[#FAF7F4]/50 transition-colors">
-                    <td className="px-8 py-6 font-mono font-bold text-[#4A2C6E] text-[13px] tracking-widest">{o.order_number}</td>
+                    <td className="px-8 py-6 font-mono font-bold text-[#783A3A] text-[13px] tracking-widest">{o.order_number}</td>
                     <td className="px-8 py-6">
                       <p className="font-bold text-[#1C1410] text-[14px]">{o.customer_name}</p>
                       <p className="text-[11px] text-[#6B6058] font-bold opacity-40 mt-1 uppercase tracking-wider">{o.phone}</p>
@@ -313,7 +313,7 @@ export default function AdminOrdersPage() {
                     <td className="px-8 py-6">
                       <p className="text-[14px] font-bold text-[#6B6058]">{o.items?.length || 0} Units</p>
                     </td>
-                    <td className="px-8 py-6 font-bold text-[#4A2C6E] font-heading text-[16px]">{o.total_pkr?.toLocaleString()} PKR</td>
+                    <td className="px-8 py-6 font-bold text-[#783A3A] font-heading text-[16px]">{o.total_pkr?.toLocaleString()} PKR</td>
                     <td className="px-8 py-6">
                       <span className={`text-[9px] uppercase tracking-[2px] font-bold px-4 py-2 rounded-0 border ${getStatusStyle(o.status)}`}>
                         {o.status}
@@ -368,7 +368,7 @@ export default function AdminOrdersPage() {
 
             {/* STATUS MUTATION SUITE */}
             <div className="bg-[#FAF7F4] rounded-0 p-8 mb-10 border border-[#E8E2D9] text-left">
-              <p className="text-[10px] font-bold tracking-[3px] text-[#4A2C6E] uppercase mb-6 opacity-60">Synchronize Protocol Status</p>
+              <p className="text-[10px] font-bold tracking-[3px] text-[#783A3A] uppercase mb-6 opacity-60">Synchronize Protocol Status</p>
               <div className="flex gap-4 flex-wrap">
                 {['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(st => (
                   <button
@@ -376,7 +376,7 @@ export default function AdminOrdersPage() {
                     onClick={() => updateOrderStatus(st)}
                     className={`px-6 py-3 rounded-0 text-[10px] font-bold uppercase tracking-[2px] transition-all border ${
                       selectedOrder.status === st 
-                        ? 'bg-[#4A2C6E] text-white border-[#4A2C6E] shadow-lg scale-105'
+                        ? 'bg-[#783A3A] text-white border-[#783A3A] shadow-lg scale-105'
                         : 'border-[#E8E2D9] bg-white text-[#6B6058] hover:border-[#1C1410] hover:text-[#1C1410]'
                     }`}
                   >
@@ -408,10 +408,10 @@ export default function AdminOrdersPage() {
                 {selectedOrder.items?.map((item: any, idx: number) => (
                   <div key={idx} className="flex justify-between items-center group">
                     <div>
-                      <p className="text-[15px] font-bold text-[#1C1410] font-heading group-hover:text-[#4A2C6E] transition-colors">{item.name}</p>
+                      <p className="text-[15px] font-bold text-[#1C1410] font-heading group-hover:text-[#783A3A] transition-colors">{item.name}</p>
                       <p className="text-[10px] text-[#6B6058] font-bold mt-2 uppercase tracking-[2px] opacity-40">Unit Count: {item.qty}</p>
                     </div>
-                    <p className="font-bold text-[#4A2C6E] text-[15px]">{ (item.price_pkr * item.qty).toLocaleString() } PKR</p>
+                    <p className="font-bold text-[#783A3A] text-[15px]">{ (item.price_pkr * item.qty).toLocaleString() } PKR</p>
                   </div>
                 ))}
               </div>

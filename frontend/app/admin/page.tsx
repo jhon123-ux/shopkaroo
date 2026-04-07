@@ -80,11 +80,11 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#4A2C6E]">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#783A3A]">
             <ShoppingCart size={28} />
           </div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
-          <p className="font-heading font-bold text-[48px] text-[#4A2C6E] leading-none">
+          <p className="font-heading font-bold text-[48px] text-[#783A3A] leading-none">
             {loading ? '—' : stats.orders}
           </p>
         </div>
@@ -152,10 +152,10 @@ export default function AdminDashboardPage() {
                   <td className="px-8 py-6 font-mono font-bold text-[13px] text-[#1C1410] tracking-widest">{o.order_number}</td>
                   <td className="px-8 py-6 text-[#6B6058] font-bold text-[13px]">{o.customer_name}</td>
                   <td className="px-8 py-6 text-[#6B6058] font-medium text-[12px] uppercase tracking-wider">{o.city}</td>
-                  <td className="px-8 py-6 font-bold text-[#4A2C6E] font-heading text-[15px]">{o.total_pkr?.toLocaleString()} PKR</td>
+                  <td className="px-8 py-6 font-bold text-[#783A3A] font-heading text-[15px]">{o.total_pkr?.toLocaleString()} PKR</td>
                   <td className="px-8 py-6">
                     <span className={`px-4 py-1.5 rounded-0 text-[9px] font-bold uppercase tracking-[2px] border ${
-                      o.status === 'pending' ? 'bg-[#F0EBF8] text-[#4A2C6E] border-[rgba(74,44,110,0.1)]' : 'bg-white text-[#1C1410] border-[#E8E2D9]'
+                      o.status === 'pending' ? 'bg-[#F5E8E8] text-[#783A3A] border-[rgba(120,58,58,0.1)]' : 'bg-white text-[#1C1410] border-[#E8E2D9]'
                     }`}>
                       {o.status}
                     </span>

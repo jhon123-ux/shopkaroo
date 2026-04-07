@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @theme {
-  --color-primary:         #4A2C6E;
-  --color-primary-dark:    #3A1F57;
-  --color-primary-soft:    #7B5EA7;
-  --color-primary-tint:    #F0EBF8;
+  --color-primary:         #783A3A;
+  --color-primary-dark:    #5B2C2C;
+  --color-primary-soft:    #9B5656;
+  --color-primary-tint:    #F5E8E8;
   --color-surface:         #F2EDE6;
   --color-background:      #FAF7F4;
   --color-bg-white:        #FFFFFF;

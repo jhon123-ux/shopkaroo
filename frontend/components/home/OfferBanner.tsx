@@ -64,7 +64,7 @@ export default function OfferBanner() {
 
   return (
     <section className="w-full py-12 px-5 md:px-16 md:py-14 relative overflow-hidden bg-[#1C1410]">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#4A2C6E]/40 to-transparent z-0 opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#783A3A]/40 to-transparent z-0 opacity-60" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-16 lg:gap-12">
           

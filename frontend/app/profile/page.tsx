@@ -94,7 +94,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                   type="text"
                   value={formData.fullName}
                   onChange={e => setFormData({...formData, fullName: e.target.value})}
-                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function ProfilePage() {
                   placeholder="03XXXXXXXXX"
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
-                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body font-mono tracking-wider"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body font-mono tracking-wider"
                 />
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function ProfilePage() {
                 <select 
                   value={formData.city}
                   onChange={e => setFormData({...formData, city: e.target.value})}
-                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body"
                 >
                   <option value="">Select city</option>
                   <option value="Karachi">Karachi</option>
@@ -201,7 +201,7 @@ export default function ProfilePage() {
                 placeholder="Complete address (House, Street, Area...)"
                 value={formData.address}
                 onChange={e => setFormData({...formData, address: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body resize-none leading-relaxed"
+                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body resize-none leading-relaxed"
               />
             </div>
 
@@ -210,7 +210,7 @@ export default function ProfilePage() {
               <button 
                 type="submit" 
                 disabled={saving}
-                className="w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 shadow-xl"
+                className="w-full bg-[#783A3A] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 shadow-xl"
               >
                 {saving ? (
                   <>

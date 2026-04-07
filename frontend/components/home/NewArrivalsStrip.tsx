@@ -29,14 +29,14 @@ export default function NewArrivalsStrip() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <div className="inline-block bg-[#6C3FC5] text-white text-[10px] px-3 py-1 rounded-full font-mono tracking-widest mb-3 uppercase font-bold shadow-sm">
+            <div className="inline-block bg-[#783A3A] text-white text-[10px] px-3 py-1 rounded-full font-mono tracking-widest mb-3 uppercase font-bold shadow-sm">
               NEW
             </div>
             <h2 className="text-3xl font-extrabold font-heading text-[#1A1A2E]">
               Just Landed
             </h2>
           </div>
-          <Link href="/furniture" className="text-[#6C3FC5] font-semibold flex items-center group font-body">
+          <Link href="/furniture" className="text-[#783A3A] font-semibold flex items-center group font-body">
             See All <span className="ml-1 group-hover:ml-2 transition-all">→</span>
           </Link>
         </div>

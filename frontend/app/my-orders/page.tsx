@@ -28,9 +28,9 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
-  confirmed: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
-  shipped: 'text-[#4A2C6E] bg-[#F0EBF8] border-[rgba(74,44,110,0.1)]',
+  pending: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
+  confirmed: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
+  shipped: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
   delivered: 'text-[#2D6A4F] bg-[#EBF7F0] border-[rgba(45,106,79,0.1)]',
   cancelled: 'text-[#DC2626] bg-[#FEF2F2] border-red-100'
 }
@@ -69,7 +69,7 @@ export default function MyOrdersPage() {
   if (loading || fetching) {
     return (
       <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -99,7 +99,7 @@ export default function MyOrdersPage() {
               Your purchase history is currently empty.
             </p>
             <Link href="/"
-              className="bg-[#4A2C6E] text-white px-10 py-4 rounded-[3px] font-bold uppercase tracking-[2px] text-[13px] hover:bg-[#3A1F57] transition-all shadow-xl hover:-translate-y-1 active:scale-95 inline-block">
+              className="bg-[#783A3A] text-white px-10 py-4 rounded-[3px] font-bold uppercase tracking-[2px] text-[13px] hover:bg-[#5B2C2C] transition-all shadow-xl hover:-translate-y-1 active:scale-95 inline-block">
               Browse Collection
             </Link>
           </div>
@@ -138,12 +138,12 @@ export default function MyOrdersPage() {
                   {order.items?.map((item: any, i: number) => (
                     <div key={i} className="flex justify-between items-center group">
                       <div className="flex flex-col">
-                        <span className="text-[#1C1410] font-bold text-[15px] font-heading group-hover:text-[#4A2C6E] transition-colors">
+                        <span className="text-[#1C1410] font-bold text-[15px] font-heading group-hover:text-[#783A3A] transition-colors">
                           {item.name}
                         </span>
                         <span className="text-[11px] text-[#6B6058] uppercase tracking-widest font-bold opacity-40 mt-1">Quantity: {item.qty}</span>
                       </div>
-                      <span className="font-bold text-[#4A2C6E] text-[14px]">
+                      <span className="font-bold text-[#783A3A] text-[14px]">
                         { (item.price_pkr * item.qty).toLocaleString() } PKR
                       </span>
                     </div>
@@ -160,7 +160,7 @@ export default function MyOrdersPage() {
                   </div>
                   <div className="text-right">
                     <span className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1 block">Grand Total</span>
-                    <p className="font-bold text-[#4A2C6E] text-[24px] font-heading leading-none">
+                    <p className="font-bold text-[#783A3A] text-[24px] font-heading leading-none">
                       {order.total_pkr.toLocaleString()} <span className="text-[14px]">PKR</span>
                     </p>
                   </div>
@@ -178,13 +178,13 @@ export default function MyOrdersPage() {
                           <div key={step} className="flex flex-col items-center flex-1 relative">
                             {/* Connector Line */}
                             {i > 0 && (
-                              <div className={`absolute right-1/2 top-[10px] w-full h-[1px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-[#4A2C6E]' : 'bg-[#E8E2D9]'}`} />
+                              <div className={`absolute right-1/2 top-[10px] w-full h-[1px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-[#783A3A]' : 'bg-[#E8E2D9]'}`} />
                             )}
                             
                             {/* Dot */}
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-700 z-10 ${
-                              isCompleted ? 'bg-[#4A2C6E]' : 'bg-[#E8E2D9]'
-                            } ${isActive ? 'ring-8 ring-[#F0EBF8] scale-110' : ''}`}>
+                              isCompleted ? 'bg-[#783A3A]' : 'bg-[#E8E2D9]'
+                            } ${isActive ? 'ring-8 ring-[#F5E8E8] scale-110' : ''}`}>
                               {isCompleted && (
                                 <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="text-white">
                                   <path d="M1 4L4 7L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -194,7 +194,7 @@ export default function MyOrdersPage() {
                             
                             {/* Label */}
                             <p className={`text-[9px] font-bold mt-4 text-center transition-all duration-300 uppercase tracking-widest ${
-                              isActive ? 'text-[#4A2C6E] scale-105' : isCompleted ? 'text-[#1C1410]' : 'text-[#6B6058] opacity-40'
+                              isActive ? 'text-[#783A3A] scale-105' : isCompleted ? 'text-[#1C1410]' : 'text-[#6B6058] opacity-40'
                             }`}>
                               {STATUS_LABELS[step]}
                             </p>

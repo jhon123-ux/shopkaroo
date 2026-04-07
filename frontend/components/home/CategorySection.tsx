@@ -27,10 +27,10 @@ export default function CategorySection() {
 
   const getGradient = (slug: string) => {
     switch (slug) {
-      case 'living-room': return 'linear-gradient(135deg, #4A2C6E, #7B5EA7)'
-      case 'bedroom': return 'linear-gradient(135deg, #3A1F57, #5D4480)'
-      case 'office': return 'linear-gradient(135deg, #1C1410, #4A2C6E)'
-      case 'dining': return 'linear-gradient(135deg, #2D1B40, #7B5EA7)'
+      case 'living-room': return 'linear-gradient(135deg, #783A3A, #9B5656)'
+      case 'bedroom': return 'linear-gradient(135deg, #5B2C2C, #5D4480)'
+      case 'office': return 'linear-gradient(135deg, #1C1410, #783A3A)'
+      case 'dining': return 'linear-gradient(135deg, #2D1B40, #9B5656)'
       default: return 'linear-gradient(135deg, #6B6058, #A89890)'
     }
   }

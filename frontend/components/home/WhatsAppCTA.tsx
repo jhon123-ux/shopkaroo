@@ -4,7 +4,7 @@ export default function WhatsAppCTA() {
   return (
     <section 
       className="py-24 flex justify-center items-center"
-      style={{ background: 'linear-gradient(135deg, #4A2C6E, #3A1F57)' }}
+      style={{ background: 'linear-gradient(135deg, #783A3A, #5B2C2C)' }}
     >
       <div className="max-w-4xl mx-auto px-6 text-center">
         
@@ -19,7 +19,7 @@ export default function WhatsAppCTA() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a 
             href="tel:03706905835" 
-            className="inline-flex items-center justify-center bg-[#4A2C6E] text-white px-8 py-4 rounded-[3px] font-bold font-body text-base hover:bg-[#3A1F57] transition-all shadow-lg active:scale-95 gap-3 w-full sm:w-auto"
+            className="inline-flex items-center justify-center bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold font-body text-base hover:bg-[#5B2C2C] transition-all shadow-lg active:scale-95 gap-3 w-full sm:w-auto"
           >
             <Phone size={16} /> Call 03706905835
           </a>

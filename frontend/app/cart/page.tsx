@@ -54,7 +54,7 @@ export default function CartPage() {
         </p>
         <button 
           onClick={() => router.push('/furniture/living-room')}
-          className="bg-[#4A2C6E] text-white px-12 py-4 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-lg active:scale-95"
+          className="bg-[#783A3A] text-white px-12 py-4 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-lg active:scale-95"
         >
           Explore Collection
         </button>
@@ -84,7 +84,7 @@ export default function CartPage() {
               const price = item.sale_price ?? item.price_pkr
               
               return (
-                <div key={item.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] flex flex-col sm:flex-row items-center gap-8 w-full relative transition-all duration-300 hover:border-[#4A2C6E]/30">
+                <div key={item.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] flex flex-col sm:flex-row items-center gap-8 w-full relative transition-all duration-300 hover:border-[#783A3A]/30">
                   
                   {/* Image area */}
                   <div className="w-28 h-28 flex-shrink-0 bg-[#F2EDE6] rounded-0 overflow-hidden relative border border-[#E8E2D9]">
@@ -104,7 +104,7 @@ export default function CartPage() {
 
                   {/* Item info */}
                   <div className="flex-1 w-full text-center sm:text-left">
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-[2px] text-[#4A2C6E] bg-[#F0EBF8] px-3 py-1.5 rounded-[2px] mb-4 font-body">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-[2px] text-[#783A3A] bg-[#F5E8E8] px-3 py-1.5 rounded-[2px] mb-4 font-body">
                       {item.category.replace('-', ' ')}
                     </span>
                     <h3 className="font-heading font-bold text-[#1C1410] text-[18px] md:text-[22px] mb-2 pr-6">
@@ -139,7 +139,7 @@ export default function CartPage() {
 
                     {/* Item total */}
                     <div className="text-center sm:text-right">
-                      <p className="font-heading font-bold text-[#4A2C6E] text-[20px]">
+                      <p className="font-heading font-bold text-[#783A3A] text-[20px]">
                         {formatPrice(price * item.quantity)}
                       </p>
                       <button 
@@ -187,7 +187,7 @@ export default function CartPage() {
 
               <div className="flex flex-col gap-2 mb-10 items-center">
                 <span className="font-body font-bold text-[11px] text-[#6B6058] uppercase tracking-[3px] opacity-60">Grand Total</span>
-                <span className="font-heading font-bold text-[36px] text-[#4A2C6E] leading-none">{formatPrice(getTotalPrice())}</span>
+                <span className="font-heading font-bold text-[36px] text-[#783A3A] leading-none">{formatPrice(getTotalPrice())}</span>
               </div>
 
               {/* COD notice */}
@@ -203,7 +203,7 @@ export default function CartPage() {
 
               <button 
                 onClick={() => router.push('/checkout')}
-                className="hidden md:flex w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-lg active:scale-95 items-center justify-center gap-3"
+                className="hidden md:flex w-full bg-[#783A3A] text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-lg active:scale-95 items-center justify-center gap-3"
               >
                 Complete Order
                 <ArrowRight size={18} strokeWidth={2.5} />
@@ -211,7 +211,7 @@ export default function CartPage() {
               
               <Link 
                 href="/furniture/living-room"
-                className="hidden md:flex w-full items-center justify-center gap-2 text-[#6B6058] text-[12px] font-bold hover:text-[#4A2C6E] transition-colors mt-6 uppercase tracking-[1px] font-body"
+                className="hidden md:flex w-full items-center justify-center gap-2 text-[#6B6058] text-[12px] font-bold hover:text-[#783A3A] transition-colors mt-6 uppercase tracking-[1px] font-body"
               >
                 <ArrowLeft size={14} /> Back to Gallery
               </Link>
@@ -226,11 +226,11 @@ export default function CartPage() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex flex-col">
             <span className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
-            <span className="font-heading font-bold text-[24px] text-[#4A2C6E]">{formatPrice(getTotalPrice())}</span>
+            <span className="font-heading font-bold text-[24px] text-[#783A3A]">{formatPrice(getTotalPrice())}</span>
           </div>
           <button 
             onClick={() => router.push('/checkout')}
-            className="bg-[#4A2C6E] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-md active:scale-95 flex items-center justify-center gap-2"
+            className="bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-md active:scale-95 flex items-center justify-center gap-2"
           >
             Checkout
           </button>

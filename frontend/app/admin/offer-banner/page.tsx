@@ -205,7 +205,7 @@ export default function AdminOfferBannerPage() {
           </div>
 
           <div className="bg-[#FAF7F4] p-8 border border-[#E8E2D9] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#4A2C6E] uppercase tracking-[3px] opacity-60 italic">Real-Time Synchronization Preview:</span>
+              <span className="text-[10px] font-bold text-[#783A3A] uppercase tracking-[3px] opacity-60 italic">Real-Time Synchronization Preview:</span>
               <div className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest">
                 {previewTimeLeft.days}d {previewTimeLeft.hours}h {previewTimeLeft.minutes}m {previewTimeLeft.seconds}s
               </div>
@@ -230,7 +230,7 @@ export default function AdminOfferBannerPage() {
         
         <div className="rounded-0 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.15)] relative group bg-[#1C1410]">
           <div className="p-16 md:p-20 text-center relative z-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#4A2C6E]/60 to-[#1C1410]/95 z-0" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#783A3A]/60 to-[#1C1410]/95 z-0" />
             
             <div className="relative z-20">
               <span className="inline-block bg-white/10 text-white text-[10px] px-4 py-1.5 rounded-0 font-bold tracking-[3px] mb-8 border border-white/20 uppercase">

@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
       <div className="bg-white rounded-2xl p-8 max-w-md w-full border border-[#E5E0F5] shadow-lg">
         {/* Header */}
         <div className="text-center mb-8">
-          <p className="text-[#6C3FC5] font-extrabold text-2xl mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>
+          <p className="text-[#783A3A] font-extrabold text-2xl mb-2" style={{ fontFamily: 'Syne, sans-serif' }}>
             Shopkarro
           </p>
           <h1 className="text-2xl font-extrabold text-[#1A1A2E]" style={{ fontFamily: 'Syne, sans-serif' }}>
@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
               placeholder="ahmed@gmail.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#6C3FC5] outline-none transition-shadow"
+              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#783A3A] outline-none transition-shadow"
             />
           </div>
 
@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#6C3FC5] text-white py-3.5 rounded-xl font-bold font-heading text-base hover:bg-[#5530A8] transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+            className="w-full bg-[#783A3A] text-white py-3.5 rounded-xl font-bold font-heading text-base hover:bg-[#5B2C2C] transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
           >
             {loading ? (
               <>
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
 
         {/* Footer Link */}
         <div className="text-center mt-10">
-          <Link href="/login" className="text-sm text-[#6B7280] hover:text-[#6C3FC5] transition-colors font-medium">
+          <Link href="/login" className="text-sm text-[#6B7280] hover:text-[#783A3A] transition-colors font-medium">
             ← Back to Sign In
           </Link>
         </div>

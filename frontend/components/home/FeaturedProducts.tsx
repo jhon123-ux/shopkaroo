@@ -81,7 +81,7 @@ function FeaturedHeader() {
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-16 gap-6">
       <div>
-        <div className="text-[10px] font-semibold tracking-[3px] text-[#4A2C6E] mb-3 uppercase font-body">
+        <div className="text-[10px] font-semibold tracking-[3px] text-[#783A3A] mb-3 uppercase font-body">
           FEATURED
         </div>
         <h2 className="text-[36px] font-bold font-heading text-[#1C1410]">
@@ -93,7 +93,7 @@ function FeaturedHeader() {
       </div>
       <Link 
         href="/furniture/living-room" 
-        className="text-[#4A2C6E] font-semibold hover:underline flex items-center group font-body text-sm"
+        className="text-[#783A3A] font-semibold hover:underline flex items-center group font-body text-sm"
       >
         View All Collection 
         <span className="ml-1 group-hover:ml-2 transition-all">→</span>

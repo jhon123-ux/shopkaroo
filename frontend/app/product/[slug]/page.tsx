@@ -159,7 +159,7 @@ export default function ProductDetailPage() {
         </div>
         <h2 className="font-heading font-bold text-3xl text-[#1C1410] mb-4">Product Not Found</h2>
         <p className="text-[#6B6058] mb-10 max-w-md font-body">Sorry, we couldn't find the piece you're looking for. It might have been moved or is no longer available.</p>
-        <Link href="/furniture" className="bg-[#4A2C6E] text-white px-12 py-4 rounded-[3px] font-bold font-body hover:bg-[#3A1F57] transition-all shadow-lg active:scale-95">
+        <Link href="/furniture" className="bg-[#783A3A] text-white px-12 py-4 rounded-[3px] font-bold font-body hover:bg-[#5B2C2C] transition-all shadow-lg active:scale-95">
           Back to Collection
         </Link>
       </div>
@@ -206,13 +206,13 @@ export default function ProductDetailPage() {
       {/* PART 1 — BREADCRUMB */}
       <div className="bg-white border-b border-[#E8E2D9] py-4">
         <div className="max-w-7xl mx-auto px-6 flex items-center gap-3 text-[12px] font-body tracking-wider uppercase flex-wrap">
-          <Link href="/" className="text-[#6B6058] hover:text-[#4A2C6E] transition-colors">Home</Link>
+          <Link href="/" className="text-[#6B6058] hover:text-[#783A3A] transition-colors">Home</Link>
           <span className="text-[#D4CCC2]">/</span>
-          <Link href={`/furniture/${product.category}`} className="text-[#6B6058] hover:text-[#4A2C6E] transition-colors">
+          <Link href={`/furniture/${product.category}`} className="text-[#6B6058] hover:text-[#783A3A] transition-colors">
             {categoryNameDisplay}
           </Link>
           <span className="text-[#D4CCC2]">/</span>
-          <span className="text-[#4A2C6E] font-bold">{product.name}</span>
+          <span className="text-[#783A3A] font-bold">{product.name}</span>
         </div>
       </div>
 
@@ -243,7 +243,7 @@ export default function ProductDetailPage() {
                 </span>
               )}
               {isNew && (
-                <span className="bg-[#4A2C6E] text-white text-[10px] px-3 py-1.5 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-md">
+                <span className="bg-[#783A3A] text-white text-[10px] px-3 py-1.5 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-md">
                   NEW
                 </span>
               )}
@@ -263,7 +263,7 @@ export default function ProductDetailPage() {
               <div 
                 key={idx}
                 onClick={() => setActiveImageIndex(idx)}
-                className={`flex-shrink-0 w-[72px] h-[72px] rounded-[4px] overflow-hidden border transition-all ${activeImageIndex === idx ? 'border-[#4A2C6E] shadow-sm' : 'border-[#E8E2D9] hover:border-[#4A2C6E]'}`}
+                className={`flex-shrink-0 w-[72px] h-[72px] rounded-[4px] overflow-hidden border transition-all ${activeImageIndex === idx ? 'border-[#783A3A] shadow-sm' : 'border-[#E8E2D9] hover:border-[#783A3A]'}`}
               >
                 <div className="w-full h-full relative p-1 bg-[#F2EDE6]">
                   <Image src={product.images[idx]} alt="thumb" fill className="object-cover" />
@@ -276,7 +276,7 @@ export default function ProductDetailPage() {
         {/* RIGHT — PRODUCT INFO */}
         <div className="flex flex-col">
           
-          <div className="bg-[#F0EBF8] text-[#4A2C6E] text-[10px] font-bold px-3 py-1.5 rounded-[2px] uppercase tracking-[2px] inline-block w-max mb-5 font-body">
+          <div className="bg-[#F5E8E8] text-[#783A3A] text-[10px] font-bold px-3 py-1.5 rounded-[2px] uppercase tracking-[2px] inline-block w-max mb-5 font-body">
             {categoryNameDisplay}
           </div>
 
@@ -290,8 +290,8 @@ export default function ProductDetailPage() {
                 <Star 
                   key={i} 
                   size={14} 
-                  fill={i < Math.round(reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1)) ? "#4A2C6E" : "none"} 
-                  className={i < Math.round(reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1)) ? "text-[#4A2C6E]" : "text-[#D4CCC2]"} 
+                  fill={i < Math.round(reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1)) ? "#783A3A" : "none"} 
+                  className={i < Math.round(reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1)) ? "text-[#783A3A]" : "text-[#D4CCC2]"} 
                 />
               ))}
             </div>
@@ -306,15 +306,15 @@ export default function ProductDetailPage() {
             {isSale ? (
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-4">
-                  <span className="font-heading text-[40px] font-bold text-[#4A2C6E] tracking-tight leading-none">{formatPrice(product.sale_price!)}</span>
+                  <span className="font-heading text-[40px] font-bold text-[#783A3A] tracking-tight leading-none">{formatPrice(product.sale_price!)}</span>
                   <span className="text-xl text-[#6B6058] line-through font-body opacity-60">{formatPrice(product.price_pkr)}</span>
                 </div>
-                <span className="bg-[#F2EDE6] text-[#4A2C6E] text-[11px] px-3 py-1 rounded-[2px] font-bold font-body uppercase tracking-wider mt-2 w-max">
+                <span className="bg-[#F2EDE6] text-[#783A3A] text-[11px] px-3 py-1 rounded-[2px] font-bold font-body uppercase tracking-wider mt-2 w-max">
                   SAVE {formatPrice(product.price_pkr - product.sale_price!)}
                 </span>
               </div>
             ) : (
-              <span className="font-heading text-[40px] font-bold text-[#4A2C6E] tracking-tight leading-none">{formatPrice(product.price_pkr)}</span>
+              <span className="font-heading text-[40px] font-bold text-[#783A3A] tracking-tight leading-none">{formatPrice(product.price_pkr)}</span>
             )}
           </div>
 
@@ -353,7 +353,7 @@ export default function ProductDetailPage() {
                 <button 
                   onClick={() => setQty(Math.max(1, qty - 1))}
                   disabled={qty <= 1}
-                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#4A2C6E] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
+                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#783A3A] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
                 >
                   <Minus size={18} />
                 </button>
@@ -363,7 +363,7 @@ export default function ProductDetailPage() {
                 <button 
                   onClick={() => setQty(Math.min(product.stock_qty, qty + 1))}
                   disabled={qty >= product.stock_qty}
-                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#4A2C6E] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
+                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#783A3A] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
                 >
                   <Plus size={18} />
                 </button>
@@ -379,7 +379,7 @@ export default function ProductDetailPage() {
           <div className="hidden md:flex flex-col gap-4 mb-10">
             <button 
               onClick={handleAddToCart}
-              className="w-full bg-[#4A2C6E] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#3A1F57] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
+              className="w-full bg-[#783A3A] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#5B2C2C] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
             >
               <ShoppingCart size={18} /> Add to Cart
             </button>
@@ -390,7 +390,7 @@ export default function ProductDetailPage() {
             >
               <MessageCircle size={18} /> Order via WhatsApp
             </a>
-            <button className="w-full border border-[#D4CCC2] text-[#6B6058] py-4 rounded-[3px] font-semibold text-base hover:border-[#4A2C6E] hover:text-[#4A2C6E] transition-all flex items-center justify-center gap-3 bg-white font-body">
+            <button className="w-full border border-[#D4CCC2] text-[#6B6058] py-4 rounded-[3px] font-semibold text-base hover:border-[#783A3A] hover:text-[#783A3A] transition-all flex items-center justify-center gap-3 bg-white font-body">
               <Heart size={18} /> Save to Wishlist
             </button>
           </div>
@@ -401,7 +401,7 @@ export default function ProductDetailPage() {
               <select 
                 value={city}
                 onChange={e => setCity(e.target.value)}
-                className="w-full border border-[#D4CCC2] rounded-[3px] px-4 py-3 text-[14px] font-medium outline-none focus:border-[#4A2C6E] bg-white appearance-none pr-10 cursor-pointer font-body"
+                className="w-full border border-[#D4CCC2] rounded-[3px] px-4 py-3 text-[14px] font-medium outline-none focus:border-[#783A3A] bg-white appearance-none pr-10 cursor-pointer font-body"
               >
                 {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -427,19 +427,19 @@ export default function ProductDetailPage() {
         <div className="flex gap-4 border-b border-[#E8E2D9] mb-12 overflow-x-auto scrollbar-hide">
           <button 
             onClick={() => setActiveTab('desc')}
-            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'desc' ? 'border-b-2 border-[#4A2C6E] text-[#4A2C6E] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
+            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'desc' ? 'border-b-2 border-[#783A3A] text-[#783A3A] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
           >
             Description
           </button>
           <button 
             onClick={() => setActiveTab('specs')}
-            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'specs' ? 'border-b-2 border-[#4A2C6E] text-[#4A2C6E] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
+            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'specs' ? 'border-b-2 border-[#783A3A] text-[#783A3A] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
           >
             Specifications
           </button>
           <button 
             onClick={() => setActiveTab('reviews')}
-            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'reviews' ? 'border-b-2 border-[#4A2C6E] text-[#4A2C6E] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
+            className={`pb-4 px-4 text-[12px] tracking-[2px] uppercase whitespace-nowrap transition-all ${activeTab === 'reviews' ? 'border-b-2 border-[#783A3A] text-[#783A3A] font-bold' : 'text-[#6B6058] font-semibold hover:text-[#1C1410]'}`}
           >
             Reviews ({reviews.length})
           </button>
@@ -504,7 +504,7 @@ export default function ProductDetailPage() {
               {reviews.length > 0 && (
                 <div className="flex flex-col md:flex-row items-center gap-12 pb-12 border-b border-[#E8E2D9]">
                   <div className="text-center">
-                    <p className="text-[48px] font-bold font-heading text-[#4A2C6E] leading-none mb-4">
+                    <p className="text-[48px] font-bold font-heading text-[#783A3A] leading-none mb-4">
                       {(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)}
                     </p>
                     <div className="flex justify-center gap-1 mb-2">
@@ -512,8 +512,8 @@ export default function ProductDetailPage() {
                          <Star 
                            key={i} 
                            size={16} 
-                           fill={i < Math.floor(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length) ? "#4A2C6E" : "none"} 
-                           className={i < Math.floor(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length) ? "text-[#4A2C6E]" : "text-[#D4CCC2]"} 
+                           fill={i < Math.floor(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length) ? "#783A3A" : "none"} 
+                           className={i < Math.floor(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length) ? "text-[#783A3A]" : "text-[#D4CCC2]"} 
                          />
                        ))}
                     </div>
@@ -531,7 +531,7 @@ export default function ProductDetailPage() {
                           <span className="text-[11px] font-bold text-[#1C1410] w-4">{star}★</span>
                           <div className="flex-1 h-1.5 bg-[#FAF7F4] rounded-full overflow-hidden border border-[#E8E2D9]/30">
                             <div 
-                              className="h-full bg-[#4A2C6E] transition-all duration-500" 
+                              className="h-full bg-[#783A3A] transition-all duration-500" 
                               style={{ width: `${percentage}%` }}
                             />
                           </div>
@@ -558,14 +558,14 @@ export default function ProductDetailPage() {
                           <Star 
                             key={i} 
                             size={14} 
-                            fill={i < review.rating ? "#4A2C6E" : "none"} 
-                            className={i < review.rating ? "text-[#4A2C6E]" : "text-[#D4CCC2]"} 
+                            fill={i < review.rating ? "#783A3A" : "none"} 
+                            className={i < review.rating ? "text-[#783A3A]" : "text-[#D4CCC2]"} 
                           />
                         ))}
                       </div>
                       <p className="text-[#1C1410] text-[15px] leading-relaxed italic mb-8 font-body opacity-90 relative z-10">"{review.comment}"</p>
                       <div className="flex items-center gap-4 relative z-10">
-                        <div className="w-10 h-10 rounded-[3px] bg-[#F0EBF8] flex items-center justify-center text-[#4A2C6E] font-bold text-[14px] font-heading border border-white shadow-sm">
+                        <div className="w-10 h-10 rounded-[3px] bg-[#F5E8E8] flex items-center justify-center text-[#783A3A] font-bold text-[14px] font-heading border border-white shadow-sm">
                           {review.name?.charAt(0) || 'U'}
                         </div>
                         <div>
@@ -579,7 +579,7 @@ export default function ProductDetailPage() {
                       </div>
 
                       {/* Accent */}
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-[#4A2C6E]/[0.02] rounded-full -mr-12 -mt-12" />
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-[#783A3A]/[0.02] rounded-full -mr-12 -mt-12" />
                     </div>
                   ))}
                 </div>
@@ -596,7 +596,7 @@ export default function ProductDetailPage() {
                     </p>
                     <Link 
                       href="/login" 
-                      className="bg-[#4A2C6E] text-white px-12 py-4 rounded-[3px] font-bold font-body uppercase tracking-widest text-[13px] hover:bg-[#3A1F57] transition-all shadow-lg active:scale-95 inline-block"
+                      className="bg-[#783A3A] text-white px-12 py-4 rounded-[3px] font-bold font-body uppercase tracking-widest text-[13px] hover:bg-[#5B2C2C] transition-all shadow-lg active:scale-95 inline-block"
                     >
                       Sign In to Review
                     </Link>
@@ -618,8 +618,8 @@ export default function ProductDetailPage() {
                           >
                             <Star 
                               size={28} 
-                              fill={revRating >= star ? "#4A2C6E" : "none"} 
-                              className={revRating >= star ? "text-[#4A2C6E]" : "text-[#D4CCC2] group-hover:text-[#4A2C6E]/40"} 
+                              fill={revRating >= star ? "#783A3A" : "none"} 
+                              className={revRating >= star ? "text-[#783A3A]" : "text-[#D4CCC2] group-hover:text-[#783A3A]/40"} 
                             />
                           </button>
                         ))}
@@ -630,7 +630,7 @@ export default function ProductDetailPage() {
                       <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body opacity-60">Written Statement</label>
                       <textarea 
                         required rows={5} value={revComment} onChange={e => setRevComment(e.target.value)}
-                        className="w-full border border-[#D4CCC2] rounded-[3px] px-6 py-5 outline-none focus:border-[#4A2C6E] bg-white text-[15px] font-body resize-none leading-relaxed transition-colors placeholder:opacity-40" 
+                        className="w-full border border-[#D4CCC2] rounded-[3px] px-6 py-5 outline-none focus:border-[#783A3A] bg-white text-[15px] font-body resize-none leading-relaxed transition-colors placeholder:opacity-40" 
                         placeholder="Share your detailed experience with this piece..."
                       />
                     </div>
@@ -638,7 +638,7 @@ export default function ProductDetailPage() {
                     <button 
                       type="submit" 
                       disabled={isSubmitting}
-                      className="bg-[#4A2C6E] text-white px-12 py-5 rounded-[3px] font-bold w-full sm:w-auto self-start hover:bg-[#3A1F57] transition-all uppercase tracking-widest text-[14px] font-body shadow-xl flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+                      className="bg-[#783A3A] text-white px-12 py-5 rounded-[3px] font-bold w-full sm:w-auto self-start hover:bg-[#5B2C2C] transition-all uppercase tracking-widest text-[14px] font-body shadow-xl flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <>
@@ -673,7 +673,7 @@ export default function ProductDetailPage() {
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E8E2D9] px-6 py-4 flex items-center gap-4 md:hidden shadow-lg animate-slideUp">
         <div className="flex-shrink-0">
           <p className="text-[10px] text-[#6B6058] uppercase tracking-wider font-bold mb-1 opacity-60">Price</p>
-          <p className="text-lg font-bold text-[#4A2C6E] font-heading leading-none">
+          <p className="text-lg font-bold text-[#783A3A] font-heading leading-none">
             {formatPrice(product.sale_price ?? product.price_pkr)}
           </p>
         </div>
@@ -687,7 +687,7 @@ export default function ProductDetailPage() {
           </a>
           <button 
             onClick={handleAddToCart}
-            className="bg-[#4A2C6E] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform gap-2"
+            className="bg-[#783A3A] text-white h-12 rounded-[3px] font-bold text-[13px] tracking-wide uppercase flex items-center justify-center flex-1 active:scale-95 transition-transform gap-2"
           >
             <ShoppingCart size={18} /> Cart
           </button>
@@ -695,7 +695,7 @@ export default function ProductDetailPage() {
       </div>
 
       {showToast && (
-        <div className="fixed top-24 right-6 z-[100] bg-[#1C1410] text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-[#4A2C6E]">
+        <div className="fixed top-24 right-6 z-[100] bg-[#1C1410] text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-[#783A3A]">
           <Check size={16} className="text-[#2D6A4F]" strokeWidth={3} /> 
           <span className="text-[13px] font-body font-semibold">Added to your collection</span>
         </div>

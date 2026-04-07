@@ -85,7 +85,7 @@ export default function AdminLayout({
                   px-5 py-4 rounded-0 mb-2 text-[13px]
                   transition-all duration-300 uppercase tracking-widest font-bold
                   ${isActive
-                    ? 'bg-[#4A2C6E] text-white shadow-lg'
+                    ? 'bg-[#783A3A] text-white shadow-lg'
                     : 'text-white/40 hover:bg-white/[0.03] hover:text-white'
                   }`}
               >
@@ -145,7 +145,7 @@ export default function AdminLayout({
                 <span className="text-[#1C1410] text-[12px] font-bold uppercase tracking-wider">System Administrator</span>
                 <span className="text-[#2D6A4F] text-[10px] font-bold uppercase tracking-widest">Online</span>
             </div>
-            <div className="w-10 h-10 bg-[#FAF7F4] border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#4A2C6E] shadow-inner">
+            <div className="w-10 h-10 bg-[#FAF7F4] border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#783A3A] shadow-inner">
               <ShieldCheck size={20} />
             </div>
           </div>

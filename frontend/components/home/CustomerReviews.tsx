@@ -41,7 +41,7 @@ export default function CustomerReviews() {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-xs font-mono tracking-widest text-[#6C3FC5] uppercase mb-2">Testimonials</p>
+          <p className="text-xs font-mono tracking-widest text-[#783A3A] uppercase mb-2">Testimonials</p>
           <h2 className="text-4xl font-extrabold text-[#1A1A2E]" style={{fontFamily: 'Syne, sans-serif'}}>
             What Our Customers Say
           </h2>
@@ -72,7 +72,7 @@ export default function CustomerReviews() {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#EDE6FA] flex items-center justify-center text-[#6C3FC5] font-bold text-sm" style={{fontFamily: 'Syne, sans-serif'}}>
+                <div className="w-10 h-10 rounded-full bg-[#EDE6FA] flex items-center justify-center text-[#783A3A] font-bold text-sm" style={{fontFamily: 'Syne, sans-serif'}}>
                   {(review.name || "U").charAt(0)}
                 </div>
                 <div>
@@ -93,7 +93,7 @@ export default function CustomerReviews() {
           <div className="flex justify-center gap-2 mt-8">
             {reviews.map((_, i) => (
               <button key={i} onClick={() => setCurrent(i)}
-                className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#6C3FC5]' : 'w-2 bg-[#E5E0F5]'}`}
+                className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#783A3A]' : 'w-2 bg-[#E5E0F5]'}`}
               />
             ))}
           </div>

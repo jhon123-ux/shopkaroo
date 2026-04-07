@@ -48,7 +48,7 @@ export default function CategoryPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin w-10 h-10 border-4 border-[#6C3FC5] border-t-transparent rounded-full" />
+        <div className="animate-spin w-10 h-10 border-4 border-[#783A3A] border-t-transparent rounded-full" />
       </div>
     }>
       <CategoryContent />
@@ -212,7 +212,7 @@ function CategoryContent() {
             className="absolute inset-0 w-full h-full object-cover" 
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1C1410] to-[#4A2C6E]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1C1410] to-[#783A3A]" />
         )}
         <div className="absolute inset-0 bg-[#1C1410]/40 backdrop-blur-[2px]" />
         
@@ -268,7 +268,7 @@ function CategoryContent() {
                   <button 
                     key={tag}
                     onClick={() => removeFilterTag(tag)}
-                    className="bg-white border border-[#E8E2D9] text-[#1C1410] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 flex items-center gap-2 hover:border-[#4A2C6E] transition-colors"
+                    className="bg-white border border-[#E8E2D9] text-[#1C1410] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 flex items-center gap-2 hover:border-[#783A3A] transition-colors"
                   >
                     {tag} <X size={10} className="opacity-40" />
                   </button>
@@ -346,7 +346,7 @@ function CategoryContent() {
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`text-[12px] font-bold font-mono tracking-widest transition-all ${
-                          currentPage === (i + 1) ? 'text-[#4A2C6E] border-b-2 border-[#4A2C6E] pb-1' : 'text-[#A89890] hover:text-[#1C1410]'
+                          currentPage === (i + 1) ? 'text-[#783A3A] border-b-2 border-[#783A3A] pb-1' : 'text-[#A89890] hover:text-[#1C1410]'
                         }`}
                       >
                         {String(i + 1).padStart(2, '0')}
@@ -408,7 +408,7 @@ function FilterContent({
               placeholder="Min" 
               value={localMinPrice}
               onChange={e => setLocalMinPrice(e.target.value)}
-              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#4A2C6E] transition-colors" 
+              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#783A3A] transition-colors" 
             />
           </div>
           <div className="relative flex-1">
@@ -418,13 +418,13 @@ function FilterContent({
               placeholder="Max" 
               value={localMaxPrice}
               onChange={e => setLocalMaxPrice(e.target.value)}
-              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#4A2C6E] transition-colors" 
+              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#783A3A] transition-colors" 
             />
           </div>
         </div>
         <button 
           onClick={applyPriceRange}
-          className="w-full bg-[#1C1410] text-white py-3.5 text-[11px] font-bold uppercase tracking-widest mt-6 hover:bg-[#4A2C6E] transition-all shadow-lg active:scale-95"
+          className="w-full bg-[#1C1410] text-white py-3.5 text-[11px] font-bold uppercase tracking-widest mt-6 hover:bg-[#783A3A] transition-all shadow-lg active:scale-95"
         >
           Execute Range
         </button>
@@ -439,9 +439,9 @@ function FilterContent({
                 type="checkbox" 
                 checked={selectedMaterials.includes(mat)}
                 onChange={() => handleMaterialToggle(mat)}
-                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#4A2C6E] focus:ring-0 accent-[#4A2C6E]" 
+                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#783A3A] focus:ring-0 accent-[#783A3A]" 
               />
-              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#4A2C6E] transition-colors">{mat}</span>
+              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#783A3A] transition-colors">{mat}</span>
             </label>
           ))}
         </div>
@@ -456,9 +456,9 @@ function FilterContent({
                 type="checkbox" 
                 checked={selectedCities.includes(city)}
                 onChange={() => handleCityToggle(city)}
-                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#4A2C6E] focus:ring-0 accent-[#4A2C6E]" 
+                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#783A3A] focus:ring-0 accent-[#783A3A]" 
               />
-              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#4A2C6E] transition-colors">{city}</span>
+              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#783A3A] transition-colors">{city}</span>
             </label>
           ))}
         </div>

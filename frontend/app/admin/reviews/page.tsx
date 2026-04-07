@@ -112,7 +112,7 @@ export default function AdminReviewsPage() {
           <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Reviews</h2>
         </div>
         <div className="flex flex-col items-end">
-          <p className="text-[#4A2C6E] text-[13px] font-bold uppercase tracking-[2px]">
+          <p className="text-[#783A3A] text-[13px] font-bold uppercase tracking-[2px]">
             {reviews.filter(r => r.is_approved === null).length} Pending Audit
           </p>
         </div>
@@ -131,13 +131,13 @@ export default function AdminReviewsPage() {
             onClick={() => setActiveTab(tab.id as any)}
             className={`pb-4 text-[11px] font-bold uppercase tracking-[2.5px] transition-all relative ${
               activeTab === tab.id 
-                ? 'text-[#4A2C6E]' 
+                ? 'text-[#783A3A]' 
                 : 'text-[#6B6058] opacity-40 hover:opacity-100'
             }`}
           >
             {tab.label}
             {activeTab === tab.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4A2C6E] animate-slideUp" />
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#783A3A] animate-slideUp" />
             )}
           </button>
         ))}
@@ -183,7 +183,7 @@ export default function AdminReviewsPage() {
                     </td>
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-[#F0EBF8] text-[#4A2C6E] font-bold rounded-0 flex items-center justify-center text-[11px] font-heading">
+                        <div className="w-8 h-8 bg-[#F5E8E8] text-[#783A3A] font-bold rounded-0 flex items-center justify-center text-[11px] font-heading">
                           {review.name?.charAt(0)}
                         </div>
                         <div className="flex flex-col">
@@ -198,8 +198,8 @@ export default function AdminReviewsPage() {
                           <Star 
                             key={i} 
                             size={12} 
-                            fill={i < review.rating ? "#4A2C6E" : "none"} 
-                            className={i < review.rating ? "text-[#4A2C6E]" : "text-[#D4CCC2]"} 
+                            fill={i < review.rating ? "#783A3A" : "none"} 
+                            className={i < review.rating ? "text-[#783A3A]" : "text-[#D4CCC2]"} 
                           />
                         ))}
                       </div>

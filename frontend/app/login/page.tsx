@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
       </div>
     }>
       <LoginForm />
@@ -88,7 +88,7 @@ function LoginForm() {
               placeholder="e.g. jhon@example.com"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30"
+              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30"
             />
           </div>
 
@@ -96,7 +96,7 @@ function LoginForm() {
           <div>
             <div className="flex justify-between items-center mb-3">
               <label className="block text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Password</label>
-              <Link href="/forgot-password" title="Forgot Password" className="text-[#4A2C6E] text-[10px] font-bold uppercase tracking-widest border-b border-transparent hover:border-[#4A2C6E] transition-all">
+              <Link href="/forgot-password" title="Forgot Password" className="text-[#783A3A] text-[10px] font-bold uppercase tracking-widest border-b border-transparent hover:border-[#783A3A] transition-all">
                 Reset?
               </Link>
             </div>
@@ -107,7 +107,7 @@ function LoginForm() {
                 placeholder="Enter password"
                 value={formData.password}
                 onChange={e => setFormData({...formData, password: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30 pr-12"
+                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30 pr-12"
               />
               <button 
                 type="button"
@@ -127,7 +127,7 @@ function LoginForm() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="w-full bg-[#783A3A] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             {loading ? (
               <>
@@ -144,7 +144,7 @@ function LoginForm() {
         <div className="text-center mt-12 bg-[#FAF7F4] p-4 rounded-[2px] border border-[#E8E2D9]">
           <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
             New to Shopkarro?{' '}
-            <Link href="/signup" className="text-[#4A2C6E] hover:underline ml-2">
+            <Link href="/signup" className="text-[#783A3A] hover:underline ml-2">
               Create Account →
             </Link>
           </p>

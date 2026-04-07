@@ -59,7 +59,7 @@ export default function AdminBanners() {
   const openNewModal = () => {
     setEditingBanner(null)
     setFormData({
-      title: '', subtitle: '', badge_text: '', badge_color: '#4A2C6E',
+      title: '', subtitle: '', badge_text: '', badge_color: '#783A3A',
       cta_primary_text: 'Discover Collection', cta_primary_link: '/furniture/living-room',
       cta_secondary_text: 'Consultation', cta_secondary_link: 'https://wa.me/923706905835',
       bg_image_url: null, bg_overlay: 'rgba(28,20,16,0.4)',
@@ -148,7 +148,7 @@ export default function AdminBanners() {
         ) : (
           <div className="space-y-6">
             {banners.map(b => (
-              <div key={b.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] shadow-sm flex items-center gap-8 group hover:border-[#4A2C6E] transition-all">
+              <div key={b.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] shadow-sm flex items-center gap-8 group hover:border-[#783A3A] transition-all">
                 
                 <div className="cursor-grab text-[#1C1410] opacity-10 hover:opacity-30 px-2 py-4 select-none">☰</div>
                 
@@ -161,7 +161,7 @@ export default function AdminBanners() {
                   <div className="flex items-center gap-4 mb-2">
                      <h3 className="font-bold text-[#1C1410] font-heading truncate text-[18px] uppercase tracking-widest">{b.title}</h3>
                      {b.badge_text && (
-                       <span className="text-[9px] font-bold px-3 py-1 bg-[#F0EBF8] text-[#4A2C6E] border border-[rgba(74,44,110,0.1)] uppercase tracking-[2px]">
+                       <span className="text-[9px] font-bold px-3 py-1 bg-[#F5E8E8] text-[#783A3A] border border-[rgba(120,58,58,0.1)] uppercase tracking-[2px]">
                          {b.badge_text}
                        </span>
                      )}
@@ -249,7 +249,7 @@ export default function AdminBanners() {
                     <div className="relative h-12 w-full border border-[#D4CCC2] rounded-0 overflow-hidden cursor-pointer shadow-sm">
                        <input 
                          type="color" 
-                         value={formData.badge_color || '#4A2C6E'} 
+                         value={formData.badge_color || '#783A3A'} 
                          onChange={e => setFormData({...formData, badge_color: e.target.value})}
                          className="absolute inset-0 w-[150%] h-[150%] -translate-x-1/4 -translate-y-1/4 cursor-pointer"
                        />

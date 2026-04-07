@@ -18,7 +18,7 @@ export default function OrderConfirmedPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#4A2C6E] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
       </div>
     }>
       <OrderConfirmedContent />
@@ -36,7 +36,7 @@ function OrderConfirmedContent() {
     <main className="bg-[#FAF7F4] min-h-[90vh] flex flex-col items-center justify-center p-6 text-center font-body relative overflow-hidden">
       
       {/* Subtle brand texture or decoration */}
-      <div className="absolute w-[800px] h-[800px] bg-[#4A2C6E]/[0.02] rounded-full blur-3xl -top-40 -left-40 pointer-events-none shrink-0"></div>
+      <div className="absolute w-[800px] h-[800px] bg-[#783A3A]/[0.02] rounded-full blur-3xl -top-40 -left-40 pointer-events-none shrink-0"></div>
       <div className="absolute w-[600px] h-[600px] bg-[#2D6A4F]/[0.02] rounded-full blur-3xl -bottom-20 -right-20 pointer-events-none shrink-0"></div>
 
       <div className="max-w-3xl w-full bg-white rounded-0 border border-[#E8E2D9] shadow-sm p-10 md:p-20 relative z-10 animate-slideUp">
@@ -56,7 +56,7 @@ function OrderConfirmedContent() {
 
         <div className="flex flex-col items-center gap-2 mb-12">
             <span className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40">Reference Code</span>
-            <p className="text-[#4A2C6E] font-bold text-[24px] font-mono tracking-[4px] bg-[#FAF7F4] inline-block px-8 py-3 rounded-[2px] border border-[#E8E2D9]">
+            <p className="text-[#783A3A] font-bold text-[24px] font-mono tracking-[4px] bg-[#FAF7F4] inline-block px-8 py-3 rounded-[2px] border border-[#E8E2D9]">
             {orderId || 'PENDING'}
             </p>
         </div>
@@ -74,7 +74,7 @@ function OrderConfirmedContent() {
               <div className="pt-4 border-t border-[#E8E2D9]">
                 <Link 
                   href={`/signup?email=${encodeURIComponent(email)}&ref=checkout`}
-                  className="text-[#4A2C6E] font-bold text-[13px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
+                  className="text-[#783A3A] font-bold text-[13px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
                 >
                   Create Account To Track <ArrowRight size={16} strokeWidth={3} />
                 </Link>
@@ -124,7 +124,7 @@ function OrderConfirmedContent() {
         <div className="mt-16 flex flex-col sm:flex-row items-center gap-6 justify-center">
           <Link 
             href="/"
-            className="w-full sm:w-auto px-12 py-5 bg-[#4A2C6E] text-white rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#3A1F57] transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-center"
+            className="w-full sm:w-auto px-12 py-5 bg-[#783A3A] text-white rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-[#5B2C2C] transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-center"
           >
             Explore Collection
           </Link>

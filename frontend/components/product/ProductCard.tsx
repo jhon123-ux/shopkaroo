@@ -55,7 +55,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
   }
 
   return (
-    <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-white rounded-[4px] border border-[#E8E2D9] overflow-hidden hover:border-[#4A2C6E] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+    <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-white rounded-[4px] border border-[#E8E2D9] overflow-hidden hover:border-[#783A3A] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
       
       {/* TOP — Square Image Area */}
       <div 
@@ -81,7 +81,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
               SALE
             </span>
           ) : isNew ? (
-            <span className="bg-[#4A2C6E] text-white text-[10px] px-[10px] py-[4px] rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
+            <span className="bg-[#783A3A] text-white text-[10px] px-[10px] py-[4px] rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
               NEW
             </span>
           ) : null}
@@ -95,7 +95,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         {/* Top right Wishlist button */}
         <button 
           onClick={(e) => { e.preventDefault(); /* Wishlist logic later */ }}
-          className="absolute top-3 right-3 z-10 bg-white/92 border border-[#E8E2D9] w-[34px] h-[34px] rounded-[3px] flex items-center justify-center text-[#6B6058] hover:text-[#4A2C6E] hover:border-[#4A2C6E] opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+          className="absolute top-3 right-3 z-10 bg-white/92 border border-[#E8E2D9] w-[34px] h-[34px] rounded-[3px] flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] opacity-0 group-hover:opacity-100 transition-all shadow-sm"
           aria-label="Add to wishlist"
         >
           <Heart size={16} />
@@ -119,7 +119,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         <div className="flex items-center gap-2 mb-1">
           {isSale ? (
              <>
-               <span className="text-[#4A2C6E] font-bold text-[18px] font-heading">
+               <span className="text-[#783A3A] font-bold text-[18px] font-heading">
                  {formatPrice(product.sale_price!)}
                </span>
                <span className="text-[#A89890] text-[13px] font-body line-through">
@@ -137,7 +137,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         {/* Add to Cart button — Always visible now */}
         <button 
           onClick={handleAddToCart}
-          className="w-full mt-3 py-2.5 border border-[#E8E2D9] text-[#6B6058] group-hover:bg-[#4A2C6E] group-hover:text-white group-hover:border-[#4A2C6E] transition-all duration-200 rounded-sm text-sm font-semibold flex items-center justify-center gap-2"
+          className="w-full mt-3 py-2.5 border border-[#E8E2D9] text-[#6B6058] group-hover:bg-[#783A3A] group-hover:text-white group-hover:border-[#783A3A] transition-all duration-200 rounded-sm text-sm font-semibold flex items-center justify-center gap-2"
         >
           <ShoppingCart size={15} /> Add to Cart
         </button>

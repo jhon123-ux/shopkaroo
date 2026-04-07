@@ -210,8 +210,8 @@ Address: ${address}`
               <span className="w-5 h-5 bg-[#EBF7F0] rounded-full flex items-center justify-center text-[10px]">✓</span> Cart
             </div>
             <div className="w-8 h-px bg-[#D4CCC2]"></div>
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#4A2C6E]">
-              <span className="w-5 h-5 bg-[#4A2C6E] text-white rounded-full flex items-center justify-center text-[10px]">2</span> Shipping
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#783A3A]">
+              <span className="w-5 h-5 bg-[#783A3A] text-white rounded-full flex items-center justify-center text-[10px]">2</span> Shipping
             </div>
             <div className="w-8 h-px bg-[#D4CCC2]"></div>
             <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#6B6058] opacity-40">
@@ -242,7 +242,7 @@ Address: ${address}`
                   type="text" 
                   value={name} onChange={e => setName(e.target.value)}
                   placeholder="Enter your full name"
-                  className={`w-full border ${errors.name ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
+                  className={`w-full border ${errors.name ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#783A3A]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
                 />
                 {errors.name && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.name}</p>}
               </div>
@@ -257,7 +257,7 @@ Address: ${address}`
                   type="email" 
                   value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className={`w-full border ${errors.email ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
+                  className={`w-full border ${errors.email ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#783A3A]'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] placeholder:opacity-30`}
                 />
                 {errors.email && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.email}</p>}
                 
@@ -282,7 +282,7 @@ Address: ${address}`
                   value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
                   placeholder="03XXXXXXXXX"
                   maxLength={11}
-                  className={`w-full border ${errors.phone ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all font-mono text-[16px] placeholder:opacity-30 tracking-widest`}
+                  className={`w-full border ${errors.phone ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#783A3A]'} rounded-[3px] px-5 py-4 outline-none transition-all font-mono text-[16px] placeholder:opacity-30 tracking-widest`}
                 />
                 {errors.phone ? (
                   <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.phone}</p>
@@ -298,7 +298,7 @@ Address: ${address}`
                   <select 
                     value={city} 
                     onChange={e => setCity(e.target.value)}
-                    className={`w-full border ${errors.city ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body text-[15px]`}
+                    className={`w-full border ${errors.city ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#783A3A]'} rounded-[3px] px-5 py-4 outline-none transition-all bg-white appearance-none pr-12 cursor-pointer font-body text-[15px]`}
                   >
                     <option value="" disabled>Select a city</option>
                     <option value="Karachi">Karachi</option>
@@ -316,7 +316,7 @@ Address: ${address}`
                 {errors.city && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.city}</p>}
                 
                 {city && (
-                  <div className="inline-flex items-center gap-2 mt-4 bg-[#F0EBF8] text-[#4A2C6E] text-[11px] font-bold uppercase tracking-[2px] px-4 py-2 rounded-[2px] border border-[rgba(74,44,110,0.1)] animate-slideUp">
+                  <div className="inline-flex items-center gap-2 mt-4 bg-[#F5E8E8] text-[#783A3A] text-[11px] font-bold uppercase tracking-[2px] px-4 py-2 rounded-[2px] border border-[rgba(120,58,58,0.1)] animate-slideUp">
                     <Truck size={14} className="opacity-60" /> Est. {getDeliveryEstimate(city)}
                   </div>
                 )}
@@ -329,7 +329,7 @@ Address: ${address}`
                   rows={4}
                   value={address} onChange={e => setAddress(e.target.value)}
                   placeholder="Apartment, House No., Street, Area"
-                  className={`w-full border ${errors.address ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#4A2C6E]'} rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed`}
+                  className={`w-full border ${errors.address ? 'border-[#DC2626]' : 'border-[#D4CCC2] focus:border-[#783A3A]'} rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed`}
                 />
                 {errors.address && <p className="text-[#DC2626] text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.address}</p>}
               </div>
@@ -344,7 +344,7 @@ Address: ${address}`
                   rows={2}
                   value={notes} onChange={e => setNotes(e.target.value)}
                   placeholder="e.g. Call before delivery, handle with care..."
-                  className="w-full border border-[#D4CCC2] focus:border-[#4A2C6E] rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed"
+                  className="w-full border border-[#D4CCC2] focus:border-[#783A3A] rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] placeholder:opacity-30 leading-relaxed"
                 />
               </div>
 
@@ -366,7 +366,7 @@ Address: ${address}`
           <button 
             type="submit"
             disabled={loading}
-            className="hidden md:flex mt-12 w-full bg-[#4A2C6E] text-white py-6 rounded-[3px] font-bold text-[15px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:bg-[#3A1F57] hover:-translate-y-1 active:scale-95 items-center justify-center gap-4 relative"
+            className="hidden md:flex mt-12 w-full bg-[#783A3A] text-white py-6 rounded-[3px] font-bold text-[15px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:bg-[#5B2C2C] hover:-translate-y-1 active:scale-95 items-center justify-center gap-4 relative"
           >
             {loading ? (
               <>
@@ -399,7 +399,7 @@ Address: ${address}`
             
             <div className="bg-[#FAF7F4] px-8 py-5 border-b border-[#E8E2D9] flex items-center">
               <h2 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest">Your Items</h2>
-              <span className="text-[10px] font-bold text-[#4A2C6E] bg-[#F0EBF8] px-3 py-1 rounded-[2px] ml-auto uppercase tracking-widest">
+              <span className="text-[10px] font-bold text-[#783A3A] bg-[#F5E8E8] px-3 py-1 rounded-[2px] ml-auto uppercase tracking-widest">
                 {items.length} Units
               </span>
             </div>
@@ -422,7 +422,7 @@ Address: ${address}`
                       <p className="text-[14px] font-bold text-[#1C1410] line-clamp-1 font-heading">{item.name}</p>
                       <p className="text-[12px] font-body text-[#6B6058] mt-1 opacity-60 uppercase tracking-widest">Qty: {item.quantity}</p>
                     </div>
-                    <p className="text-[15px] font-bold text-[#4A2C6E] font-body flex-shrink-0">
+                    <p className="text-[15px] font-bold text-[#783A3A] font-body flex-shrink-0">
                       { (price * item.quantity).toLocaleString('en-PK') }
                     </p>
                   </div>
@@ -442,7 +442,7 @@ Address: ${address}`
               <div className="border-t border-[#E8E2D9] my-6"></div>
               <div className="flex justify-between items-center">
                 <span className="font-body font-bold text-[#6B6058] uppercase tracking-[3px] text-[11px] opacity-60">Total</span>
-                <span className="font-heading font-bold text-[28px] text-[#4A2C6E]">
+                <span className="font-heading font-bold text-[28px] text-[#783A3A]">
                   {totalPrice.toLocaleString('en-PK')}
                 </span>
               </div>
@@ -472,12 +472,12 @@ Address: ${address}`
         <div className="flex justify-between items-center mb-6">
           <div className="flex flex-col">
             <span className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
-            <span className="font-heading font-bold text-[22px] text-[#4A2C6E]">{totalPrice.toLocaleString('en-PK')} PKR</span>
+            <span className="font-heading font-bold text-[22px] text-[#783A3A]">{totalPrice.toLocaleString('en-PK')} PKR</span>
           </div>
           <button 
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-[#4A2C6E] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 active:scale-95 flex justify-center items-center gap-3"
+            className="bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all disabled:opacity-50 active:scale-95 flex justify-center items-center gap-3"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>

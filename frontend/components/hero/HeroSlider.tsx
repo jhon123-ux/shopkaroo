@@ -74,7 +74,7 @@ export default function HeroSlider() {
     title: 'Furnish Your Home With Style',
     subtitle: 'Premium quality furniture delivered to your door. Pay cash on delivery.',
     badge_text: 'New Arrivals',
-    badge_color: '#6C3FC5',
+    badge_color: '#783A3A',
     cta_primary_text: 'Shop Now',
     cta_primary_link: '/furniture/living-room',
     cta_secondary_text: 'WhatsApp Us',

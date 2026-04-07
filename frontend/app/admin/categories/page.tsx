@@ -190,10 +190,10 @@ export default function AdminCategoriesPage() {
 
   const getGradient = (slug: string) => {
     switch (slug) {
-      case 'living-room': return 'linear-gradient(135deg, #4A2C6E, #7B5EA7)'
-      case 'bedroom': return 'linear-gradient(135deg, #3A1F57, #5D4480)'
-      case 'office': return 'linear-gradient(135deg, #1C1410, #4A2C6E)'
-      case 'dining': return 'linear-gradient(135deg, #2D1B40, #7B5EA7)'
+      case 'living-room': return 'linear-gradient(135deg, #783A3A, #9B5656)'
+      case 'bedroom': return 'linear-gradient(135deg, #5B2C2C, #5D4480)'
+      case 'office': return 'linear-gradient(135deg, #1C1410, #783A3A)'
+      case 'dining': return 'linear-gradient(135deg, #2D1B40, #9B5656)'
       default: return 'linear-gradient(135deg, #6B6058, #A89890)'
     }
   }
@@ -218,7 +218,7 @@ export default function AdminCategoriesPage() {
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="bg-[#4A2C6E] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#3A1F57] transition-all shadow-sm active:scale-95"
+          className="bg-[#783A3A] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#5B2C2C] transition-all shadow-sm active:scale-95"
         >
           <Plus size={14} strokeWidth={2.5} />
           Add Category
@@ -241,7 +241,7 @@ export default function AdminCategoriesPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((cat) => (
-            <div key={cat.id} className="bg-white border border-[#E8E2D9] rounded-0 overflow-hidden shadow-sm group hover:border-[#4A2C6E] transition-colors relative">
+            <div key={cat.id} className="bg-white border border-[#E8E2D9] rounded-0 overflow-hidden shadow-sm group hover:border-[#783A3A] transition-colors relative">
               {/* Image Preview */}
               <div className="h-40 relative flex items-center justify-center overflow-hidden">
                 {cat.image_url ? (
@@ -270,7 +270,7 @@ export default function AdminCategoriesPage() {
                   <button 
                     onClick={() => handleToggle(cat.id)}
                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] font-bold uppercase tracking-widest border transition-all ${
-                      cat.is_active ? 'border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4]' : 'bg-[#4A2C6E] text-white border-[#4A2C6E]'
+                      cat.is_active ? 'border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4]' : 'bg-[#783A3A] text-white border-[#783A3A]'
                     }`}
                   >
                     {cat.is_active ? <EyeOff size={12} /> : <Eye size={12} />}
@@ -317,7 +317,7 @@ export default function AdminCategoriesPage() {
                     onChange={e => handleNameChange(e.target.value)}
                     required
                     placeholder="e.g. Living Room"
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#4A2C6E]"
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A]"
                   />
                 </div>
                 <div>
@@ -338,7 +338,7 @@ export default function AdminCategoriesPage() {
                   value={formData.description} 
                   onChange={e => setFormData({...formData, description: e.target.value})}
                   rows={3}
-                  className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#4A2C6E]"
+                  className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A]"
                 />
               </div>
 
@@ -357,7 +357,7 @@ export default function AdminCategoriesPage() {
                     </button>
                   </div>
                 ) : (
-                  <label className={`cursor-pointer border-2 border-dashed border-[#D4CCC2] rounded-0 h-48 flex flex-col items-center justify-center hover:border-[#4A2C6E] transition group relative ${isUploading ? 'opacity-50' : ''}`}>
+                  <label className={`cursor-pointer border-2 border-dashed border-[#D4CCC2] rounded-0 h-48 flex flex-col items-center justify-center hover:border-[#783A3A] transition group relative ${isUploading ? 'opacity-50' : ''}`}>
                     <Upload size={32} className="text-[#6B6058] opacity-20 group-hover:opacity-40 transition-opacity mb-4" />
                     <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-40">
                       {isUploading ? 'Synchronizing Asset...' : 'Upload Visual Exhibit'}
@@ -383,7 +383,7 @@ export default function AdminCategoriesPage() {
                       type="checkbox" 
                       checked={formData.is_active} 
                       onChange={e => setFormData({...formData, is_active: e.target.checked})}
-                      className="w-5 h-5 accent-[#4A2C6E]"
+                      className="w-5 h-5 accent-[#783A3A]"
                     />
                     <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-60 group-hover:opacity-100 transition-opacity">Protocol Active</span>
                   </label>

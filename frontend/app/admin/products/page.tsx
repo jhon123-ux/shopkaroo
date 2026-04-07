@@ -217,9 +217,9 @@ export default function AdminProductsPage() {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-10">
-        <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search catalog identifier..." className="flex-1 border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#4A2C6E] outline-none shadow-sm font-body" />
+        <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search catalog identifier..." className="flex-1 border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#783A3A] outline-none shadow-sm font-body" />
         <div className="relative min-w-[180px]">
-          <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none">
+          <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none">
             <option value="all">Every Category</option>
             <option value="living-room">Living Room</option>
             <option value="bedroom">Bedroom</option>
@@ -229,7 +229,7 @@ export default function AdminProductsPage() {
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
         </div>
         <div className="relative min-w-[180px]">
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#4A2C6E] outline-none">
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none">
             <option value="all">Market Status</option>
             <option value="active">Active Exhibits</option>
             <option value="inactive">Archived Exhibits</option>
@@ -275,9 +275,9 @@ export default function AdminProductsPage() {
                   <p className="font-bold text-[#1C1410] text-[15px] font-heading tracking-widest">{p.name}</p>
                   <p className="text-[10px] text-[#6B6058] font-bold opacity-40 mt-1 uppercase tracking-widest">{p.slug}</p>
                 </td>
-                <td className="px-8 py-6"><span className="text-[9px] font-bold uppercase tracking-[2px] px-3 py-1 bg-[#F0EBF8] text-[#4A2C6E] border border-[rgba(74,44,110,0.1)]">{p.category}</span></td>
+                <td className="px-8 py-6"><span className="text-[9px] font-bold uppercase tracking-[2px] px-3 py-1 bg-[#F5E8E8] text-[#783A3A] border border-[rgba(120,58,58,0.1)]">{p.category}</span></td>
                 <td className="px-8 py-6">
-                  {p.sale_price ? <><p className="font-bold text-[#4A2C6E] font-heading text-[16px]">{p.sale_price.toLocaleString()} PKR</p><p className="text-[10px] line-through text-[#6B6058] opacity-40">Was {p.price_pkr.toLocaleString()} PKR</p></> : <p className="font-bold text-[#1C1410] font-heading text-[16px]">{p.price_pkr?.toLocaleString()} PKR</p>}
+                  {p.sale_price ? <><p className="font-bold text-[#783A3A] font-heading text-[16px]">{p.sale_price.toLocaleString()} PKR</p><p className="text-[10px] line-through text-[#6B6058] opacity-40">Was {p.price_pkr.toLocaleString()} PKR</p></> : <p className="font-bold text-[#1C1410] font-heading text-[16px]">{p.price_pkr?.toLocaleString()} PKR</p>}
                 </td>
                 <td className="px-8 py-6"><p className={`text-[12px] font-bold uppercase tracking-widest ${p.stock_qty > 5 ? 'text-[#2D6A4F]' : 'text-red-500'}`}>{p.stock_qty} Units</p></td>
                 <td className="px-8 py-6"><button onClick={() => handleToggle(p.id)} className={`w-11 h-6 rounded-full relative transition-all shadow-inner ${p.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${p.is_active ? 'left-6' : 'left-1'}`}></div></button></td>
@@ -343,7 +343,7 @@ export default function AdminProductsPage() {
                       
                       {/* Badge for main image */}
                       {idx === 0 && (
-                        <div className="absolute bottom-1 left-1 bg-[#4A2C6E] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 shadow-md">
+                        <div className="absolute bottom-1 left-1 bg-[#783A3A] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 shadow-md">
                           Main
                         </div>
                       )}

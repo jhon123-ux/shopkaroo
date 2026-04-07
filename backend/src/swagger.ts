@@ -115,7 +115,7 @@ const options = {
             title: { type: 'string' },
             subtitle: { type: 'string' },
             badge_text: { type: 'string' },
-            badge_color: { type: 'string', example: '#6C3FC5' },
+            badge_color: { type: 'string', example: '#783A3A' },
             cta_primary_text: { type: 'string' },
             cta_primary_link: { type: 'string' },
             cta_secondary_text: { type: 'string' },

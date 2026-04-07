@@ -92,7 +92,7 @@ export default function SignupPage() {
               placeholder="e.g. Ali Ahmed"
               value={formData.fullName}
               onChange={e => setFormData({...formData, fullName: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30"
+              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30"
             />
           </div>
 
@@ -105,7 +105,7 @@ export default function SignupPage() {
               placeholder="ali@example.com"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30"
+              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30"
             />
           </div>
 
@@ -120,7 +120,7 @@ export default function SignupPage() {
                   placeholder="8+ characters"
                   value={formData.password}
                   onChange={e => setFormData({...formData, password: e.target.value})}
-                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30 pr-12"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30 pr-12"
                 />
                 <button 
                   type="button"
@@ -146,7 +146,7 @@ export default function SignupPage() {
                   placeholder="Repeat code"
                   value={formData.confirmPassword}
                   onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
-                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#4A2C6E] outline-none transition-all font-body placeholder:opacity-30 pr-12"
+                  className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30 pr-12"
                 />
                 <button 
                   type="button"
@@ -167,7 +167,7 @@ export default function SignupPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#4A2C6E] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#3A1F57] shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-4"
+            className="w-full bg-[#783A3A] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-4"
           >
             {loading ? (
               <>
@@ -195,7 +195,7 @@ export default function SignupPage() {
         <div className="text-center mt-12 pt-8 border-t border-[#FAF7F4]">
           <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#4A2C6E] hover:underline ml-2">
+            <Link href="/login" className="text-[#783A3A] hover:underline ml-2">
               Sign In →
             </Link>
           </p>
