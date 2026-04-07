@@ -47,12 +47,12 @@ export default function CategorySection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex overflow-x-auto pb-6 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:mx-0 sm:px-0 sm:pb-0">
           {categories.map((cat) => (
             <Link 
               key={cat.id} 
               href={`/furniture/${cat.slug}`}
-              className="group relative h-[280px] rounded-0 overflow-hidden cursor-pointer block transform transition-transform duration-500 hover:scale-[1.02]"
+              className="group relative h-[280px] w-[85vw] sm:w-auto flex-shrink-0 snap-start rounded-0 overflow-hidden cursor-pointer block transform transition-transform duration-500 hover:scale-[1.02]"
             >
               {/* Background layer */}
               <div className="absolute inset-0 z-0">
