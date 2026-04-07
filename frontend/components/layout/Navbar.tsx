@@ -3,7 +3,7 @@ import Link from 'next/link'
 import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
 import { useState, useRef, useEffect } from 'react'
-import { Search, ShoppingBag, Menu, X, ChevronDown, Package, User, LogOut } from 'lucide-react'
+import { Search, ShoppingBag, Menu, X, User, ChevronDown, Package, LogOut } from 'lucide-react'
 import { Product } from '@/types'
 
 const navLinks = [
@@ -184,7 +184,7 @@ export default function Navbar() {
                 className="text-[#6B6058] hover:text-[#4A2C6E] p-1 focus:outline-none"
                 aria-label="Main menu"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>

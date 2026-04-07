@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Phone, Mail, Clock } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -39,10 +40,10 @@ export default function Footer() {
           <div className="col-span-1">
             <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Help</h4>
             <ul className="space-y-4">
-              {['FAQ', 'Returns & Refunds', 'Track Order', 'Privacy Policy'].map((item) => (
+              {['FAQ', 'Privacy Policy'].map((item) => (
                 <li key={item}>
                   <Link 
-                    href="/" 
+                    href={item === 'Privacy Policy' ? '/privacy' : '/faq'} 
                     className="text-white/60 hover:text-white/90 transition-colors text-[14px] font-body"
                   >
                     {item}
@@ -56,17 +57,17 @@ export default function Footer() {
           <div className="col-span-1">
             <h4 className="font-semibold tracking-[2px] text-white/50 uppercase text-[11px] mb-8 font-body">Contact</h4>
             <ul className="space-y-4 text-[14px] font-body">
-              <li className="flex items-center text-white/60">
-                <span className="mr-4 opacity-50">📱</span> 
-                WhatsApp: +92-300-1234567
+              <li className="flex items-center gap-3 text-white/60">
+                <Phone size={14} className="opacity-50" />
+                <a href="tel:03706905835" className="hover:text-white transition-colors">03706905835</a>
               </li>
-              <li className="flex items-center text-white/60">
-                <span className="mr-4 opacity-50">📧</span> 
-                hello@shopkarro.com
+              <li className="flex items-center gap-3 text-white/60">
+                <Mail size={14} className="opacity-50" />
+                <a href="mailto:shopkarro.ecom@gmail.com" className="hover:text-white transition-colors">shopkarro.ecom@gmail.com</a>
               </li>
-              <li className="flex items-center text-white/60">
-                <span className="mr-4 opacity-50">🕐</span> 
-                Mon–Sat, 9am–6pm PKT
+              <li className="flex items-center gap-3 text-white/60">
+                <Clock size={14} className="opacity-50" />
+                <span>Mon-Sat, 9am-6pm PKT</span>
               </li>
             </ul>
           </div>

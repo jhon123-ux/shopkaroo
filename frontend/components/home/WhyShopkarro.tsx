@@ -1,19 +1,19 @@
-import { Truck, Banknote, ShieldCheck } from 'lucide-react'
+import { Truck, Banknote, BadgeCheck } from 'lucide-react'
 
 export default function WhyShopkarro() {
   const cards = [
     {
-      icon: <Truck size={24} className="text-[#4A2C6E]" />,
+      icon: <Truck size={28} className="text-[#4A2C6E]" />,
       title: 'Delivered to Your Door',
       desc: 'We deliver across 30+ cities in Pakistan including Karachi, Lahore, Islamabad, and Faisalabad.'
     },
     {
-      icon: <Banknote size={24} className="text-[#4A2C6E]" />,
+      icon: <Banknote size={28} className="text-[#4A2C6E]" />,
       title: 'Cash on Delivery',
       desc: 'No online payment required. Browse, order, and pay cash when your furniture arrives at your home.'
     },
     {
-      icon: <ShieldCheck size={24} className="text-[#4A2C6E]" />,
+      icon: <BadgeCheck size={28} className="text-[#4A2C6E]" />,
       title: 'Quality Assured',
       desc: 'Every piece is inspected before dispatch. We stand behind the quality of every item we sell.'
     }
@@ -38,7 +38,7 @@ export default function WhyShopkarro() {
               key={idx} 
               className="bg-white rounded-[4px] p-8 border border-[#E8E2D9] hover:border-[#4A2C6E] transition-all duration-300 group"
             >
-              <div className="w-[52px] h-[52px] bg-[#F0EBF8] rounded-[3px] flex items-center justify-center mb-8 text-2xl group-hover:scale-105 transition-transform duration-300">
+              <div className="w-[52px] h-[52px] bg-[#F0EBF8] p-3 rounded-sm flex items-center justify-center mb-8 text-2xl group-hover:scale-105 transition-transform duration-300">
                 {card.icon}
               </div>
               

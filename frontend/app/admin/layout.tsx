@@ -3,23 +3,24 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { 
   LayoutDashboard, 
-  Image as ImageIcon, 
+  Image, 
   Tag, 
   Package, 
   ShoppingCart, 
   Star, 
+  Percent,
   ArrowLeft, 
   LogOut, 
   ShieldCheck 
 } from 'lucide-react'
 
 const sidebarLinks = [
-  { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={18} /> },
-  { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={18} /> },
-  { href: '/admin/offer-banner', label: 'Promotionals', icon: <Tag size={18} /> },
-  { href: '/admin/products', label: 'Inventory', icon: <Package size={18} /> },
-  { href: '/admin/orders', label: 'Transactions', icon: <ShoppingCart size={18} /> },
-  { href: '/admin/reviews', label: 'Feedback', icon: <Star size={18} /> },
+  { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={16} /> },
+  { href: '/admin/banners', label: 'Hero Banners', icon: <Image size={16} /> },
+  { href: '/admin/offer-banner', label: 'Promotionals', icon: <Percent size={16} /> },
+  { href: '/admin/products', label: 'Inventory', icon: <Package size={16} /> },
+  { href: '/admin/orders', label: 'Transactions', icon: <ShoppingCart size={16} /> },
+  { href: '/admin/reviews', label: 'Feedback', icon: <Star size={16} /> },
 ]
 
 export default function AdminLayout({
