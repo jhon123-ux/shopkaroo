@@ -142,12 +142,17 @@ export default function AdminCategoriesPage() {
         body: JSON.stringify(formData)
       })
 
-      if (!res.ok) throw new Error('Failed to save category')
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to save category manifest')
+      }
       
       showToast(`Category ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
       fetchCategories()
     } catch (err: any) {
+      console.error('Save Category Error:', err)
       showToast(err.message, 'error')
     }
   }
