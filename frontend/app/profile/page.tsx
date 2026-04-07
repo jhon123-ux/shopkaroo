@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import useAuthStore from '@/lib/authStore'
+import useWishlistStore from '@/lib/wishlistStore'
+import ProductCard from '@/components/product/ProductCard'
+import { Heart } from 'lucide-react'
 
 export default function ProfilePage() {
   const { user, loading } = useAuthStore()
@@ -18,6 +21,10 @@ export default function ProfilePage() {
   
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  
+  const [wishlistProducts, setWishlistProducts] = useState<any[]>([])
+  const [loadingWishlist, setLoadingWishlist] = useState(true)
+  const { initialize, isInitialized } = useWishlistStore()
 
   // Redirect if not logged in
   useEffect(() => {
@@ -55,6 +62,42 @@ export default function ProfilePage() {
     
     fetchProfile()
   }, [user])
+
+  // Fetch wishlist
+  useEffect(() => {
+    if (!user) return
+
+    const fetchWishlist = async () => {
+      setLoadingWishlist(true)
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        const token = session?.access_token
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/wishlist`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        const json = await res.json()
+        
+        if (json.data) {
+          const products = json.data.map((item: any) => item.products)
+          setWishlistProducts(products)
+          
+          // Initialize store if needed
+          if (!isInitialized) {
+            initialize(products.map((p: any) => p.id))
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch wishlist', err)
+      } finally {
+        setLoadingWishlist(false)
+      }
+    }
+
+    fetchWishlist()
+  }, [user, isInitialized, initialize])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -228,6 +271,47 @@ export default function ProfilePage() {
               </button>
             </div>
           </form>
+        </div>
+
+        {/* Wishlist Section */}
+        <div className="mt-20">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-[28px] font-bold text-[#1C1410] font-heading flex items-center gap-3">
+              <Heart className="text-[#783A3A] fill-[#783A3A]" size={24} />
+              My Collection
+            </h2>
+            <span className="text-[12px] font-bold text-[#6B6058] uppercase tracking-[2px] opacity-40">
+              {wishlistProducts.length} Items Liked
+            </span>
+          </div>
+
+          {loadingWishlist ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white border border-[#E8E2D9] h-80 animate-pulse rounded-[4px]" />
+              ))}
+            </div>
+          ) : wishlistProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {wishlistProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white border border-[#E8E2D9] p-16 text-center rounded-[4px]">
+              <div className="mb-6 opacity-20">
+                <Heart size={48} className="mx-auto" />
+              </div>
+              <h3 className="text-[20px] font-bold text-[#1C1410] font-heading mb-2">Your collection is empty</h3>
+              <p className="text-[#6B6058] mb-8 text-[15px]">Start liking products to build your dream space.</p>
+              <button 
+                onClick={() => router.push('/furniture')}
+                className="bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold uppercase tracking-[1px] text-[12px] hover:bg-[#5B2C2C] transition-all"
+              >
+                Browse Products
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

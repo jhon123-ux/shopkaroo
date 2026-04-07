@@ -2,7 +2,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 import useCartStore from '@/lib/cartStore'
+import useAuthStore from '@/lib/authStore'
+import useWishlistStore from '@/lib/wishlistStore'
 import { Heart, ShoppingCart, Check } from 'lucide-react'
 
 interface ProductCardProps {
@@ -19,7 +23,12 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: { product: ProductCardProps }) {
   const { addItem } = useCartStore()
+  const { user } = useAuthStore()
+  const { toggleItem, hasItem } = useWishlistStore()
+  const router = useRouter()
   const [showToast, setShowToast] = useState(false)
+  
+  const isLiked = hasItem(product.id)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -35,6 +44,35 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
     })
     setShowToast(true)
     setTimeout(() => setShowToast(false), 2000)
+  }
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
+    // Optimistic UI toggle
+    toggleItem(product.id)
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/wishlist/toggle`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ product_id: product.id })
+      })
+    } catch (err) {
+      console.error('Failed to toggle like', err)
+      // Revert optimism if it failed
+      toggleItem(product.id)
+    }
   }
 
   const isSale = product.sale_price !== null && product.sale_price !== undefined
@@ -94,11 +132,15 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
 
         {/* Top right Wishlist button */}
         <button 
-          onClick={(e) => { e.preventDefault(); /* Wishlist logic later */ }}
-          className="absolute top-3 right-3 z-10 bg-white/92 border border-[#E8E2D9] w-[34px] h-[34px] rounded-[3px] flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+          onClick={handleLike}
+          className={`absolute top-3 right-3 z-10 bg-white/92 border w-[34px] h-[34px] rounded-[3px] flex items-center justify-center transition-all shadow-sm ${
+            isLiked 
+              ? 'text-[#783A3A] border-[#783A3A] opacity-100' 
+              : 'border-[#E8E2D9] text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] opacity-0 group-hover:opacity-100'
+          }`}
           aria-label="Add to wishlist"
         >
-          <Heart size={16} />
+          <Heart size={16} fill={isLiked ? '#783A3A' : 'none'} />
         </button>
       </div>
 

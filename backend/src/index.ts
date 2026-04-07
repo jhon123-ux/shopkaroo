@@ -12,6 +12,7 @@ import reviewRoutes from './routes/reviews'
 import bannerRoutes from './routes/banners'
 import uploadRoutes from './routes/upload'
 import offerBannerRoutes from './routes/offerBanner'
+import wishlistRoutes from './routes/wishlist.routes'
 
 dotenv.config()
 
@@ -45,6 +46,7 @@ app.use('/api/reviews', reviewRoutes)
 app.use('/api/banners', bannerRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/offer-banner', offerBannerRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 
 // Swagger
 swaggerSetup(app)
