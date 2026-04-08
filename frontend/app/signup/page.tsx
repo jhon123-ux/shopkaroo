@@ -65,7 +65,7 @@ export default function SignupPage() {
       <div className="bg-white rounded-0 p-10 md:p-14 max-w-xl w-full border border-[#E8E2D9] shadow-sm">
         {/* Header */}
         <div className="text-center mb-12">
-          <Link href="/" className="text-2xl font-bold italic text-[#1C1410] font-heading block mb-8">
+          <Link href="/" className="text-2xl font-bold text-[#1C1410] font-heading block mb-8">
             Shopkarro
           </Link>
           <h1 className="text-[32px] font-bold text-[#1C1410] font-heading mb-3">

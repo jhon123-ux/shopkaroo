@@ -10,7 +10,7 @@ import { supabaseAdmin } from '../lib/supabase'
 
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const { all } = req.query
+    const { all, nested } = req.query
     
     let query = supabaseAdmin
       .from('categories')
@@ -25,6 +25,19 @@ export const getCategories = async (req: Request, res: Response) => {
     const { data, error } = await query
     if (error) throw error
     
+    // If nesting is requested, transform flat list to hierarchy
+    if (nested === 'true' && data) {
+      const parentCategories = data.filter(cat => !cat.parent_id)
+      const subCategories = data.filter(cat => cat.parent_id)
+      
+      const hierarchy = parentCategories.map(parent => ({
+        ...parent,
+        children: subCategories.filter(child => child.parent_id === parent.id)
+      }))
+      
+      return res.json({ data: hierarchy })
+    }
+    
     return res.json({ data: data || [] })
   } catch (error: any) {
     console.error('Get Categories Error:', error)
@@ -34,7 +47,7 @@ export const getCategories = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
-    const { name, slug, description, image_url, sort_order, is_active } = req.body
+    const { name, slug, description, image_url, sort_order, is_active, parent_id } = req.body
     
     const { data, error } = await supabaseAdmin
       .from('categories')
@@ -44,7 +57,8 @@ export const createCategory = async (req: Request, res: Response) => {
         description,
         image_url,
         sort_order: sort_order || 0,
-        is_active: is_active !== undefined ? is_active : true
+        is_active: is_active !== undefined ? is_active : true,
+        parent_id
       })
       .select()
       .single()

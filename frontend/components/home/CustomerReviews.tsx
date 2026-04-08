@@ -42,10 +42,10 @@ export default function CustomerReviews() {
         {/* Header */}
         <div className="text-center mb-12">
           <p className="text-xs font-mono tracking-widest text-[#783A3A] uppercase mb-2">Testimonials</p>
-          <h2 className="text-4xl font-extrabold text-[#1A1A2E]" style={{fontFamily: 'Syne, sans-serif'}}>
+          <h2 className="text-4xl font-extrabold text-[#1A1A2E] font-heading">
             What Our Customers Say
           </h2>
-          <p className="text-[#6B7280] text-lg mt-3">
+          <p className="text-[#6B7280] text-lg mt-3 font-body">
             Real reviews from real Pakistani customers
           </p>
         </div>
@@ -72,14 +72,14 @@ export default function CustomerReviews() {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#EDE6FA] flex items-center justify-center text-[#783A3A] font-bold text-sm" style={{fontFamily: 'Syne, sans-serif'}}>
+                <div className="w-10 h-10 rounded-full bg-[#EDE6FA] flex items-center justify-center text-[#783A3A] font-bold text-sm font-heading">
                   {(review.name || "U").charAt(0)}
                 </div>
                 <div>
-                  <p className="font-bold text-[#1A1A2E] text-sm" style={{fontFamily: 'Syne, sans-serif'}}>
+                  <p className="font-bold text-[#1A1A2E] text-sm font-heading">
                     {review.name}
                   </p>
-                  <p className="text-[#6B7280] text-xs">
+                  <p className="text-[#6B7280] text-xs font-body">
                     {review.city || "Pakistan"}
                   </p>
                 </div>

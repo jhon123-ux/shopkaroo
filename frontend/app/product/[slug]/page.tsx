@@ -201,7 +201,7 @@ export default function ProductDetailPage() {
   const categoryIconDisplay = product.category ? (CATEGORY_ICONS[product.category] || '🏠') : '🏠'
 
   return (
-    <main className="bg-white min-h-screen pb-24 md:pb-0 overflow-x-hidden relative">
+    <main className="bg-white min-h-screen pb-40 md:pb-24 overflow-x-hidden relative">
       
       {/* PART 1 — BREADCRUMB */}
       <div className="bg-white border-b border-[#E8E2D9] py-4">
@@ -346,53 +346,53 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          <div className="mb-10">
-            <h4 className="text-[10px] tracking-[3px] text-[#6B6058] font-bold mb-4 uppercase font-body">Quantity</h4>
-            <div className="flex items-center gap-6">
-              <div className="flex items-center">
+          <div className="flex flex-col gap-6 mb-10">
+            <h4 className="text-[10px] tracking-[3px] text-[#6B6058] font-bold uppercase font-body">Configure Selection</h4>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              {/* Quantity Selector */}
+              <div className="flex items-center border border-[#E8E2D9] rounded-[3px] bg-white h-14">
                 <button 
                   onClick={() => setQty(Math.max(1, qty - 1))}
                   disabled={qty <= 1}
-                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#783A3A] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
+                  className="w-12 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
                 >
-                  <Minus size={18} />
+                  <Minus size={16} />
                 </button>
-                <div className="text-[18px] font-bold text-[#1C1410] w-14 text-center font-body">
+                <div className="w-12 text-center font-bold text-[#1C1410] font-body text-base">
                   {qty}
                 </div>
                 <button 
                   onClick={() => setQty(Math.min(product.stock_qty, qty + 1))}
                   disabled={qty >= product.stock_qty}
-                  className="w-12 h-12 rounded-[3px] border border-[#E8E2D9] flex items-center justify-center hover:border-[#783A3A] text-xl transition disabled:opacity-30 disabled:cursor-not-allowed bg-white"
+                  className="w-12 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
                 >
-                  <Plus size={18} />
+                  <Plus size={16} />
                 </button>
               </div>
-              {product.stock_qty > 0 && product.stock_qty <= 5 && (
-                <span className="text-[#DC2626] text-[12px] font-bold bg-[#FEF2F2] px-3 py-1.5 rounded-[2px] border border-red-100 uppercase tracking-wider">
-                  Only {product.stock_qty} left
-                </span>
-              )}
-            </div>
-          </div>
 
-          <div className="hidden md:flex flex-col gap-4 mb-10">
+              {/* Add to Cart */}
+              <button 
+                onClick={handleAddToCart}
+                className="flex-1 w-full bg-white border border-[#783A3A] text-[#783A3A] h-14 rounded-[3px] font-bold text-[13px] uppercase tracking-[2px] hover:bg-[#F5E8E8] transition-all flex items-center justify-center gap-3 active:scale-95"
+              >
+                <ShoppingCart size={18} /> Add to Cart
+              </button>
+            </div>
+
+            {/* Buy Now Button (Vibrating) */}
             <button 
-              onClick={handleAddToCart}
-              className="w-full bg-[#783A3A] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#5B2C2C] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
+              className="w-full bg-[#783A3A] text-white h-16 rounded-[3px] font-bold text-[15px] uppercase tracking-[3px] flex items-center justify-center gap-3 shadow-xl hover:bg-[#5B2C2C] transition-all animate-shake active:scale-95"
             >
-              <ShoppingCart size={18} /> Add to Cart
+              <Package size={20} /> Buy it Now
             </button>
+            
             <a 
               href={`https://wa.me/923706905835?text=${whatsappMessage}`}
               target="_blank" rel="noopener noreferrer"
-              className="w-full bg-[#25D366] text-white py-4 rounded-[3px] font-bold text-base font-body hover:bg-[#1fba59] transition-all flex items-center justify-center gap-3 shadow-md hover:-translate-y-0.5 active:scale-95"
+              className="w-full bg-[#25D366] text-white py-4 rounded-[3px] font-bold text-[13px] uppercase tracking-wider hover:bg-[#1fba59] transition-all flex items-center justify-center gap-3 shadow-md"
             >
               <MessageCircle size={18} /> Order via WhatsApp
             </a>
-            <button className="w-full border border-[#D4CCC2] text-[#6B6058] py-4 rounded-[3px] font-semibold text-base hover:border-[#783A3A] hover:text-[#783A3A] transition-all flex items-center justify-center gap-3 bg-white font-body">
-              <Heart size={18} /> Save to Wishlist
-            </button>
           </div>
 
           <div className="bg-[#FAF7F4] rounded-[3px] p-6 border border-[#E8E2D9]">

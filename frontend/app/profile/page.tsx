@@ -305,7 +305,7 @@ export default function ProfilePage() {
               <h3 className="text-[20px] font-bold text-[#1C1410] font-heading mb-2">Your collection is empty</h3>
               <p className="text-[#6B6058] mb-8 text-[15px]">Start liking products to build your dream space.</p>
               <button 
-                onClick={() => router.push('/furniture')}
+                onClick={() => router.push('/')}
                 className="bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold uppercase tracking-[1px] text-[12px] hover:bg-[#5B2C2C] transition-all"
               >
                 Browse Products

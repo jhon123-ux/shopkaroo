@@ -4,8 +4,28 @@ import { supabase, supabaseAdmin } from '../lib/supabase'
 export const getProducts = async (req: Request, res: Response) => {
   try {
     let query = supabase.from('products').select('*', { count: 'exact' })
+    
     if (req.query.category && req.query.category !== 'all') {
-      query = query.eq('category', req.query.category)
+      const categorySlug = req.query.category as string
+      
+      // Fetch the category and its children slugs
+      const { data: catData } = await supabaseAdmin
+        .from('categories')
+        .select('id, slug')
+        .eq('slug', categorySlug)
+        .single()
+        
+      if (catData) {
+        const { data: children } = await supabaseAdmin
+          .from('categories')
+          .select('slug')
+          .eq('parent_id', catData.id)
+          
+        const allSlugs = [catData.slug, ...(children?.map(c => c.slug) || [])]
+        query = query.in('category', allSlugs)
+      } else {
+        query = query.eq('category', categorySlug)
+      }
     }
 
     if (req.query.search) {

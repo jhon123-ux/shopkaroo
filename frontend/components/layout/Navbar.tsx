@@ -27,14 +27,10 @@ export default function Navbar() {
 
     const fetchNavCategories = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories?nested=true`)
         const data = await res.json()
         if (data.data) {
-          const cmsLinks = data.data.map((cat: any) => ({
-            name: cat.name,
-            slug: cat.slug
-          }))
-          setNavLinks([{ name: 'Home', slug: '' }, ...cmsLinks])
+          setNavLinks([{ name: 'Home', slug: '', children: [] }, ...data.data])
         }
       } catch (err) {
         console.error('Navbar category fetch error:', err)
@@ -118,16 +114,33 @@ export default function Navbar() {
                 Categories <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
               </button>
               
-              <div className="absolute left-0 top-[100%] w-56 bg-white border border-[#E8E2D9] rounded-[4px] py-2 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                {navLinks.filter(link => link.name !== 'Home').map((link) => (
-                  <Link 
-                    key={link.name} 
-                    href={`/furniture/${link.slug}`}
-                    className="block px-4 py-2.5 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] hover:bg-[#F2EDE6] transition-colors capitalize"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+              <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] translate-y-2 group-hover:translate-y-0">
+                <div className="w-[480px] bg-white border border-[#E8E2D9] rounded-[4px] shadow-2xl overflow-hidden p-6 grid grid-cols-2 gap-8">
+                  {navLinks.filter(link => link.name !== 'Home').map((link: any) => (
+                    <div key={link.id || link.name} className="flex flex-col gap-3">
+                      <Link 
+                        href={`/furniture/${link.slug}`}
+                        className="text-[13px] font-bold font-body text-[#1C1410] hover:text-[#783A3A] transition-colors uppercase tracking-widest border-b border-[#FAF7F4] pb-2"
+                      >
+                        {link.name}
+                      </Link>
+                      
+                      {link.children && link.children.length > 0 && (
+                        <div className="flex flex-col gap-2 pl-1">
+                          {link.children.map((child: any) => (
+                            <Link 
+                              key={child.id} 
+                              href={`/furniture/${child.slug}`}
+                              className="text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-colors"
+                            >
+                              {child.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -221,17 +234,32 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0">
-          <div className="pt-2 pb-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
-                className="block pl-4 pr-4 py-2 border-l-4 border-transparent text-base font-medium font-body text-[#1C1410] hover:bg-[#F2EDE6] hover:border-[#783A3A] hover:text-[#783A3A] transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
+        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0 z-50 max-h-[80vh] overflow-y-auto">
+          <div className="pt-2 pb-6 space-y-1">
+            {navLinks.map((link: any) => (
+              <div key={link.name} className="flex flex-col">
+                <Link
+                  href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
+                  className="block pl-4 pr-4 py-3 border-l-4 border-transparent text-[15px] font-bold font-heading text-[#1C1410] hover:bg-[#FAF7F4] hover:border-[#783A3A] hover:text-[#783A3A] transition-all uppercase tracking-wide"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+                {link.children && link.children.length > 0 && (
+                  <div className="bg-[#FAF7F4]/50 flex flex-col pt-1 pb-2">
+                    {link.children.map((child: any) => (
+                      <Link
+                        key={child.slug}
+                        href={`/furniture/${child.slug}`}
+                        className="block pl-10 pr-4 py-2.5 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-all"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {child.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

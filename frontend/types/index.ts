@@ -46,6 +46,8 @@ export interface Category {
   slug: string
   icon?: string
   image?: string
+  parent_id?: string | null
+  children?: Category[]
 }
 
 export interface Review {
