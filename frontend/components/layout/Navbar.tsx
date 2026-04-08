@@ -264,7 +264,7 @@ export default function Navbar() {
 
             {/* Mobile Auth Actions */}
             <div className="mt-6 pt-8 border-t border-[#E8E2D9] px-4 space-y-4">
-              {!user ? (
+              {!mounted ? null : !user ? (
                 <div className="flex flex-col gap-3">
                   <p className="text-[10px] font-black text-[#6B6058] uppercase tracking-[3px] mb-1 opacity-40">Account Access</p>
                   <div className="flex flex-col gap-3">
