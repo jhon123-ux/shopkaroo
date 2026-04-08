@@ -117,44 +117,12 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
             <div className="text-7xl opacity-60 group-hover:scale-[1.04] transition-transform duration-500 select-none">🪑</div>
           )}
 
-          {/* Action Overlay (Quick View & Share) */}
-          <div className="absolute inset-0 bg-[#1C1410]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 z-20">
-            <button 
-              onClick={handleQuickView}
-              className="w-10 h-10 bg-white border border-[#E8E2D9] rounded-full flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] shadow-md transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-[0ms]"
-              title="Quick View"
-            >
-              <Eye size={18} />
-            </button>
-            <button 
-              onClick={handleShare}
-              className="w-10 h-10 bg-white border border-[#E8E2D9] rounded-full flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] shadow-md transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-[50ms]"
-              title="Share Product"
-            >
-              <Share2 size={18} />
-            </button>
-          </div>
-
-          {/* Top left badges */}
-          <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
-            {isSale ? (
-              <span className="bg-[#1C1410] text-white text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
-                SALE
-              </span>
-            ) : isNew ? (
-              <span className="bg-[#783A3A] text-white text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
-                NEW
-              </span>
-            ) : null}
-            <div className="inline-flex items-center gap-1 bg-[#EBF7F0]/90 backdrop-blur-sm text-[#2D6A4F] text-[9px] px-1.5 py-[1px] rounded-[1px] border border-[rgba(45,106,79,0.15)] font-body font-bold mt-1">
-              <Check size={9} strokeWidth={4} /> COD
-            </div>
-          </div>
-
-          {/* Top right Wishlist button */}
+        {/* Action Buttons Stack (Top Right) */}
+        <div className="absolute top-3 right-3 z-40 flex flex-col gap-2">
+          {/* Like Button */}
           <button 
             onClick={handleLike}
-            className={`absolute top-3 right-3 z-30 bg-white/92 border w-[32px] h-[32px] rounded-full flex items-center justify-center transition-all shadow-sm ${
+            className={`bg-white/92 border w-[32px] h-[32px] rounded-0 flex items-center justify-center transition-all shadow-sm ${
               isLiked 
                 ? 'text-[#783A3A] border-[#783A3A] opacity-100' 
                 : 'border-[#E8E2D9] text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] opacity-0 group-hover:opacity-100'
@@ -163,7 +131,42 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           >
             <Heart size={14} fill={isLiked ? '#783A3A' : 'none'} />
           </button>
+
+          {/* Quick View Button */}
+          <button 
+            onClick={handleQuickView}
+            className="w-[32px] h-[32px] bg-white border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[0ms]"
+            title="Quick View"
+          >
+            <Eye size={14} />
+          </button>
+
+          {/* Share Button */}
+          <button 
+            onClick={handleShare}
+            className="w-[32px] h-[32px] bg-white border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#6B6058] hover:text-[#783A3A] hover:border-[#783A3A] shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[50ms]"
+            title="Share Product"
+          >
+            <Share2 size={14} />
+          </button>
         </div>
+
+        {/* Top left badges */}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
+          {isSale ? (
+            <span className="bg-[#1C1410] text-white text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
+              SALE
+            </span>
+          ) : isNew ? (
+            <span className="bg-[#783A3A] text-white text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
+              NEW
+            </span>
+          ) : null}
+          <div className="inline-flex items-center gap-1 bg-[#EBF7F0]/90 backdrop-blur-sm text-[#2D6A4F] text-[9px] px-1.5 py-[1px] rounded-[1px] border border-[rgba(45,106,79,0.15)] font-body font-bold mt-1">
+            <Check size={9} strokeWidth={4} /> COD
+          </div>
+        </div>
+      </div>
 
         {/* BOTTOM — Product Info */}
         <div className="p-4 flex flex-col items-start bg-white">
