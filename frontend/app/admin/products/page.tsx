@@ -22,9 +22,11 @@ export default function AdminProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [currentProductId, setCurrentProductId] = useState<string | null>(null)
+  const [allCategories, setAllCategories] = useState<any[]>([])
+  const [flatCategories, setFlatCategories] = useState<{id: string, name: string, path: string}[]>([])
   
   const [formData, setFormData] = useState({
-    name: '', slug: '', category: 'living-room', material: '', price_pkr: '',
+    name: '', slug: '', category: '', material: '', price_pkr: '',
     sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
     description: '', name_urdu: '', is_active: true, images: [] as string[]
   })
@@ -34,22 +36,47 @@ export default function AdminProductsPage() {
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
-  const fetchProducts = async () => {
+  const fetchInitialData = async () => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     const headers = { 'x-admin-auth': adminToken || '' }
     setLoading(true)
     try {
-      const res = await fetch(`${backendUrl}/api/products?all=true&limit=100`, { headers })
-      const data = await res.json()
-      setProducts(data.data || [])
+      // 1. Fetch Products
+      const prodRes = await fetch(`${backendUrl}/api/products?all=true&limit=100`, { headers })
+      const prodData = await prodRes.json()
+      setProducts(prodData.data || [])
+
+      // 2. Fetch Categories for selection
+      const catRes = await fetch(`${backendUrl}/api/categories?all=true`, { headers })
+      const catData = await catRes.json()
+      const rawCats = catData.data || []
+      setAllCategories(rawCats)
+
+      // 3. Flatten for dropdowns (Parent > Child)
+      const parents = rawCats.filter((c: any) => !c.parent_id)
+      const subs = rawCats.filter((c: any) => c.parent_id)
+      
+      const flattened: any[] = []
+      parents.forEach((p: any) => {
+        flattened.push({ id: p.id, name: p.name, path: p.name })
+        subs.filter((s: any) => s.parent_id === p.id).forEach((s: any) => {
+          flattened.push({ id: s.id, name: s.name, path: `${p.name} > ${s.name}` })
+        })
+      })
+      
+      setFlatCategories(flattened)
+      if (!isEditMode && flattened.length > 0) {
+        setFormData(prev => ({ ...prev, category: flattened[0].id }))
+      }
+
     } catch (err) {
-      showToast('Failed to load products', 'error')
+      showToast('Data synchronization failed.', 'error')
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => { fetchProducts() }, [])
+  useEffect(() => { fetchInitialData() }, [])
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type })
@@ -64,7 +91,7 @@ export default function AdminProductsPage() {
   const openAddModal = () => {
     setIsEditMode(false); setCurrentProductId(null)
     setFormData({
-      name: '', slug: '', category: 'living-room', material: '', price_pkr: '',
+      name: '', slug: '', category: flatCategories[0]?.id || '', material: '', price_pkr: '',
       sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
       description: '', name_urdu: '', is_active: true, images: []
     })
@@ -113,6 +140,18 @@ export default function AdminProductsPage() {
     } catch (err) {
       showToast('Status synchronization failed.', 'error')
     }
+  }
+
+  const getCategoryName = (idOrSlug: string) => {
+    // Check by ID first (uuid), then slug for backward compatibility
+    const cat = allCategories.find(c => c.id === idOrSlug || c.slug === idOrSlug)
+    if (!cat) return idOrSlug
+    
+    if (cat.parent_id) {
+      const parent = allCategories.find(p => p.id === cat.parent_id)
+      return parent ? `${parent.name} > ${cat.name}` : cat.name
+    }
+    return cat.name
   }
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +228,7 @@ export default function AdminProductsPage() {
       }
 
       showToast(`Registry updated: ${formData.name}`)
-      setIsModalOpen(false); fetchProducts()
+      setIsModalOpen(false); fetchInitialData()
     } catch (err: any) {
       showToast(err.message || 'Synchronization failed.', 'error')
     }
@@ -221,10 +260,9 @@ export default function AdminProductsPage() {
         <div className="relative min-w-[180px]">
           <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none">
             <option value="all">Every Category</option>
-            <option value="living-room">Living Room</option>
-            <option value="bedroom">Bedroom</option>
-            <option value="office">Office</option>
-            <option value="dining">Dining</option>
+            {flatCategories.map(c => (
+              <option key={c.id} value={c.id}>{c.path}</option>
+            ))}
           </select>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
         </div>
@@ -275,7 +313,7 @@ export default function AdminProductsPage() {
                   <p className="font-bold text-[#1C1410] text-[15px] font-heading tracking-widest">{p.name}</p>
                   <p className="text-[10px] text-[#6B6058] font-bold opacity-40 mt-1 uppercase tracking-widest">{p.slug}</p>
                 </td>
-                <td className="px-8 py-6"><span className="text-[9px] font-bold uppercase tracking-[2px] px-3 py-1 bg-[#F5E8E8] text-[#783A3A] border border-[rgba(120,58,58,0.1)]">{p.category}</span></td>
+                <td className="px-8 py-6"><span className="text-[9px] font-bold uppercase tracking-[2px] px-3 py-1 bg-[#F5E8E8] text-[#783A3A] border border-[rgba(120,58,58,0.1)]">{getCategoryName(p.category)}</span></td>
                 <td className="px-8 py-6">
                   {p.sale_price ? <><p className="font-bold text-[#783A3A] font-heading text-[16px]">{p.sale_price.toLocaleString()} PKR</p><p className="text-[10px] line-through text-[#6B6058] opacity-40">Was {p.price_pkr.toLocaleString()} PKR</p></> : <p className="font-bold text-[#1C1410] font-heading text-[16px]">{p.price_pkr?.toLocaleString()} PKR</p>}
                 </td>
@@ -305,7 +343,18 @@ export default function AdminProductsPage() {
                 <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Exhibition Label *</label><input required value={formData.name} onChange={handleNameChange} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body" /></div>
                 <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Registry Key (Slug) *</label><input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] font-mono opacity-60 outline-none" /></div>
                 <div className="grid grid-cols-2 gap-6">
-                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Class *</label><select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[1px] appearance-none bg-white"><option value="living-room">Living Room</option><option value="bedroom">Bedroom</option><option value="office">Office</option><option value="dining">Dining</option></select></div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Class *</label>
+                    <select 
+                      value={formData.category} 
+                      onChange={e => setFormData({...formData, category: e.target.value})} 
+                      className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[1px] appearance-none bg-white"
+                    >
+                      {flatCategories.map(c => (
+                        <option key={c.id} value={c.id}>{c.path}</option>
+                      ))}
+                    </select>
+                  </div>
                   <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Material Composition</label><input value={formData.material} onChange={e => setFormData({...formData, material: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body" /></div>
                 </div>
                 <div className="grid grid-cols-2 gap-6">
