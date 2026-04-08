@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import ProductCard from '@/components/product/ProductCard'
@@ -42,6 +42,7 @@ const CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'M
 
 export default function ProductDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const slug = params?.slug ? (params.slug as string) : ''
   
   const [product, setProduct] = useState<Product | null>(null)
@@ -381,7 +382,11 @@ export default function ProductDetailPage() {
 
             {/* Buy Now Button (Vibrating) */}
             <button 
-              className="w-full bg-[#783A3A] text-white h-16 rounded-[3px] font-bold text-[15px] uppercase tracking-[3px] flex items-center justify-center gap-3 shadow-xl hover:bg-[#5B2C2C] transition-all animate-shake active:scale-95"
+              onClick={() => {
+                handleAddToCart();
+                router.push('/cart');
+              }}
+              className="w-full bg-[#783A3A] text-white h-16 rounded-[3px] font-bold text-[15px] uppercase tracking-[3px] flex items-center justify-center gap-3 shadow-xl hover:bg-[#5B2C2C] transition-all animate-shake active:scale-95 cursor-pointer z-10"
             >
               <Package size={20} /> Buy it Now
             </button>
