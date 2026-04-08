@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import { 
   Plus, 
   FolderOpen, 
@@ -12,13 +13,19 @@ import {
   Eye,
   EyeOff,
   MoveVertical,
-  ChevronRight
+  ChevronLeft,
+  ArrowLeft
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function AdminCategoriesPage() {
+export default function SubcategoryManagementPage() {
+  const params = useParams()
+  const router = useRouter()
+  const parentId = params?.id as string
+
   const [categories, setCategories] = useState<any[]>([])
+  const [parentCategory, setParentCategory] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingCat, setEditingCat] = useState<any | null>(null)
@@ -30,14 +37,14 @@ export default function AdminCategoriesPage() {
     image_url: '',
     sort_order: 0,
     is_active: true,
-    parent_id: ''
+    parent_id: parentId
   })
 
   const [isUploading, setIsUploading] = useState(false)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
-  const fetchCategories = async () => {
+  const fetchData = async () => {
     setLoading(true)
     try {
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
@@ -45,7 +52,12 @@ export default function AdminCategoriesPage() {
         headers: { 'x-admin-auth': adminToken || '' }
       })
       const data = await res.json()
-      setCategories(data.data || [])
+      const allCats = data.data || []
+      
+      setCategories(allCats)
+      
+      const foundParent = allCats.find((c: any) => c.id === parentId)
+      setParentCategory(foundParent)
     } catch (err) {
       console.error(err)
     } finally {
@@ -54,8 +66,8 @@ export default function AdminCategoriesPage() {
   }
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    if (parentId) fetchData()
+  }, [parentId])
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type })
@@ -72,7 +84,7 @@ export default function AdminCategoriesPage() {
         image_url: cat.image_url || '',
         sort_order: cat.sort_order || 0,
         is_active: cat.is_active,
-        parent_id: cat.parent_id || ''
+        parent_id: cat.parent_id || parentId
       })
     } else {
       setEditingCat(null)
@@ -81,9 +93,9 @@ export default function AdminCategoriesPage() {
         slug: '',
         description: '',
         image_url: '',
-        sort_order: categories.length + 1,
+        sort_order: categories.filter(c => c.parent_id === parentId).length + 1,
         is_active: true,
-        parent_id: ''
+        parent_id: parentId
       })
     }
     setShowModal(true)
@@ -114,18 +126,14 @@ export default function AdminCategoriesPage() {
       })
 
       const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Upload failed')
-      }
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
 
       if (data.url) {
         setFormData(prev => ({ ...prev, image_url: data.url }))
         showToast('Image uploaded successfully')
       }
     } catch (err: any) {
-      console.error('Image Upload Error:', err)
-      showToast(err.message || 'Asset synchronization failed', 'error')
+      showToast(err.message, 'error')
     } finally {
       setIsUploading(false)
     }
@@ -148,22 +156,18 @@ export default function AdminCategoriesPage() {
       })
 
       const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to save category manifest')
-      }
+      if (!res.ok) throw new Error(data.error || 'Failed to save category')
       
-      showToast(`Category ${editingCat ? 'updated' : 'created'} successfully`)
+      showToast(`Subcategory ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
-      fetchCategories()
+      fetchData()
     } catch (err: any) {
-      console.error('Save Category Error:', err)
       showToast(err.message, 'error')
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to expunge this category?')) return
+    if (!confirm('Are you sure you want to expunge this subcategory?')) return
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
 
     try {
@@ -172,8 +176,8 @@ export default function AdminCategoriesPage() {
         headers: { 'x-admin-auth': adminToken || '' }
       })
       if (res.ok) {
-        showToast('Category expunged')
-        fetchCategories()
+        showToast('Subcategory expunged')
+        fetchData()
       }
     } catch (err) {
       showToast('Deletion failed', 'error')
@@ -187,21 +191,13 @@ export default function AdminCategoriesPage() {
         method: 'PATCH',
         headers: { 'x-admin-auth': adminToken || '' }
       })
-      if (res.ok) fetchCategories()
+      if (res.ok) fetchData()
     } catch (err) {
       showToast('Toggle failed', 'error')
     }
   }
 
-  const getGradient = (slug: string) => {
-    switch (slug) {
-      case 'living-room': return 'linear-gradient(135deg, #783A3A, #9B5656)'
-      case 'bedroom': return 'linear-gradient(135deg, #5B2C2C, #5D4480)'
-      case 'office': return 'linear-gradient(135deg, #1C1410, #783A3A)'
-      case 'dining': return 'linear-gradient(135deg, #2D1B40, #9B5656)'
-      default: return 'linear-gradient(135deg, #6B6058, #A89890)'
-    }
-  }
+  const subCategories = categories.filter(cat => cat.parent_id === parentId)
 
   return (
     <div className="relative font-body">
@@ -216,18 +212,32 @@ export default function AdminCategoriesPage() {
       )}
 
       {/* HEADER */}
-      <div className="flex justify-between items-end mb-12">
-        <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Hierarchy Manifest</p>
-          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Categories</h2>
-        </div>
-        <button 
-          onClick={() => handleOpenModal()}
-          className="bg-[#783A3A] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#5B2C2C] transition-all shadow-sm active:scale-95"
+      <div className="flex flex-col mb-12">
+        <Link 
+          href="/admin/categories" 
+          className="flex items-center gap-2 text-[#6B6058] hover:text-[#783A3A] text-[11px] font-bold uppercase tracking-[2px] mb-6 transition-colors group w-max"
         >
-          <Plus size={14} strokeWidth={2.5} />
-          Add Category
-        </button>
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+          Back to Classifications
+        </Link>
+        
+        <div className="flex justify-between items-end">
+          <div>
+            <p className="text-[#783A3A] text-[11px] font-bold uppercase tracking-[3px] mb-1 font-body">
+              {parentCategory?.name || 'Loading...'} <span className="mx-2 opacity-30">/</span> Subcategories
+            </p>
+            <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">
+              Manage Sub-classifications
+            </h2>
+          </div>
+          <button 
+            onClick={() => handleOpenModal()}
+            className="bg-[#783A3A] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#5B2C2C] transition-all shadow-sm active:scale-95"
+          >
+            <Plus size={14} strokeWidth={2.5} />
+            Add Subcategory
+          </button>
+        </div>
       </div>
 
       {/* GRID */}
@@ -237,84 +247,61 @@ export default function AdminCategoriesPage() {
             <div key={i} className="h-[300px] bg-white border border-[#E8E2D9] animate-pulse" />
           ))}
         </div>
-      ) : categories.length === 0 ? (
+      ) : subCategories.length === 0 ? (
         <div className="bg-white border border-[#E8E2D9] p-24 text-center">
           <FolderOpen size={48} className="mx-auto mb-6 text-[#1C1410] opacity-10" />
-          <h3 className="font-heading font-bold text-[20px] text-[#1C1410] uppercase tracking-widest">No Classifications Found</h3>
-          <p className="text-[#6B6058] mt-4 opacity-60">Begin by adding your first product category.</p>
+          <h3 className="font-heading font-bold text-[20px] text-[#1C1410] uppercase tracking-widest">No Subcategories Found</h3>
+          <p className="text-[#6B6058] mt-4 opacity-60">Begin by adding the first sub-classification for {parentCategory?.name}.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories
-            .filter(cat => !cat.parent_id)
-            .map((cat) => (
-            <div key={cat.id} className="bg-white border border-[#E8E2D9] rounded-0 overflow-hidden shadow-sm group hover:border-[#783A3A] transition-colors relative flex flex-col">
-              {/* Card Body Link */}
-              <Link href={`/admin/categories/${cat.id}`} className="flex-1 flex flex-col cursor-pointer pb-20">
-                {/* Image Preview */}
-                <div className="h-40 relative flex items-center justify-center overflow-hidden">
-                  {cat.image_url ? (
-                    <Image src={cat.image_url} alt={cat.name} fill className="object-cover transition-transform group-hover:scale-105" />
-                  ) : (
-                    <div className="absolute inset-0" style={{ background: getGradient(cat.slug) }} />
-                  )}
-                  <div className="absolute top-2 right-2 flex gap-2">
-                    <span className={`px-3 py-1 text-[9px] font-bold uppercase tracking-[2px] border ${
-                      cat.is_active ? 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]' : 'bg-gray-100 text-gray-400 border-gray-200'
-                    }`}>
-                      {cat.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                  
-                  {/* Overlay for "Manage Subcategories" */}
-                  <div className="absolute inset-0 bg-[#1C1410]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white text-[10px] font-bold uppercase tracking-[3px] border border-white/40 px-4 py-2 flex items-center gap-2">
-                      Manage Subcategories <ChevronRight size={14} />
-                    </span>
-                  </div>
+          {subCategories.map((cat) => (
+            <div key={cat.id} className="bg-white border border-[#E8E2D9] rounded-0 overflow-hidden shadow-sm group hover:border-[#783A3A] transition-colors relative">
+              <div className="h-40 relative flex items-center justify-center overflow-hidden bg-[#FAF7F4]">
+                {cat.image_url ? (
+                  <Image src={cat.image_url} alt={cat.name} fill className="object-cover transition-transform group-hover:scale-105" />
+                ) : (
+                  <FolderOpen size={48} className="text-[#1C1410] opacity-10" />
+                )}
+                <div className="absolute top-2 right-2 flex gap-2">
+                   <span className={`px-3 py-1 text-[9px] font-bold uppercase tracking-[2px] border ${
+                     cat.is_active ? 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]' : 'bg-gray-100 text-gray-400 border-gray-200'
+                   }`}>
+                     {cat.is_active ? 'Active' : 'Inactive'}
+                   </span>
                 </div>
+              </div>
 
-                {/* Body */}
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex flex-col">
-                      <h3 className="font-heading font-bold text-[18px] text-[#1C1410] uppercase tracking-widest">{cat.name}</h3>
-                    </div>
-                    <span className="bg-[#FAF7F4] text-[#1C1410] px-2 py-1 text-[10px] font-mono font-bold opacity-40">ORDER: {cat.sort_order}</span>
-                  </div>
-                  <p className="text-[11px] text-[#6B6058] font-mono tracking-wider opacity-60 mb-2">slug/{cat.slug}</p>
-                  
-                  {/* Subcategories Count */}
-                  <div className="mt-4 flex items-center gap-2 text-[#783A3A] text-[10px] font-bold uppercase tracking-wider">
-                    <FolderOpen size={12} />
-                    {categories.filter(c => c.parent_id === cat.id).length} Subcategories
-                  </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-heading font-bold text-[18px] text-[#1C1410] uppercase tracking-widest">{cat.name}</h3>
+                  <span className="bg-[#FAF7F4] text-[#1C1410] px-2 py-1 text-[10px] font-mono font-bold opacity-40">ORDER: {cat.sort_order}</span>
                 </div>
-              </Link>
-
-              {/* Action Buttons (Absolute at bottom for clean click area) */}
-              <div className="absolute bottom-6 left-6 right-6 flex gap-3 pt-6 border-t border-[#FAF7F4]">
-                <button 
-                  onClick={() => handleToggle(cat.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] font-bold uppercase tracking-widest border transition-all ${
-                    cat.is_active ? 'border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4]' : 'bg-[#783A3A] text-white border-[#783A3A]'
-                  }`}
-                >
-                  {cat.is_active ? <EyeOff size={12} /> : <Eye size={12} />}
-                  {cat.is_active ? 'Deactivate' : 'Activate'}
-                </button>
-                <button 
-                  onClick={() => handleOpenModal(cat)}
-                  className="w-10 h-10 flex items-center justify-center border border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4] transition-all"
-                >
-                  <Edit3 size={14} />
-                </button>
-                <button 
-                  onClick={() => handleDelete(cat.id)}
-                  className="w-10 h-10 flex items-center justify-center border border-[#E8E2D9] text-[#DC2626] hover:bg-red-50 hover:border-red-100 transition-all"
-                >
-                  <Trash2 size={14} />
-                </button>
+                <p className="text-[11px] text-[#6B6058] font-mono tracking-wider opacity-60 mb-6">slug/{cat.slug}</p>
+                
+                <div className="flex gap-3 pt-6 border-t border-[#FAF7F4]">
+                  <button 
+                    onClick={() => handleToggle(cat.id)}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[10px] font-bold uppercase tracking-widest border transition-all ${
+                      cat.is_active ? 'border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4]' : 'bg-[#783A3A] text-white border-[#783A3A]'
+                    }`}
+                  >
+                    {cat.is_active ? <EyeOff size={12} /> : <Eye size={12} />}
+                    {cat.is_active ? 'Deactivate' : 'Activate'}
+                  </button>
+                  <button 
+                    onClick={() => handleOpenModal(cat)}
+                    className="w-10 h-10 flex items-center justify-center border border-[#E8E2D9] text-[#6B6058] hover:bg-[#FAF7F4] transition-all"
+                  >
+                    <Edit3 size={14} />
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(cat.id)}
+                    className="w-10 h-10 flex items-center justify-center border border-[#E8E2D9] text-[#DC2626] hover:bg-red-50 hover:border-red-100 transition-all"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -330,7 +317,7 @@ export default function AdminCategoriesPage() {
             </button>
 
             <h2 className="font-heading font-bold text-[24px] text-[#1C1410] uppercase tracking-widest mb-10 border-b border-[#FAF7F4] pb-6">
-              {editingCat ? 'Manifest Update' : 'New Classification'}
+              {editingCat ? 'Update Subcategory' : `New Sub-category for ${parentCategory?.name}`}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-8">
@@ -342,7 +329,7 @@ export default function AdminCategoriesPage() {
                     value={formData.name} 
                     onChange={e => handleNameChange(e.target.value)}
                     required
-                    placeholder="e.g. Living Room"
+                    placeholder="e.g. Office Chairs"
                     className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A]"
                   />
                 </div>
@@ -368,7 +355,6 @@ export default function AdminCategoriesPage() {
                 />
               </div>
 
-              {/* Image Upload Zone */}
               <div>
                 <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Visual Asset Exhibit</label>
                 {formData.image_url ? (
@@ -394,21 +380,14 @@ export default function AdminCategoriesPage() {
               </div>
 
               <div className="flex gap-8">
-                <div className="flex-1">
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Hierarchy Placement</label>
-                  <select 
-                    value={formData.parent_id} 
-                    onChange={e => setFormData({...formData, parent_id: e.target.value})}
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A] bg-white appearance-none cursor-pointer"
-                  >
-                    <option value="">Top Level (Main Category)</option>
-                    {categories
-                      .filter(c => c.id !== editingCat?.id && !c.parent_id)
-                      .map(c => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))
-                    }
-                  </select>
+                <div className="flex-1 opacity-50 cursor-not-allowed">
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Parent Category</label>
+                  <input 
+                    type="text" 
+                    value={parentCategory?.name || ''} 
+                    disabled
+                    className="w-full border border-[#D4CCC2] bg-[#FAF7F4] rounded-0 px-5 py-4 text-[13px] outline-none font-bold text-[#783A3A]"
+                  />
                 </div>
                 <div className="flex-1">
                   <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Sort Sequence</label>
@@ -416,7 +395,7 @@ export default function AdminCategoriesPage() {
                     type="number" 
                     value={formData.sort_order} 
                     onChange={e => setFormData({...formData, sort_order: parseInt(e.target.value)})}
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none"
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A]"
                   />
                 </div>
               </div>
@@ -437,7 +416,7 @@ export default function AdminCategoriesPage() {
                 type="submit" 
                 className="w-full bg-[#1C1410] text-white py-6 rounded-[3px] font-bold uppercase tracking-[4px] text-[13px] hover:bg-[#33221b] transition-all shadow-xl active:scale-95"
               >
-                {editingCat ? 'Execute Update' : 'Initialize Classification'}
+                {editingCat ? 'Update Subcategory' : 'Initialize Subcategory'}
               </button>
             </form>
           </div>
