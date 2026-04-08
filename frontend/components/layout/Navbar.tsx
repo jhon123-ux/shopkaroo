@@ -234,13 +234,13 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0 z-50 max-h-[80vh] overflow-y-auto">
+        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0 z-50 max-h-[80vh] overflow-y-auto shadow-xl">
           <div className="pt-2 pb-6 space-y-1">
             {navLinks.map((link: any) => (
               <div key={link.name} className="flex flex-col">
                 <Link
                   href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
-                  className="block pl-4 pr-4 py-3 border-l-4 border-transparent text-[15px] font-bold font-heading text-[#1C1410] hover:bg-[#FAF7F4] hover:border-[#783A3A] hover:text-[#783A3A] transition-all uppercase tracking-wide"
+                  className="block pl-4 pr-4 py-4 border-l-4 border-transparent text-[15px] font-bold font-heading text-[#1C1410] hover:bg-[#FAF7F4] hover:border-[#783A3A] hover:text-[#783A3A] transition-all uppercase tracking-wide"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
@@ -251,7 +251,7 @@ export default function Navbar() {
                       <Link
                         key={child.slug}
                         href={`/furniture/${child.slug}`}
-                        className="block pl-10 pr-4 py-2.5 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-all"
+                        className="block pl-10 pr-4 py-3 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-all"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {child.name}
@@ -261,6 +261,55 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+
+            {/* Mobile Auth Actions */}
+            <div className="mt-6 pt-8 border-t border-[#E8E2D9] px-4 space-y-4">
+              {!user ? (
+                <div className="flex flex-col gap-3">
+                  <p className="text-[10px] font-black text-[#6B6058] uppercase tracking-[3px] mb-1 opacity-40">Account Access</p>
+                  <div className="flex flex-col gap-3">
+                    <Link 
+                      href="/login" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full h-12 flex items-center justify-center border-[1.5px] border-[#783A3A] text-[#783A3A] text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-[#F5E8E8] transition-colors"
+                    >
+                      Sign In
+                    </Link>
+                    <Link 
+                      href="/signup" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="w-full h-12 flex items-center justify-center bg-[#783A3A] text-white text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-[#5B2C2C] transition-all"
+                    >
+                      Create Account
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <p className="text-[10px] font-black text-[#6B6058] uppercase tracking-[3px] mb-3 opacity-40">User Interface</p>
+                  <Link 
+                    href="/my-orders" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-4 py-3 text-[#1C1410] font-bold text-[14px] uppercase tracking-wide border-b border-[#FAF7F4]"
+                  >
+                    <Package size={18} className="text-[#6B6058]" /> My Orders
+                  </Link>
+                  <Link 
+                    href="/profile" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-4 py-3 text-[#1C1410] font-bold text-[14px] uppercase tracking-wide border-b border-[#FAF7F4]"
+                  >
+                    <User size={18} className="text-[#6B6058]" /> My Profile
+                  </Link>
+                  <button 
+                    onClick={() => { signOut(); setIsMobileMenuOpen(false); }}
+                    className="flex items-center gap-4 py-4 text-[#991B1B] font-bold text-[14px] uppercase tracking-widest mt-2"
+                  >
+                    <LogOut size={18} /> Sign Out Protocol
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
