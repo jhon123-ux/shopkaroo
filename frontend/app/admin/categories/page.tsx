@@ -27,7 +27,8 @@ export default function AdminCategoriesPage() {
     description: '',
     image_url: '',
     sort_order: 0,
-    is_active: true
+    is_active: true,
+    parent_id: ''
   })
 
   const [isUploading, setIsUploading] = useState(false)
@@ -68,7 +69,8 @@ export default function AdminCategoriesPage() {
         description: cat.description || '',
         image_url: cat.image_url || '',
         sort_order: cat.sort_order || 0,
-        is_active: cat.is_active
+        is_active: cat.is_active,
+        parent_id: cat.parent_id || ''
       })
     } else {
       setEditingCat(null)
@@ -78,7 +80,8 @@ export default function AdminCategoriesPage() {
         description: '',
         image_url: '',
         sort_order: categories.length + 1,
-        is_active: true
+        is_active: true,
+        parent_id: ''
       })
     }
     setShowModal(true)
@@ -261,7 +264,14 @@ export default function AdminCategoriesPage() {
               {/* Body */}
               <div className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-heading font-bold text-[18px] text-[#1C1410] uppercase tracking-widest">{cat.name}</h3>
+                  <div className="flex flex-col">
+                    <h3 className="font-heading font-bold text-[18px] text-[#1C1410] uppercase tracking-widest">{cat.name}</h3>
+                    {cat.parent_id && (
+                      <span className="text-[10px] font-bold text-[#783A3A] uppercase tracking-wider mt-1">
+                        Subcategory of: {categories.find(c => c.id === cat.parent_id)?.name || 'Parent'}
+                      </span>
+                    )}
+                  </div>
                   <span className="bg-[#FAF7F4] text-[#1C1410] px-2 py-1 text-[10px] font-mono font-bold opacity-40">ORDER: {cat.sort_order}</span>
                 </div>
                 <p className="text-[11px] text-[#6B6058] font-mono tracking-wider opacity-60 mb-6">slug/{cat.slug}</p>
@@ -369,6 +379,22 @@ export default function AdminCategoriesPage() {
 
               <div className="flex gap-8">
                 <div className="flex-1">
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Hierarchy Placement</label>
+                  <select 
+                    value={formData.parent_id} 
+                    onChange={e => setFormData({...formData, parent_id: e.target.value})}
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none focus:border-[#783A3A] bg-white appearance-none cursor-pointer"
+                  >
+                    <option value="">Top Level (Main Category)</option>
+                    {categories
+                      .filter(c => c.id !== editingCat?.id && !c.parent_id)
+                      .map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))
+                    }
+                  </select>
+                </div>
+                <div className="flex-1">
                   <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Sort Sequence</label>
                   <input 
                     type="number" 
@@ -377,17 +403,18 @@ export default function AdminCategoriesPage() {
                     className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none"
                   />
                 </div>
-                <div className="flex items-center pt-6">
-                  <label className="flex items-center gap-3 cursor-pointer group">
-                    <input 
-                      type="checkbox" 
-                      checked={formData.is_active} 
-                      onChange={e => setFormData({...formData, is_active: e.target.checked})}
-                      className="w-5 h-5 accent-[#783A3A]"
-                    />
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-60 group-hover:opacity-100 transition-opacity">Protocol Active</span>
-                  </label>
-                </div>
+              </div>
+
+              <div className="flex items-center">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <input 
+                    type="checkbox" 
+                    checked={formData.is_active} 
+                    onChange={e => setFormData({...formData, is_active: e.target.checked})}
+                    className="w-5 h-5 accent-[#783A3A]"
+                  />
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-60 group-hover:opacity-100 transition-opacity">Protocol Active</span>
+                </label>
               </div>
 
               <button 
