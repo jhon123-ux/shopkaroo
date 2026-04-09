@@ -1,0 +1,6 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- maroon rounded square background -->
+  <rect width="100" height="100" rx="12" fill="#783A3A"/>
+  <!-- sk text in white -->
+  <text x="4" y="78" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-weight="700" font-size="82" fill="white" letter-spacing="-4">sk</text>
+</svg>

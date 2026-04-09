@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Logo & Tagline */}
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <Image src="/logo-symbol.svg" alt="Shopkarro Logo" width={36} height={36} className="invert opacity-90" />
+              <Image src="/logo-symbol-light.svg" alt="Shopkarro Logo" width={36} height={36} />
               <h3 className="font-body font-bold text-[28px] text-white m-0">
                 Shopkarro
               </h3>
