@@ -349,34 +349,34 @@ export default function ProductDetailPage() {
 
           <div className="flex flex-col gap-6 mb-10">
             <h4 className="text-[10px] tracking-[3px] text-[#6B6058] font-bold uppercase font-body">Configure Selection</h4>
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Quantity Selector */}
-              <div className="flex items-center border border-[#E8E2D9] rounded-[3px] bg-white h-14">
+              <div className="flex items-center border border-[#E8E2D9] rounded-[3px] bg-white h-12 flex-shrink-0">
                 <button 
                   onClick={() => setQty(Math.max(1, qty - 1))}
                   disabled={qty <= 1}
-                  className="w-12 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
+                  className="w-10 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
                 >
-                  <Minus size={16} />
+                  <Minus size={15} />
                 </button>
-                <div className="w-12 text-center font-bold text-[#1C1410] font-body text-base">
+                <div className="w-10 text-center font-bold text-[#1C1410] font-body text-sm">
                   {qty}
                 </div>
                 <button 
                   onClick={() => setQty(Math.min(product.stock_qty, qty + 1))}
                   disabled={qty >= product.stock_qty}
-                  className="w-12 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
+                  className="w-10 h-full flex items-center justify-center hover:text-[#783A3A] transition-colors disabled:opacity-20"
                 >
-                  <Plus size={16} />
+                  <Plus size={15} />
                 </button>
               </div>
 
               {/* Add to Cart */}
               <button 
                 onClick={handleAddToCart}
-                className="flex-1 w-full bg-white border border-[#783A3A] text-[#783A3A] h-14 rounded-[3px] font-bold text-[13px] uppercase tracking-[2px] hover:bg-[#F5E8E8] transition-all flex items-center justify-center gap-3 active:scale-95"
+                className="flex-1 bg-white border border-[#783A3A] text-[#783A3A] h-12 rounded-[3px] font-bold text-[12px] md:text-[13px] uppercase tracking-[1px] md:tracking-[2px] hover:bg-[#F5E8E8] transition-all flex items-center justify-center gap-2 active:scale-95"
               >
-                <ShoppingCart size={18} /> Add to Cart
+                <ShoppingCart size={16} /> Add to Cart
               </button>
             </div>
 
@@ -664,11 +664,14 @@ export default function ProductDetailPage() {
 
       {/* PART 4 — RELATED PRODUCTS */}
       {related.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 mt-20 pt-16 border-t border-[#E8E2D9]">
-          <h2 className="text-[32px] font-bold font-heading text-[#1C1410] mb-10 text-center">You Might Also Like</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-7xl mx-auto mt-20 pt-16 border-t border-[#E8E2D9]">
+          <h2 className="text-[28px] md:text-[32px] font-bold font-heading text-[#1C1410] mb-8 px-6">You Might Also Like</h2>
+          {/* Mobile: horizontal scroll | Desktop: grid */}
+          <div className="flex overflow-x-auto gap-4 pb-4 px-6 snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
             {related.map(p => (
-              <ProductCard key={p.id} product={p} />
+              <div key={p.id} className="flex-shrink-0 w-[72vw] max-w-[260px] snap-start md:w-auto md:max-w-none">
+                <ProductCard product={p} />
+              </div>
             ))}
           </div>
         </div>
