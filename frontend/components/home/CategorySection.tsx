@@ -79,7 +79,7 @@ export default function CategorySection() {
 
               {/* Content */}
               <div className="absolute inset-0 p-8 flex flex-col justify-end text-white text-left z-20">
-                <h3 className="font-heading font-bold text-[24px] drop-shadow-md leading-tight uppercase tracking-widest mb-1">
+                <h3 className="font-heading font-bold text-[24px] drop-shadow-md leading-tight tracking-wide mb-1">
                   {cat.name}
                 </h3>
                 <div className="flex flex-col">

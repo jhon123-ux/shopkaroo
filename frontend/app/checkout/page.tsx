@@ -430,7 +430,7 @@ Address: ${address}`
               })}
             </div>
 
-            <div className="px-8 pb-8 pt-6 border-t border-[#E8E2D9] bg-[#FAF7F4]/50">
+            <div className="px-8 pb-6 pt-6 border-t border-[#E8E2D9] bg-[#FAF7F4]/50">
               <div className="flex justify-between text-[14px] mb-3 font-body">
                 <span className="text-[#6B6058] font-semibold opacity-60">Subtotal</span>
                 <span className="text-[#1C1410] font-bold">{totalPrice.toLocaleString('en-PK')}</span>
@@ -439,30 +439,31 @@ Address: ${address}`
                 <span className="text-[#6B6058] font-semibold opacity-60">Premium Shipping</span>
                 <span className="text-[#2D6A4F] font-bold uppercase tracking-widest text-[11px]">Free</span>
               </div>
-              <div className="border-t border-[#E8E2D9] my-6"></div>
-              <div className="flex justify-between items-center">
+              <div className="border-t border-[#E8E2D9] my-4"></div>
+              <div className="flex justify-between items-center mb-6">
                 <span className="font-body font-bold text-[#6B6058] uppercase tracking-[3px] text-[11px] opacity-60">Total</span>
                 <span className="font-heading font-bold text-[28px] text-[#783A3A]">
                   {totalPrice.toLocaleString('en-PK')}
                 </span>
               </div>
+
+              {/* Trust badges — inside the card so they stay below items on mobile */}
+              <div className="grid grid-cols-3 gap-3 border-t border-[#E8E2D9] pt-6">
+                <div className="bg-[#FAF7F4] rounded-[2px] p-3 text-center border border-[#E8E2D9] flex flex-col items-center gap-2">
+                  <Lock size={18} className="opacity-40" />
+                  <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Secure</span>
+                </div>
+                <div className="bg-[#FAF7F4] rounded-[2px] p-3 text-center border border-[#E8E2D9] flex flex-col items-center gap-2">
+                  <Package size={18} className="opacity-40" />
+                  <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Insured</span>
+                </div>
+                <div className="bg-[#FAF7F4] rounded-[2px] p-3 text-center border border-[#E8E2D9] flex flex-col items-center gap-2">
+                  <RotateCcw size={18} className="opacity-40" />
+                  <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">7-Day</span>
+                </div>
+              </div>
             </div>
 
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 mt-8">
-            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <Lock size={20} className="opacity-40" />
-              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Secure</span>
-            </div>
-            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <Package size={20} className="opacity-40" />
-              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">Insured</span>
-            </div>
-            <div className="bg-white rounded-0 p-4 text-center border border-[#E8E2D9] shadow-sm flex flex-col items-center gap-2">
-              <RotateCcw size={20} className="opacity-40" />
-              <span className="text-[9px] uppercase tracking-[2px] font-bold text-[#6B6058]">7-Day</span>
-            </div>
           </div>
         </div>
       </form>
