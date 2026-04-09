@@ -56,27 +56,27 @@ function OrderConfirmedContent() {
 
         <div className="flex flex-col items-center gap-2 mb-12">
             <span className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40">Reference Code</span>
-            <p className="text-[#783A3A] font-bold text-[24px] font-mono tracking-[4px] bg-[#FAF7F4] inline-block px-8 py-3 rounded-[2px] border border-[#E8E2D9]">
+            <p className="text-[#783A3A] font-bold text-[22px] md:text-[24px] font-mono tracking-[4px] bg-[#FAF7F4] inline-block px-4 md:px-8 py-3 rounded-[2px] border border-[#E8E2D9] break-all w-full text-center">
             {orderId || 'PENDING'}
             </p>
         </div>
 
         {/* Email Notice */}
         {email && (
-          <div className="bg-[#FAF7F4] rounded-0 p-8 mb-16 border border-[#E8E2D9] text-left flex gap-6 items-start max-w-lg mx-auto">
-            <div className="bg-white w-12 h-12 flex items-center justify-center flex-shrink-0 border border-[#E8E2D9] shadow-sm">
-              <Mail size={20} className="opacity-40" />
+          <div className="bg-[#FAF7F4] rounded-0 p-5 mb-16 border border-[#E8E2D9] text-left flex flex-col sm:flex-row gap-4 items-start max-w-lg mx-auto">
+            <div className="bg-white w-10 h-10 flex items-center justify-center flex-shrink-0 border border-[#E8E2D9] shadow-sm">
+              <Mail size={18} className="opacity-40" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-[#1C1410] font-bold text-[12px] uppercase tracking-wider mb-1">Confirmation Despatched</p>
-              <p className="text-[#6B6058] text-[14px] mb-4 opacity-80">{email}</p>
+              <p className="text-[#6B6058] text-[13px] mb-4 opacity-80 break-all">{email}</p>
               
-              <div className="pt-4 border-t border-[#E8E2D9]">
+              <div className="pt-3 border-t border-[#E8E2D9]">
                 <Link 
                   href={`/signup?email=${encodeURIComponent(email)}&ref=checkout`}
-                  className="text-[#783A3A] font-bold text-[13px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
+                  className="text-[#783A3A] font-bold text-[12px] uppercase tracking-[1px] hover:underline flex items-center gap-2 transition-all"
                 >
-                  Create Account To Track <ArrowRight size={16} strokeWidth={3} />
+                  Create Account To Track <ArrowRight size={14} strokeWidth={3} />
                 </Link>
               </div>
             </div>
