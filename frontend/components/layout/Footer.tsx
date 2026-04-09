@@ -77,7 +77,7 @@ export default function Footer() {
               {['FAQ', 'Privacy Policy'].map((item) => (
                 <li key={item}>
                   <Link 
-                    href={item === 'Privacy Policy' ? '/privacy' : '/faq'} 
+                    href={item === 'Privacy Policy' ? '/privacy' : '/faqs'} 
                     className="text-white/60 hover:text-white/90 transition-colors text-[14px] font-body"
                   >
                     {item}
