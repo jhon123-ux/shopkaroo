@@ -42,7 +42,7 @@ export default function CategorySection() {
       <div className="max-w-7xl mx-auto px-6">
         
         <div className="mb-16">
-          <h2 className="text-[36px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">
+          <h2 className="text-[36px] font-bold font-heading text-[#1C1410] tracking-wide leading-none">
             Shop by Room
           </h2>
         </div>
