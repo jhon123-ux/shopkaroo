@@ -3,6 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronDown, MessageCircle, HelpCircle, Truck, CreditCard, ShieldCheck, RotateCcw } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'FAQs & Support - Shopkarro',
+  description: 'Find answers to common questions about Shopkarro furniture delivery, payments, returns, and assembly. We are here to help you create your perfect home.',
+}
 
 const FAQ_DATA = [
   {

@@ -5,15 +5,19 @@ import AuthProvider from '@/components/auth/AuthProvider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
-  title: 'Shopkarro — Premium Furniture Pakistan',
-  description: 'Buy premium quality furniture online in Pakistan. Cash on Delivery available across 30+ cities.',
+  title: 'Shopkarro — Premium Furniture Pakistan | Handcrafted Luxury',
+  description: 'Shop premium quality furniture online in Pakistan. From handcrafted sheerham wood beds to luxury velvet sofas and ergonomic office chairs. Cash on Delivery available across 30+ cities for your convenience.',
+  keywords: 'furniture pakistan, luxury furniture karachi, shopkarro, sheesham wood beds, sofas lahore, modern dining tables, home decor islamabad, office furniture pakistan',
+  alternates: {
+    canonical: 'https://shopkarro.com',
+  },
   icons: {
     icon: '/favicon.svg',
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
     title: 'Shopkarro — Premium Furniture Pakistan',
-    description: 'Premium furniture delivered to your door. COD available.',
+    description: 'Bespoke luxury furniture delivered to your door. Full Cash on Delivery available nationwide.',
     url: 'https://shopkarro.com',
     siteName: 'Shopkarro',
     images: [
@@ -24,12 +28,13 @@ export const metadata: Metadata = {
         alt: 'Shopkarro — Premium Furniture Pakistan',
       },
     ],
+    locale: 'en_PK',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Shopkarro — Premium Furniture Pakistan',
-    description: 'Premium furniture delivered to your door. COD available.',
+    description: 'Transform your home with our premium furniture collection. Handcrafted comfort delivered across Pakistan.',
     images: ['/opengraph-image'],
   },
 }

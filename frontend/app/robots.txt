@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /profile
+Disallow: /my-orders
+Disallow: /checkout
+Disallow: /cart/success
+
+Sitemap: https://shopkarro.com/sitemap.xml
