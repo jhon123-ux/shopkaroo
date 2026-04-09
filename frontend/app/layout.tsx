@@ -5,8 +5,8 @@ import AuthProvider from '@/components/auth/AuthProvider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
-  title: 'Shopkarro — Premium Furniture Pakistan | Handcrafted Luxury',
-  description: 'Shop premium quality furniture online in Pakistan. From handcrafted sheerham wood beds to luxury velvet sofas and ergonomic office chairs. Cash on Delivery available across 30+ cities for your convenience.',
+  title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
+  description: 'Shopkarro brings you handcrafted, quality-inspected furniture across Pakistan. Order online, pay on delivery. Karachi, Lahore, Islamabad & 30+ cities.',
   keywords: 'furniture pakistan, luxury furniture karachi, shopkarro, sheesham wood beds, sofas lahore, modern dining tables, home decor islamabad, office furniture pakistan',
   alternates: {
     canonical: 'https://shopkarro.com',
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'Shopkarro — Premium Furniture Pakistan',
-    description: 'Bespoke luxury furniture delivered to your door. Full Cash on Delivery available nationwide.',
+    title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
+    description: 'Shopkarro brings you handcrafted, quality-inspected furniture across Pakistan. Order online, pay on delivery.',
     url: 'https://shopkarro.com',
     siteName: 'Shopkarro',
     images: [
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shopkarro — Premium Furniture Pakistan',
-    description: 'Transform your home with our premium furniture collection. Handcrafted comfort delivered across Pakistan.',
+    title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
+    description: 'Shopkarro brings you handcrafted, quality-inspected furniture across Pakistan. Order online, pay on delivery.',
     images: ['/opengraph-image'],
   },
 }
