@@ -13,6 +13,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
 
   // Search State
@@ -234,33 +235,59 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0 z-50 max-h-[80vh] overflow-y-auto shadow-xl">
+        <div className="md:hidden bg-white border-b border-[#E8E2D9] absolute w-full left-0 z-50 max-h-[85vh] overflow-y-auto shadow-xl animate-slideDown">
           <div className="pt-2 pb-6 space-y-1">
-            {navLinks.map((link: any) => (
-              <div key={link.name} className="flex flex-col">
-                <Link
-                  href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
-                  className="block pl-4 pr-4 py-4 border-l-4 border-transparent text-[15px] font-bold font-heading text-[#1C1410] hover:bg-[#FAF7F4] hover:border-[#783A3A] hover:text-[#783A3A] transition-all uppercase tracking-wide"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-                {link.children && link.children.length > 0 && (
-                  <div className="bg-[#FAF7F4]/50 flex flex-col pt-1 pb-2">
-                    {link.children.map((child: any) => (
-                      <Link
-                        key={child.slug}
-                        href={`/furniture/${child.slug}`}
-                        className="block pl-10 pr-4 py-3 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-all"
-                        onClick={() => setIsMobileMenuOpen(false)}
+            {navLinks.map((link: any) => {
+              const hasChildren = link.children && link.children.length > 0;
+              const isExpanded = expandedCategory === link.name;
+              
+              return (
+                <div key={link.name} className="flex flex-col border-b border-[#FAF7F4] last:border-0">
+                  <div className="flex items-center justify-between pr-2 hover:bg-[#FAF7F4] transition-all group">
+                    <Link
+                      href={`/${link.slug ? 'furniture/' + link.slug : ''}`}
+                      className="flex-1 pl-6 py-4 text-[15px] font-bold font-heading text-[#1C1410] group-hover:text-[#783A3A] transition-all uppercase tracking-wide"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                    
+                    {hasChildren && (
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setExpandedCategory(isExpanded ? null : link.name);
+                        }}
+                        className="p-4 text-[#6B6058] hover:text-[#783A3A] transition-colors"
+                        aria-label={isExpanded ? "Collapse" : "Expand"}
                       >
-                        {child.name}
-                      </Link>
-                    ))}
+                        <ChevronDown 
+                          size={18} 
+                          className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} 
+                        />
+                      </button>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+
+                  {/* Subcategories (Accordion Content) */}
+                  {hasChildren && isExpanded && (
+                    <div className="bg-[#FAF7F4] flex flex-col pt-1 pb-4 animate-slideDown border-t border-[#E8E2D9]/30">
+                      {link.children.map((child: any) => (
+                        <Link
+                          key={child.slug}
+                          href={`/furniture/${child.slug}`}
+                          className="block pl-10 pr-4 py-3 text-[14px] font-medium font-body text-[#6B6058] hover:text-[#783A3A] transition-all border-l-2 border-transparent hover:border-[#783A3A]"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
             {/* Mobile Auth Actions */}
             <div className="mt-6 pt-8 border-t border-[#E8E2D9] px-4 space-y-4">
