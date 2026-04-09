@@ -14,16 +14,17 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '0',
+          borderRadius: '4px',
         }}
       >
         <span style={{
           color: 'white',
-          fontSize: '22px',
+          fontSize: '18px',
           fontWeight: '800',
-          fontFamily: 'sans-serif'
+          fontFamily: 'sans-serif',
+          letterSpacing: '-0.5px',
         }}>
-          S
+          sk
         </span>
       </div>
     ),

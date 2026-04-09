@@ -16,7 +16,22 @@ export const metadata: Metadata = {
     description: 'Premium furniture delivered to your door. COD available.',
     url: 'https://shopkarro.com',
     siteName: 'Shopkarro',
-  }
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Shopkarro — Premium Furniture Pakistan',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shopkarro — Premium Furniture Pakistan',
+    description: 'Premium furniture delivered to your door. COD available.',
+    images: ['/opengraph-image'],
+  },
 }
 
 export default function RootLayout({
