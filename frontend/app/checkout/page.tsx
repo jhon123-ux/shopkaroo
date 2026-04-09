@@ -237,7 +237,7 @@ Address: ${address}`
               
               {/* Full Name */}
               <div>
-                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Full Name *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 tracking-[2px] font-body">Full Name *</label>
                 <input 
                   type="text" 
                   value={name} onChange={e => setName(e.target.value)}
@@ -250,7 +250,7 @@ Address: ${address}`
               {/* Email */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Email Address</label>
+                  <label className="text-[11px] font-bold text-[#1C1410] tracking-[2px] font-body">Email Address</label>
                   <span className="text-[#6B6058] text-[9px] uppercase tracking-widest font-bold opacity-40">Optional</span>
                 </div>
                 <input 
@@ -276,7 +276,7 @@ Address: ${address}`
 
               {/* Phone */}
               <div>
-                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Contact Number *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 tracking-[2px] font-body">Contact Number *</label>
                 <input 
                   type="tel" 
                   value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
@@ -293,7 +293,7 @@ Address: ${address}`
 
               {/* City */}
               <div>
-                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Select City *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 tracking-[2px] font-body">Select City *</label>
                 <div className="relative">
                   <select 
                     value={city} 
@@ -324,7 +324,7 @@ Address: ${address}`
 
               {/* Address */}
               <div>
-                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body">Full Shipping Address *</label>
+                <label className="block text-[11px] font-bold text-[#1C1410] mb-3 tracking-[2px] font-body">Full Shipping Address *</label>
                 <textarea 
                   rows={4}
                   value={address} onChange={e => setAddress(e.target.value)}
@@ -337,7 +337,7 @@ Address: ${address}`
               {/* Notes */}
               <div>
                 <div className="flex justify-between items-center mb-3">
-                  <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Special Instructions</label>
+                  <label className="text-[11px] font-bold text-[#1C1410] tracking-[2px] font-body">Special Instructions</label>
                   <span className="text-[#6B6058] text-[9px] uppercase tracking-widest font-bold opacity-40">Optional</span>
                 </div>
                 <textarea 
