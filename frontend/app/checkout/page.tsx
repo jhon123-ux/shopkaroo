@@ -469,7 +469,7 @@ Address: ${address}`
       </form>
 
       {/* MOBILE BOTTOM BAR */}
-      <div className="lg:hidden fixed bottom-12 left-0 right-0 z-50 bg-white border-t border-[#E8E2D9] p-6 shadow-[0_-10px_30px_rgba(28,20,16,0.1)]">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E8E2D9] p-6 shadow-[0_-10px_30px_rgba(28,20,16,0.1)]">
         <div className="flex justify-between items-center mb-6">
           <div className="flex flex-col">
             <span className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
