@@ -1,10 +1,27 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import useCartStore from '@/lib/cartStore'
 import Link from 'next/link'
 import Image from 'next/image'
+import { 
+  Lock, 
+  Banknote, 
+  Truck, 
+  Check, 
+  Mail, 
+  ArrowRight, 
+  RotateCcw, 
+  Package, 
+  ChevronDown,
+  Sofa,
+  Bed,
+  Archive,
+  Utensils,
+  Box
+} from 'lucide-react'
+import useCartStore from '@/lib/cartStore'
+import useAuthStore from '@/lib/authStore'
+import { supabase } from '@/lib/supabase'
 
 const getDeliveryEstimate = (city: string) => {
   const fast = ['Karachi', 'Lahore']
@@ -24,25 +41,6 @@ const getCategoryEmoji = (category: string) => {
     default: return <Box className="w-10 h-10" />
   }
 }
-
-import useAuthStore from '@/lib/authStore'
-import { supabase } from '@/lib/supabase'
-import { 
-  Lock, 
-  Banknote, 
-  Truck, 
-  Check, 
-  Mail, 
-  ArrowRight, 
-  RotateCcw, 
-  Package, 
-  ChevronDown,
-  Sofa,
-  Bed,
-  Archive,
-  Utensils,
-  Box
-} from 'lucide-react'
 
 export default function CheckoutPage() {
   const router = useRouter()
