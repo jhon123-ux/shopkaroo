@@ -12,7 +12,6 @@ import {
   Minus, 
   ArrowRight, 
   ArrowLeft, 
-  ArrowLeft, 
   Check,
   Sofa,
   Bed,

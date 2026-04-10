@@ -53,6 +53,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         {/* Message */}
+        {message && (
           <div className={`${
             message.type === 'success' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#166534]' : 'bg-[#FEF2F2] border-[#FECACA] text-[#DC2626]'
           } border text-sm rounded-xl p-4 mb-6 animate-slideUp flex items-center gap-2`}>
