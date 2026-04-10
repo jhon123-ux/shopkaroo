@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, Link2 } from 'lucide-react'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -184,7 +184,7 @@ export default function SignupPage() {
         {/* Info Box */}
         <div className="bg-[#FAF7F4] border border-[#E8E2D9] rounded-[2px] p-6 mt-10">
           <p className="text-[#6B6058] text-[13px] font-body flex gap-4 leading-relaxed">
-            <span className="text-lg opacity-40">🔗</span>
+            <Link2 className="w-5 h-5 opacity-40 shrink-0 mt-0.5" />
             <span>
               <strong className="text-[#1C1410] block mb-1 uppercase tracking-wider text-[11px]">Sync Your Orders</strong> 
               Sign up with the email used during checkout to automatically sync your order history with this account.
@@ -196,8 +196,8 @@ export default function SignupPage() {
         <div className="text-center mt-12 pt-8 border-t border-[#FAF7F4]">
           <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#783A3A] hover:underline ml-2">
-              Sign In →
+            <Link href="/login" className="text-[#783A3A] hover:underline ml-2 inline-flex items-center gap-1">
+              Sign In <ArrowRight className="w-4 h-4" />
             </Link>
           </p>
         </div>

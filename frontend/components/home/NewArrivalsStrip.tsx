@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
+import { ArrowRight } from 'lucide-react'
 
 export default function NewArrivalsStrip() {
   const [products, setProducts] = useState<Product[]>([])
@@ -37,7 +38,9 @@ export default function NewArrivalsStrip() {
             </h2>
           </div>
           <Link href="/furniture" className="text-[#783A3A] font-semibold flex items-center group font-body">
-            See All <span className="ml-1 group-hover:ml-2 transition-all">→</span>
+            See All <span className="ml-1 group-hover:ml-2 transition-all inline-flex items-center">
+              <ArrowRight size={14} />
+            </span>
           </Link>
         </div>
 

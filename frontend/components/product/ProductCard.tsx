@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 import useCartStore from '@/lib/cartStore'
 import useAuthStore from '@/lib/authStore'
 import useWishlistStore from '@/lib/wishlistStore'
-import { Heart, ShoppingCart, Check, Eye, Share2 } from 'lucide-react'
+import { Heart, ShoppingCart, Check, Eye, Share2, Archive } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 
 interface ProductCardProps {
@@ -114,7 +114,9 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
               className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
             />
           ) : (
-            <div className="text-7xl opacity-60 group-hover:scale-[1.04] transition-transform duration-500 select-none">🪑</div>
+            <div className="flex items-center justify-center w-full h-full text-[#A89890] opacity-40 group-hover:scale-[1.04] transition-transform duration-500 select-none">
+              <Archive size={64} strokeWidth={1} />
+            </div>
           )}
 
         {/* Action Buttons Stack (Top Right) */}

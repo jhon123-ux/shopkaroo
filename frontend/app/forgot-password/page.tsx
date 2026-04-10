@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { Mail, ArrowLeft } from 'lucide-react'
 
 export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false)
@@ -23,7 +24,7 @@ export default function ForgotPasswordPage() {
 
       setMessage({
         type: 'success',
-        text: '📧 Check your email for a reset link'
+        text: 'Check your email for a reset link'
       })
     } catch (err: any) {
       setMessage({
@@ -52,10 +53,10 @@ export default function ForgotPasswordPage() {
         </div>
 
         {/* Message */}
-        {message && (
           <div className={`${
             message.type === 'success' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#166534]' : 'bg-[#FEF2F2] border-[#FECACA] text-[#DC2626]'
-          } border text-sm rounded-xl p-4 mb-6 animate-slideUp`}>
+          } border text-sm rounded-xl p-4 mb-6 animate-slideUp flex items-center gap-2`}>
+            {message.type === 'success' && <Mail className="w-4 h-4" />}
             {message.text}
           </div>
         )}
@@ -93,8 +94,8 @@ export default function ForgotPasswordPage() {
 
         {/* Footer Link */}
         <div className="text-center mt-10">
-          <Link href="/login" className="text-sm text-[#6B7280] hover:text-[#783A3A] transition-colors font-medium">
-            ← Back to Sign In
+          <Link href="/login" className="text-sm text-[#6B7280] hover:text-[#783A3A] transition-colors font-medium flex items-center justify-center gap-2">
+            <ArrowLeft className="w-4 h-4" /> Back to Sign In
           </Link>
         </div>
       </div>

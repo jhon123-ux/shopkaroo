@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight } from 'lucide-react'
 
 import { Suspense } from 'react'
 
@@ -145,8 +145,8 @@ function LoginForm() {
         <div className="text-center mt-12 bg-[#FAF7F4] p-4 rounded-[2px] border border-[#E8E2D9]">
           <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
             New to Shopkarro?{' '}
-            <Link href="/signup" className="text-[#783A3A] hover:underline ml-2">
-              Create Account →
+            <Link href="/signup" className="text-[#783A3A] hover:underline ml-2 inline-flex items-center gap-1">
+              Create Account <ArrowRight className="w-4 h-4" />
             </Link>
           </p>
         </div>

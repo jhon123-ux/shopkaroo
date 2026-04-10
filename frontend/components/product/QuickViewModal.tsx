@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { X, ShoppingCart, MessageCircle, Plus, Minus, Star, Heart } from 'lucide-react'
+import { X, ShoppingCart, MessageCircle, Plus, Minus, Star, Heart, Archive } from 'lucide-react'
 import useCartStore from '@/lib/cartStore'
 import { Product } from '@/types'
 
@@ -72,7 +72,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 className="object-contain p-4"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl opacity-20">🪑</div>
+              <div className="w-full h-full flex items-center justify-center text-[#A89890] opacity-40">
+                <Archive size={64} strokeWidth={1} />
+              </div>
             )}
           </div>
           

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
+import { Package, ArrowRight } from 'lucide-react'
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -48,7 +49,9 @@ export default function FeaturedProducts() {
         <div className="max-w-7xl mx-auto px-6">
           <FeaturedHeader />
           <div className="text-center py-24 bg-white rounded-[4px] border border-[#E8E2D9] shadow-sm">
-            <div className="text-4xl mb-4 opacity-40">📦</div>
+            <div className="flex justify-center mb-4 opacity-40">
+              <Package size={48} strokeWidth={1} />
+            </div>
             <p className="text-[#1C1410] text-xl font-bold font-heading">
               Products coming soon.
             </p>
@@ -96,7 +99,9 @@ function FeaturedHeader() {
         className="text-[#783A3A] font-semibold hover:underline flex items-center group font-body text-sm"
       >
         View All Collection 
-        <span className="ml-1 group-hover:ml-2 transition-all">→</span>
+        <span className="ml-1 group-hover:ml-2 transition-all inline-flex items-center">
+          <ArrowRight size={14} />
+        </span>
       </Link>
     </div>
   )

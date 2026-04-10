@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import useAuthStore from '@/lib/authStore'
 import Link from 'next/link'
+import { Package, Check, X } from 'lucide-react'
 
 interface Order {
   id: string
@@ -91,7 +92,7 @@ export default function MyOrdersPage() {
         {/* Empty state */}
         {orders.length === 0 && (
           <div className="bg-white rounded-0 border border-[#E8E2D9] p-20 text-center shadow-sm">
-            <div className="text-5xl mb-8 opacity-20">📦</div>
+            <div className="flex justify-center mb-8 opacity-20"><Package size={48} strokeWidth={1.5} /></div>
             <h2 className="text-[24px] font-bold text-[#1C1410] mb-3 font-heading uppercase tracking-widest">
               No Orders Found
             </h2>
@@ -186,9 +187,7 @@ export default function MyOrdersPage() {
                               isCompleted ? 'bg-[#783A3A]' : 'bg-[#E8E2D9]'
                             } ${isActive ? 'ring-8 ring-[#F5E8E8] scale-110' : ''}`}>
                               {isCompleted && (
-                                <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="text-white">
-                                  <path d="M1 4L4 7L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
+                                <Check size={12} className="text-white" strokeWidth={3} />
                               )}
                             </div>
                             
@@ -208,7 +207,7 @@ export default function MyOrdersPage() {
                 {/* Cancelled state */}
                 {isCancelled && (
                   <div className="bg-[#FEF2F2] rounded-0 p-6 text-center border border-red-100 flex flex-col items-center gap-3">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm">✕</div>
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm"><X className="w-5 h-5" /></div>
                     <div>
                       <p className="text-[#DC2626] text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
                       <p className="text-[#DC2626]/60 text-[11px] mt-1 font-body">

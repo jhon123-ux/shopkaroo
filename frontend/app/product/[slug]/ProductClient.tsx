@@ -21,7 +21,13 @@ import {
   Check, 
   Plus, 
   Minus,
-  ChevronDown
+  ChevronDown,
+  Sofa,
+  Bed,
+  Archive,
+  Utensils,
+  Home,
+  Sparkles
 } from 'lucide-react'
 
 const CATEGORY_NAMES: Record<string, string> = {
@@ -31,11 +37,11 @@ const CATEGORY_NAMES: Record<string, string> = {
   'dining': 'Dining Room'
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  'living-room': '🛋️',
-  'bedroom': '🛏️',
-  'office': '🪑',
-  'dining': '🍽️'
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  'living-room': <Sofa className="w-10 h-10" />,
+  'bedroom': <Bed className="w-10 h-10" />,
+  'office': <Archive className="w-10 h-10" />,
+  'dining': <Utensils className="w-10 h-10" />
 }
 
 const CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan', 'Other']
@@ -199,7 +205,7 @@ export default function ProductDetailPage() {
   }
 
   const categoryNameDisplay = product.category ? (CATEGORY_NAMES[product.category] || product.category.replace('-', ' ')) : 'Category'
-  const categoryIconDisplay = product.category ? (CATEGORY_ICONS[product.category] || '🏠') : '🏠'
+  const categoryIconDisplay = product.category ? (CATEGORY_ICONS[product.category] || <Home className="w-10 h-10" />) : <Home className="w-10 h-10" />
 
   return (
     <main className="bg-white min-h-screen pb-40 md:pb-24 overflow-x-hidden relative">
@@ -232,7 +238,7 @@ export default function ProductDetailPage() {
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-8xl opacity-10 select-none">{categoryIconDisplay}</span>
+                <div className="opacity-10 select-none">{categoryIconDisplay}</div>
               </div>
             )}
 
@@ -533,7 +539,10 @@ export default function ProductDetailPage() {
                       const percentage = (count / reviews.length) * 100
                       return (
                         <div key={star} className="flex items-center gap-4">
-                          <span className="text-[11px] font-bold text-[#1C1410] w-4">{star}★</span>
+                        <div className="flex items-center gap-1 text-[#1C1410] w-max">
+                          <span className="text-[11px] font-bold">{star}</span>
+                          <Star size={10} fill="#1C1410" />
+                        </div>
                           <div className="flex-1 h-1.5 bg-[#FAF7F4] rounded-full overflow-hidden border border-[#E8E2D9]/30">
                             <div 
                               className="h-full bg-[#783A3A] transition-all duration-500" 
@@ -551,7 +560,9 @@ export default function ProductDetailPage() {
               {/* REVIEWS LIST */}
               {reviews.length === 0 ? (
                 <div className="py-20 text-center text-[#6B6058] font-body bg-[#FAF7F4] border border-dashed border-[#E8E2D9] rounded-0">
-                  <span className="text-4xl block mb-4 opacity-30">✨</span>
+                <div className="flex justify-center mb-4 opacity-30">
+                  <Sparkles size={32} />
+                </div>
                   No approved reviews yet. Be the first to share your experience.
                 </div>
               ) : (

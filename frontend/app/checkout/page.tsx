@@ -17,11 +17,11 @@ const getDeliveryEstimate = (city: string) => {
 
 const getCategoryEmoji = (category: string) => {
   switch (category) {
-    case 'living-room': return '🛋️'
-    case 'bedroom': return '🛏️'
-    case 'office': return '🪑'
-    case 'dining': return '🍽️'
-    default: return '🪴'
+    case 'living-room': return <Sofa className="w-10 h-10" />
+    case 'bedroom': return <Bed className="w-10 h-10" />
+    case 'office': return <Archive className="w-10 h-10" />
+    case 'dining': return <Utensils className="w-10 h-10" />
+    default: return <Box className="w-10 h-10" />
   }
 }
 
@@ -36,7 +36,12 @@ import {
   ArrowRight, 
   RotateCcw, 
   Package, 
-  ChevronDown 
+  ChevronDown,
+  Sofa,
+  Bed,
+  Archive,
+  Utensils,
+  Box
 } from 'lucide-react'
 
 export default function CheckoutPage() {
@@ -207,7 +212,7 @@ Address: ${address}`
 
           <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#2D6A4F]">
-              <span className="w-5 h-5 bg-[#EBF7F0] rounded-full flex items-center justify-center text-[10px]">✓</span> Cart
+              <span className="w-5 h-5 bg-[#EBF7F0] rounded-full flex items-center justify-center text-[10px]"><Check className="w-3 h-3" /></span> Cart
             </div>
             <div className="w-8 h-px bg-[#D4CCC2]"></div>
             <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#783A3A]">
@@ -414,7 +419,7 @@ Address: ${address}`
                         <Image src={item.images[0]} alt={item.name} fill className="object-contain p-1" />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                          <span className="text-2xl">{getCategoryEmoji(item.category)}</span>
+                          {getCategoryEmoji(item.category)}
                         </div>
                       )}
                     </div>

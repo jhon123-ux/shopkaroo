@@ -12,18 +12,24 @@ import {
   Minus, 
   ArrowRight, 
   ArrowLeft, 
-  Check 
+  ArrowLeft, 
+  Check,
+  Sofa,
+  Bed,
+  Archive,
+  Utensils,
+  Box
 } from 'lucide-react'
 
 const formatPrice = (price: number) => 'Rs. ' + price.toLocaleString('en-PK')
 
 const getCategoryEmoji = (category: string) => {
   switch (category) {
-    case 'living-room': return '🛋️'
-    case 'bedroom': return '🛏️'
-    case 'office': return '🪑'
-    case 'dining': return '🍽️'
-    default: return '🪴'
+    case 'living-room': return <Sofa className="w-10 h-10" />
+    case 'bedroom': return <Bed className="w-10 h-10" />
+    case 'office': return <Archive className="w-10 h-10" />
+    case 'dining': return <Utensils className="w-10 h-10" />
+    default: return <Box className="w-10 h-10" />
   }
 }
 
@@ -97,7 +103,7 @@ export default function CartPage() {
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center grayscale opacity-10">
-                        <span className="text-4xl">{getCategoryEmoji(item.category)}</span>
+                        <span className="flex items-center justify-center">{getCategoryEmoji(item.category)}</span>
                       </div>
                     )}
                   </div>

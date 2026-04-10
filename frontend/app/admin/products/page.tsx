@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { Check, X, Camera, Hourglass, Sofa, Bed, Archive, Utensils, Box } from 'lucide-react'
 
 const getCategoryEmoji = (category: string) => {
   switch (category) {
-    case 'living-room': return '🛋️'
-    case 'bedroom': return '🛏️'
-    case 'office': return '🪑'
-    case 'dining': return '🍽️'
-    default: return '🪴'
+    case 'living-room': return <Sofa className="w-5 h-5" />
+    case 'bedroom': return <Bed className="w-5 h-5" />
+    case 'office': return <Archive className="w-5 h-5" />
+    case 'dining': return <Utensils className="w-5 h-5" />
+    default: return <Box className="w-5 h-5" />
   }
 }
 
@@ -240,7 +241,7 @@ export default function AdminProductsPage() {
         <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
           toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
+          <span>{toast.type === 'success' ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}</span>
           {toast.message}
         </div>
       )}
@@ -379,7 +380,7 @@ export default function AdminProductsPage() {
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {formData.images.length < 5 && (
                     <label className={`cursor-pointer bg-white border-2 border-dashed border-[#D4CCC2] aspect-square flex flex-col items-center justify-center hover:border-[#1C1410] transition group relative ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                      <span className="text-3xl opacity-20 group-hover:opacity-100 transition">{isUploading ? '⌛' : '📸'}</span>
+                      <div className="mb-1">{isUploading ? <Hourglass className="w-8 h-8 opacity-20 group-hover:opacity-100 transition" /> : <Camera className="w-8 h-8 opacity-20 group-hover:opacity-100 transition" />}</div>
                       <span className="text-[9px] font-bold uppercase tracking-[2px] mt-2 opacity-40">{isUploading ? `Uploading ${uploadingCount}...` : 'Add Image'}</span>
                       <span className="text-[7px] font-bold uppercase tracking-[1px] opacity-25 mt-1">Max 5MB • JPG/PNG</span>
                       <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} disabled={isUploading} />

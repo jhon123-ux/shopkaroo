@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Check, X } from 'lucide-react'
 
 interface OfferBannerData {
   id: string
@@ -125,7 +126,7 @@ export default function AdminOfferBannerPage() {
         <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
           toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
+          <span>{toast.type === 'success' ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}</span>
           {toast.message}
         </div>
       )}

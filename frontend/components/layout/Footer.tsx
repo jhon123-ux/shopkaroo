@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { Phone, Mail, Clock } from 'lucide-react'
+import { Phone, Mail, Clock, Check } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -112,7 +112,9 @@ export default function Footer() {
           <p>© {currentYear} Shopkarro. All rights reserved.</p>
           <div className="mt-6 sm:mt-0 flex items-center space-x-6">
             <span>Designed for Pakistan</span> 
-            <span className="text-[#2D6A4F] font-semibold tracking-wide uppercase text-[10px]">✓ Cash on Delivery Only</span>
+            <span className="text-[#2D6A4F] font-semibold tracking-wide uppercase text-[10px] flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" strokeWidth={3} /> Cash on Delivery Only
+            </span>
           </div>
         </div>
       </div>

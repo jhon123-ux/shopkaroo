@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { X, ArrowLeft } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
@@ -77,7 +78,7 @@ export default function AdminLoginPage() {
 
             {error && (
               <div className="bg-white text-[#DC2626] py-4 border-l-2 border-l-[#DC2626] px-4 text-[11px] font-bold uppercase tracking-[1px] flex items-center gap-3">
-                <span className="text-[14px]">✕</span> {error}
+                <X className="w-4 h-4" /> {error}
               </div>
             )}
 
@@ -99,8 +100,8 @@ export default function AdminLoginPage() {
 
         {/* FOOTER LINK */}
         <div className="mt-12 text-center">
-          <Link href="/" className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[3px] opacity-40 hover:opacity-100 transition-opacity">
-            ← Return to Public Showroom
+          <Link href="/" className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[3px] opacity-40 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <ArrowLeft className="w-3 h-3" /> Return to Public Showroom
           </Link>
         </div>
 

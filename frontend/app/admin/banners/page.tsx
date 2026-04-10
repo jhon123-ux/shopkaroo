@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { Check, X, Menu, Camera } from 'lucide-react'
 import { bannerAPI } from '@/lib/api'
 import { Banner } from '@/types'
 
@@ -122,7 +123,7 @@ export default function AdminBanners() {
         <div className={`fixed top-12 right-12 z-[100] px-6 py-4 rounded-0 shadow-2xl flex items-center gap-4 animate-slideUp text-white text-[12px] font-bold uppercase tracking-widest ${
           toast.type === 'success' ? 'bg-[#1C1410]' : 'bg-[#DC2626]'
         }`}>
-          <span>{toast.type === 'success' ? '✓' : '✕'}</span>
+          <span>{toast.type === 'success' ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}</span>
           {toast.message}
         </div>
       )}
@@ -151,7 +152,7 @@ export default function AdminBanners() {
             {banners.map(b => (
               <div key={b.id} className="bg-white rounded-0 p-6 border border-[#E8E2D9] shadow-sm flex items-center gap-8 group hover:border-[#783A3A] transition-all">
                 
-                <div className="cursor-grab text-[#1C1410] opacity-10 hover:opacity-30 px-2 py-4 select-none">☰</div>
+                <div className="cursor-grab text-[#1C1410] opacity-10 hover:opacity-30 px-2 py-4 select-none"><Menu className="w-5 h-5" /></div>
                 
                 <div className="w-32 h-20 rounded-0 overflow-hidden shrink-0 relative flex items-center justify-center bg-[#FAF7F4] border border-[#E8E2D9]">
                    {b.bg_image_url && <Image src={b.bg_image_url} alt="" fill className="object-cover" />}
@@ -271,7 +272,7 @@ export default function AdminBanners() {
                      ) : (
                        <div className="relative border-2 border-dashed border-[#D4CCC2] rounded-0 p-6 flex flex-col items-center justify-center text-center hover:bg-white hover:border-[#1C1410] transition-all cursor-pointer group h-24">
                          <input type="file" accept="image/jpeg, image/png, image/webp" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                         <span className="text-2xl opacity-20 mb-1 group-hover:opacity-100 transition">📸</span>
+                         <Camera className="w-8 h-8 opacity-20 mb-1 group-hover:opacity-100 transition" />
                          <span className="text-[9px] font-bold uppercase tracking-[2px] text-[#1C1410] opacity-40">
                            {isUploading ? 'SYNCING...' : 'UPLOAD'}
                          </span>

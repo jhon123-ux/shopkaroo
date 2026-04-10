@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react'
+
 export default function CODBadge() {
   return (
     <span style={{
@@ -7,7 +9,7 @@ export default function CODBadge() {
       display: 'inline-flex', alignItems: 'center', gap: 4,
       letterSpacing: '0.02em'
     }}>
-      ✓ Cash on Delivery
+      <Check size={14} strokeWidth={3} /> Cash on Delivery
     </span>
   )
 }

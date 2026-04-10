@@ -4,7 +4,7 @@ import Image from 'next/image'
 import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
 import { useState, useRef, useEffect } from 'react'
-import { Search, ShoppingBag, Menu, X, User, ChevronDown, Package, LogOut } from 'lucide-react'
+import { Search, ShoppingBag, Menu, X, User, ChevronDown, Package, LogOut, Archive } from 'lucide-react'
 import { Product } from '@/types'
 
 export default function Navbar() {
@@ -415,7 +415,7 @@ export default function Navbar() {
                         {product.images?.[0] ? (
                           <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xl">🪑</div>
+                          <div className="w-full h-full flex items-center justify-center text-xl text-[#A89890]"><Archive size={28} strokeWidth={1.5} /></div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0 text-left">
