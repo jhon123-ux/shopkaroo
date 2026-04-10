@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 
 export const getReviews = async (req: Request, res: Response) => {
   try {
@@ -51,7 +51,7 @@ export const createReview = async (req: Request, res: Response) => {
 // Add Admin review management
 export const getAllReviewsAdmin = async (req: Request, res: Response) => {
   try {
-    const { data, error } = await supabase.from('reviews').select(`
+    const { data, error } = await supabaseAdmin.from('reviews').select(`
       *,
       products (name)
     `).order('created_at', { ascending: false })
@@ -68,7 +68,7 @@ export const updateReviewStatus = async (req: Request, res: Response) => {
     const { id } = req.params
     const { is_approved } = req.body
     
-    const { data, error } = await supabase.from('reviews')
+    const { data, error } = await supabaseAdmin.from('reviews')
       .update({ is_approved })
       .eq('id', id)
       .select().single()
@@ -83,7 +83,7 @@ export const updateReviewStatus = async (req: Request, res: Response) => {
 export const approveReview = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { data, error } = await supabase.from('reviews')
+    const { data, error } = await supabaseAdmin.from('reviews')
       .update({ is_approved: true })
       .eq('id', id)
       .select().single()
@@ -98,7 +98,7 @@ export const approveReview = async (req: Request, res: Response) => {
 export const rejectReview = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { data, error } = await supabase.from('reviews')
+    const { data, error } = await supabaseAdmin.from('reviews')
       .update({ is_approved: false }) // FALSE = Rejected
       .eq('id', id)
       .select().single()
@@ -113,7 +113,7 @@ export const rejectReview = async (req: Request, res: Response) => {
 export const deleteReview = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { error } = await supabase.from('reviews').delete().eq('id', id)
+    const { error } = await supabaseAdmin.from('reviews').delete().eq('id', id)
     if (error) throw error
     res.status(204).send()
   } catch (error: any) {

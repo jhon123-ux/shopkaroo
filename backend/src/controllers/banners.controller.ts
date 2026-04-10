@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 
 export const getAllBanners = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -43,7 +43,7 @@ export const getBannerById = async (req: Request, res: Response): Promise<void> 
 
 export const createBanner = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('banners')
       .insert([req.body])
       .select()
@@ -64,7 +64,7 @@ export const updateBanner = async (req: Request, res: Response): Promise<void> =
   try {
     const { id } = req.params
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('banners')
       .update(req.body)
       .eq('id', id)
@@ -85,7 +85,7 @@ export const updateBanner = async (req: Request, res: Response): Promise<void> =
 export const deleteBanner = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params
-    const { error } = await supabase.from('banners').delete().eq('id', id)
+    const { error } = await supabaseAdmin.from('banners').delete().eq('id', id)
 
     if (error) {
       res.status(400).json({ error: error.message })
@@ -103,7 +103,7 @@ export const toggleBanner = async (req: Request, res: Response): Promise<void> =
     const { id } = req.params
     
     // First get current status
-    const { data: current, error: fetchErr } = await supabase
+    const { data: current, error: fetchErr } = await supabaseAdmin
       .from('banners')
       .select('is_active')
       .eq('id', id)
@@ -114,7 +114,7 @@ export const toggleBanner = async (req: Request, res: Response): Promise<void> =
       return
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('banners')
       .update({ is_active: !current.is_active })
       .eq('id', id)
@@ -144,7 +144,7 @@ export const reorderBanners = async (req: Request, res: Response): Promise<void>
     // Since Supabase RPC requires a custom postgres function for batch updates,
     // we will loop the updates natively in map for this scale. (Typically 3-5 banners).
     const promises = banners.map((b) => 
-      supabase.from('banners').update({ sort_order: b.sort_order }).eq('id', b.id)
+      supabaseAdmin.from('banners').update({ sort_order: b.sort_order }).eq('id', b.id)
     )
 
     await Promise.all(promises)

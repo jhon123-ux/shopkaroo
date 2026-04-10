@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 
 export const getOfferBanner = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,7 +26,7 @@ export const getOfferBanner = async (req: Request, res: Response): Promise<void>
 export const updateOfferBanner = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('offer_banner')
       .update(req.body)
       .eq('id', id)
