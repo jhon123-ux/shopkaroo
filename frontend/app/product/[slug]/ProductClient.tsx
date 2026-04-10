@@ -70,6 +70,8 @@ export default function ProductDetailPage() {
   const [revSubmitted, setRevSubmitted] = useState(false)
   const [reviews, setReviews] = useState<any[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
+  const [isZoomed, setIsZoomed] = useState(false)
   
   const { user } = useAuthStore()
 
@@ -204,6 +206,13 @@ export default function ProductDetailPage() {
     setTimeout(() => setShowToast(false), 2000)
   }
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
+    const x = ((e.pageX - left - window.scrollX) / width) * 100
+    const y = ((e.pageY - top - window.scrollY) / height) * 100
+    setZoomPosition({ x, y })
+  }
+
   const categoryNameDisplay = product.category ? (CATEGORY_NAMES[product.category] || product.category.replace('-', ' ')) : 'Category'
   const categoryIconDisplay = product.category ? (CATEGORY_ICONS[product.category] || <Home className="w-10 h-10" />) : <Home className="w-10 h-10" />
 
@@ -228,12 +237,22 @@ export default function ProductDetailPage() {
         
         {/* LEFT — IMAGE GALLERY */}
         <div className="flex flex-col w-full md:sticky md:top-28 h-max">
-          <div className="w-full aspect-square bg-[#F2EDE6] rounded-0 overflow-hidden relative border border-[#E8E2D9]">
+          <div 
+            className={`w-full aspect-square bg-[#F2EDE6] rounded-0 overflow-hidden relative border border-[#E8E2D9] ${isZoomed ? 'cursor-crosshair' : 'cursor-zoom-in'}`}
+            onMouseEnter={() => setIsZoomed(true)}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setIsZoomed(false)}
+          >
             {product.images && product.images.length > 0 ? (
               <Image 
                 src={product.images[activeImageIndex]} 
                 alt={product.name}
                 fill
+                style={{
+                  transform: isZoomed ? 'scale(2)' : 'scale(1)',
+                  transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                  transition: isZoomed ? 'transform-origin 0.1s ease-out' : 'transform 0.3s ease-out'
+                }}
                 className="object-contain p-4 md:p-8 transition-opacity duration-300"
               />
             ) : (
@@ -243,7 +262,7 @@ export default function ProductDetailPage() {
             )}
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+            <div className={`absolute top-4 left-4 flex flex-col gap-2 z-10 transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
               {isSale && (
                 <span className="bg-[#1C1410] text-white text-[10px] px-3 py-1.5 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-md">
                   SALE
@@ -257,7 +276,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Zoom Hint */}
-            <div className="absolute bottom-4 right-4 bg-white/90 border border-[#E8E2D9] rounded-[3px] px-3 py-1.5 z-10 shadow-sm">
+            <div className={`absolute bottom-4 right-4 bg-white/90 border border-[#E8E2D9] rounded-[3px] px-3 py-1.5 z-10 shadow-sm transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
               <span className="text-[11px] text-[#6B6058] font-semibold tracking-wide uppercase font-body flex items-center gap-1.5">
                 <Search size={14} className="opacity-40" /> Zoom
               </span>
