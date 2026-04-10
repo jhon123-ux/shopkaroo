@@ -105,9 +105,10 @@ export default function AdminBanners() {
     try {
       const res = await bannerAPI.uploadImage(form)
       setFormData(prev => ({ ...prev, bg_image_url: res.data.url }))
-    } catch (error) {
+    } catch (error: any) {
       console.error('Upload failed', error)
-      showToast('Asset upload failed.', 'error')
+      const msg = error.response?.data?.details || error.response?.data?.error || 'Asset upload failed.'
+      showToast(msg, 'error')
     } finally {
       setIsUploading(false)
     }

@@ -56,6 +56,20 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', project: 'Shopkaroo API', version: '1.0.0' })
 })
 
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Unhandled error:', err);
+  
+  if (err.name === 'MulterError') {
+    return res.status(400).json({ error: 'File upload error', details: err.message });
+  }
+  
+  const status = err.status || 500;
+  res.status(status).json({ 
+    error: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Shopkaroo API running on http://localhost:${PORT}`)
   console.log(`Swagger docs at http://localhost:${PORT}/api-docs`)
