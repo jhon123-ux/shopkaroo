@@ -58,17 +58,17 @@ export default function AdminLayout({
     <div className="flex min-h-screen bg-background font-body transition-colors duration-300">
       
       {/* SIDEBAR */}
-      <aside className="w-64 bg-brand-black min-h-screen 
-        flex flex-col fixed left-0 top-0 z-40 border-r border-white/5">
+      <aside className="w-64 bg-admin-sidebar-bg min-h-screen 
+        flex flex-col fixed left-0 top-0 z-40 border-r border-admin-border-faint">
         
         {/* Logo */}
         <div className="px-8 py-8 border-b 
-          border-white/5">
-          <p className="text-white font-bold italic
+          border-admin-border-faint">
+          <p className="text-admin-sidebar-text font-bold italic
             text-[24px] font-heading" >
             Shopkarro
           </p>
-          <p className="text-white/30 text-[9px] mt-2 
+          <p className="text-admin-sidebar-muted text-[9px] mt-2 
             font-bold uppercase tracking-[4px]">
             Enterprise Panel
           </p>
@@ -86,11 +86,11 @@ export default function AdminLayout({
                   px-5 py-4 rounded-0 mb-2 text-[13px]
                   transition-all duration-300 uppercase tracking-widest font-bold
                   ${isActive
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'text-white/40 hover:bg-white/[0.03] hover:text-white'
+                    ? 'bg-admin-sidebar-active text-white shadow-lg'
+                    : 'text-admin-sidebar-text/60 hover:bg-white/[0.03] hover:text-admin-sidebar-text'
                   }`}
               >
-                <span className="opacity-60">
+                <span className={isActive ? "opacity-100" : "opacity-40 group-hover:opacity-100"}>
                   {link.icon}
                 </span>
                 {link.label}
@@ -101,24 +101,24 @@ export default function AdminLayout({
 
         {/* Bottom */}
         <div className="px-8 py-6 border-t 
-          border-white/5 bg-black/10">
+          border-admin-border-faint bg-black/10">
           <Link href="/" 
-            className="text-white/30 text-[10px] 
-            hover:text-white/70 transition uppercase tracking-[2px]
+            className="text-admin-sidebar-muted text-[10px] 
+            hover:text-admin-sidebar-text transition uppercase tracking-[2px]
             flex items-center gap-3 font-bold">
             <ArrowLeft size={12} /> Storefront
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full mt-6 text-[#DC2626] opacity-40 hover:opacity-100 transition-all 
+            className="w-full mt-6 text-[#DC2626] opacity-60 hover:opacity-100 transition-all 
             uppercase tracking-[4px] text-[9px] font-bold py-3 
-            border border-[#DC2626]/20 hover:border-[#DC2626] 
+            border border-[#DC2626]/40 hover:border-[#DC2626] 
             flex items-center justify-center gap-2"
           >
             <LogOut size={12} /> Terminate Session
           </button>
 
-          <p className="text-white/10 text-[9px] mt-6 
+          <p className="text-admin-sidebar-muted/30 text-[9px] mt-6 
             uppercase tracking-widest">
             Protocol v2.4.0
           </p>

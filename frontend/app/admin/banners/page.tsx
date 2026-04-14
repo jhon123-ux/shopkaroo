@@ -132,7 +132,7 @@ export default function AdminBanners() {
         {/* Header */}
         <div className="flex justify-between items-end mb-12">
           <div>
-            <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Curation Management</p>
+            <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Curation Management</p>
             <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Exhibition Banners</h2>
           </div>
           <button 
@@ -184,7 +184,7 @@ export default function AdminBanners() {
 
                 <div className="flex items-center gap-8 ml-auto border-l border-[#FAF7F4] pl-8 h-full shrink-0">
                   <div className="flex flex-col items-center">
-                     <span className="text-[9px] uppercase text-[#6B6058] mb-1 font-bold opacity-40 tracking-widest">Index</span>
+                     <span className="text-[9px] uppercase text-[#6B6058] mb-1 font-bold tracking-widest">Index</span>
                      <span className="font-heading text-[20px] font-bold text-[#1C1410]">{b.sort_order}</span>
                   </div>
                   
@@ -216,14 +216,14 @@ export default function AdminBanners() {
             <div className="bg-white rounded-0 p-12 md:p-16 max-w-6xl w-full mx-auto max-h-[90vh] overflow-y-auto shadow-[0_30px_100px_rgba(0,0,0,0.2)] flex flex-col md:flex-row gap-16 animate-slideUp">
               
               {/* Form Fields */}
-              <div className="flex-1 space-y-8 border-r border-[#FAF7F4] pr-0 md:pr-16">
+                <div className="flex-1 space-y-8 border-r border-[#FAF7F4] pr-0 md:pr-16">
                 <div className="mb-12">
-                   <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] opacity-40 mb-2">Protocol Entry</p>
+                   <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] mb-2">Protocol Entry</p>
                    <h2 className="text-[32px] font-bold font-heading text-[#1C1410] uppercase tracking-widest">{editingBanner ? 'Modify Exhibit' : 'New Exhibit'}</h2>
                 </div>
                 
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Primary Designation *</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Primary Designation *</label>
                   <input 
                     type="text" 
                     value={formData.title || ''} 
@@ -234,7 +234,7 @@ export default function AdminBanners() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Descriptive Narrative</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Descriptive Narrative</label>
                   <textarea 
                     rows={3}
                     value={formData.subtitle || ''} 
@@ -246,7 +246,7 @@ export default function AdminBanners() {
 
                 <div className="flex gap-8">
                   <div className="flex-1">
-                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Badge Inscription</label>
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Badge Inscription</label>
                     <input 
                       type="text" 
                       value={formData.badge_text || ''} 
@@ -256,7 +256,7 @@ export default function AdminBanners() {
                     />
                   </div>
                   <div className="w-24 shrink-0">
-                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Tone</label>
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Tone</label>
                     <div className="relative h-12 w-full border border-[#D4CCC2] rounded-0 overflow-hidden cursor-pointer shadow-sm">
                        <input 
                          type="color" 

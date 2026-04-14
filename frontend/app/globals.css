@@ -15,6 +15,13 @@
   --color-border-input:    #D4CCC2;
   --font-heading: 'Playfair Display', serif;
   --font-body:    'DM Sans', sans-serif;
+
+  /* Admin Sidebar (Locked Dark) */
+  --admin-sidebar-bg:      #1C1410;
+  --admin-sidebar-text:    #FAF7F4;
+  --admin-sidebar-muted:   #6B6058;
+  --admin-sidebar-active:  #783A3A;
+  --admin-border-faint:   rgba(255,255,255,0.05);
 }
 
 .dark {
@@ -47,6 +54,12 @@
   --font-heading: var(--font-heading);
   --font-body:    var(--font-body);
   
+  --color-admin-sidebar-bg:    var(--admin-sidebar-bg);
+  --color-admin-sidebar-text:  var(--admin-sidebar-text);
+  --color-admin-sidebar-muted: var(--admin-sidebar-muted);
+  --color-admin-sidebar-active: var(--admin-sidebar-active);
+  --color-admin-border-faint: var(--admin-border-faint);
+
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.2);
   --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
 }

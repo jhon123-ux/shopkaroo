@@ -108,7 +108,7 @@ export default function AdminReviewsPage() {
       {/* HEADER */}
       <div className="flex justify-between items-end mb-12">
         <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Sentiment Curation</p>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Sentiment Curation</p>
           <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Reviews</h2>
         </div>
         <div className="flex flex-col items-end">
@@ -132,7 +132,7 @@ export default function AdminReviewsPage() {
             className={`pb-4 text-[11px] font-bold uppercase tracking-[2.5px] transition-all relative ${
               activeTab === tab.id 
                 ? 'text-[#783A3A]' 
-                : 'text-[#6B6058] opacity-40 hover:opacity-100'
+                : 'text-[#6B6058] opacity-70 hover:opacity-100'
             }`}
           >
             {tab.label}
@@ -149,12 +149,12 @@ export default function AdminReviewsPage() {
           <table className="w-full text-sm text-left">
             <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
               <tr>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Product</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Rating</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Statement</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Status</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40 text-right">Command</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Product</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Customer</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Rating</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Statement</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Status</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] text-right">Command</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#FAF7F4]">
@@ -188,7 +188,7 @@ export default function AdminReviewsPage() {
                         </div>
                         <div className="flex flex-col">
                           <span className="font-bold text-[#1C1410] text-[13px]">{review.name}</span>
-                          <span className="text-[10px] text-[#6B6058] opacity-40 font-bold uppercase tracking-wider">{new Date(review.created_at).toLocaleDateString()}</span>
+                          <span className="text-[10px] text-[#6B6058] font-bold uppercase tracking-wider">{new Date(review.created_at).toLocaleDateString()}</span>
                         </div>
                       </div>
                     </td>

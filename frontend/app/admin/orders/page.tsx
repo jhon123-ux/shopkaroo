@@ -170,7 +170,7 @@ export default function AdminOrdersPage() {
       {/* HEADER SECTION */}
       <div className="flex justify-between items-end mb-12">
         <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Vault Registry</p>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Vault Registry</p>
           <h2 className="text-[28px] font-bold font-heading text-[#1C1410] leading-none uppercase tracking-widest">Transactions</h2>
         </div>
         <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
@@ -182,19 +182,19 @@ export default function AdminOrdersPage() {
       {/* TOP AGGREGATE STATS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
-          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Total Volume</p>
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 group-hover:opacity-100 transition-opacity">Total Volume</p>
           <p className="font-heading font-bold text-[36px] text-[#1C1410] leading-none">{orders.length}</p>
         </div>
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
-          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Awaiting Action</p>
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 group-hover:opacity-100 transition-opacity">Awaiting Action</p>
           <p className="font-heading font-bold text-[36px] text-[orange] leading-none">{orders.filter(o => o.status === 'pending').length}</p>
         </div>
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
-          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">In Transit</p>
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 group-hover:opacity-100 transition-opacity">In Transit</p>
           <p className="font-heading font-bold text-[36px] text-[#783A3A] leading-none">{orders.filter(o => o.status === 'shipped').length}</p>
         </div>
         <div className="bg-white border border-[#E8E2D9] rounded-0 p-8 shadow-sm group">
-          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 opacity-40 group-hover:opacity-60 transition-opacity">Fulfilled</p>
+          <p className="text-[#6B6058] font-bold text-[10px] uppercase tracking-[2px] mb-2 group-hover:opacity-100 transition-opacity">Fulfilled</p>
           <p className="font-heading font-bold text-[36px] text-[#2D6A4F] leading-none">{orders.filter(o => o.status === 'delivered').length}</p>
         </div>
       </div>
@@ -267,14 +267,14 @@ export default function AdminOrdersPage() {
           <table className="w-full text-sm">
             <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
               <tr>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Identifier</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Geo</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Inventory</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Valuation</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Pipeline</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Chronology</th>
-                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Command</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Identifier</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Customer</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Geo</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Inventory</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Valuation</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Pipeline</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Chronology</th>
+                <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Command</th>
               </tr>
             </thead>
             <tbody>
@@ -307,7 +307,7 @@ export default function AdminOrdersPage() {
                     <td className="px-8 py-6 font-mono font-bold text-[#783A3A] text-[13px] tracking-widest">{o.order_number}</td>
                     <td className="px-8 py-6">
                       <p className="font-bold text-[#1C1410] text-[14px]">{o.customer_name}</p>
-                      <p className="text-[11px] text-[#6B6058] font-bold opacity-40 mt-1 uppercase tracking-wider">{o.phone}</p>
+                      <p className="text-[11px] text-[#6B6058] font-bold mt-1 uppercase tracking-wider">{o.phone}</p>
                     </td>
                     <td className="px-8 py-6 text-[12px] font-bold text-[#1C1410] uppercase tracking-widest">{o.city}</td>
                     <td className="px-8 py-6">

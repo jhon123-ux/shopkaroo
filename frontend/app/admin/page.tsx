@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-text">
             <Package size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Total Inventory</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Total Inventory</p>
           <p className="font-heading font-bold text-[48px] text-text leading-none">
             {loading ? '—' : stats.products}
           </p>
@@ -83,7 +83,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-primary">
             <ShoppingCart size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Revenue Cycles</p>
           <p className="font-heading font-bold text-[48px] text-primary leading-none">
             {loading ? '—' : stats.orders}
           </p>
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-orange-500">
             <Clock size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Queue</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Queue</p>
           <p className="font-heading font-bold text-[48px] text-orange-500 leading-none">
             {loading ? '—' : stats.pending}
           </p>
@@ -103,7 +103,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-green-600 dark:text-green-500">
             <ImageIcon size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Exhibits</p>
           <p className="font-heading font-bold text-[48px] text-green-600 dark:text-green-500 leading-none">
             {loading ? '—' : stats.banners}
           </p>
@@ -113,7 +113,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity text-[#D97706]">
             <Star size={28} />
           </div>
-          <p className="text-[#D97706] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Sentiment Audit</p>
+          <p className="text-[#D97706] text-[11px] font-bold uppercase tracking-[2px] mb-2">Sentiment Audit</p>
           <p className="font-heading font-bold text-[48px] text-[#D97706] leading-none">
             {loading ? '—' : stats.pendingReviews}
           </p>
@@ -129,12 +129,12 @@ export default function AdminDashboardPage() {
         <table className="w-full text-sm">
           <thead className="bg-surface border-b border-border">
             <tr>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Identifier</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Customer</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Location</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Valuation</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Status</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Created</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Identifier</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Customer</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Location</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Valuation</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Status</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Created</th>
             </tr>
           </thead>
           <tbody>
@@ -160,7 +160,7 @@ export default function AdminDashboardPage() {
                       {o.status}
                     </span>
                   </td>
-                  <td className="px-8 py-6 text-text-muted text-[11px] font-bold uppercase tracking-widest opacity-40">
+                  <td className="px-8 py-6 text-text-muted text-[11px] font-bold uppercase tracking-widest opacity-60">
                     {new Date(o.created_at).toLocaleDateString('en-PK', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
                 </tr>

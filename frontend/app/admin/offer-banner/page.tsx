@@ -133,7 +133,7 @@ export default function AdminOfferBannerPage() {
 
       {/* HEADER */}
       <div className="text-left mb-12">
-        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Storefront Promotions</p>
+        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Storefront Promotions</p>
         <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Promotionals</h2>
       </div>
 
@@ -142,7 +142,7 @@ export default function AdminOfferBannerPage() {
         <div className="grid grid-cols-1 gap-10">
           
           <div>
-            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Announcement Designation</label>
+            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Announcement Designation</label>
             <input 
               type="text" 
               value={banner.title}
@@ -153,7 +153,7 @@ export default function AdminOfferBannerPage() {
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Exhibition Narrative</label>
+            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Exhibition Narrative</label>
             <textarea 
               rows={2}
               value={banner.subtitle}
@@ -165,7 +165,7 @@ export default function AdminOfferBannerPage() {
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Inscription Badge</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Inscription Badge</label>
               <input 
                 type="text" 
                 value={banner.badge_text}
@@ -174,7 +174,7 @@ export default function AdminOfferBannerPage() {
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Action Designation</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Action Designation</label>
               <input 
                 type="text" 
                 value={banner.cta_text}
@@ -186,16 +186,16 @@ export default function AdminOfferBannerPage() {
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Target Protocol (Link)</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Target Protocol (Link)</label>
               <input 
                 type="text" 
                 value={banner.cta_link}
                 onChange={e => setBanner({...banner, cta_link: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-mono opacity-60 outline-none"
+                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-mono outline-none"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Temporal Expiry (Date & Time)</label>
+              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Temporal Expiry (Date & Time)</label>
               <input 
                 type="datetime-local" 
                 value={banner.end_date}
@@ -227,7 +227,7 @@ export default function AdminOfferBannerPage() {
 
       {/* LIVE PREVIEW AREA */}
       <div className="border-t border-[#FAF7F4] pt-16">
-        <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-10 opacity-40 text-left">Real-Time Visualization</h3>
+        <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-10 text-left">Real-Time Visualization</h3>
         
         <div className="rounded-0 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.15)] relative group bg-[#1C1410]">
           <div className="p-16 md:p-20 text-center relative z-10">

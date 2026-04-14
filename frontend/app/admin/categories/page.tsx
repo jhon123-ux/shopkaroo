@@ -218,7 +218,7 @@ export default function AdminCategoriesPage() {
       {/* HEADER */}
       <div className="flex justify-between items-end mb-12">
         <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Hierarchy Manifest</p>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Hierarchy Manifest</p>
           <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Categories</h2>
         </div>
         <button 
@@ -280,9 +280,9 @@ export default function AdminCategoriesPage() {
                     <div className="flex flex-col">
                       <h3 className="font-heading font-bold text-[18px] text-[#1C1410] uppercase tracking-widest">{cat.name}</h3>
                     </div>
-                    <span className="bg-[#FAF7F4] text-[#1C1410] px-2 py-1 text-[10px] font-mono font-bold opacity-40">ORDER: {cat.sort_order}</span>
+                    <span className="bg-[#FAF7F4] text-[#1C1410] px-2 py-1 text-[10px] font-mono font-bold">ORDER: {cat.sort_order}</span>
                   </div>
-                  <p className="text-[11px] text-[#6B6058] font-mono tracking-wider opacity-60 mb-2">slug/{cat.slug}</p>
+                  <p className="text-[11px] text-[#6B6058] font-mono tracking-wider mb-2">slug/{cat.slug}</p>
                   
                   {/* Subcategories Count */}
                   <div className="mt-4 flex items-center gap-2 text-[#783A3A] text-[10px] font-bold uppercase tracking-wider">
@@ -336,7 +336,7 @@ export default function AdminCategoriesPage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Classification Name</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Classification Name</label>
                   <input 
                     type="text" 
                     value={formData.name} 
@@ -347,7 +347,7 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">System Slug (Auto)</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">System Slug (Auto)</label>
                   <input 
                     type="text" 
                     value={formData.slug} 
@@ -359,7 +359,7 @@ export default function AdminCategoriesPage() {
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Narrative Description</label>
+                <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Narrative Description</label>
                 <textarea 
                   value={formData.description} 
                   onChange={e => setFormData({...formData, description: e.target.value})}
@@ -370,7 +370,7 @@ export default function AdminCategoriesPage() {
 
               {/* Image Upload Zone */}
               <div>
-                <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Visual Asset Exhibit</label>
+                <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Visual Asset Exhibit</label>
                 {formData.image_url ? (
                   <div className="relative h-48 border border-[#E8E2D9] rounded-0 overflow-hidden group bg-[#FAF7F4]">
                     <Image src={formData.image_url} alt="preview" fill className="object-cover" />
@@ -385,7 +385,7 @@ export default function AdminCategoriesPage() {
                 ) : (
                   <label className={`cursor-pointer border-2 border-dashed border-[#D4CCC2] rounded-0 h-48 flex flex-col items-center justify-center hover:border-[#783A3A] transition group relative ${isUploading ? 'opacity-50' : ''}`}>
                     <Upload size={32} className="text-[#6B6058] opacity-20 group-hover:opacity-40 transition-opacity mb-4" />
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-40">
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410]">
                       {isUploading ? 'Synchronizing Asset...' : 'Upload Visual Exhibit'}
                     </span>
                     <input type="file" hidden accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
@@ -395,7 +395,7 @@ export default function AdminCategoriesPage() {
 
               <div className="flex gap-8">
                 <div className="flex-1">
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Hierarchy Placement</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Hierarchy Placement</label>
                   <select 
                     value={formData.parent_id} 
                     onChange={e => setFormData({...formData, parent_id: e.target.value})}
@@ -411,7 +411,7 @@ export default function AdminCategoriesPage() {
                   </select>
                 </div>
                 <div className="flex-1">
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Sort Sequence</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Sort Sequence</label>
                   <input 
                     type="number" 
                     value={formData.sort_order} 
@@ -429,7 +429,7 @@ export default function AdminCategoriesPage() {
                     onChange={e => setFormData({...formData, is_active: e.target.checked})}
                     className="w-5 h-5 accent-[#783A3A]"
                   />
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] opacity-60 group-hover:opacity-100 transition-opacity">Protocol Active</span>
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#1C1410] group-hover:opacity-100 transition-opacity">Protocol Active</span>
                 </label>
               </div>
 
