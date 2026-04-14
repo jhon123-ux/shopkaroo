@@ -76,7 +76,7 @@ export default function HeroSlider() {
     badge_text: 'New Arrivals',
     badge_color: 'var(--color-primary)',
     cta_primary_text: 'Shop Now',
-    cta_primary_link: '/furniture/living-room',
+    cta_primary_link: '/furniture',
     cta_secondary_text: 'WhatsApp Us',
     cta_secondary_link: 'https://wa.me/923001234567',
     bg_image_url: null,
@@ -169,7 +169,7 @@ export default function HeroSlider() {
             style={{ animationDelay: '250ms' }}
           >
             <Link 
-              href={banner.cta_primary_link}
+              href="/furniture"
               className="bg-bg-white text-text px-10 py-4 rounded-[3px] font-bold font-body text-sm text-center shadow-lg hover:bg-surface transition-all duration-300 active:scale-95"
             >
               {banner.cta_primary_text}

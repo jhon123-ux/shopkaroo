@@ -95,7 +95,7 @@ function FeaturedHeader() {
         </p>
       </div>
       <Link 
-        href="/furniture/living-room" 
+        href="/furniture" 
         className="text-primary font-semibold hover:underline flex items-center group font-body text-sm"
       >
         View All Collection 
