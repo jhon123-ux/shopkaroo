@@ -209,7 +209,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         </div>
 
         {showToast && (
-          <div className="fixed top-24 right-6 z-[300] bg-brand-black text-white px-5 py-3.5 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-primary">
+          <div className="fixed top-24 right-6 z-[500] bg-brand-black text-white px-5 py-3.5 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-primary">
             <Check size={16} className="text-green-500" strokeWidth={3} /> 
             <span className="text-[13px] font-body font-semibold text-white">{toastMsg}</span>
           </div>

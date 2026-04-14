@@ -721,7 +721,7 @@ export default function ProductDetailPage() {
       </div>
 
       {showToast && (
-        <div className="fixed top-24 right-6 z-[100] bg-brand-black text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-primary">
+        <div className="fixed top-24 right-6 z-[500] bg-brand-black text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-primary">
           <Check size={16} className="text-green-500" strokeWidth={3} /> 
           <span className="text-[13px] font-body font-semibold text-white">Registry Updated: Link active</span>
         </div>
