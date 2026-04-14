@@ -111,7 +111,10 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
               src={product.images[0]} 
               alt={product.name}
               fill
-              className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              style={{ objectFit: 'cover' }}
+              loading="lazy"
+              className="group-hover:scale-[1.04] transition-transform duration-500"
             />
           ) : (
             <div className="flex items-center justify-center w-full h-full text-text-muted opacity-40 group-hover:scale-[1.04] transition-transform duration-500 select-none">

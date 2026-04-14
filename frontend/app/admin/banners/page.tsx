@@ -155,7 +155,16 @@ export default function AdminBanners() {
                 <div className="cursor-grab text-[#1C1410] opacity-10 hover:opacity-30 px-2 py-4 select-none"><Menu className="w-5 h-5" /></div>
                 
                 <div className="w-32 h-20 rounded-0 overflow-hidden shrink-0 relative flex items-center justify-center bg-[#FAF7F4] border border-[#E8E2D9]">
-                   {b.bg_image_url && <Image src={b.bg_image_url} alt="" fill className="object-cover" />}
+                   {b.bg_image_url && (
+                     <Image 
+                       src={b.bg_image_url} 
+                       alt="" 
+                       fill 
+                       loading="lazy"
+                       sizes="128px"
+                       className="object-cover" 
+                     />
+                   )}
                    {!b.bg_image_url && <span className="text-[9px] font-bold text-[#1C1410] opacity-40 uppercase tracking-widest">Protocol BG</span>}
                 </div>
 
@@ -264,7 +273,14 @@ export default function AdminBanners() {
                      <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Master Asset</label>
                      {formData.bg_image_url ? (
                        <div className="relative h-24 rounded-0 overflow-hidden border border-[#D4CCC2] shadow-inner group">
-                         <Image src={formData.bg_image_url} alt="" fill className="object-cover" />
+                         <Image 
+                           src={formData.bg_image_url} 
+                           alt="" 
+                           fill 
+                           loading="lazy"
+                           sizes="200px"
+                           className="object-cover" 
+                         />
                          <button onClick={() => setFormData({...formData, bg_image_url: null})} className="absolute top-1 right-1 bg-white/90 p-1 rounded-0 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity shadow text-red-500">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M6 18L18 6M6 6l12 12" /></svg>
                          </button>
@@ -297,7 +313,16 @@ export default function AdminBanners() {
                  <div>
                     <h3 className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[4px] mb-8 opacity-40">Real-Time Visualization</h3>
                     <div className="relative w-full aspect-[4/5] rounded-0 overflow-hidden shadow-2xl flex flex-col justify-end p-12 border border-[#1C1410]/5" style={{ background: formData.bg_image_url ? 'transparent' : '#1C1410' }}>
-                       {formData.bg_image_url && <Image src={formData.bg_image_url} alt="" fill className="object-cover" />}
+                       {formData.bg_image_url && (
+                         <Image 
+                           src={formData.bg_image_url} 
+                           alt="" 
+                           fill 
+                           loading="lazy"
+                           sizes="400px"
+                           className="object-cover" 
+                         />
+                       )}
                        <div className="absolute inset-0 z-0" style={{ background: formData.bg_overlay || 'rgba(0,0,0,0)' }}></div>
                        
                        <div className="relative z-10 w-full transform">

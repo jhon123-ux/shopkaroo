@@ -106,8 +106,10 @@ export default function HeroSlider() {
                 src={b.bg_image_url}
                 alt="Banner background"
                 fill
-                className="object-cover"
                 priority={idx === 0}
+                loading={idx === 0 ? undefined : "lazy"}
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
               />
               <div className="absolute inset-0 z-0" style={{ background: b.bg_overlay }}></div>
             </>

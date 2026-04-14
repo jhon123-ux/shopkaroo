@@ -47,6 +47,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://xxhnilswsukipjfbgiec.supabase.co" />
+        <link rel="preconnect" href="https://shopkaroo-production.up.railway.app" />
+      </head>
       <body className="flex flex-col min-h-screen font-body antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <AuthProvider>
