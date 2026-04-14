@@ -20,19 +20,32 @@ export function ThemeToggle() {
   }
 
   return (
-    <button
+    <div 
+      className="relative w-[72px] h-[36px] bg-bg-white border border-border rounded-full p-1 flex items-center justify-between cursor-pointer transition-colors duration-300"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="relative w-10 h-10 flex items-center justify-center rounded-[3px] border border-border bg-bg-white text-text-muted hover:text-primary hover:border-primary transition-all cursor-pointer overflow-hidden group"
-      aria-label="Toggle theme"
     >
-      <div className="relative w-full h-full flex items-center justify-center">
+      {/* Active Indicator Slab */}
+      <div 
+        className={`absolute w-[30px] h-[28px] bg-primary rounded-full transition-all duration-300 ease-out shadow-sm ${
+          theme === 'dark' ? 'translate-x-[34px]' : 'translate-x-0'
+        }`} 
+      />
+      
+      {/* Light Icon Area */}
+      <div className="flex-1 flex items-center justify-center relative z-10 transition-colors">
         <Sun 
-          className="absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" 
-        />
-        <Moon 
-          className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" 
+          size={14} 
+          className={theme === 'light' ? 'text-white' : 'text-text-muted opacity-50'} 
         />
       </div>
-    </button>
+
+      {/* Dark Icon Area */}
+      <div className="flex-1 flex items-center justify-center relative z-10 transition-colors">
+        <Moon 
+          size={14} 
+          className={theme === 'dark' ? 'text-white' : 'text-text-muted opacity-50'} 
+        />
+      </div>
+    </div>
   )
 }

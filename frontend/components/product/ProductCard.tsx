@@ -100,7 +100,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
 
   return (
     <>
-      <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-bg-white rounded-[4px] border border-border overflow-hidden hover:border-primary hover:shadow-md transition-all duration-300">
+      <Link href={`/product/${product.slug}`} className="block h-full cursor-pointer group bg-brand-offwhite rounded-[4px] border border-border overflow-hidden hover:border-primary hover:shadow-md transition-all duration-300">
         
         {/* TOP — Square Image Area */}
         <div 
@@ -124,7 +124,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           {/* Like Button */}
           <button 
             onClick={handleLike}
-            className={`bg-bg-white/92 border w-[32px] h-[32px] rounded-0 flex items-center justify-center transition-all shadow-sm ${
+            className={`bg-white border w-[32px] h-[32px] rounded-0 flex items-center justify-center transition-all shadow-sm ${
               isLiked 
                 ? 'text-primary border-primary opacity-100' 
                 : 'border-border text-text-muted hover:text-primary hover:border-primary opacity-0 group-hover:opacity-100'
@@ -137,7 +137,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           {/* Quick View Button */}
           <button 
             onClick={handleQuickView}
-            className="w-[32px] h-[32px] bg-bg-white border border-border rounded-0 flex items-center justify-center text-text-muted hover:text-primary hover:border-primary shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[0ms]"
+            className="w-[32px] h-[32px] bg-white border border-border rounded-0 flex items-center justify-center text-text-muted hover:text-primary hover:border-primary shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[0ms]"
             title="Quick View"
           >
             <Eye size={14} />
@@ -146,7 +146,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
           {/* Share Button */}
           <button 
             onClick={handleShare}
-            className="w-[32px] h-[32px] bg-bg-white border border-border rounded-0 flex items-center justify-center text-text-muted hover:text-primary hover:border-primary shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[50ms]"
+            className="w-[32px] h-[32px] bg-white border border-border rounded-0 flex items-center justify-center text-text-muted hover:text-primary hover:border-primary shadow-sm opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300 delay-[50ms]"
             title="Share Product"
           >
             <Share2 size={14} />
@@ -171,12 +171,12 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
       </div>
 
         {/* BOTTOM — Product Info */}
-        <div className="p-4 flex flex-col items-start bg-bg-white">
+        <div className="p-4 flex flex-col items-start bg-brand-offwhite">
           <span className="text-[10px] font-semibold font-body tracking-[2px] uppercase text-text-muted mb-1 opacity-70">
             {product.category?.replace('-', ' ')}
           </span>
 
-          <h3 className="font-heading font-semibold text-[15px] text-text line-clamp-1 mb-1 group-hover:text-primary transition-colors">
+          <h3 className="font-heading font-semibold text-[15px] text-brand-black line-clamp-1 mb-1 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
 
@@ -191,7 +191,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
                  </span>
                </>
             ) : (
-               <span className="text-text font-bold text-[17px] font-heading">
+               <span className="text-brand-black font-bold text-[17px] font-heading">
                  {formatPrice(product.price_pkr)}
                </span>
             )}
@@ -199,7 +199,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
 
           <button 
             onClick={handleAddToCart}
-            className="w-full py-2.5 border border-border text-text-muted bg-bg-white hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 rounded-[2px] text-[12px] font-bold uppercase tracking-wider flex items-center justify-center gap-2.5"
+            className="w-full py-2.5 border border-border text-text-muted bg-white hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 rounded-[2px] text-[12px] font-bold uppercase tracking-wider flex items-center justify-center gap-2.5"
           >
             <ShoppingCart size={14} /> Add to Cart
           </button>
