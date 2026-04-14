@@ -74,7 +74,7 @@ function CategoryContent() {
   // Fetch Category Details
   useEffect(() => {
     const fetchCategoryMetadata = async () => {
-      if (!categorySlug) return
+      if (isAllFurniture) return
       try {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
         const res = await fetch(`${backendUrl}/api/categories?all=true`)
@@ -116,8 +116,6 @@ function CategoryContent() {
   // Fetch Data
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!categorySlug) return
-      
       setLoading(true)
       try {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
