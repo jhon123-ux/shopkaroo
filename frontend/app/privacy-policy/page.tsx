@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="bg-[#FAF7F4] min-h-screen">
+    <main className="bg-background min-h-screen transition-colors duration-300">
       
       {/* Header */}
-      <div className="bg-[#1C1410] py-16">
+      <div className="bg-text py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[#783A3A] font-medium text-sm tracking-widest uppercase mb-4"
+          <p className="text-primary font-medium text-sm tracking-widest uppercase mb-4"
              style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '3px' }}>
             Legal
           </p>
@@ -34,13 +34,13 @@ export default function PrivacyPolicyPage() {
       <div className="max-w-4xl mx-auto px-6 py-16">
         
         {/* Intro */}
-        <div className="bg-white border border-[#E8E2D9] p-8 mb-8" style={{ borderRadius: '4px' }}>
-          <p className="text-[#6B6058] text-base leading-relaxed"
+        <div className="bg-bg-white border border-border p-8 mb-8 shadow-sm" style={{ borderRadius: '4px' }}>
+          <p className="text-text-muted text-base leading-relaxed"
              style={{ fontFamily: 'DM Sans, sans-serif' }}>
-            Welcome to <strong className="text-[#1C1410]">Shopkarro</strong> ("we", "our", "us"). 
+            Welcome to <strong className="text-text">Shopkarro</strong> ("we", "our", "us"). 
             We are committed to protecting your personal information and your right to privacy. 
             This Privacy Policy explains how we collect, use, disclose, and safeguard your information 
-            when you visit our website <strong className="text-[#783A3A]">shopkarro.com</strong> and 
+            when you visit our website <strong className="text-primary">shopkarro.com</strong> and 
             make purchases from us. Please read this policy carefully.
           </p>
         </div>
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
         {sections.map((section, index) => (
           <div key={index} className="mb-8">
             <div className="flex items-start gap-4 mb-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#783A3A] flex items-center justify-center"
+              <div className="flex-shrink-0 w-8 h-8 bg-primary flex items-center justify-center shadow-sm"
                    style={{ borderRadius: '2px' }}>
                 <span className="text-white text-sm font-bold"
                       style={{ fontFamily: 'DM Sans, sans-serif' }}>
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
             <div className="ml-12">
               {section.content.map((paragraph, pIndex) => (
                 <p key={pIndex} 
-                   className="text-[#6B6058] text-base leading-relaxed mb-4"
+                   className="text-text-muted text-base leading-relaxed mb-4"
                    style={{ fontFamily: 'DM Sans, sans-serif' }}>
                   {paragraph}
                 </p>
@@ -75,9 +75,9 @@ export default function PrivacyPolicyPage() {
                 <ul className="mt-3 space-y-2">
                   {section.bullets.map((bullet, bIndex) => (
                     <li key={bIndex} 
-                        className="flex items-start gap-3 text-[#6B6058] text-base"
+                        className="flex items-start gap-3 text-text-muted text-base"
                         style={{ fontFamily: 'DM Sans, sans-serif' }}>
-                      <span className="w-1.5 h-1.5 bg-[#783A3A] rounded-full mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                       {bullet}
                     </li>
                   ))}
@@ -86,13 +86,13 @@ export default function PrivacyPolicyPage() {
             </div>
             
             {index < sections.length - 1 && (
-              <hr className="mt-8 border-[#E8E2D9]" />
+              <hr className="mt-8 border-border" />
             )}
           </div>
         ))}
 
         {/* Contact Box */}
-        <div className="bg-[#1C1410] p-8 mt-12" style={{ borderRadius: '4px' }}>
+        <div className="bg-text p-8 mt-12 transition-colors duration-300" style={{ borderRadius: '4px' }}>
           <h2 className="text-white text-2xl font-bold mb-4"
               style={{ fontFamily: 'Playfair Display, serif' }}>
             Contact Us About Privacy

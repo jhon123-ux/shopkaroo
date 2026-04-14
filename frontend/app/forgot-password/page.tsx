@@ -37,17 +37,17 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F5FF] flex items-center justify-center px-4 py-12">
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full border border-[#E5E0F5] shadow-lg">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12 transition-colors duration-300">
+      <div className="bg-bg-white rounded-2xl p-8 max-w-md w-full border border-border shadow-lg">
         {/* Header */}
         <div className="text-center mb-8">
-          <p className="text-[#783A3A] font-extrabold text-2xl mb-2 font-heading">
+          <p className="text-primary font-extrabold text-2xl mb-2 font-heading">
             Shopkarro
           </p>
-          <h1 className="text-2xl font-extrabold text-[#1A1A2E] font-heading">
+          <h1 className="text-2xl font-extrabold text-text font-heading">
             Forgot password?
           </h1>
-          <p className="text-[#6B7280] text-sm mt-1">
+          <p className="text-text-muted text-sm mt-1">
             No worries, we'll send you reset instructions.
           </p>
         </div>
@@ -55,8 +55,8 @@ export default function ForgotPasswordPage() {
         {/* Message */}
         {message && (
           <div className={`${
-            message.type === 'success' ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#166534]' : 'bg-[#FEF2F2] border-[#FECACA] text-[#DC2626]'
-          } border text-sm rounded-xl p-4 mb-6 animate-slideUp flex items-center gap-2`}>
+            message.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-500' : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-500'
+          } border text-sm rounded-xl p-4 mb-6 animate-slideUp flex items-center gap-2 transition-colors`}>
             {message.type === 'success' && <Mail className="w-4 h-4" />}
             {message.text}
           </div>
@@ -65,14 +65,14 @@ export default function ForgotPasswordPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
-            <label className="block text-sm font-bold text-[#1A1A2E] mb-2">Email Address</label>
+            <label className="block text-sm font-bold text-text mb-2">Email Address</label>
             <input 
               required
               type="email"
               placeholder="ahmed@gmail.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full border border-[#E5E0F5] rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#783A3A] outline-none transition-shadow"
+              className="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm focus:border-primary outline-none transition-all text-text"
             />
           </div>
 
@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#783A3A] text-white py-3.5 rounded-xl font-bold font-heading text-base hover:bg-[#5B2C2C] transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+            className="w-full bg-primary text-white py-3.5 rounded-xl font-bold font-heading text-base hover:bg-primary-dark transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
           >
             {loading ? (
               <>
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
 
         {/* Footer Link */}
         <div className="text-center mt-10">
-          <Link href="/login" className="text-sm text-[#6B7280] hover:text-[#783A3A] transition-colors font-medium flex items-center justify-center gap-2">
+          <Link href="/login" className="text-sm text-text-muted hover:text-primary transition-colors font-medium flex items-center justify-center gap-2">
             <ArrowLeft className="w-4 h-4" /> Back to Sign In
           </Link>
         </div>

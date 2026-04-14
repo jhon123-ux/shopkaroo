@@ -11,8 +11,8 @@ import { Suspense } from 'react'
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-background flex items-center justify-center transition-colors duration-300">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     }>
       <LoginForm />
@@ -57,17 +57,17 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center px-6 py-20 font-body">
-      <div className="bg-white rounded-0 p-10 md:p-14 max-w-lg w-full border border-[#E8E2D9] shadow-sm">
+    <div className="min-h-screen bg-background flex items-center justify-center px-6 py-20 font-body transition-colors duration-300">
+      <div className="bg-bg-white rounded-0 p-10 md:p-14 max-w-lg w-full border border-border shadow-sm">
         {/* Header */}
         <div className="text-center mb-12">
-          <Link href="/" className="text-2xl font-bold text-[#1C1410] font-heading block mb-8">
+          <Link href="/" className="text-2xl font-bold text-text font-heading block mb-8">
             Shopkarro
           </Link>
-          <h1 className="text-[32px] font-bold text-[#1C1410] font-heading mb-3">
+          <h1 className="text-[32px] font-bold text-text font-heading mb-3">
             Welcome Back
           </h1>
-          <p className="text-[#6B6058] text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
+          <p className="text-text-muted text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
             Access Your Collection
           </p>
         </div>
@@ -82,22 +82,22 @@ function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Email */}
           <div>
-            <label className="block text-[11px] font-bold text-[#1C1410] mb-3 uppercase tracking-[2px] font-body text-left">Email Address</label>
+            <label className="block text-[11px] font-bold text-text mb-3 uppercase tracking-[2px] font-body text-left">Email Address</label>
             <input 
               required
               type="email"
               placeholder="e.g. jhon@example.com"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30"
+              className="w-full bg-surface border border-border-input rounded-[3px] px-5 py-4 text-[15px] focus:border-primary outline-none transition-all font-body text-text placeholder:opacity-30"
             />
           </div>
 
           {/* Password */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <label className="block text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px] font-body">Password</label>
-              <Link href="/forgot-password" title="Forgot Password" className="text-[#783A3A] text-[10px] font-bold uppercase tracking-widest border-b border-transparent hover:border-[#783A3A] transition-all">
+              <label className="block text-[11px] font-bold text-text uppercase tracking-[2px] font-body">Password</label>
+              <Link href="/forgot-password" title="Forgot Password" className="text-primary text-[10px] font-bold uppercase tracking-widest border-b border-transparent hover:border-primary transition-all">
                 Reset?
               </Link>
             </div>
@@ -108,7 +108,7 @@ function LoginForm() {
                 placeholder="Enter password"
                 value={formData.password}
                 onChange={e => setFormData({...formData, password: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-[3px] px-5 py-4 text-[15px] focus:border-[#783A3A] outline-none transition-all font-body placeholder:opacity-30 pr-12"
+                className="w-full bg-surface border border-border-input rounded-[3px] px-5 py-4 text-[15px] focus:border-primary outline-none transition-all font-body text-text placeholder:opacity-30 pr-12"
               />
               <button 
                 type="button"
@@ -128,7 +128,7 @@ function LoginForm() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#783A3A] text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-[#5B2C2C] shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="w-full bg-primary text-white py-5 rounded-[3px] font-bold font-body text-[14px] uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-xl hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             {loading ? (
               <>
@@ -142,10 +142,10 @@ function LoginForm() {
         </form>
 
         {/* Footer Link */}
-        <div className="text-center mt-12 bg-[#FAF7F4] p-4 rounded-[2px] border border-[#E8E2D9]">
-          <p className="text-[12px] text-[#6B6058] font-bold uppercase tracking-wider">
+        <div className="text-center mt-12 bg-surface p-4 rounded-[2px] border border-border transition-colors">
+          <p className="text-[12px] text-text-muted font-bold uppercase tracking-wider">
             New to Shopkarro?{' '}
-            <Link href="/signup" className="text-[#783A3A] hover:underline ml-2 inline-flex items-center gap-1">
+            <Link href="/signup" className="text-primary hover:underline ml-2 inline-flex items-center gap-1">
               Create Account <ArrowRight className="w-4 h-4" />
             </Link>
           </p>

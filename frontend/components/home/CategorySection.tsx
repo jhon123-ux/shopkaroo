@@ -27,22 +27,22 @@ export default function CategorySection() {
 
   const getGradient = (slug: string) => {
     switch (slug) {
-      case 'living-room': return 'linear-gradient(135deg, #783A3A, #9B5656)'
-      case 'bedroom': return 'linear-gradient(135deg, #5B2C2C, #5D4480)'
-      case 'office': return 'linear-gradient(135deg, #1C1410, #783A3A)'
-      case 'dining': return 'linear-gradient(135deg, #2D1B40, #9B5656)'
-      default: return 'linear-gradient(135deg, #6B6058, #A89890)'
+      case 'living-room': return 'linear-gradient(135deg, var(--color-primary), var(--color-brand-black))'
+      case 'bedroom': return 'linear-gradient(135deg, var(--color-primary-dark), #3D2B55)'
+      case 'office': return 'linear-gradient(135deg, var(--color-brand-black), var(--color-primary))'
+      case 'dining': return 'linear-gradient(135deg, #1C1410, var(--color-primary-dark))'
+      default: return 'linear-gradient(135deg, var(--color-text-muted), var(--color-border))'
     }
   }
 
   if (loading && categories.length === 0) return null
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-bg-white py-24 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         
         <div className="mb-16">
-          <h2 className="text-[36px] font-bold font-heading text-[#1C1410] tracking-wide leading-none">
+          <h2 className="text-[36px] font-bold font-heading text-text tracking-wide leading-none">
             Shop by Room
           </h2>
         </div>
@@ -64,7 +64,7 @@ export default function CategorySection() {
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1410]/95 via-[#1C1410]/30 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-text/95 via-text/30 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
                   </>
                 ) : (
                   <div 

@@ -1,9 +1,10 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { 
   LayoutDashboard, 
-  Image, 
+  Image as ImageIcon, 
   Percent,
   Package, 
   ShoppingCart, 
@@ -16,7 +17,7 @@ import {
 
 const sidebarLinks = [
   { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={16} /> },
-  { href: '/admin/banners', label: 'Hero Banners', icon: <Image size={16} /> },
+  { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={16} /> },
   { href: '/admin/categories', label: 'Categories', icon: <FolderOpen size={16} /> },
   { href: '/admin/offer-banner', label: 'Promotionals', icon: <Percent size={16} /> },
   { href: '/admin/products', label: 'Inventory', icon: <Package size={16} /> },
@@ -54,10 +55,10 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FAF7F4] font-body">
+    <div className="flex min-h-screen bg-background font-body transition-colors duration-300">
       
       {/* SIDEBAR */}
-      <aside className="w-64 bg-[#1C1410] min-h-screen 
+      <aside className="w-64 bg-brand-black min-h-screen 
         flex flex-col fixed left-0 top-0 z-40 border-r border-white/5">
         
         {/* Logo */}
@@ -85,7 +86,7 @@ export default function AdminLayout({
                   px-5 py-4 rounded-0 mb-2 text-[13px]
                   transition-all duration-300 uppercase tracking-widest font-bold
                   ${isActive
-                    ? 'bg-[#783A3A] text-white shadow-lg'
+                    ? 'bg-primary text-white shadow-lg'
                     : 'text-white/40 hover:bg-white/[0.03] hover:text-white'
                   }`}
               >
@@ -129,23 +130,24 @@ export default function AdminLayout({
       <main className="flex-1 ml-64 min-h-screen relative">
         
         {/* Top bar */}
-        <header className="bg-white border-b 
-          border-[#E8E2D9] px-10 py-6
+        <header className="bg-bg-white border-b 
+          border-border px-10 py-6
           flex items-center justify-between
-          sticky top-0 z-30 shadow-sm">
+          sticky top-0 z-30 shadow-sm transition-colors">
           
           <h1 className="font-bold text-[24px] 
-            text-[#1C1410] font-heading uppercase tracking-widest">
+            text-text font-heading uppercase tracking-widest">
             {getTitle(pathname)}
           </h1>
 
           {/* Right side */}
           <div className="flex items-center gap-6">
+            <ThemeToggle />
             <div className="flex flex-col items-end mr-2">
-                <span className="text-[#1C1410] text-[12px] font-bold uppercase tracking-wider">System Administrator</span>
-                <span className="text-[#2D6A4F] text-[10px] font-bold uppercase tracking-widest">Online</span>
+                <span className="text-text text-[12px] font-bold uppercase tracking-wider">System Administrator</span>
+                <span className="text-green-600 dark:text-green-500 text-[10px] font-bold uppercase tracking-widest">Online</span>
             </div>
-            <div className="w-10 h-10 bg-[#FAF7F4] border border-[#E8E2D9] rounded-0 flex items-center justify-center text-[#783A3A] shadow-inner">
+            <div className="w-10 h-10 bg-surface border border-border rounded-0 flex items-center justify-center text-primary shadow-inner">
               <ShieldCheck size={20} />
             </div>
           </div>

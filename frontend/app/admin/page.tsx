@@ -69,42 +69,42 @@ export default function AdminDashboardPage() {
     <div className="font-body">
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#1C1410]">
+        <div className="bg-bg-white rounded-0 p-8 border border-border shadow-sm relative overflow-hidden group transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-text">
             <Package size={28} />
           </div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Total Inventory</p>
-          <p className="font-heading font-bold text-[48px] text-[#1C1410] leading-none">
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Total Inventory</p>
+          <p className="font-heading font-bold text-[48px] text-text leading-none">
             {loading ? '—' : stats.products}
           </p>
         </div>
 
-        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#783A3A]">
+        <div className="bg-bg-white rounded-0 p-8 border border-border shadow-sm relative overflow-hidden group transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-primary">
             <ShoppingCart size={28} />
           </div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
-          <p className="font-heading font-bold text-[48px] text-[#783A3A] leading-none">
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Revenue Cycles</p>
+          <p className="font-heading font-bold text-[48px] text-primary leading-none">
             {loading ? '—' : stats.orders}
           </p>
         </div>
 
-        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[orange]">
+        <div className="bg-bg-white rounded-0 p-8 border border-border shadow-sm relative overflow-hidden group transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-orange-500">
             <Clock size={28} />
           </div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Queue</p>
-          <p className="font-heading font-bold text-[48px] text-[orange] leading-none">
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Queue</p>
+          <p className="font-heading font-bold text-[48px] text-orange-500 leading-none">
             {loading ? '—' : stats.pending}
           </p>
         </div>
 
-        <div className="bg-white rounded-0 p-8 border border-[#E8E2D9] shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-[#2D6A4F]">
+        <div className="bg-bg-white rounded-0 p-8 border border-border shadow-sm relative overflow-hidden group transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-green-600 dark:text-green-500">
             <ImageIcon size={28} />
           </div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
-          <p className="font-heading font-bold text-[48px] text-[#2D6A4F] leading-none">
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2 opacity-60">Active Exhibits</p>
+          <p className="font-heading font-bold text-[48px] text-green-600 dark:text-green-500 leading-none">
             {loading ? '—' : stats.banners}
           </p>
         </div>
@@ -121,20 +121,20 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="flex justify-between items-center mb-8">
-        <h2 className="font-heading font-bold text-[22px] text-[#1C1410] uppercase tracking-widest leading-none">Latest Transactions</h2>
-        <div className="h-px bg-[#E8E2D9] flex-1 mx-8 opacity-40"></div>
+        <h2 className="font-heading font-bold text-[22px] text-text uppercase tracking-widest leading-none">Latest Transactions</h2>
+        <div className="h-px bg-border flex-1 mx-8 opacity-40"></div>
       </div>
 
-      <div className="bg-white rounded-0 border border-[#E8E2D9] overflow-hidden shadow-sm">
+      <div className="bg-bg-white rounded-0 border border-border overflow-hidden shadow-sm transition-colors">
         <table className="w-full text-sm">
-          <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
+          <thead className="bg-surface border-b border-border">
             <tr>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Identifier</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Customer</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Location</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Valuation</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Status</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Created</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Identifier</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Customer</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Location</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Valuation</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Status</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px] opacity-40">Created</th>
             </tr>
           </thead>
           <tbody>
@@ -148,19 +148,19 @@ export default function AdminDashboardPage() {
               </tr>
             ) : (
               recentOrders.map((o: any) => (
-                <tr key={o.id} className="border-b border-[#FAF7F4] last:border-0 hover:bg-[#FAF7F4]/50 transition-colors">
-                  <td className="px-8 py-6 font-mono font-bold text-[13px] text-[#1C1410] tracking-widest">{o.order_number}</td>
-                  <td className="px-8 py-6 text-[#6B6058] font-bold text-[13px]">{o.customer_name}</td>
-                  <td className="px-8 py-6 text-[#6B6058] font-medium text-[12px] uppercase tracking-wider">{o.city}</td>
-                  <td className="px-8 py-6 font-bold text-[#783A3A] font-heading text-[15px]">{o.total_pkr?.toLocaleString()} PKR</td>
+                <tr key={o.id} className="border-b border-border last:border-0 hover:bg-surface transition-colors">
+                  <td className="px-8 py-6 font-mono font-bold text-[13px] text-text tracking-widest">{o.order_number}</td>
+                  <td className="px-8 py-6 text-text-muted font-bold text-[13px]">{o.customer_name}</td>
+                  <td className="px-8 py-6 text-text-muted font-medium text-[12px] uppercase tracking-wider">{o.city}</td>
+                  <td className="px-8 py-6 font-bold text-primary font-heading text-[15px]">{o.total_pkr?.toLocaleString()} PKR</td>
                   <td className="px-8 py-6">
                     <span className={`px-4 py-1.5 rounded-0 text-[9px] font-bold uppercase tracking-[2px] border ${
-                      o.status === 'pending' ? 'bg-[#F5E8E8] text-[#783A3A] border-[rgba(120,58,58,0.1)]' : 'bg-white text-[#1C1410] border-[#E8E2D9]'
+                      o.status === 'pending' ? 'bg-primary-tint text-primary border-primary/10' : 'bg-surface text-text border-border'
                     }`}>
                       {o.status}
                     </span>
                   </td>
-                  <td className="px-8 py-6 text-[#6B6058] text-[11px] font-bold uppercase tracking-widest opacity-40">
+                  <td className="px-8 py-6 text-text-muted text-[11px] font-bold uppercase tracking-widest opacity-40">
                     {new Date(o.created_at).toLocaleDateString('en-PK', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
                 </tr>

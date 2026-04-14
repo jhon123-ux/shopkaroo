@@ -63,8 +63,8 @@ export default function OfferBanner() {
   if (!banner || !banner.is_active) return null
 
   return (
-    <section className="w-full py-12 px-5 md:px-16 md:py-14 relative overflow-hidden bg-[#1C1410]">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#783A3A]/40 to-transparent z-0 opacity-60" />
+    <section className="w-full py-12 px-5 md:px-16 md:py-14 relative overflow-hidden bg-text transition-colors duration-300">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/40 to-transparent z-0 opacity-60" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-16 lg:gap-12">
           
@@ -79,7 +79,7 @@ export default function OfferBanner() {
             <p className="text-white/80 text-[14px] lg:text-lg font-body mt-2 mb-8 max-w-lg mx-auto lg:mx-0 italic leading-relaxed px-4 lg:px-0 text-center lg:text-left">
               {banner.subtitle}
             </p>
-            <Link href={banner.cta_link} className="inline-block bg-white text-[#1C1410] px-10 py-3 lg:px-10 lg:py-5 rounded-[3px] font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#FAF7F4] active:scale-95 transition-all shadow-2xl mx-auto lg:mx-0 block lg:inline-block w-auto mb-6 lg:mb-0">
+            <Link href={banner.cta_link} className="inline-block bg-bg-white text-text px-10 py-3 lg:px-10 lg:py-5 rounded-[3px] font-bold uppercase tracking-[3px] text-[12px] hover:bg-surface active:scale-95 transition-all shadow-2xl mx-auto lg:mx-0 block lg:inline-block w-auto mb-6 lg:mb-0">
               {banner.cta_text}
             </Link>
           </div>

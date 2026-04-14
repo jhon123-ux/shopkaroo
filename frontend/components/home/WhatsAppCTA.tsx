@@ -3,8 +3,8 @@ import { Phone, Mail } from 'lucide-react'
 export default function WhatsAppCTA() {
   return (
     <section 
-      className="py-24 flex justify-center items-center"
-      style={{ background: 'linear-gradient(135deg, #783A3A, #5B2C2C)' }}
+      className="py-24 flex justify-center items-center relative transition-colors duration-300"
+      style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))' }}
     >
       <div className="max-w-4xl mx-auto px-6 text-center">
         
@@ -19,7 +19,7 @@ export default function WhatsAppCTA() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a 
             href="tel:03706905835" 
-            className="inline-flex items-center justify-center bg-[#783A3A] text-white px-8 py-4 rounded-[3px] font-bold font-body text-base hover:bg-[#5B2C2C] transition-all shadow-lg active:scale-95 gap-3 w-full sm:w-auto"
+            className="inline-flex items-center justify-center bg-bg-white text-text px-8 py-4 rounded-[3px] font-bold font-body text-base hover:bg-surface transition-all shadow-lg active:scale-95 gap-3 w-full sm:w-auto"
           >
             <Phone size={16} /> Call 03706905835
           </a>

@@ -29,11 +29,11 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
-  confirmed: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
-  shipped: 'text-[#783A3A] bg-[#F5E8E8] border-[rgba(120,58,58,0.1)]',
-  delivered: 'text-[#2D6A4F] bg-[#EBF7F0] border-[rgba(45,106,79,0.1)]',
-  cancelled: 'text-[#DC2626] bg-[#FEF2F2] border-red-100'
+  pending: 'text-primary bg-primary-tint border-primary/10',
+  confirmed: 'text-primary bg-primary-tint border-primary/10',
+  shipped: 'text-primary bg-primary-tint border-primary/10',
+  delivered: 'text-green-600 bg-green-500/10 border-green-500/20 dark:text-green-400',
+  cancelled: 'text-red-500 bg-red-500/10 border-red-500/20'
 }
 
 export default function MyOrdersPage() {
@@ -69,38 +69,38 @@ export default function MyOrdersPage() {
 
   if (loading || fetching) {
     return (
-      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#783A3A] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-background flex items-center justify-center transition-colors duration-300">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] py-16 md:py-24 font-body">
+    <div className="min-h-screen bg-background py-16 md:py-24 font-body transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-6">
         
         {/* Header */}
         <div className="mb-16 text-center">
-          <h1 className="text-[40px] font-bold text-[#1C1410] font-heading mb-4">
+          <h1 className="text-[40px] font-bold text-text font-heading mb-4">
             Order Collection
           </h1>
-          <p className="text-[#6B6058] text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
+          <p className="text-text-muted text-[14px] uppercase tracking-[3px] font-semibold opacity-60">
             {orders.length} ARCHIVED PURCHASES
           </p>
         </div>
 
         {/* Empty state */}
         {orders.length === 0 && (
-          <div className="bg-white rounded-0 border border-[#E8E2D9] p-20 text-center shadow-sm">
-            <div className="flex justify-center mb-8 opacity-20"><Package size={48} strokeWidth={1.5} /></div>
-            <h2 className="text-[24px] font-bold text-[#1C1410] mb-3 font-heading uppercase tracking-widest">
+          <div className="bg-bg-white rounded-0 border border-border p-20 text-center shadow-sm transition-colors">
+            <div className="flex justify-center mb-8 opacity-20 text-text"><Package size={48} strokeWidth={1.5} /></div>
+            <h2 className="text-[24px] font-bold text-text mb-3 font-heading uppercase tracking-widest">
               No Orders Found
             </h2>
-            <p className="text-[#6B6058] mb-10 font-body opacity-60">
+            <p className="text-text-muted mb-10 font-body opacity-60">
               Your purchase history is currently empty.
             </p>
             <Link href="/"
-              className="bg-[#783A3A] text-white px-10 py-4 rounded-[3px] font-bold uppercase tracking-[2px] text-[13px] hover:bg-[#5B2C2C] transition-all shadow-xl hover:-translate-y-1 active:scale-95 inline-block">
+              className="bg-primary text-white px-10 py-4 rounded-[3px] font-bold uppercase tracking-[2px] text-[13px] hover:bg-primary-dark transition-all shadow-xl hover:-translate-y-1 active:scale-95 inline-block">
               Browse Collection
             </Link>
           </div>
@@ -113,15 +113,15 @@ export default function MyOrdersPage() {
             const isCancelled = order.status === 'cancelled'
 
             return (
-              <div key={order.id} className="bg-white rounded-0 border border-[#E8E2D9] p-8 md:p-10 shadow-sm transition-all hover:shadow-md">
+              <div key={order.id} className="bg-bg-white rounded-0 border border-border p-8 md:p-10 shadow-sm transition-all hover:shadow-md">
                 
                 {/* Top row */}
-                <div className="flex justify-between items-start mb-10 pb-6 border-b border-[#FAF7F4]">
+                <div className="flex justify-between items-start mb-10 pb-6 border-b border-border transition-colors">
                   <div>
-                    <p className="font-bold text-[#1C1410] text-[18px] font-heading tracking-widest uppercase mb-1">
+                    <p className="font-bold text-text text-[18px] font-heading tracking-widest uppercase mb-1">
                       Order {order.order_number}
                     </p>
-                    <p className="text-[12px] text-[#6B6058] uppercase tracking-widest opacity-60 font-bold">
+                    <p className="text-[12px] text-text-muted uppercase tracking-widest opacity-60 font-bold">
                       {new Date(order.created_at).toLocaleDateString('en-PK', {
                         day: 'numeric',
                         month: 'long',
@@ -139,12 +139,12 @@ export default function MyOrdersPage() {
                   {order.items?.map((item: any, i: number) => (
                     <div key={i} className="flex justify-between items-center group">
                       <div className="flex flex-col">
-                        <span className="text-[#1C1410] font-bold text-[15px] font-heading group-hover:text-[#783A3A] transition-colors">
+                        <span className="text-text font-bold text-[15px] font-heading group-hover:text-primary transition-colors">
                           {item.name}
                         </span>
-                        <span className="text-[11px] text-[#6B6058] uppercase tracking-widest font-bold opacity-40 mt-1">Quantity: {item.qty}</span>
+                        <span className="text-[11px] text-text-muted uppercase tracking-widest font-bold opacity-40 mt-1">Quantity: {item.qty}</span>
                       </div>
-                      <span className="font-bold text-[#783A3A] text-[14px]">
+                      <span className="font-bold text-primary text-[14px]">
                         { (item.price_pkr * item.qty).toLocaleString() } PKR
                       </span>
                     </div>
@@ -152,16 +152,16 @@ export default function MyOrdersPage() {
                 </div>
 
                 {/* Total + Location */}
-                <div className="flex justify-between items-center mb-12 bg-[#FAF7F4] p-6 rounded-0 border border-[#E8E2D9]">
+                <div className="flex justify-between items-center mb-12 bg-surface p-6 rounded-0 border border-border transition-colors">
                   <div className="flex flex-col">
-                    <span className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Destination</span>
-                    <span className="text-[#1C1410] font-bold text-[13px] uppercase tracking-widest leading-none flex items-center gap-2">
+                    <span className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Destination</span>
+                    <span className="text-text font-bold text-[13px] uppercase tracking-widest leading-none flex items-center gap-2">
                        {order.city}
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1 block">Grand Total</span>
-                    <p className="font-bold text-[#783A3A] text-[24px] font-heading leading-none">
+                    <span className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-1 block">Grand Total</span>
+                    <p className="font-bold text-primary text-[24px] font-heading leading-none">
                       {order.total_pkr.toLocaleString()} <span className="text-[14px]">PKR</span>
                     </p>
                   </div>
@@ -179,13 +179,13 @@ export default function MyOrdersPage() {
                           <div key={step} className="flex flex-col items-center flex-1 relative">
                             {/* Connector Line */}
                             {i > 0 && (
-                              <div className={`absolute right-1/2 top-[10px] w-full h-[1px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-[#783A3A]' : 'bg-[#E8E2D9]'}`} />
+                              <div className={`absolute right-1/2 top-[10px] w-full h-[1px] -translate-y-1/2 -z-10 ${i <= stepIndex ? 'bg-primary' : 'bg-border'}`} />
                             )}
                             
                             {/* Dot */}
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all duration-700 z-10 ${
-                              isCompleted ? 'bg-[#783A3A]' : 'bg-[#E8E2D9]'
-                            } ${isActive ? 'ring-8 ring-[#F5E8E8] scale-110' : ''}`}>
+                              isCompleted ? 'bg-primary' : 'bg-border'
+                            } ${isActive ? 'ring-8 ring-primary-tint scale-110' : ''}`}>
                               {isCompleted && (
                                 <Check size={12} className="text-white" strokeWidth={3} />
                               )}
@@ -193,7 +193,7 @@ export default function MyOrdersPage() {
                             
                             {/* Label */}
                             <p className={`text-[9px] font-bold mt-4 text-center transition-all duration-300 uppercase tracking-widest ${
-                              isActive ? 'text-[#783A3A] scale-105' : isCompleted ? 'text-[#1C1410]' : 'text-[#6B6058] opacity-40'
+                              isActive ? 'text-primary scale-105' : isCompleted ? 'text-text' : 'text-text-muted opacity-40'
                             }`}>
                               {STATUS_LABELS[step]}
                             </p>
@@ -206,11 +206,11 @@ export default function MyOrdersPage() {
 
                 {/* Cancelled state */}
                 {isCancelled && (
-                  <div className="bg-[#FEF2F2] rounded-0 p-6 text-center border border-red-100 flex flex-col items-center gap-3">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm"><X className="w-5 h-5" /></div>
+                  <div className="bg-red-500/10 rounded-0 p-6 text-center border border-red-500/20 flex flex-col items-center gap-3 transition-colors">
+                    <div className="w-10 h-10 bg-bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm"><X className="w-5 h-5" /></div>
                     <div>
-                      <p className="text-[#DC2626] text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
-                      <p className="text-[#DC2626]/60 text-[11px] mt-1 font-body">
+                      <p className="text-red-600 dark:text-red-500 text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
+                      <p className="text-red-600/60 dark:text-red-500/60 text-[11px] mt-1 font-body">
                         Please contact Concierge via WhatsApp for clarification.
                       </p>
                     </div>

@@ -23,17 +23,17 @@ export default function FeaturedProducts() {
 
   if (loading) {
     return (
-      <section className="bg-[#FAF7F4] py-24">
+      <section className="bg-background py-24 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <FeaturedHeader />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={`skeleton-${i}`} className="bg-white rounded-[4px] border border-[#E8E2D9] overflow-hidden h-[400px] animate-pulse">
-                <div className="h-64 bg-[#F2EDE6]"></div>
+              <div key={`skeleton-${i}`} className="bg-bg-white rounded-[4px] border border-border overflow-hidden h-[400px] animate-pulse">
+                <div className="h-64 bg-surface"></div>
                 <div className="p-4 flex flex-col h-full">
-                  <div className="h-4 bg-[#F2EDE6] rounded-[2px] w-3/4 mb-4"></div>
-                  <div className="h-6 bg-[#F2EDE6] rounded-[2px] w-1/3 mb-4 mt-auto"></div>
-                  <div className="h-[40px] bg-[#F2EDE6] rounded-[3px] w-full mt-auto"></div>
+                  <div className="h-4 bg-surface rounded-[2px] w-3/4 mb-4"></div>
+                  <div className="h-6 bg-surface rounded-[2px] w-1/3 mb-4 mt-auto"></div>
+                  <div className="h-[40px] bg-surface rounded-[3px] w-full mt-auto"></div>
                 </div>
               </div>
             ))}
@@ -45,17 +45,17 @@ export default function FeaturedProducts() {
 
   if (products.length === 0) {
     return (
-      <section className="bg-[#FAF7F4] py-24">
+      <section className="bg-background py-24 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <FeaturedHeader />
-          <div className="text-center py-24 bg-white rounded-[4px] border border-[#E8E2D9] shadow-sm">
-            <div className="flex justify-center mb-4 opacity-40">
+          <div className="text-center py-24 bg-bg-white rounded-[4px] border border-border shadow-sm">
+            <div className="flex justify-center mb-4 opacity-40 text-text">
               <Package size={48} strokeWidth={1} />
             </div>
-            <p className="text-[#1C1410] text-xl font-bold font-heading">
+            <p className="text-text text-xl font-bold font-heading">
               Products coming soon.
             </p>
-            <p className="text-[#6B6058] text-base mt-2 font-body px-4">
+            <p className="text-text-muted text-base mt-2 font-body px-4">
               Check back shortly as we add our latest collection!
             </p>
           </div>
@@ -65,7 +65,7 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="bg-[#FAF7F4] py-24 border-b border-[#E8E2D9]">
+    <section className="bg-background py-24 border-b border-border transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         <FeaturedHeader />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -84,19 +84,19 @@ function FeaturedHeader() {
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-16 gap-6">
       <div>
-        <div className="text-[10px] font-semibold tracking-[3px] text-[#783A3A] mb-3 uppercase font-body">
+        <div className="text-[10px] font-semibold tracking-[3px] text-primary mb-3 uppercase font-body">
           FEATURED
         </div>
-        <h2 className="text-[36px] font-bold font-heading text-[#1C1410]">
+        <h2 className="text-[36px] font-bold font-heading text-text">
           Featured Furniture
         </h2>
-        <p className="text-[#6B6058] text-lg font-body mt-2">
+        <p className="text-text-muted text-lg font-body mt-2">
           Handpicked pieces for your home
         </p>
       </div>
       <Link 
         href="/furniture/living-room" 
-        className="text-[#783A3A] font-semibold hover:underline flex items-center group font-body text-sm"
+        className="text-primary font-semibold hover:underline flex items-center group font-body text-sm"
       >
         View All Collection 
         <span className="ml-1 group-hover:ml-2 transition-all inline-flex items-center">

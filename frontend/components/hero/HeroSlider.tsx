@@ -48,8 +48,8 @@ export default function HeroSlider() {
   // Render Skeleton Loading State
   if (loading) {
     return (
-      <div className="bg-[#F7F5FF] px-3 py-3 md:px-6 md:py-6 w-full">
-        <div className="min-h-screen bg-gradient-to-r from-[#1A1A2E] to-[#2D1B69] animate-pulse flex items-center relative overflow-hidden rounded-2xl shadow-2xl">
+      <div className="bg-surface px-3 py-3 md:px-6 md:py-6 w-full transition-colors duration-300">
+        <div className="min-h-screen bg-gradient-to-r from-brand-black to-primary animate-pulse flex items-center relative overflow-hidden rounded-2xl shadow-2xl">
           <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
             <div className="max-w-2xl">
               <div className="h-6 w-32 bg-white/20 rounded-full mb-6"></div>
@@ -74,13 +74,13 @@ export default function HeroSlider() {
     title: 'Furnish Your Home With Style',
     subtitle: 'Premium quality furniture delivered to your door. Pay cash on delivery.',
     badge_text: 'New Arrivals',
-    badge_color: '#783A3A',
+    badge_color: 'var(--color-primary)',
     cta_primary_text: 'Shop Now',
     cta_primary_link: '/furniture/living-room',
     cta_secondary_text: 'WhatsApp Us',
     cta_secondary_link: 'https://wa.me/923001234567',
     bg_image_url: null,
-    bg_overlay: 'rgba(26,26,46,0.6)',
+    bg_overlay: 'rgba(0,0,0,0.4)',
     sort_order: 1,
     is_active: true
   }]
@@ -88,9 +88,9 @@ export default function HeroSlider() {
   const banner = displayBanners[currentSlide]
 
   return (
-    <div className="bg-[#FAF7F4] px-4 py-4 md:px-5 md:py-5 w-full">
+    <div className="bg-background px-4 py-4 md:px-5 md:py-5 w-full transition-colors duration-300">
       <section 
-        className="relative min-h-[85vh] w-full flex items-center overflow-hidden bg-[#1C1410] rounded-[6px] shadow-sm transition-all duration-500"
+        className="relative min-h-[85vh] w-full flex items-center overflow-hidden bg-text rounded-[6px] shadow-sm transition-all duration-500"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -114,7 +114,7 @@ export default function HeroSlider() {
           ) : (
             <div 
               className="absolute inset-0 z-0" 
-              style={{ background: `linear-gradient(135deg, ${b.badge_color}40, #1C1410)` }}
+              style={{ background: `linear-gradient(135deg, ${b.badge_color}40, var(--color-text))` }}
             >
               <div className="absolute inset-0 z-0" style={{ background: b.bg_overlay }}></div>
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
@@ -168,7 +168,7 @@ export default function HeroSlider() {
           >
             <Link 
               href={banner.cta_primary_link}
-              className="bg-white text-[#1C1410] px-10 py-4 rounded-[3px] font-bold font-body text-sm text-center shadow-lg hover:bg-[#F2EDE6] transition-all duration-300 active:scale-95"
+              className="bg-bg-white text-text px-10 py-4 rounded-[3px] font-bold font-body text-sm text-center shadow-lg hover:bg-surface transition-all duration-300 active:scale-95"
             >
               {banner.cta_primary_text}
             </Link>

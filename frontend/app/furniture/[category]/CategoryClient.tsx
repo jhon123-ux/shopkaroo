@@ -47,8 +47,8 @@ import { Suspense } from 'react'
 export default function CategoryPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-spin w-10 h-10 border-4 border-[#783A3A] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-bg-white flex items-center justify-center transition-colors">
+        <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full" />
       </div>
     }>
       <CategoryContent />
@@ -202,7 +202,7 @@ function CategoryContent() {
   const totalPages = Math.ceil(totalCount / 12) || 1
   
   return (
-    <main className="bg-[#FAF7F4] min-h-screen font-body">
+    <main className="bg-background min-h-screen font-body transition-colors duration-300">
       {/* LUXURY HERO HEADER */}
       <div className="relative h-[300px] flex items-center justify-center overflow-hidden">
         {categoryData?.image_url ? (
@@ -212,9 +212,9 @@ function CategoryContent() {
             className="absolute inset-0 w-full h-full object-cover" 
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1C1410] to-[#783A3A]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-black to-primary" />
         )}
-        <div className="absolute inset-0 bg-[#1C1410]/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-text/40 backdrop-blur-[2px]" />
         
         <div className="relative text-center px-6">
           <p className="text-white/60 text-[11px] font-bold uppercase tracking-[4px] mb-4">Collection Gallery</p>
@@ -235,7 +235,7 @@ function CategoryContent() {
         <aside className="hidden lg:block w-72 flex-shrink-0">
           <div className="sticky top-24 space-y-12">
             <div>
-              <h2 className="text-[#1C1410] font-heading font-bold text-[22px] mb-8">Architect Filters</h2>
+              <h2 className="text-text font-heading font-bold text-[22px] mb-8">Architect Filters</h2>
               <FilterContent 
                 localMinPrice={localMinPrice} setLocalMinPrice={setLocalMinPrice}
                 localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
@@ -247,9 +247,9 @@ function CategoryContent() {
             </div>
 
             {categoryData?.description && (
-              <div className="pt-12 border-t border-[#E8E2D9]">
-                <p className="text-[#6B6058] text-[12px] font-bold uppercase tracking-[2px] mb-4 opacity-40">Room Narrative</p>
-                <p className="text-[#6B6058] text-[14px] leading-relaxed italic opacity-80">
+              <div className="pt-12 border-t border-border">
+                <p className="text-text-muted text-[12px] font-bold uppercase tracking-[2px] mb-4 opacity-40">Room Narrative</p>
+                <p className="text-text-muted text-[14px] leading-relaxed italic opacity-80">
                   {categoryData.description}
                 </p>
               </div>
@@ -260,21 +260,21 @@ function CategoryContent() {
         {/* PRODUCTS REGISTRY */}
         <div className="flex-1">
           {/* Sorting & Filter Trigger (Mobile) */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 pb-6 border-b border-[#E8E2D9] gap-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 pb-6 border-b border-border gap-6">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40">Classification:</span>
+              <span className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] opacity-40">Classification:</span>
               <div className="flex flex-wrap gap-2">
                 {activeFiltersTags.map(tag => (
                   <button 
                     key={tag}
                     onClick={() => removeFilterTag(tag)}
-                    className="bg-white border border-[#E8E2D9] text-[#1C1410] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 flex items-center gap-2 hover:border-[#783A3A] transition-colors"
+                    className="bg-bg-white border border-border text-text text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 flex items-center gap-2 hover:border-primary transition-colors"
                   >
                     {tag} <X size={10} className="opacity-40" />
                   </button>
                 ))}
                 {hasActiveFilters && (
-                  <button onClick={clearAllFilters} className="text-[#A89890] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 hover:text-[#DC2626]">Clear</button>
+                  <button onClick={clearAllFilters} className="text-text-muted text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 hover:text-red-500">Clear</button>
                 )}
               </div>
             </div>
@@ -282,7 +282,7 @@ function CategoryContent() {
             <div className="flex items-center gap-6 w-full sm:w-auto">
               <button 
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex-1 sm:flex-none border border-[#E8E2D9] px-6 py-3 text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-3"
+                className="lg:hidden flex-1 sm:flex-none border border-border px-6 py-3 text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 bg-bg-white text-text"
               >
                 <Filter size={14} /> Filter
               </button>
@@ -291,7 +291,7 @@ function CategoryContent() {
                 <select 
                   value={sort}
                   onChange={handleSortChange}
-                  className="w-full bg-transparent border-b border-black text-[11px] font-bold uppercase tracking-widest py-2 pr-8 focus:outline-none cursor-pointer appearance-none"
+                  className="w-full bg-transparent border-b border-text text-[11px] font-bold uppercase tracking-widest py-2 pr-8 focus:outline-none cursor-pointer appearance-none text-text"
                 >
                   <option value="newest">Latest Exhibits</option>
                   <option value="price_asc">Price Ascending</option>
@@ -307,18 +307,18 @@ function CategoryContent() {
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="aspect-[4/5] bg-[#F2EDE6] animate-pulse rounded-0 border border-[#E8E2D9]" />
+                <div key={i} className="aspect-[4/5] bg-surface animate-pulse rounded-0 border border-border" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="py-32 text-center border-2 border-dashed border-[#E8E2D9] bg-white shadow-sm">
-              <div className="text-[#1C1410] opacity-10 mb-8 flex justify-center">
+            <div className="py-32 text-center border-2 border-dashed border-border bg-bg-white shadow-sm">
+              <div className="text-text opacity-10 mb-8 flex justify-center">
                 <Filter size={80} strokeWidth={0.5} />
               </div>
-              <h3 className="font-heading italic text-[32px] text-[#1C1410] mb-4">No exhibits found</h3>
-              <p className="text-[#6B6058] max-w-md mx-auto text-[14px]">Our current archive does not contain pieces matching these specifications.</p>
+              <h3 className="font-heading italic text-[32px] text-text mb-4">No exhibits found</h3>
+              <p className="text-text-muted max-w-md mx-auto text-[14px]">Our current archive does not contain pieces matching these specifications.</p>
               {hasActiveFilters && (
-                <button onClick={clearAllFilters} className="mt-8 bg-[#1C1410] text-white px-8 py-4 text-[11px] font-bold uppercase tracking-widest rounded-0 shadow-lg">Refresh Registry</button>
+                <button onClick={clearAllFilters} className="mt-8 bg-primary text-white px-8 py-4 text-[11px] font-bold uppercase tracking-widest rounded-0 shadow-lg hover:bg-primary-dark transition-colors">Refresh Registry</button>
               )}
             </div>
           ) : (
@@ -331,11 +331,11 @@ function CategoryContent() {
 
               {/* PAGINATION — Minimalist Numerics */}
               {totalPages > 1 && (
-                <div className="mt-24 pt-12 border-t border-[#E8E2D9] flex justify-center items-center gap-6">
+                <div className="mt-24 pt-12 border-t border-border flex justify-center items-center gap-6">
                   <button 
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="p-3 border border-[#E8E2D9] hover:bg-[#FAF7F4] transition-colors disabled:opacity-20"
+                    className="p-3 border border-border hover:bg-surface transition-colors disabled:opacity-20 text-text"
                   >
                     <ChevronLeft size={16} />
                   </button>
@@ -346,7 +346,7 @@ function CategoryContent() {
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`text-[12px] font-bold font-mono tracking-widest transition-all ${
-                          currentPage === (i + 1) ? 'text-[#783A3A] border-b-2 border-[#783A3A] pb-1' : 'text-[#A89890] hover:text-[#1C1410]'
+                          currentPage === (i + 1) ? 'text-primary border-b-2 border-primary pb-1' : 'text-text-muted hover:text-text'
                         }`}
                       >
                         {String(i + 1).padStart(2, '0')}
@@ -357,7 +357,7 @@ function CategoryContent() {
                   <button 
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
-                    className="p-3 border border-[#E8E2D9] hover:bg-[#FAF7F4] transition-colors disabled:opacity-20"
+                    className="p-3 border border-border hover:bg-surface transition-colors disabled:opacity-20 text-text"
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -371,9 +371,9 @@ function CategoryContent() {
       {/* Mobile Drawer Fix */}
       {isMobileFilterOpen && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md lg:hidden p-6 overflow-y-auto">
-          <div className="bg-white min-h-screen p-10 animate-slideUp relative shadow-2xl">
-            <button onClick={() => setIsMobileFilterOpen(false)} className="absolute top-8 right-8 text-[#1C1410] opacity-40 hover:opacity-100"><X size={28} /></button>
-            <h2 className="text-[#1C1410] font-heading font-bold text-[32px] mb-12">Filter Collection</h2>
+          <div className="bg-bg-white min-h-screen p-10 animate-slideUp relative shadow-2xl">
+            <button onClick={() => setIsMobileFilterOpen(false)} className="absolute top-8 right-8 text-text opacity-40 hover:opacity-100"><X size={28} /></button>
+            <h2 className="text-text font-heading font-bold text-[32px] mb-12">Filter Collection</h2>
             <FilterContent 
                 localMinPrice={localMinPrice} setLocalMinPrice={setLocalMinPrice}
                 localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
@@ -399,7 +399,7 @@ function FilterContent({
   return (
     <div className="space-y-12">
       <div>
-        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Price Spectrum</h4>
+        <h4 className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6 font-body">Price Spectrum</h4>
         <div className="flex gap-4 items-center">
           <div className="relative flex-1">
             <span className="absolute left-3 top-3 text-[10px] font-bold opacity-30">PKR</span>
@@ -408,30 +408,30 @@ function FilterContent({
               placeholder="Min" 
               value={localMinPrice}
               onChange={e => setLocalMinPrice(e.target.value)}
-              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#783A3A] transition-colors" 
+              className="w-full bg-surface border-b border-border pl-10 pr-4 py-3 text-[13px] outline-none focus:border-primary transition-colors text-text" 
             />
           </div>
           <div className="relative flex-1">
-            <span className="absolute left-3 top-3 text-[10px] font-bold opacity-30">PKR</span>
+            <span className="absolute left-3 top-3 text-[10px] font-bold opacity-30 text-text">PKR</span>
             <input 
               type="number" 
               placeholder="Max" 
               value={localMaxPrice}
               onChange={e => setLocalMaxPrice(e.target.value)}
-              className="w-full bg-[#F2EDE6] border-b border-[#E8E2D9] pl-10 pr-4 py-3 text-[13px] outline-none focus:border-[#783A3A] transition-colors" 
+              className="w-full bg-surface border-b border-border pl-10 pr-4 py-3 text-[13px] outline-none focus:border-primary transition-colors text-text" 
             />
           </div>
         </div>
         <button 
           onClick={applyPriceRange}
-          className="w-full bg-[#1C1410] text-white py-3.5 text-[11px] font-bold uppercase tracking-widest mt-6 hover:bg-[#783A3A] transition-all shadow-lg active:scale-95"
+          className="w-full bg-primary text-white py-3.5 text-[11px] font-bold uppercase tracking-widest mt-6 hover:bg-primary-dark transition-all shadow-lg active:scale-95"
         >
           Execute Range
         </button>
       </div>
 
       <div>
-        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Materials Archive</h4>
+        <h4 className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6 font-body">Materials Archive</h4>
         <div className="space-y-3">
           {ALL_MATERIALS.map(mat => (
             <label key={mat} className="flex items-center gap-4 cursor-pointer group">
@@ -439,16 +439,16 @@ function FilterContent({
                 type="checkbox" 
                 checked={selectedMaterials.includes(mat)}
                 onChange={() => handleMaterialToggle(mat)}
-                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#783A3A] focus:ring-0 accent-[#783A3A]" 
+                className="w-4 h-4 rounded-0 border-border text-primary focus:ring-0 accent-primary" 
               />
-              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#783A3A] transition-colors">{mat}</span>
+              <span className="text-[13px] text-text font-medium group-hover:text-primary transition-colors">{mat}</span>
             </label>
           ))}
         </div>
       </div>
 
       <div>
-        <h4 className="text-[#6B6058] text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6">Dispatch Cities</h4>
+        <h4 className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6 font-body">Dispatch Cities</h4>
         <div className="space-y-3">
           {ALL_CITIES.map(city => (
             <label key={city} className="flex items-center gap-4 cursor-pointer group">
@@ -456,9 +456,9 @@ function FilterContent({
                 type="checkbox" 
                 checked={selectedCities.includes(city)}
                 onChange={() => handleCityToggle(city)}
-                className="w-4 h-4 rounded-0 border-[#E8E2D9] text-[#783A3A] focus:ring-0 accent-[#783A3A]" 
+                className="w-4 h-4 rounded-0 border-border text-primary focus:ring-0 accent-primary" 
               />
-              <span className="text-[13px] text-[#1C1410] font-medium group-hover:text-[#783A3A] transition-colors">{city}</span>
+              <span className="text-[13px] text-text font-medium group-hover:text-primary transition-colors">{city}</span>
             </label>
           ))}
         </div>
@@ -467,7 +467,7 @@ function FilterContent({
       {hasActiveFilters && (
         <button 
           onClick={clearAllFilters}
-          className="w-full border border-[#DC2626] text-[#DC2626] py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-50 transition-colors"
+          className="w-full border border-red-500 text-red-500 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
         >
           Reset All Attributes
         </button>

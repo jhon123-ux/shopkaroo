@@ -37,16 +37,15 @@ export default function CustomerReviews() {
   ]
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-bg-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         
-        {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-xs font-mono tracking-widest text-[#783A3A] uppercase mb-2">Testimonials</p>
-          <h2 className="text-4xl font-extrabold text-[#1A1A2E] font-heading">
+          <p className="text-xs font-mono tracking-widest text-primary uppercase mb-2">Testimonials</p>
+          <h2 className="text-4xl font-extrabold text-text font-heading">
             What Our Customers Say
           </h2>
-          <p className="text-[#6B7280] text-lg mt-3 font-body">
+          <p className="text-text-muted text-lg mt-3 font-body">
             Real reviews from real Pakistani customers
           </p>
         </div>
@@ -55,7 +54,7 @@ export default function CustomerReviews() {
         <div className={`grid grid-cols-1 ${reviews.length >= 3 ? 'md:grid-cols-3' : reviews.length === 2 ? 'md:grid-cols-2' : ''} gap-6`}>
           {visible.map((review, index) => (
             <div key={`${review.id}-${index}`}
-              className="bg-[#F7F5FF] rounded-2xl p-6 border border-[#E5E0F5]">
+              className="bg-surface rounded-2xl p-6 border border-border shadow-sm">
               
               {/* Stars */}
               <div className="flex gap-1 mb-4">
@@ -65,20 +64,20 @@ export default function CustomerReviews() {
               </div>
 
               {/* Review text */}
-              <p className="text-[#1A1A2E] text-sm leading-relaxed italic mb-6">
+              <p className="text-text text-sm leading-relaxed italic mb-6">
                 "{review.comment || review.review}"
               </p>
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#EDE6FA] flex items-center justify-center text-[#783A3A] font-bold text-sm font-heading">
+                <div className="w-10 h-10 rounded-full bg-primary-tint flex items-center justify-center text-primary font-bold text-sm font-heading">
                   {(review.name || "U").charAt(0)}
                 </div>
                 <div>
-                  <p className="font-bold text-[#1A1A2E] text-sm font-heading">
+                  <p className="font-bold text-text text-sm font-heading">
                     {review.name}
                   </p>
-                  <p className="text-[#6B7280] text-xs font-body">
+                  <p className="text-text-muted text-xs font-body">
                     {review.city || "Pakistan"}
                   </p>
                 </div>
@@ -92,7 +91,7 @@ export default function CustomerReviews() {
           <div className="flex justify-center gap-2 mt-8">
             {reviews.map((_, i) => (
               <button key={i} onClick={() => setCurrent(i)}
-                className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#783A3A]' : 'w-2 bg-[#E5E0F5]'}`}
+                className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-primary' : 'w-2 bg-border-input opacity-40'}`}
               />
             ))}
           </div>

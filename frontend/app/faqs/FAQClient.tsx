@@ -7,7 +7,7 @@ import { ChevronDown, MessageCircle, HelpCircle, Truck, CreditCard, ShieldCheck,
 const FAQ_DATA = [
   {
     category: 'Ordering & Delivery',
-    icon: <Truck size={20} className="text-[#783A3A]" />,
+    icon: <Truck size={20} className="text-primary" />,
     questions: [
       {
         q: 'Which cities do you deliver to?',
@@ -25,7 +25,7 @@ const FAQ_DATA = [
   },
   {
     category: 'Payments',
-    icon: <CreditCard size={20} className="text-[#783A3A]" />,
+    icon: <CreditCard size={20} className="text-primary" />,
     questions: [
       {
         q: 'Do you offer Cash on Delivery (COD)?',
@@ -39,7 +39,7 @@ const FAQ_DATA = [
   },
   {
     category: 'Quality & Warranty',
-    icon: <ShieldCheck size={20} className="text-[#783A3A]" />,
+    icon: <ShieldCheck size={20} className="text-primary" />,
     questions: [
       {
         q: 'What materials are used in your furniture?',
@@ -53,7 +53,7 @@ const FAQ_DATA = [
   },
   {
     category: 'Returns & Cancellations',
-    icon: <RotateCcw size={20} className="text-[#783A3A]" />,
+    icon: <RotateCcw size={20} className="text-primary" />,
     questions: [
       {
         q: 'What is your return policy?',
@@ -75,25 +75,25 @@ export default function FAQPage() {
   }
 
   return (
-    <main className="bg-white min-h-screen pb-24">
+    <main className="bg-bg-white min-h-screen pb-24 transition-colors duration-300">
       {/* Breadcrumbs */}
-      <div className="bg-[#FAF7F4] border-b border-[#E8E2D9] py-4">
-        <div className="max-w-4xl mx-auto px-6 flex items-center gap-3 text-[11px] font-bold tracking-[2px] uppercase opacity-40">
-          <Link href="/" className="hover:text-[#783A3A] transition-colors">Home</Link>
+      <div className="bg-background border-b border-border py-4 transition-colors">
+        <div className="max-w-4xl mx-auto px-6 flex items-center gap-3 text-[11px] font-bold tracking-[2px] uppercase opacity-40 text-text">
+          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
           <span>/</span>
-          <span className="text-[#783A3A]">Support Center</span>
+          <span className="text-primary">Support Center</span>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-6 py-16 md:py-24">
         <header className="text-center mb-20 animate-slideDown">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#F5E8E8] text-[#783A3A] rounded-full mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-tint text-primary rounded-full mb-6 transition-colors">
             <HelpCircle size={32} strokeWidth={1.5} />
           </div>
-          <h1 className="text-[40px] md:text-[56px] font-bold font-heading text-[#1C1410] leading-tight mb-6">
-            Frequently Asked <span className="text-[#783A3A]">Questions</span>
+          <h1 className="text-[40px] md:text-[56px] font-bold font-heading text-text leading-tight mb-6">
+            Frequently Asked <span className="text-primary">Questions</span>
           </h1>
-          <p className="text-[#6B6058] text-[16px] md:text-[18px] font-body max-w-2xl mx-auto leading-relaxed opacity-70">
+          <p className="text-text-muted text-[16px] md:text-[18px] font-body max-w-2xl mx-auto leading-relaxed opacity-70">
             Everything you need to know about bringing Shopkaroo pieces into your home. Transparency and trust are built into every answer.
           </p>
         </header>
@@ -101,11 +101,11 @@ export default function FAQPage() {
         <div className="space-y-12">
           {FAQ_DATA.map((category, catIdx) => (
             <section key={catIdx} className="animate-slideUp" style={{ animationDelay: `${catIdx * 0.1}s` }}>
-              <div className="flex items-center gap-4 mb-8 pb-4 border-b border-[#FAF7F4]">
-                <div className="p-2.5 bg-[#F5E8E8] rounded-[4px]">
+              <div className="flex items-center gap-4 mb-8 pb-4 border-b border-border transition-colors">
+                <div className="p-2.5 bg-primary-tint rounded-[4px] transition-colors">
                   {category.icon}
                 </div>
-                <h2 className="text-[20px] font-bold font-heading text-[#1C1410] uppercase tracking-[1px]">{category.category}</h2>
+                <h2 className="text-[20px] font-bold font-heading text-text uppercase tracking-[1px]">{category.category}</h2>
               </div>
 
               <div className="space-y-4">
@@ -116,24 +116,24 @@ export default function FAQPage() {
                   return (
                     <div 
                       key={faqIdx} 
-                      className={`group border rounded-[4px] transition-all duration-300 ${isOpen ? 'border-[#783A3A]/30 bg-[#FAF7F4]' : 'border-[#E8E2D9] bg-white hover:border-[#783A3A]/30'}`}
+                      className={`group border rounded-[4px] transition-all duration-300 ${isOpen ? 'border-primary/30 bg-surface' : 'border-border bg-bg-white hover:border-primary/30'}`}
                     >
                       <button 
                         onClick={() => toggleAccordion(index)}
                         className="w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                       >
-                        <span className={`text-[15px] md:text-[16px] font-bold font-heading transition-colors ${isOpen ? 'text-[#783A3A]' : 'text-[#1C1410] group-hover:text-[#783A3A]'}`}>
+                        <span className={`text-[15px] md:text-[16px] font-bold font-heading transition-colors ${isOpen ? 'text-primary' : 'text-text group-hover:text-primary'}`}>
                           {faq.q}
                         </span>
                         <ChevronDown 
                           size={18} 
-                          className={`flex-shrink-0 text-[#6B6058] transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#783A3A]' : ''}`} 
+                          className={`flex-shrink-0 text-text-muted transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} 
                         />
                       </button>
                       
                       {isOpen && (
                         <div className="px-6 pb-6 animate-slideDown">
-                          <p className="text-[#6B6058] text-[14px] md:text-[15px] font-body leading-relaxed opacity-80 border-t border-[#E8E2D9]/30 pt-4">
+                          <p className="text-text-muted text-[14px] md:text-[15px] font-body leading-relaxed opacity-80 border-t border-border pt-4 transition-colors">
                             {faq.a}
                           </p>
                         </div>
@@ -147,7 +147,7 @@ export default function FAQPage() {
         </div>
 
         {/* Support CTA */}
-        <section className="mt-24 bg-[#1C1410] p-10 md:p-16 rounded-[4px] text-center relative overflow-hidden shadow-2xl animate-slideUp">
+        <section className="mt-24 bg-card-dark p-10 md:p-16 rounded-[4px] text-center relative overflow-hidden shadow-2xl animate-slideUp transition-colors">
           <div className="relative z-10">
             <h3 className="text-white font-heading font-bold text-[28px] md:text-[36px] mb-6">Still have questions?</h3>
             <p className="text-white/60 font-body text-[15px] md:text-[17px] mb-10 max-w-xl mx-auto leading-relaxed">
@@ -163,8 +163,8 @@ export default function FAQPage() {
           </div>
           
           {/* Subtle decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#783A3A]/20 blur-[100px] -mr-32 -mt-32" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#783A3A]/10 blur-[80px] -ml-32 -mb-32" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -mr-32 -mt-32" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 blur-[80px] -ml-32 -mb-32" />
         </section>
       </div>
     </main>
