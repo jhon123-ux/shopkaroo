@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
       {/* Header */}
       <div className="bg-[#1C1410] py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[#7B5EA7] font-medium text-sm tracking-widest uppercase mb-4"
+          <p className="text-[#783A3A] font-medium text-sm tracking-widest uppercase mb-4"
              style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '3px' }}>
             Legal
           </p>
@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
             Welcome to <strong className="text-[#1C1410]">Shopkarro</strong> ("we", "our", "us"). 
             We are committed to protecting your personal information and your right to privacy. 
             This Privacy Policy explains how we collect, use, disclose, and safeguard your information 
-            when you visit our website <strong className="text-[#4A2C6E]">shopkarro.com</strong> and 
+            when you visit our website <strong className="text-[#783A3A]">shopkarro.com</strong> and 
             make purchases from us. Please read this policy carefully.
           </p>
         </div>
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
         {sections.map((section, index) => (
           <div key={index} className="mb-8">
             <div className="flex items-start gap-4 mb-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#4A2C6E] flex items-center justify-center"
+              <div className="flex-shrink-0 w-8 h-8 bg-[#783A3A] flex items-center justify-center"
                    style={{ borderRadius: '2px' }}>
                 <span className="text-white text-sm font-bold"
                       style={{ fontFamily: 'DM Sans, sans-serif' }}>
@@ -77,7 +77,7 @@ export default function PrivacyPolicyPage() {
                     <li key={bIndex} 
                         className="flex items-start gap-3 text-[#6B6058] text-base"
                         style={{ fontFamily: 'DM Sans, sans-serif' }}>
-                      <span className="w-1.5 h-1.5 bg-[#4A2C6E] rounded-full mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 bg-[#783A3A] rounded-full mt-2 flex-shrink-0" />
                       {bullet}
                     </li>
                   ))}
@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
         ))}
 
         {/* Contact Box */}
-        <div className="bg-[#4A2C6E] p-8 mt-12" style={{ borderRadius: '4px' }}>
+        <div className="bg-[#1C1410] p-8 mt-12" style={{ borderRadius: '4px' }}>
           <h2 className="text-white text-2xl font-bold mb-4"
               style={{ fontFamily: 'Playfair Display, serif' }}>
             Contact Us About Privacy
