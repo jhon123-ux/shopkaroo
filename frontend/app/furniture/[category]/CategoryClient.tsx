@@ -62,6 +62,7 @@ function CategoryContent() {
   const searchParams = useSearchParams()
 
   const categorySlug = params?.category ? (params.category as string) : ''
+  const isAllFurniture = !categorySlug || categorySlug === 'all'
   
   // CMS Category Metadata
   const [categoryData, setCategoryData] = useState<any>(null)
@@ -108,8 +109,9 @@ function CategoryContent() {
     if (selectedMaterials.length > 0) params.set('material', selectedMaterials.join(','))
     if (selectedCities.length > 0) params.set('city', selectedCities.join(','))
     
-    router.push(`/furniture/${categorySlug}?${params.toString()}`, { scroll: false })
-  }, [sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, categorySlug, router])
+    const baseUrl = isAllFurniture ? '/furniture' : `/furniture/${categorySlug}`
+    router.push(`${baseUrl}?${params.toString()}`, { scroll: false })
+  }, [sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, categorySlug, isAllFurniture, router])
 
   // Fetch Data
   useEffect(() => {
@@ -120,10 +122,10 @@ function CategoryContent() {
       try {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
         const queryParams = new URLSearchParams({
-          category: categorySlug,
           limit: '12',
           offset: ((currentPage - 1) * 12).toString()
         })
+        if (!isAllFurniture) queryParams.set('category', categorySlug)
         if (sort) queryParams.set('sort', sort)
         if (minPrice) queryParams.set('min_price', minPrice.toString())
         if (maxPrice) queryParams.set('max_price', maxPrice.toString())
@@ -219,12 +221,12 @@ function CategoryContent() {
         <div className="relative text-center px-6">
           <p className="text-white/60 text-[11px] font-bold uppercase tracking-[4px] mb-4">Collection Gallery</p>
           <h1 className="text-white font-heading italic text-[48px] md:text-[64px] leading-none mb-6 capitalize">
-            {catName}
+            {isAllFurniture ? 'All Furniture' : catName}
           </h1>
           <div className="flex items-center justify-center gap-3 text-white/40 text-[12px] font-bold uppercase tracking-widest">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span className="opacity-20">/</span>
-            <span className="text-white">Shop {catName}</span>
+            <span className="text-white">{isAllFurniture ? 'All Furniture' : `Shop ${catName}`}</span>
           </div>
         </div>
       </div>
