@@ -109,7 +109,7 @@ export default function AdminReviewsPage() {
       <div className="flex justify-between items-end mb-12">
         <div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Sentiment Curation</p>
-          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Reviews</h2>
+          <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Reviews</h2>
         </div>
         <div className="flex flex-col items-end">
           <p className="text-[#783A3A] text-[13px] font-bold uppercase tracking-[2px]">

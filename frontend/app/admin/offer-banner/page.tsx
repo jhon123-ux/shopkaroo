@@ -134,7 +134,7 @@ export default function AdminOfferBannerPage() {
       {/* HEADER */}
       <div className="text-left mb-12">
         <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Storefront Promotions</p>
-        <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Promotionals</h2>
+        <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Promotionals</h2>
       </div>
 
       {/* EDIT FORM */}
@@ -142,60 +142,60 @@ export default function AdminOfferBannerPage() {
         <div className="grid grid-cols-1 gap-10">
           
           <div>
-            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Announcement Designation</label>
+            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Announcement Designation</label>
             <input 
               type="text" 
               value={banner.title}
               onChange={e => setBanner({...banner, title: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body"
+              className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-6 py-4 text-[14px] text-text focus:border-[#783A3A] outline-none shadow-sm font-body"
               placeholder="e.g. Seasonal Clearance"
             />
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Exhibition Narrative</label>
+            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Exhibition Narrative</label>
             <textarea 
               rows={2}
               value={banner.subtitle}
               onChange={e => setBanner({...banner, subtitle: e.target.value})}
-              className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body h-24"
+              className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-6 py-4 text-[14px] text-text focus:border-[#783A3A] outline-none shadow-sm font-body h-24"
               placeholder="Descriptive details for the front-facing banner..."
             />
           </div>
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Inscription Badge</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Inscription Badge</label>
               <input 
                 type="text" 
                 value={banner.badge_text}
                 onChange={e => setBanner({...banner, badge_text: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-bold uppercase tracking-[3px] outline-none"
+                className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-6 py-4 text-[12px] font-bold uppercase tracking-[3px] text-text outline-none"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Action Designation</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Action Designation</label>
               <input 
                 type="text" 
                 value={banner.cta_text}
                 onChange={e => setBanner({...banner, cta_text: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[14px] font-bold uppercase tracking-[2px] outline-none"
+                className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-6 py-4 text-[14px] font-bold uppercase tracking-[2px] text-text outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Target Protocol (Link)</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Target Protocol (Link)</label>
               <input 
                 type="text" 
                 value={banner.cta_link}
                 onChange={e => setBanner({...banner, cta_link: e.target.value})}
-                className="w-full border border-[#D4CCC2] rounded-0 px-6 py-4 text-[12px] font-mono outline-none"
+                className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-6 py-4 text-[12px] font-mono text-text outline-none"
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4">Temporal Expiry (Date & Time)</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Temporal Expiry (Date & Time)</label>
               <input 
                 type="datetime-local" 
                 value={banner.end_date}

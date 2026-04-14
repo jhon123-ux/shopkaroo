@@ -171,7 +171,7 @@ export default function AdminOrdersPage() {
       <div className="flex justify-between items-end mb-12">
         <div>
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Vault Registry</p>
-          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] leading-none uppercase tracking-widest">Transactions</h2>
+          <h2 className="text-[28px] font-bold font-heading text-text leading-none uppercase tracking-widest">Transactions</h2>
         </div>
         <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
           <Download size={14} strokeWidth={2.5} />
@@ -207,14 +207,14 @@ export default function AdminOrdersPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search identifier or customer signature..."
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#783A3A] outline-none shadow-sm font-body"
+            className="w-full border border-[#D4CCC2] bg-bg-white rounded-[2px] px-5 py-4 text-[13px] text-text focus:border-[#783A3A] outline-none shadow-sm font-body"
           />
         </div>
         <div className="relative min-w-[160px]">
           <select 
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] text-text appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Pipeline Status</option>
             <option value="pending">Pending</option>
@@ -231,7 +231,7 @@ export default function AdminOrdersPage() {
           <select 
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] text-text appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Territory</option>
             <option value="Karachi">Karachi</option>
@@ -248,7 +248,7 @@ export default function AdminOrdersPage() {
           <select 
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
+            className="w-full border border-[#D4CCC2] bg-bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] text-text appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none shadow-sm"
           >
             <option value="all">Temporal Filter</option>
             <option value="today">Today</option>

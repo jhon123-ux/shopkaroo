@@ -133,7 +133,7 @@ export default function AdminBanners() {
         <div className="flex justify-between items-end mb-12">
           <div>
             <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Curation Management</p>
-            <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Exhibition Banners</h2>
+            <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Exhibition Banners</h2>
           </div>
           <button 
             onClick={openNewModal}
@@ -219,44 +219,44 @@ export default function AdminBanners() {
                 <div className="flex-1 space-y-8 border-r border-[#FAF7F4] pr-0 md:pr-16">
                 <div className="mb-12">
                    <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] mb-2">Protocol Entry</p>
-                   <h2 className="text-[32px] font-bold font-heading text-[#1C1410] uppercase tracking-widest">{editingBanner ? 'Modify Exhibit' : 'New Exhibit'}</h2>
+                   <h2 className="text-[32px] font-bold font-heading text-text uppercase tracking-widest">{editingBanner ? 'Modify Exhibit' : 'New Exhibit'}</h2>
                 </div>
                 
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Primary Designation *</label>
+                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Primary Designation *</label>
                   <input 
                     type="text" 
                     value={formData.title || ''} 
                     onChange={e => setFormData({...formData, title: e.target.value})}
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body"
+                    className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-5 py-4 text-[14px] text-text focus:border-[#783A3A] outline-none shadow-sm font-body"
                     placeholder="Classic Furnishings"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Descriptive Narrative</label>
+                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Descriptive Narrative</label>
                   <textarea 
                     rows={3}
                     value={formData.subtitle || ''} 
                     onChange={e => setFormData({...formData, subtitle: e.target.value})}
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] focus:border-[#1C1410] outline-none shadow-sm font-body h-24"
+                    className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-5 py-4 text-[13px] text-text focus:border-[#783A3A] outline-none shadow-sm font-body h-24"
                     placeholder="Exquisite craftsmanship for modern living..."
                   />
                 </div>
 
                 <div className="flex gap-8">
                   <div className="flex-1">
-                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Badge Inscription</label>
+                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Badge Inscription</label>
                     <input 
                       type="text" 
                       value={formData.badge_text || ''} 
                       onChange={e => setFormData({...formData, badge_text: e.target.value})}
-                      className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body"
+                      className="w-full border border-[#D4CCC2] bg-bg-white rounded-0 px-5 py-4 text-[13px] text-text outline-none font-body"
                       placeholder="Limited Edition"
                     />
                   </div>
                   <div className="w-24 shrink-0">
-                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3">Tone</label>
+                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Tone</label>
                     <div className="relative h-12 w-full border border-[#D4CCC2] rounded-0 overflow-hidden cursor-pointer shadow-sm">
                        <input 
                          type="color" 
