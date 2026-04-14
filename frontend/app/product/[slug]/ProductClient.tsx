@@ -501,26 +501,14 @@ export default function ProductDetailPage() {
                 <span className="text-text text-[14px] font-bold font-body">{product.dimensions ? `${product.dimensions.L}×${product.dimensions.W}×${product.dimensions.H} ${product.dimensions.unit}` : "—"}</span>
               </div>
               <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Weight</span>
-                <span className="text-text text-[14px] font-bold font-body">{product.weight_kg ? `${product.weight_kg} kg` : "—"}</span>
-              </div>
-              <div className="px-6 py-4 flex justify-between bg-surface border-b border-border">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Category</span>
                 <span className="text-text text-[14px] font-bold font-body capitalize">{product.category}</span>
-              </div>
-              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">SKU</span>
-                <span className="text-text text-[14px] font-bold font-body font-mono">SKR-{product.id ? product.id.toString().slice(0,8).toUpperCase() : 'UNKNOWN'}</span>
               </div>
               <div className="px-6 py-4 flex justify-between bg-surface border-b border-border">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Delivery</span>
                 <span className="text-text text-[14px] font-bold font-body">2-7 business days</span>
               </div>
-              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Warranty</span>
-                <span className="text-text text-[14px] font-bold font-body">1 Year Limited</span>
-              </div>
-              <div className="px-6 py-4 flex justify-between bg-surface">
+              <div className="px-6 py-4 flex justify-between bg-bg-white">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Payment</span>
                 <span className="text-green-600 dark:text-green-500 text-[13px] font-bold font-body">CASH ON DELIVERY</span>
               </div>
