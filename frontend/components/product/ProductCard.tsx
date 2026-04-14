@@ -156,7 +156,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         {/* Top left badges */}
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isSale ? (
-            <span className="bg-brand-black text-white text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
+            <span className="bg-white text-primary text-[10px] px-2 py-1 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-sm">
               SALE
             </span>
           ) : isNew ? (
