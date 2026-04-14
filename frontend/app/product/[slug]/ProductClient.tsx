@@ -262,9 +262,9 @@ export default function ProductDetailPage() {
             )}
 
             {/* Badges */}
-            <div className={`absolute top-4 left-4 flex flex-col gap-2 z-10 transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`absolute top-4 left-4 flex flex-col gap-2 z-20 transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
               {isSale && (
-                <span className="bg-brand-black text-white text-[10px] px-3 py-1.5 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-md">
+                <span className="bg-bg-white text-primary text-[10px] px-3 py-1.5 rounded-0 font-body font-bold tracking-[2px] uppercase shadow-md pointer-events-none">
                   SALE
                 </span>
               )}
@@ -723,7 +723,7 @@ export default function ProductDetailPage() {
       {showToast && (
         <div className="fixed top-24 right-6 z-[100] bg-brand-black text-white px-6 py-4 rounded-0 shadow-2xl flex items-center gap-3 animate-slideUp border-l-4 border-primary">
           <Check size={16} className="text-green-500" strokeWidth={3} /> 
-          <span className="text-[13px] font-body font-semibold text-white">Added to your collection</span>
+          <span className="text-[13px] font-body font-semibold text-white">Registry Updated: Link active</span>
         </div>
       )}
 
