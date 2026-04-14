@@ -24,7 +24,7 @@ export default function AdminProductsPage() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [currentProductId, setCurrentProductId] = useState<string | null>(null)
   const [allCategories, setAllCategories] = useState<any[]>([])
-  const [flatCategories, setFlatCategories] = useState<{id: string, name: string, path: string}[]>([])
+  const [flatCategories, setFlatCategories] = useState<{id: string, slug: string, name: string, path: string}[]>([])
   
   const [formData, setFormData] = useState({
     name: '', slug: '', category: '', material: '', price_pkr: '',
@@ -59,15 +59,15 @@ export default function AdminProductsPage() {
       
       const flattened: any[] = []
       parents.forEach((p: any) => {
-        flattened.push({ id: p.id, name: p.name, path: p.name })
+        flattened.push({ id: p.id, slug: p.slug, name: p.name, path: p.name })
         subs.filter((s: any) => s.parent_id === p.id).forEach((s: any) => {
-          flattened.push({ id: s.id, name: s.name, path: `${p.name} > ${s.name}` })
+          flattened.push({ id: s.id, slug: s.slug, name: s.name, path: `${p.name} > ${s.name}` })
         })
       })
       
       setFlatCategories(flattened)
       if (!isEditMode && flattened.length > 0) {
-        setFormData(prev => ({ ...prev, category: flattened[0].id }))
+        setFormData(prev => ({ ...prev, category: flattened[0].slug }))
       }
 
     } catch (err) {
@@ -92,7 +92,7 @@ export default function AdminProductsPage() {
   const openAddModal = () => {
     setIsEditMode(false); setCurrentProductId(null)
     setFormData({
-      name: '', slug: '', category: flatCategories[0]?.id || '', material: '', price_pkr: '',
+      name: '', slug: '', category: flatCategories[0]?.slug || 'living-room', material: '', price_pkr: '',
       sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
       description: '', name_urdu: '', is_active: true, images: []
     })
@@ -352,7 +352,7 @@ export default function AdminProductsPage() {
                       className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[1px] appearance-none bg-white"
                     >
                       {flatCategories.map(c => (
-                        <option key={c.id} value={c.id}>{c.path}</option>
+                        <option key={c.slug} value={c.slug}>{c.path}</option>
                       ))}
                     </select>
                   </div>
