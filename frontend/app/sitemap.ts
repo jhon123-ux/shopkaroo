@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/cart',
     '/checkout',
     '/furniture',
+    '/privacy-policy',
   ].map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
@@ -40,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Products
-  const products = await fetchJson('/api/products?limit=100')
+  const products = await fetchJson('/api/products?limit=500')
   const productRoutes = products.map((prod: any) => ({
     url: `${siteUrl}/product/${prod.slug}`,
     lastModified: new Date(),
