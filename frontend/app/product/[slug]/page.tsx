@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
   
   try {
-    const res = await fetch(`${backendUrl}/api/products?slug=${slug}`, { next: { revalidate: 3600 } })
+    const res = await fetch(`${backendUrl}/api/products?slug=${slug}`, { cache: 'no-store' })
     if (!res.ok) throw new Error()
     const data = await res.json()
     const product = data.data?.[0]
