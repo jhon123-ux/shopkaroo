@@ -10,10 +10,19 @@ export interface Product {
   material: string
   dimensions?: { L: number; W: number; H: number; unit: string }
   images: string[]
+  image_alts?: string[]
   stock_qty: number
   weight_kg?: number
   is_active: boolean
   created_at: string
+  // SEO fields
+  meta_title?: string | null
+  meta_description?: string | null
+  // Rich content fields
+  opening_paragraph?: string | null
+  features?: string[]
+  seo_paragraph?: string | null
+  closing_cta?: string | null
 }
 
 export interface OrderItem {

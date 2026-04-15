@@ -10,27 +10,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
   
   try {
-    const res = await fetch(`${backendUrl}/api/products/${slug}`)
+    const res = await fetch(`${backendUrl}/api/products?slug=${slug}`, { next: { revalidate: 3600 } })
     if (!res.ok) throw new Error()
     const data = await res.json()
-    const product = data.data
+    const product = data.data?.[0]
 
     if (!product) return { title: 'Product Not Found - Shopkarro' }
 
+    // Prefer admin-entered SEO fields, fall back to auto-generated
+    const metaTitle = product.meta_title || `${product.name} | Premium Furniture Pakistan - Shopkarro`
+    const metaDescription = product.meta_description || 
+      product.description?.substring(0, 160) || 
+      `Buy ${product.name} at Shopkarro. Handcrafted premium furniture with Cash on Delivery across Pakistan.`
+
+    const ogImage = product.images?.[0] || null
+
     return {
-      title: `${product.name} | Premium Furniture Pakistan - Shopkarro`,
-      description: product.description?.substring(0, 160) || `Buy ${product.name} at Shopkarro. Handcrafted premium furniture with Cash on Delivery across Pakistan.`,
+      title: metaTitle,
+      description: metaDescription,
       openGraph: {
-        title: product.name,
-        description: product.description,
-        images: product.image_url ? [{ url: product.image_url }] : [],
+        title: metaTitle,
+        description: metaDescription,
+        images: ogImage ? [{ url: ogImage, alt: product.image_alts?.[0] || product.name }] : [],
         type: 'article',
       },
       twitter: {
         card: 'summary_large_image',
-        title: product.name,
-        description: product.description,
-        images: product.image_url ? [product.image_url] : [],
+        title: metaTitle,
+        description: metaDescription,
+        images: ogImage ? [ogImage] : [],
       }
     }
   } catch (e) {

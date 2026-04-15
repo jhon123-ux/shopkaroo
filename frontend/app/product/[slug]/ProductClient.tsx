@@ -246,7 +246,7 @@ export default function ProductDetailPage() {
             {product.images && product.images.length > 0 ? (
               <Image 
                 src={product.images[activeImageIndex]} 
-                alt={product.name}
+                alt={product.image_alts?.[activeImageIndex] || product.name}
                 fill
                 style={{
                   transform: isZoomed ? 'scale(2)' : 'scale(1)',
@@ -292,7 +292,7 @@ export default function ProductDetailPage() {
                 className={`flex-shrink-0 w-[72px] h-[72px] rounded-[4px] overflow-hidden border transition-all ${activeImageIndex === idx ? 'border-primary shadow-sm' : 'border-border hover:border-primary'}`}
               >
                 <div className="w-full h-full relative p-1 bg-surface">
-                  <Image src={product.images[idx]} alt="thumb" fill className="object-cover" />
+                  <Image src={product.images[idx]} alt={product.image_alts?.[idx] || `${product.name} image ${idx + 1}`} fill className="object-cover" />
                 </div>
               </div>
             ))}
@@ -477,16 +477,66 @@ export default function ProductDetailPage() {
 
         <div className="min-h-[250px]">
           {activeTab === 'desc' && (
-            <div className="animate-slideUp max-w-4xl">
-              <p className="text-text text-[16px] leading-[1.8] font-body opacity-90">
-                {product.description || "Transform your living space with our beautifully crafted furniture designed specifically for modern Pakistani homes. Built with longevity in mind, our pieces offer a seamless blend of comfort, durability, and contemporary styling."}
-              </p>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="animate-slideUp max-w-4xl space-y-10">
+
+              {/* Opening Paragraph — bold styled intro */}
+              {product.opening_paragraph && (
+                <p className="text-text text-[18px] leading-[1.8] font-body font-semibold opacity-90">
+                  {product.opening_paragraph}
+                </p>
+              )}
+
+              {/* Features bullet list */}
+              {product.features && product.features.length > 0 && (
+                <div>
+                  <h3 className="text-[11px] uppercase tracking-[3px] font-bold text-text-muted mb-5 font-body opacity-60">Features</h3>
+                  <ul className="space-y-3">
+                    {product.features.map((feature: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-3 text-text font-body text-[15px] leading-relaxed">
+                        <span className="flex-shrink-0 mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Check size={11} className="text-primary" strokeWidth={3} />
+                        </span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Plain description fallback */}
+              {product.description && (
+                <p className="text-text text-[16px] leading-[1.8] font-body opacity-80">
+                  {product.description}
+                </p>
+              )}
+
+              {/* Default trust badges */}
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Premium Materials</div>
                 <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Skilled Artisans</div>
                 <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Long-lasting Build</div>
                 <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Secure Delivery</div>
               </div>
+
+              {/* SEO Paragraph */}
+              {product.seo_paragraph && (
+                <div className="border-t border-border pt-8">
+                  <p className="text-text-muted text-[14px] leading-[1.8] font-body opacity-60">
+                    {product.seo_paragraph}
+                  </p>
+                </div>
+              )}
+
+              {/* Closing CTA */}
+              {product.closing_cta && (
+                <div className="bg-primary/5 border border-primary/20 rounded-[3px] px-6 py-4 flex items-center gap-4">
+                  <Sparkles size={18} className="text-primary flex-shrink-0" />
+                  <p className="text-primary font-bold font-body text-[14px] tracking-wide">
+                    {product.closing_cta}
+                  </p>
+                </div>
+              )}
+
             </div>
           )}
 
@@ -497,18 +547,24 @@ export default function ProductDetailPage() {
                 <span className="text-text text-[14px] font-bold font-body">{product.material || "—"}</span>
               </div>
               <div className="px-6 py-4 flex justify-between bg-surface border-b border-border">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Dimensions</span>
+                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Dimensions (L×W×H)</span>
                 <span className="text-text text-[14px] font-bold font-body">{product.dimensions ? `${product.dimensions.L}×${product.dimensions.W}×${product.dimensions.H} ${product.dimensions.unit}` : "—"}</span>
               </div>
-              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Category</span>
-                <span className="text-text text-[14px] font-bold font-body capitalize">{product.category}</span>
-              </div>
+              {product.weight_kg && (
+                <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
+                  <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Weight</span>
+                  <span className="text-text text-[14px] font-bold font-body">{product.weight_kg} kg</span>
+                </div>
+              )}
               <div className="px-6 py-4 flex justify-between bg-surface border-b border-border">
+                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Category</span>
+                <span className="text-text text-[14px] font-bold font-body capitalize">{categoryNameDisplay}</span>
+              </div>
+              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Delivery</span>
                 <span className="text-text text-[14px] font-bold font-body">2-7 business days</span>
               </div>
-              <div className="px-6 py-4 flex justify-between bg-bg-white">
+              <div className="px-6 py-4 flex justify-between bg-surface">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Payment</span>
                 <span className="text-green-600 dark:text-green-500 text-[13px] font-bold font-body">CASH ON DELIVERY</span>
               </div>

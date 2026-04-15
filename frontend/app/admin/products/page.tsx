@@ -29,7 +29,15 @@ export default function AdminProductsPage() {
   const [formData, setFormData] = useState({
     name: '', slug: '', category: '', material: '', price_pkr: '',
     sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
-    description: '', name_urdu: '', is_active: true, images: [] as string[]
+    description: '', name_urdu: '', is_active: true, images: [] as string[],
+    // SEO fields
+    meta_title: '', meta_description: '',
+    // Rich content
+    opening_paragraph: '',
+    features: '',  // newline-separated, converted to array on submit
+    seo_paragraph: '', closing_cta: '',
+    // Per-image alt texts (parallel to images[])
+    image_alts: [] as string[]
   })
   
   const [isUploading, setIsUploading] = useState(false)
@@ -94,7 +102,10 @@ export default function AdminProductsPage() {
     setFormData({
       name: '', slug: '', category: flatCategories[0]?.slug || 'living-room', material: '', price_pkr: '',
       sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
-      description: '', name_urdu: '', is_active: true, images: []
+      description: '', name_urdu: '', is_active: true, images: [],
+      meta_title: '', meta_description: '',
+      opening_paragraph: '', features: '', seo_paragraph: '', closing_cta: '',
+      image_alts: []
     })
     setIsModalOpen(true)
   }
@@ -108,7 +119,12 @@ export default function AdminProductsPage() {
       weight_kg: product.weight_kg?.toString() || '', dim_l: product.dimensions?.L?.toString() || '',
       dim_w: product.dimensions?.W?.toString() || '', dim_h: product.dimensions?.H?.toString() || '',
       description: product.description || '', name_urdu: product.name_urdu || '',
-      is_active: product.is_active, images: product.images || []
+      is_active: product.is_active, images: product.images || [],
+      meta_title: product.meta_title || '', meta_description: product.meta_description || '',
+      opening_paragraph: product.opening_paragraph || '',
+      features: (product.features || []).join('\n'),
+      seo_paragraph: product.seo_paragraph || '', closing_cta: product.closing_cta || '',
+      image_alts: product.image_alts || []
     })
     setIsModalOpen(true)
   }
@@ -207,12 +223,22 @@ export default function AdminProductsPage() {
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault()
+    const featuresArray = formData.features
+      .split('\n')
+      .map(f => f.trim())
+      .filter(f => f.length > 0)
     const payload = {
       name: formData.name, slug: formData.slug, category: formData.category, material: formData.material,
       price_pkr: parseInt(formData.price_pkr) || 0, sale_price: formData.sale_price ? parseInt(formData.sale_price) : null,
       stock_qty: parseInt(formData.stock_qty) || 0, weight_kg: parseFloat(formData.weight_kg) || 0,
       dimensions: { L: parseFloat(formData.dim_l) || 0, W: parseFloat(formData.dim_w) || 0, H: parseFloat(formData.dim_h) || 0, unit: 'cm' },
-      description: formData.description, name_urdu: formData.name_urdu, is_active: formData.is_active, images: formData.images
+      description: formData.description, name_urdu: formData.name_urdu, is_active: formData.is_active, images: formData.images,
+      meta_title: formData.meta_title || null, meta_description: formData.meta_description || null,
+      opening_paragraph: formData.opening_paragraph || null,
+      features: featuresArray,
+      seo_paragraph: formData.seo_paragraph || null,
+      closing_cta: formData.closing_cta || null,
+      image_alts: formData.image_alts
     }
     try {
       const url = isEditMode ? `${backendUrl}/api/products/${currentProductId}` : `${backendUrl}/api/products`
@@ -340,15 +366,17 @@ export default function AdminProductsPage() {
               <button onClick={() => setIsModalOpen(false)} className="text-[#1C1410] text-4xl font-light hover:opacity-100 opacity-20 transition">&times;</button>
             </div>
             <form onSubmit={submitForm} className="grid grid-cols-2 gap-10">
+
+              {/* ── SECTION 1: BASIC INFO ── */}
               <div className="col-span-2 md:col-span-1 space-y-8">
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Exhibition Label *</label><input required value={formData.name} onChange={handleNameChange} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body" /></div>
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Registry Key (Slug) *</label><input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] font-mono opacity-60 outline-none" /></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Product Name *</label><input required value={formData.name} onChange={handleNameChange} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body" /></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">URL Slug *</label><input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] font-mono opacity-60 outline-none" /></div>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Class *</label>
-                    <select 
-                      value={formData.category} 
-                      onChange={e => setFormData({...formData, category: e.target.value})} 
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Category *</label>
+                    <select
+                      value={formData.category}
+                      onChange={e => setFormData({...formData, category: e.target.value})}
                       className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[11px] font-bold uppercase tracking-[1px] appearance-none bg-white"
                     >
                       {flatCategories.map(c => (
@@ -356,27 +384,118 @@ export default function AdminProductsPage() {
                       ))}
                     </select>
                   </div>
-                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Material Composition</label><input value={formData.material} onChange={e => setFormData({...formData, material: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body" /></div>
+                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Material</label><input value={formData.material} onChange={e => setFormData({...formData, material: e.target.value})} placeholder="e.g. Keekar Wood" className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body" /></div>
                 </div>
                 <div className="grid grid-cols-2 gap-6">
-                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Standard Valuation (PKR) *</label><input required type="number" value={formData.price_pkr} onChange={e => setFormData({...formData, price_pkr: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] outline-none font-body" /></div>
-                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Current Event Price (PKR)</label><input type="number" value={formData.sale_price} onChange={e => setFormData({...formData, sale_price: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] outline-none font-body" /></div>
+                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Price (PKR) *</label><input required type="number" value={formData.price_pkr} onChange={e => setFormData({...formData, price_pkr: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] outline-none font-body" /></div>
+                  <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Sale Price (PKR)</label><input type="number" value={formData.sale_price} onChange={e => setFormData({...formData, sale_price: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] outline-none font-body" /></div>
                 </div>
               </div>
+
+              {/* ── SECTION 2: STOCK & DIMENSIONS ── */}
               <div className="col-span-2 md:col-span-1 space-y-8">
                 <div className="grid grid-cols-3 gap-4">
                   <div className="col-span-1"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Stock Units</label><input type="number" value={formData.stock_qty} onChange={e => setFormData({...formData, stock_qty: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
-                  <div className="col-span-2"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Mass (KG)</label><input type="number" step="0.1" value={formData.weight_kg} onChange={e => setFormData({...formData, weight_kg: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
+                  <div className="col-span-2"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Weight (KG)</label><input type="number" step="0.1" value={formData.weight_kg} onChange={e => setFormData({...formData, weight_kg: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
                 </div>
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Dimensions (L-W-H cm)</label><div className="flex gap-4"><input placeholder="L" type="number" value={formData.dim_l} onChange={e => setFormData({...formData, dim_l: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="W" type="number" value={formData.dim_w} onChange={e => setFormData({...formData, dim_w: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="H" type="number" value={formData.dim_h} onChange={e => setFormData({...formData, dim_h: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /></div></div>
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Technical Narrative</label><textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none h-32 font-body" /></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Dimensions (L × W × H cm)</label><div className="flex gap-4"><input placeholder="L" type="number" value={formData.dim_l} onChange={e => setFormData({...formData, dim_l: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="W" type="number" value={formData.dim_w} onChange={e => setFormData({...formData, dim_w: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="H" type="number" value={formData.dim_h} onChange={e => setFormData({...formData, dim_h: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /></div></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Short Description (Specs Tab)</label><textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Brief technical description for the Specifications tab" className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none h-28 font-body" /></div>
               </div>
+
+              {/* ── SECTION 3: SEO ── */}
+              <div className="col-span-2 border border-[#E8E2D9] rounded-0 p-8 bg-[#FDFCFA] space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-[9px] font-bold uppercase tracking-[3px] bg-[#783A3A] text-white px-3 py-1">SEO</span>
+                  <span className="text-[11px] text-[#6B6058] font-bold uppercase tracking-[2px] opacity-60">Search Engine Optimisation</span>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-3">
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] opacity-40">Meta Title</label>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest ${formData.meta_title.length > 60 ? 'text-red-500' : 'text-[#6B6058] opacity-40'}`}>{formData.meta_title.length}/60</span>
+                  </div>
+                  <input
+                    value={formData.meta_title}
+                    onChange={e => setFormData({...formData, meta_title: e.target.value})}
+                    placeholder="e.g. Nautical Azure Console | Teal Hand-Painted Table Pakistan"
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410]"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-3">
+                    <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] opacity-40">Meta Description</label>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest ${formData.meta_description.length > 160 ? 'text-red-500' : formData.meta_description.length > 140 ? 'text-green-600' : 'text-[#6B6058] opacity-40'}`}>{formData.meta_description.length}/160</span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    value={formData.meta_description}
+                    onChange={e => setFormData({...formData, meta_description: e.target.value})}
+                    placeholder="Shop the... — describe product benefits. Target 140–160 chars."
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410] resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* ── SECTION 4: RICH CONTENT ── */}
+              <div className="col-span-2 border border-[#E8E2D9] rounded-0 p-8 bg-[#FDFCFA] space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-[9px] font-bold uppercase tracking-[3px] bg-[#1C1410] text-white px-3 py-1">Content</span>
+                  <span className="text-[11px] text-[#6B6058] font-bold uppercase tracking-[2px] opacity-60">Rich Product Content</span>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Opening Paragraph (Bold Intro)</label>
+                  <textarea
+                    rows={4}
+                    value={formData.opening_paragraph}
+                    onChange={e => setFormData({...formData, opening_paragraph: e.target.value})}
+                    placeholder="Make a statement that no one forgets. The [Product Name] is not just furniture — it is wearable art for your home..."
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410] resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-2 opacity-40">Features / Bullet Points</label>
+                  <p className="text-[10px] text-[#6B6058] opacity-50 mb-3 font-body">One feature per line — each line becomes a bullet point on the product page.</p>
+                  <textarea
+                    rows={7}
+                    value={formData.features}
+                    onChange={e => setFormData({...formData, features: e.target.value})}
+                    placeholder={`Hand-painted nautical scene on tabletop\nVibrant teal deco paint finish with lacquer\nIntricate floral accents on drawer fronts\n2 functional drawers with smooth glide\nElegant curved cabriole legs`}
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410] resize-none leading-relaxed"
+                  />
+                  {formData.features && (
+                    <p className="text-[10px] text-[#6B6058] opacity-40 mt-2">{formData.features.split('\n').filter(f => f.trim()).length} bullet point(s)</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">SEO Paragraph (City Targeting)</label>
+                  <textarea
+                    rows={4}
+                    value={formData.seo_paragraph}
+                    onChange={e => setFormData({...formData, seo_paragraph: e.target.value})}
+                    placeholder="The [Product] is available with cash on delivery across Pakistan, including Lahore, Karachi, Islamabad..."
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410] resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Closing CTA Text</label>
+                  <input
+                    value={formData.closing_cta}
+                    onChange={e => setFormData({...formData, closing_cta: e.target.value})}
+                    placeholder="Order now and pay on delivery — no card, no compromise."
+                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410]"
+                  />
+                </div>
+              </div>
+              {/* ── SECTION 5: IMAGES ── */}
               <div className="col-span-2 py-8 bg-[#FAF7F4] p-8 -mx-1 border-t border-b border-[#E8E2D9]">
                 <div className="flex justify-between items-end mb-6">
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[3px] block opacity-60">Visual Assets Archive</label>
+                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[3px] block opacity-60">Product Images</label>
                   <span className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[1.5px] opacity-40">{formData.images.length}/5 images</span>
                 </div>
-                
+
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {formData.images.length < 5 && (
                     <label className={`cursor-pointer bg-white border-2 border-dashed border-[#D4CCC2] aspect-square flex flex-col items-center justify-center hover:border-[#1C1410] transition group relative ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
@@ -386,34 +505,54 @@ export default function AdminProductsPage() {
                       <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
                     </label>
                   )}
-                  
+
                   {formData.images.map((img, idx) => (
-                    <div key={idx} className="relative aspect-square border border-[#E8E2D9] group overflow-hidden shadow-inner bg-white">
-                      <Image src={img} alt="asset" fill className="object-cover" />
-                      
-                      {/* Badge for main image */}
-                      {idx === 0 && (
-                        <div className="absolute bottom-1 left-1 bg-[#783A3A] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 shadow-md">
-                          Main
-                        </div>
-                      )}
-                      
-                      <button 
-                        type="button" 
-                        onClick={() => removeImage(idx)} 
-                        className="absolute top-1 right-1 bg-[#1C1410]/70 text-white w-6 h-6 flex items-center justify-center rounded-sm opacity-0 group-hover:opacity-100 transition-all hover:bg-[#1C1410]"
-                      >
-                        &times;
-                      </button>
+                    <div key={idx} className="relative border border-[#E8E2D9] group bg-white shadow-inner">
+                      <div className="relative aspect-square overflow-hidden">
+                        <Image src={img} alt={formData.image_alts[idx] || 'product image'} fill className="object-cover" />
+                        {idx === 0 && (
+                          <div className="absolute bottom-1 left-1 bg-[#783A3A] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 shadow-md">
+                            Main
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            removeImage(idx)
+                            setFormData(prev => ({
+                              ...prev,
+                              image_alts: prev.image_alts.filter((_, i) => i !== idx)
+                            }))
+                          }}
+                          className="absolute top-1 right-1 bg-[#1C1410]/70 text-white w-6 h-6 flex items-center justify-center rounded-sm opacity-0 group-hover:opacity-100 transition-all hover:bg-[#1C1410]"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                      {/* Alt text input */}
+                      <div className="px-2 py-2">
+                        <input
+                          type="text"
+                          value={formData.image_alts[idx] || ''}
+                          onChange={e => {
+                            const alts = [...formData.image_alts]
+                            alts[idx] = e.target.value
+                            setFormData(prev => ({ ...prev, image_alts: alts }))
+                          }}
+                          placeholder={`Alt text ${idx + 1}`}
+                          className="w-full text-[9px] border border-[#E8E2D9] bg-white px-2 py-1.5 outline-none font-body focus:border-[#1C1410] placeholder:opacity-40"
+                        />
+                      </div>
                     </div>
                   ))}
-                  
+
                   {formData.images.length === 5 && (
-                     <div className="aspect-square bg-white/50 border-2 border-dashed border-[#E8E2D9] flex flex-col items-center justify-center text-center p-4">
-                        <span className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[1.5px] opacity-40">Max Limit Reached</span>
-                     </div>
+                    <div className="aspect-square bg-white/50 border-2 border-dashed border-[#E8E2D9] flex flex-col items-center justify-center text-center p-4">
+                      <span className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[1.5px] opacity-40">Max Limit Reached</span>
+                    </div>
                   )}
                 </div>
+                <p className="text-[10px] text-[#6B6058] opacity-40 mt-4 font-body">Add descriptive alt text for each image to improve SEO and accessibility.</p>
               </div>
               <div className="col-span-2 flex justify-between items-center mt-6 pt-10 border-t border-[#FAF7F4]">
                 <div className="flex items-center gap-4"><button type="button" onClick={() => setFormData({...formData, is_active: !formData.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner ${formData.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${formData.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Market Visibility Active</span></div>
