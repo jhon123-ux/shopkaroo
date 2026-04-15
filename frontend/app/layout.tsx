@@ -13,8 +13,12 @@ export const metadata: Metadata = {
     canonical: 'https://shopkarro.com',
   },
   icons: {
-    icon: '/favicon.svg',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/favicon.svg',
+    shortcut: '/favicon.ico',
   },
   openGraph: {
     title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
@@ -52,6 +56,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://xxhnilswsukipjfbgiec.supabase.co" />
         <link rel="preconnect" href="https://shopkaroo-production.up.railway.app" />
+        {/* Explicit favicon declarations — helps Google pick up the correct icon */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
       </head>
       <body className="flex flex-col min-h-screen font-body antialiased" suppressHydrationWarning>
         <ThemeProvider>
