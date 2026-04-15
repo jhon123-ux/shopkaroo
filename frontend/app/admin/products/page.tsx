@@ -185,7 +185,7 @@ export default function AdminProductsPage() {
     // Calculate remaining slots
     const rem = 5 - formData.images.length
     if (rem <= 0) {
-      showToast('Maximum 5 images reach.', 'error')
+      showToast('Maximum 5 images reached.', 'error')
       return
     }
     
@@ -196,20 +196,27 @@ export default function AdminProductsPage() {
     setUploadingCount(filesToUpload.length)
     
     for (let i = 0; i < filesToUpload.length; i++) {
-      const fData = new FormData(); fData.append('image', filesToUpload[i])
+      const fData = new FormData()
+      fData.append('image', filesToUpload[i])
       try {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+        // IMPORTANT: Do NOT set Content-Type header manually when sending FormData.
+        // The browser must auto-generate the multipart/form-data boundary.
         const res = await fetch(`${backendUrl}/api/upload/product`, {
-          method: 'POST', headers: { 'x-admin-auth': adminToken || '' }, body: fData
+          method: 'POST',
+          headers: { 'x-admin-auth': adminToken || '' },
+          // body is FormData — browser sets correct Content-Type with boundary automatically
+          body: fData
         })
         const data = await res.json()
         if (res.ok && data.url) {
-           setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
+          setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
         } else {
-          showToast(data.error || 'Upload failed', 'error')
+          console.error('Upload error response:', data)
+          showToast(data.error || `Upload failed (${res.status})`, 'error')
         }
       } catch (err) { 
-        console.error(err)
+        console.error('Upload network error:', err)
         showToast('Network error during upload', 'error')
       }
       setUploadingCount(prev => prev - 1)

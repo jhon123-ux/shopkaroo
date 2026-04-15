@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import multer from 'multer'
 import { createClient } from '@supabase/supabase-js'
+import { adminAuth } from '../middleware/auth.middleware'
 
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL!,
@@ -14,13 +15,14 @@ const storage = multer.memoryStorage()
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: (req, file, cb) => {
-    // Accept only specific image types
-    if (['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) {
+    const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif']
+    if (allowed.includes(file.mimetype.toLowerCase())) {
       cb(null, true)
     } else {
-      cb(new Error('Invalid file type. Only JPEG, PNG, and WebP are allowed.'))
+      console.log('Rejected file type:', file.mimetype)
+      cb(new Error(`Invalid file type: ${file.mimetype}. Allowed: JPEG, PNG, WebP, GIF`))
     }
   }
 })
@@ -124,16 +126,23 @@ router.post('/banner', upload.single('image'), async (req: Request, res: Respons
  *       400:
  *         description: Bad request / Upload error
  */
-router.post('/product', upload.single('image'), async (req: Request, res: Response): Promise<void> => {
+router.post('/product', adminAuth, upload.single('image'), async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('Product upload request received')
+    console.log('Content-Type:', req.headers['content-type'])
+    console.log('File received:', req.file ? `${req.file.originalname} (${req.file.mimetype}, ${req.file.size} bytes)` : 'NONE')
+
     if (!req.file) {
-      res.status(400).json({ error: 'No image file provided.' })
+      console.log('No file in request. Body keys:', Object.keys(req.body || {}))
+      res.status(400).json({ error: 'No image file provided. Make sure you are sending a file with field name "image".' })
       return
     }
 
     const file = req.file
     const originalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
     const fileName = `products/${Date.now()}_${originalName}`
+
+    console.log('Uploading to Supabase storage:', fileName)
 
     // Upload using Supabase Admin client
     const { data, error } = await supabaseAdmin.storage
@@ -157,6 +166,7 @@ router.post('/product', upload.single('image'), async (req: Request, res: Respon
       .from('products')
       .getPublicUrl(data.path)
 
+    console.log('Upload successful:', urlData.publicUrl)
     res.json({ url: urlData.publicUrl })
   } catch (error) {
     console.error('Server upload error:', error)
