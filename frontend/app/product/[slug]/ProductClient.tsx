@@ -357,15 +357,15 @@ export default function ProductDetailPage() {
               <h4 className="text-[10px] tracking-[3px] text-text-muted font-bold mb-4 uppercase font-body">Dimensions</h4>
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-background rounded-[3px] p-4 text-center border border-border">
-                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.L} {product.dimensions.unit}</p>
+                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.L} {product.dimensions.unit || 'in'}</p>
                   <p className="text-text-muted text-[11px] mt-2 font-body uppercase tracking-wider font-semibold opacity-60">Length</p>
                 </div>
                 <div className="bg-background rounded-[3px] p-4 text-center border border-border">
-                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.W} {product.dimensions.unit}</p>
+                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.W} {product.dimensions.unit || 'in'}</p>
                   <p className="text-text-muted text-[11px] mt-2 font-body uppercase tracking-wider font-semibold opacity-60">Width</p>
                 </div>
                 <div className="bg-background rounded-[3px] p-4 text-center border border-border">
-                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.H} {product.dimensions.unit}</p>
+                  <p className="font-bold text-text text-[18px] font-heading leading-none">{product.dimensions.H} {product.dimensions.unit || 'in'}</p>
                   <p className="text-text-muted text-[11px] mt-2 font-body uppercase tracking-wider font-semibold opacity-60">Height</p>
                 </div>
               </div>
@@ -548,7 +548,7 @@ export default function ProductDetailPage() {
               </div>
               <div className="px-6 py-4 flex justify-between bg-surface border-b border-border">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Dimensions (L×W×H)</span>
-                <span className="text-text text-[14px] font-bold font-body">{product.dimensions ? `${product.dimensions.L}×${product.dimensions.W}×${product.dimensions.H} ${product.dimensions.unit}` : "—"}</span>
+                <span className="text-text text-[14px] font-bold font-body">{product.dimensions ? `${product.dimensions.L}×${product.dimensions.W}×${product.dimensions.H} ${product.dimensions.unit || 'in'}` : "—"}</span>
               </div>
               {product.weight_kg && (
                 <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
