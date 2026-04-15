@@ -5,6 +5,11 @@ export const getProducts = async (req: Request, res: Response) => {
   try {
     let query = supabase.from('products').select('*', { count: 'exact' })
     
+    // Filter by slug (used by product detail page)
+    if (req.query.slug) {
+      query = query.eq('slug', req.query.slug as string)
+    }
+
     if (req.query.category && req.query.category !== 'all') {
       const categorySlug = req.query.category as string
       
