@@ -570,7 +570,8 @@ export default function ProductDetailPage() {
                 <span className="text-green-600 dark:text-green-500 text-[13px] font-bold font-body">CASH ON DELIVERY</span>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
           {activeTab === 'reviews' && (
             <div className="animate-slideUp max-w-4xl flex flex-col gap-12">
