@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
       setLoading(true)
       try {
         // 1. Fetch Product by slug
-        const prodRes = await fetch(`${backendUrl}/api/products?slug=${slug}`)
+        const prodRes = await fetch(`${backendUrl}/api/products?slug=${slug}`, { cache: 'no-store' })
         const prodData = await prodRes.json()
         
         if (prodData.data && prodData.data.length > 0) {
@@ -503,12 +503,7 @@ export default function ProductDetailPage() {
                 </div>
               )}
 
-              {/* Plain description fallback */}
-              {product.description && (
-                <p className="text-text text-[16px] leading-[1.8] font-body opacity-80">
-                  {product.description}
-                </p>
-              )}
+              {/* Plain description (fallback for basic info) - REMOVED from here, moved to Specs tab */}
 
               {/* Default trust badges */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -541,8 +536,14 @@ export default function ProductDetailPage() {
           )}
 
           {activeTab === 'specs' && (
-            <div className="animate-slideUp max-w-2xl border border-border rounded-0 overflow-hidden">
-              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
+            <div className="animate-slideUp max-w-2xl flex flex-col gap-6">
+              {product.description && (
+                <div className="bg-surface p-6 border border-border rounded-0 mb-4 italic text-text opacity-80 font-body leading-relaxed text-[15px]">
+                  {product.description}
+                </div>
+              )}
+              <div className="border border-border rounded-0 overflow-hidden">
+                <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Material</span>
                 <span className="text-text text-[14px] font-bold font-body">{product.material || "—"}</span>
               </div>
