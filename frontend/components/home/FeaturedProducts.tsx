@@ -28,8 +28,8 @@ export default function FeaturedProducts() {
           <FeaturedHeader />
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={`skeleton-${i}`} className="bg-bg-white rounded-[4px] border border-border overflow-hidden h-[400px] animate-pulse">
-                <div className="h-64 bg-surface"></div>
+              <div key={`skeleton-${i}`} className="bg-bg-white rounded-[4px] border border-border overflow-hidden animate-pulse">
+                <div className="aspect-square bg-surface"></div>
                 <div className="p-4 flex flex-col h-full">
                   <div className="h-4 bg-surface rounded-[2px] w-3/4 mb-4"></div>
                   <div className="h-6 bg-surface rounded-[2px] w-1/3 mb-4 mt-auto"></div>
