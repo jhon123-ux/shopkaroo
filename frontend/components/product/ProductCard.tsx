@@ -104,7 +104,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         
         {/* TOP — Square Image Area */}
         <div 
-          className="w-full h-65 relative overflow-hidden flex items-center justify-center bg-surface"
+          className="w-full aspect-square relative overflow-hidden flex items-center justify-center bg-surface"
         >
           {product.images && product.images.length > 0 ? (
             <Image 
@@ -183,18 +183,18 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
             {product.name}
           </h3>
 
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex flex-col mb-3">
             {isSale ? (
-               <>
-                 <span className="text-primary font-bold text-[17px] font-heading">
+               <div className="flex flex-col">
+                 <span className="text-primary font-bold text-[16px] md:text-[17px] font-heading leading-tight">
                    {formatPrice(product.sale_price!)}
                  </span>
-                 <span className="text-text-muted text-[12px] font-body line-through opacity-60">
+                 <span className="text-text-muted text-[11px] md:text-[12px] font-body line-through opacity-50">
                    {formatPrice(product.price_pkr)}
                  </span>
-               </>
+               </div>
             ) : (
-               <span className="text-brand-black font-bold text-[17px] font-heading">
+               <span className="text-brand-black font-bold text-[16px] md:text-[17px] font-heading leading-tight">
                  {formatPrice(product.price_pkr)}
                </span>
             )}
