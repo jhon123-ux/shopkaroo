@@ -6,11 +6,12 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://shopkarro.com'),
   title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
   description: 'Shopkarro brings you handcrafted, quality-inspected furniture across Pakistan. Order online, pay on delivery. Karachi, Lahore, Islamabad & 30+ cities.',
   keywords: 'furniture pakistan, luxury furniture karachi, shopkarro, sheesham wood beds, sofas lahore, modern dining tables, home decor islamabad, office furniture pakistan',
   alternates: {
-    canonical: 'https://shopkarro.com',
+    canonical: '/',
   },
   icons: {
     icon: '/favicon.svg',
