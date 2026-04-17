@@ -305,7 +305,7 @@ function CategoryContent() {
 
           {/* Grid Layout */}
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10">
+            <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-10">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="aspect-[4/5] bg-surface animate-pulse rounded-0 border border-border" />
               ))}
@@ -323,7 +323,7 @@ function CategoryContent() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-10">
                 {products.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}

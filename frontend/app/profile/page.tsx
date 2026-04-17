@@ -286,13 +286,13 @@ export default function ProfilePage() {
           </div>
 
           {loadingWishlist ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-bg-white border border-border h-80 animate-pulse rounded-[4px]" />
               ))}
             </div>
           ) : wishlistProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {wishlistProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
