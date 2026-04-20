@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
     <main className="bg-background min-h-screen transition-colors duration-300">
       
       {/* Header */}
-      <div className="bg-text py-16">
+      <div className="bg-brand-black py-16">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-primary font-medium text-sm tracking-widest uppercase mb-4"
              style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '3px' }}>
@@ -92,7 +92,7 @@ export default function PrivacyPolicyPage() {
         ))}
 
         {/* Contact Box */}
-        <div className="bg-text p-8 mt-12 transition-colors duration-300" style={{ borderRadius: '4px' }}>
+        <div className="bg-brand-black p-8 mt-12 transition-colors duration-300" style={{ borderRadius: '4px' }}>
           <h2 className="text-white text-2xl font-bold mb-4"
               style={{ fontFamily: 'Playfair Display, serif' }}>
             Contact Us About Privacy

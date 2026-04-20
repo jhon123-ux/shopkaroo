@@ -147,7 +147,7 @@ export default function FAQPage() {
         </div>
 
         {/* Support CTA */}
-        <section className="mt-24 bg-card-dark p-10 md:p-16 rounded-[4px] text-center relative overflow-hidden shadow-2xl animate-slideUp transition-colors">
+        <section className="mt-24 bg-brand-black p-10 md:p-16 rounded-[4px] text-center relative overflow-hidden shadow-2xl animate-slideUp transition-colors">
           <div className="relative z-10">
             <h3 className="text-white font-heading font-bold text-[28px] md:text-[36px] mb-6">Still have questions?</h3>
             <p className="text-white/60 font-body text-[15px] md:text-[17px] mb-10 max-w-xl mx-auto leading-relaxed">
