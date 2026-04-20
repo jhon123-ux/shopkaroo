@@ -78,13 +78,13 @@ export default function CategorySection() {
 
         <div 
           ref={scrollRef}
-          className="flex overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:pb-0"
+          className="flex overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory gap-6"
         >
           {categories.map((cat) => (
             <Link 
               key={cat.id} 
               href={`/furniture/${cat.slug}`}
-              className="group relative h-[320px] w-[85vw] sm:w-auto flex-shrink-0 snap-start rounded-[4px] border border-border overflow-hidden cursor-pointer block transform transition-all duration-500 hover:border-primary"
+              className="group relative h-[380px] w-[85vw] sm:w-[320px] flex-shrink-0 snap-start rounded-[4px] border border-border overflow-hidden cursor-pointer block transform transition-all duration-500 hover:border-primary"
             >
               {/* Background layer */}
               <div className="absolute inset-0 z-0">
