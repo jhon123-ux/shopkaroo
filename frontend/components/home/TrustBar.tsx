@@ -2,7 +2,7 @@ import { Truck, CreditCard, RotateCcw, ShieldCheck } from 'lucide-react'
 
 export default function TrustBar() {
   return (
-    <section className="w-full bg-text py-6 border-b border-border transition-colors duration-300">
+    <section className="w-full bg-brand-black py-10 border-y border-border transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-wrap justify-center items-center gap-y-8 gap-x-12">
           
