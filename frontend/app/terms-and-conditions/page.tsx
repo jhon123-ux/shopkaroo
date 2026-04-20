@@ -17,16 +17,7 @@ export default function TermsAndConditionsPage() {
   return (
     <main className="bg-background min-h-screen transition-colors duration-300">
       
-      {/* Navigation Top Bar */}
-      <nav className="bg-bg-white border-b border-border py-4 sticky top-0 z-50 transition-colors">
-        <div className="max-w-4xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group text-text-muted hover:text-primary transition-colors text-[11px] font-bold uppercase tracking-[2px]">
-            <ArrowLeft size={16} className="transform group-hover:-translate-x-1 transition-transform" />
-            Back to Home
-          </Link>
-          <div className="text-[14px] font-heading font-bold text-text">Shopkarro</div>
-        </div>
-      </nav>
+
 
       {/* Header */}
       <div className="bg-brand-black py-20 md:py-28">
