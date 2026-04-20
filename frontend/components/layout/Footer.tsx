@@ -86,10 +86,14 @@ export default function Footer() {
           <div className="col-span-1">
             <h4 className="font-semibold tracking-[2px] text-text-muted uppercase text-[11px] mb-8 font-body opacity-60">Help</h4>
             <ul className="space-y-4">
-              {['FAQ', 'Privacy Policy'].map((item) => (
+              {['FAQ', 'Privacy Policy', 'Terms & Conditions'].map((item) => (
                 <li key={item}>
                   <Link 
-                    href={item === 'Privacy Policy' ? '/privacy-policy' : '/faqs'} 
+                    href={
+                      item === 'Privacy Policy' ? '/privacy-policy' : 
+                      item === 'Terms & Conditions' ? '/terms-and-conditions' : 
+                      '/faqs'
+                    } 
                     className="text-text-muted hover:text-primary transition-colors text-[14px] font-body"
                   >
                     {item}
