@@ -104,7 +104,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         
         {/* TOP — Square Image Area */}
         <div 
-          className="w-full aspect-square relative overflow-hidden flex items-center justify-center bg-surface"
+          className="w-full aspect-[10/9] md:aspect-square relative overflow-hidden flex items-center justify-center bg-surface"
         >
           {product.images && product.images.length > 0 ? (
             <Image 
