@@ -19,8 +19,7 @@ export default function PrivacyPolicyPage() {
              style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '3px' }}>
             Legal
           </p>
-          <h1 className="text-white text-5xl font-bold mb-4"
-              style={{ fontFamily: 'Playfair Display, serif' }}>
+          <h1 className="text-white text-5xl font-bold font-heading mb-4">
             Privacy Policy
           </h1>
           <p className="text-white/50 text-sm"
@@ -56,8 +55,7 @@ export default function PrivacyPolicyPage() {
                   {index + 1}
                 </span>
               </div>
-              <h2 className="text-[#1C1410] text-2xl font-bold pt-0.5"
-                  style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h2 className="text-text text-2xl font-bold font-heading pt-0.5">
                 {section.title}
               </h2>
             </div>
@@ -93,8 +91,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Contact Box */}
         <div className="bg-brand-black p-8 mt-12 transition-colors duration-300" style={{ borderRadius: '4px' }}>
-          <h2 className="text-white text-2xl font-bold mb-4"
-              style={{ fontFamily: 'Playfair Display, serif' }}>
+          <h2 className="text-white text-2xl font-bold font-heading mb-4">
             Contact Us About Privacy
           </h2>
           <p className="text-white/70 text-base mb-6"
