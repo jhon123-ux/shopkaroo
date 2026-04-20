@@ -175,9 +175,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
 
         {/* BOTTOM — Product Info */}
         <div className="p-4 flex flex-col items-start bg-brand-offwhite">
-          <span className="text-[10px] font-semibold font-body tracking-[2px] uppercase text-text-muted mb-1 opacity-70">
-            {product.category?.replace('-', ' ')}
-          </span>
+
 
           <h3 className="font-heading font-semibold text-[15px] text-brand-black line-clamp-1 mb-1 group-hover:text-primary transition-colors">
             {product.name}
