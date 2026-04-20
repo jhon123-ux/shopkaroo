@@ -93,6 +93,16 @@ export default function CategorySection() {
             </Link>
           ))}
         </div>
+        
+        {/* Mobile Scroll Indicator Dots */}
+        <div className="flex sm:hidden justify-center gap-2 mt-4">
+          {categories.map((_, idx) => (
+            <div 
+              key={`dot-${idx}`}
+              className="w-1.5 h-1.5 rounded-full bg-primary/20"
+            />
+          ))}
+        </div>
 
       </div>
     </section>

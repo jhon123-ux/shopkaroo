@@ -177,7 +177,7 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
         <div className="p-4 flex flex-col items-start bg-brand-offwhite">
 
 
-          <h3 className="font-heading font-semibold text-[15px] text-brand-black line-clamp-1 mb-1 group-hover:text-primary transition-colors">
+          <h3 className="font-heading font-semibold text-[15px] text-text line-clamp-1 mb-1 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
 
