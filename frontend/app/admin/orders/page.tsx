@@ -1,6 +1,8 @@
 import { getRecurringCustomers } from '@/lib/recurring-customers'
 import AdminOrdersPage from './OrdersClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const recurringMap = await getRecurringCustomers()
   const recurringCount = recurringMap.size
