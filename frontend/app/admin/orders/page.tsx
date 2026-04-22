@@ -503,7 +503,7 @@ export default function AdminOrdersPage() {
                       <p className="text-[15px] font-bold text-[#1C1410] font-heading group-hover:text-[#783A3A] transition-colors">{item.name}</p>
                       <p className="text-[10px] text-[#6B6058] font-bold mt-2 uppercase tracking-[2px] opacity-40">Quantity: {item.quantity || item.qty || 0}</p>
                     </div>
-                    <p className="font-bold text-[#783A3A] text-[15px]">{ ((item.price_pkr || item.price || 0) * (item.quantity || item.qty || 0)).toLocaleString() } PKR</p>
+                    <p className="font-bold text-[#783A3A] text-[15px]">{ ((item.sale_price ?? item.price_pkr ?? item.price ?? 0) * (item.quantity || item.qty || 0)).toLocaleString() } PKR</p>
                   </div>
                 ))}
               </div>
