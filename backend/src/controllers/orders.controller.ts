@@ -123,13 +123,16 @@ export const createOrder = async (req: Request, res: Response) => {
           to: customer_email,
           cc: [ADMIN_CC],
           replyTo: 'hello@shopkarro.com',
-          subject: `✅ Order Confirmed — ${orderNumber} | Shopkarro`,
+          subject: `Your Order is Confirmed — ${orderNumber} | Shopkarro`,
           html: orderConfirmationTemplate({
             order_number: orderNumber,
             customer_name,
             customer_email,
             city,
-            items,
+            items: items.map((item: any) => ({
+              ...item,
+              image_url: item.images?.[0] || null
+            })),
             total_pkr,
             delivery_fee: delivery_fee || 0
           })
