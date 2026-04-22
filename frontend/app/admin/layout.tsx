@@ -16,13 +16,13 @@ import {
 } from 'lucide-react'
 
 const sidebarLinks = [
-  { href: '/admin', label: 'Overview', icon: <LayoutDashboard size={16} /> },
+  { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
   { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={16} /> },
   { href: '/admin/categories', label: 'Categories', icon: <FolderOpen size={16} /> },
-  { href: '/admin/offer-banner', label: 'Promotionals', icon: <Percent size={16} /> },
-  { href: '/admin/products', label: 'Inventory', icon: <Package size={16} /> },
-  { href: '/admin/orders', label: 'Transactions', icon: <ShoppingCart size={16} /> },
-  { href: '/admin/reviews', label: 'Feedback', icon: <Star size={16} /> },
+  { href: '/admin/offer-banner', label: 'Promotions', icon: <Percent size={16} /> },
+  { href: '/admin/products', label: 'Products', icon: <Package size={16} /> },
+  { href: '/admin/orders', label: 'Orders', icon: <ShoppingCart size={16} /> },
+  { href: '/admin/reviews', label: 'Reviews', icon: <Star size={16} /> },
 ]
 
 export default function AdminLayout({
@@ -45,7 +45,7 @@ export default function AdminLayout({
   const getTitle = (path: string) => {
     const link = sidebarLinks.find(l => l.href === path)
     if (link) return link.label
-    if (path === '/admin') return 'Overview'
+    if (path === '/admin') return 'Dashboard'
     return 'Admin'
   }
 
@@ -70,7 +70,7 @@ export default function AdminLayout({
           </p>
           <p className="text-admin-sidebar-muted text-[9px] mt-2 
             font-bold uppercase tracking-[4px]">
-            Enterprise Panel
+            Admin Panel
           </p>
         </div>
 
@@ -102,26 +102,15 @@ export default function AdminLayout({
         {/* Bottom */}
         <div className="px-8 py-6 border-t 
           border-admin-border-faint bg-black/10">
-          <Link href="/" 
-            className="text-admin-sidebar-muted text-[10px] 
-            hover:text-admin-sidebar-text transition uppercase tracking-[2px]
-            flex items-center gap-3 font-bold">
-            <ArrowLeft size={12} /> Storefront
-          </Link>
           <button
             onClick={handleLogout}
-            className="w-full mt-6 text-[#DC2626] opacity-60 hover:opacity-100 transition-all 
-            uppercase tracking-[4px] text-[9px] font-bold py-3 
+            className="w-full text-[#DC2626] opacity-60 hover:opacity-100 transition-all 
+            uppercase tracking-[4px] text-[9px] font-bold py-4
             border border-[#DC2626]/40 hover:border-[#DC2626] 
             flex items-center justify-center gap-2"
           >
-            <LogOut size={12} /> Terminate Session
+            <LogOut size={12} /> Log Out
           </button>
-
-          <p className="text-admin-sidebar-muted/30 text-[9px] mt-6 
-            uppercase tracking-widest">
-            Protocol v2.4.0
-          </p>
         </div>
 
       </aside>
@@ -140,16 +129,29 @@ export default function AdminLayout({
             {getTitle(pathname)}
           </h1>
 
-          {/* Right side */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Link
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[11px] font-bold text-[#6B6058] border border-[#E8E2D9] px-4 py-2.5 rounded-[2px] hover:border-[#783A3A] hover:text-[#783A3A] transition-all uppercase tracking-widest shadow-sm bg-white"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                <span className="hidden md:inline">View Store</span>
+              </Link>
+
+              <span className="text-[10px] text-[#6B6058] font-bold font-mono bg-[#F2EDE6] px-4 py-2.5 rounded-[2px] border border-[#E8E2D9] uppercase tracking-widest">
+                Admin
+              </span>
+            </div>
+            
+            <div className="h-8 w-px bg-border mx-2" />
             <ThemeToggle />
-            <div className="flex flex-col items-end mr-2">
-                <span className="text-text text-[12px] font-bold uppercase tracking-wider">System Administrator</span>
-                <span className="text-green-600 dark:text-green-500 text-[10px] font-bold uppercase tracking-widest">Online</span>
-            </div>
-            <div className="w-10 h-10 bg-surface border border-border rounded-0 flex items-center justify-center text-primary shadow-inner">
-              <ShieldCheck size={20} />
-            </div>
           </div>
         </header>
 

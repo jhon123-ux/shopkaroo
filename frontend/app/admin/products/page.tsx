@@ -130,7 +130,7 @@ export default function AdminProductsPage() {
   }
 
   const handleDelete = async (id: string, name: string) => {
-    if (confirm(`Acknowledge: Final deletion of "${name}"?`)) {
+    if (confirm(`Are you sure you want to delete "${name}"?`)) {
       try {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         const res = await fetch(`${backendUrl}/api/products/${id}`, { 
@@ -138,9 +138,9 @@ export default function AdminProductsPage() {
         })
         if (!res.ok) throw new Error('Delete failed')
         setProducts(products.filter(p => p.id !== id))
-        showToast('Entity purged from registry.', 'success')
+        showToast('Product deleted.', 'success')
       } catch (err) {
-        showToast('Deletion protocol failed.', 'error')
+        showToast('Failed to delete product.', 'error')
       }
     }
   }
@@ -261,10 +261,10 @@ export default function AdminProductsPage() {
         throw new Error(errorData.error || 'Submission failed')
       }
 
-      showToast(`Registry updated: ${formData.name}`)
+      showToast(`Product saved: ${formData.name}`)
       setIsModalOpen(false); fetchInitialData()
     } catch (err: any) {
-      showToast(err.message || 'Synchronization failed.', 'error')
+      showToast(err.message || 'Save failed.', 'error')
     }
   }
 
@@ -281,19 +281,19 @@ export default function AdminProductsPage() {
 
       <div className="flex justify-between items-end mb-12">
         <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Catalog Management</p>
-          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Inventory</h2>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Manage Products</p>
+          <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Products</h2>
         </div>
         <button onClick={openAddModal} className="bg-[#1C1410] text-white px-8 py-4 rounded-0 font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#33221b] transition-all shadow-xl active:scale-95">
-          + New Exhibit
+          + Add Product
         </button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-10">
-        <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search catalog identifier..." className="flex-1 border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#783A3A] outline-none shadow-sm font-body" />
+        <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search products..." className="flex-1 border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[13px] focus:border-[#783A3A] outline-none shadow-sm font-body" />
         <div className="relative min-w-[180px]">
           <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none">
-            <option value="all">Every Category</option>
+            <option value="all">All Categories</option>
             {flatCategories.map(c => (
               <option key={c.id} value={c.id}>{c.path}</option>
             ))}
@@ -302,9 +302,9 @@ export default function AdminProductsPage() {
         </div>
         <div className="relative min-w-[180px]">
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="w-full border border-[#D4CCC2] bg-white rounded-[2px] px-5 py-4 text-[11px] font-bold uppercase tracking-[2px] appearance-none pr-10 cursor-pointer focus:border-[#783A3A] outline-none">
-            <option value="all">Market Status</option>
-            <option value="active">Active Exhibits</option>
-            <option value="inactive">Archived Exhibits</option>
+            <option value="all">Status</option>
+            <option value="active">Active Products</option>
+            <option value="inactive">Archived Products</option>
           </select>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
         </div>
@@ -314,13 +314,13 @@ export default function AdminProductsPage() {
         <table className="w-full text-sm">
           <thead className="bg-[#FAF7F4] border-b border-[#E8E2D9]">
             <tr>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Visual</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Designation</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Class</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Valuation</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Units</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Image</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Product Name</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Category</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Price</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Stock</th>
               <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Status</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Operations</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] opacity-40">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -351,7 +351,7 @@ export default function AdminProductsPage() {
                 <td className="px-8 py-6">
                   {p.sale_price ? <><p className="font-bold text-[#783A3A] font-heading text-[16px]">{p.sale_price.toLocaleString()} PKR</p><p className="text-[10px] line-through text-[#6B6058] opacity-40">Was {p.price_pkr.toLocaleString()} PKR</p></> : <p className="font-bold text-[#1C1410] font-heading text-[16px]">{p.price_pkr?.toLocaleString()} PKR</p>}
                 </td>
-                <td className="px-8 py-6"><p className={`text-[12px] font-bold uppercase tracking-widest ${p.stock_qty > 5 ? 'text-[#2D6A4F]' : 'text-red-500'}`}>{p.stock_qty} Units</p></td>
+                <td className="px-8 py-6"><p className={`text-[12px] font-bold uppercase tracking-widest ${p.stock_qty > 5 ? 'text-[#2D6A4F]' : 'text-red-500'}`}>{p.stock_qty} Items</p></td>
                 <td className="px-8 py-6"><button onClick={() => handleToggle(p.id)} className={`w-11 h-6 rounded-full relative transition-all shadow-inner ${p.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${p.is_active ? 'left-6' : 'left-1'}`}></div></button></td>
                 <td className="px-8 py-6">
                   <div className="flex gap-4">
@@ -369,7 +369,7 @@ export default function AdminProductsPage() {
         <div className="fixed inset-0 bg-[#1C1410]/60 z-50 overflow-y-auto flex items-start justify-center pt-10 pb-10 px-6 backdrop-blur-md text-left">
           <div className="bg-white rounded-0 max-w-4xl w-full p-12 md:p-16 shadow-2xl relative animate-slideUp">
             <div className="flex justify-between items-start mb-12 border-b border-[#FAF7F4] pb-8">
-              <div><p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] opacity-40 mb-2">Protocol Entry</p><h2 className="font-heading font-bold text-[32px] text-[#1C1410] uppercase tracking-widest">{isEditMode ? 'Modify Exhibit' : 'Add New Exhibit'}</h2></div>
+              <div><p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] opacity-40 mb-2">New Product</p><h2 className="font-heading font-bold text-[32px] text-[#1C1410] uppercase tracking-widest">{isEditMode ? 'Edit Product' : 'Add New Product'}</h2></div>
               <button onClick={() => setIsModalOpen(false)} className="text-[#1C1410] text-4xl font-light hover:opacity-100 opacity-20 transition">&times;</button>
             </div>
             <form onSubmit={submitForm} className="grid grid-cols-2 gap-10">
@@ -377,7 +377,7 @@ export default function AdminProductsPage() {
               {/* ── SECTION 1: BASIC INFO ── */}
               <div className="col-span-2 md:col-span-1 space-y-8">
                 <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Product Name *</label><input required value={formData.name} onChange={handleNameChange} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[14px] focus:border-[#1C1410] outline-none shadow-sm font-body" /></div>
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">URL Slug *</label><input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] font-mono opacity-60 outline-none" /></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">URL Slug *</label><input required value={formData.slug} onChange={e => setFormData({...formData, slug: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] font-mono opacity-60 outline-none" /><p className="text-[9px] text-[#6B6058] mt-2 font-bold opacity-40 italic">Auto-generated from product name. You can edit it manually.</p></div>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Category *</label>
@@ -402,11 +402,11 @@ export default function AdminProductsPage() {
               {/* ── SECTION 2: STOCK & DIMENSIONS ── */}
               <div className="col-span-2 md:col-span-1 space-y-8">
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-1"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Stock Units</label><input type="number" value={formData.stock_qty} onChange={e => setFormData({...formData, stock_qty: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
+                  <div className="col-span-1"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Stock Quantity</label><input type="number" value={formData.stock_qty} onChange={e => setFormData({...formData, stock_qty: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
                   <div className="col-span-2"><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Weight (KG)</label><input type="number" step="0.1" value={formData.weight_kg} onChange={e => setFormData({...formData, weight_kg: e.target.value})} className="w-full border border-[#D4CCC2] rounded-0 px-4 py-4 text-center outline-none font-body" /></div>
                 </div>
                 <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Dimensions (L × W × H inches)</label><div className="flex gap-4"><input placeholder="L" type="number" value={formData.dim_l} onChange={e => setFormData({...formData, dim_l: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="W" type="number" value={formData.dim_w} onChange={e => setFormData({...formData, dim_w: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /><input placeholder="H" type="number" value={formData.dim_h} onChange={e => setFormData({...formData, dim_h: e.target.value})} className="w-full border border-[#D4CCC2] text-center py-4 font-body" /></div></div>
-                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Short Description (Specs Tab)</label><textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Brief technical description for the Specifications tab" className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none h-28 font-body" /></div>
+                <div><label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Specifications Description</label><textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Appears in the Specifications tab on the product page" className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none h-28 font-body" /></div>
               </div>
 
               {/* ── SECTION 3: SEO ── */}
@@ -562,8 +562,8 @@ export default function AdminProductsPage() {
                 <p className="text-[10px] text-[#6B6058] opacity-40 mt-4 font-body">Add descriptive alt text for each image to improve SEO and accessibility.</p>
               </div>
               <div className="col-span-2 flex justify-between items-center mt-6 pt-10 border-t border-[#FAF7F4]">
-                <div className="flex items-center gap-4"><button type="button" onClick={() => setFormData({...formData, is_active: !formData.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner ${formData.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${formData.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Market Visibility Active</span></div>
-                <div className="flex gap-6"><button type="button" onClick={() => setIsModalOpen(false)} className="px-10 py-5 text-[11px] font-bold uppercase tracking-[3px] opacity-40 hover:opacity-100 transition">Terminate</button><button type="submit" className="bg-[#1C1410] text-white px-12 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-2xl active:scale-95 transition-all">Synchronize Manifest</button></div>
+                <div className="flex items-center gap-4"><button type="button" onClick={() => setFormData({...formData, is_active: !formData.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner ${formData.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${formData.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Product is Active</span></div>
+                <div className="flex gap-6"><button type="button" onClick={() => setIsModalOpen(false)} className="px-10 py-5 text-[11px] font-bold uppercase tracking-[3px] opacity-40 hover:opacity-100 transition">Cancel</button><button type="submit" className="bg-[#1C1410] text-white px-12 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-2xl active:scale-95 transition-all">Save Product</button></div>
               </div>
             </form>
           </div>

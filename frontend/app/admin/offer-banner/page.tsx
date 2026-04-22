@@ -81,7 +81,7 @@ export default function AdminOfferBannerPage() {
 
   const handleSave = async () => {
     if (!banner.id) {
-      showToast('Identifier signature not located.', 'error')
+      showToast('Banner not found.', 'error')
       return
     }
 
@@ -101,9 +101,9 @@ export default function AdminOfferBannerPage() {
       })
 
       if (!res.ok) throw new Error('Save failed')
-      showToast('Promotional manifest updated.')
+      showToast('Promotion updated.')
     } catch (err) {
-      showToast('Synchronization failed.', 'error')
+      showToast('Save failed.', 'error')
       console.error(err)
     } finally {
       setSaving(false)
@@ -113,7 +113,7 @@ export default function AdminOfferBannerPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-32 opacity-40 font-bold uppercase tracking-[4px] text-[12px]">
-        <span className="animate-pulse">Retrieving promotional logs...</span>
+        <span className="animate-pulse">Loading promotions...</span>
       </div>
     )
   }
@@ -133,8 +133,8 @@ export default function AdminOfferBannerPage() {
 
       {/* HEADER */}
       <div className="text-left mb-12">
-        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Storefront Promotions</p>
-        <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Promotionals</h2>
+        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Promo Banners</p>
+        <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Promotions</h2>
       </div>
 
       {/* EDIT FORM */}
@@ -142,7 +142,7 @@ export default function AdminOfferBannerPage() {
         <div className="grid grid-cols-1 gap-10">
           
           <div>
-            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Announcement Designation</label>
+            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Title</label>
             <input 
               type="text" 
               value={banner.title}
@@ -153,7 +153,7 @@ export default function AdminOfferBannerPage() {
           </div>
 
           <div>
-            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Exhibition Narrative</label>
+            <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Subtitle / Description</label>
             <textarea 
               rows={2}
               value={banner.subtitle}
@@ -165,7 +165,7 @@ export default function AdminOfferBannerPage() {
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Inscription Badge</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Badge Text</label>
               <input 
                 type="text" 
                 value={banner.badge_text}
@@ -174,7 +174,7 @@ export default function AdminOfferBannerPage() {
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Action Designation</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Button Text</label>
               <input 
                 type="text" 
                 value={banner.cta_text}
@@ -186,7 +186,7 @@ export default function AdminOfferBannerPage() {
 
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Target Protocol (Link)</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Button Link</label>
               <input 
                 type="text" 
                 value={banner.cta_link}
@@ -195,7 +195,7 @@ export default function AdminOfferBannerPage() {
               />
             </div>
             <div>
-              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Temporal Expiry (Date & Time)</label>
+              <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-4">Expiry Date & Time</label>
               <input 
                 type="datetime-local" 
                 value={banner.end_date}
@@ -206,20 +206,20 @@ export default function AdminOfferBannerPage() {
           </div>
 
           <div className="bg-[#FAF7F4] p-8 border border-[#E8E2D9] flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#783A3A] uppercase tracking-[3px] opacity-60 italic">Real-Time Synchronization Preview:</span>
+              <span className="text-[10px] font-bold text-[#783A3A] uppercase tracking-[3px] opacity-60 italic">Countdown Preview:</span>
               <div className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest">
                 {previewTimeLeft.days}d {previewTimeLeft.hours}h {previewTimeLeft.minutes}m {previewTimeLeft.seconds}s
               </div>
           </div>
 
           <div className="pt-4 flex items-center justify-between border-t border-[#FAF7F4]">
-            <div className="flex items-center gap-4"><button type="button" onClick={() => setBanner({...banner, is_active: !banner.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner transition-all ${banner.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${banner.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Market Visibility Active</span></div>
+            <div className="flex items-center gap-4"><button type="button" onClick={() => setBanner({...banner, is_active: !banner.is_active})} className={`w-12 h-6 rounded-full relative shadow-inner transition-all ${banner.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${banner.is_active ? 'left-7' : 'left-1'}`} /></button><span className="text-[11px] font-bold uppercase tracking-[2px]">Banner is Active</span></div>
             <button 
               onClick={handleSave}
               disabled={saving}
               className="bg-[#1C1410] text-white px-12 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-2xl disabled:opacity-30 active:scale-95 transition-all w-full md:w-auto flex items-center justify-center gap-4"
             >
-              {saving ? 'SYNCHRONIZING...' : 'SYNCHRONIZE MANIFEST'}
+              {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function AdminOfferBannerPage() {
 
       {/* LIVE PREVIEW AREA */}
       <div className="border-t border-[#FAF7F4] pt-16">
-        <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-10 text-left">Real-Time Visualization</h3>
+        <h3 className="font-heading font-bold text-[#1C1410] text-[18px] uppercase tracking-widest mb-10 text-left">Live Preview</h3>
         
         <div className="rounded-0 overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.15)] relative group bg-[#1C1410]">
           <div className="p-16 md:p-20 text-center relative z-10">
@@ -235,13 +235,13 @@ export default function AdminOfferBannerPage() {
             
             <div className="relative z-20">
               <span className="inline-block bg-white/10 text-white text-[10px] px-4 py-1.5 rounded-0 font-bold tracking-[3px] mb-8 border border-white/20 uppercase">
-                {banner.badge_text || 'BADGE_INSCRIPTION'}
+                {banner.badge_text || 'BADGE TEXT'}
               </span>
               <h4 className="text-[42px] font-bold font-heading text-white mb-6 uppercase tracking-widest leading-none drop-shadow-2xl">
-                {banner.title || 'Exhibition Title'}
+                {banner.title || 'Banner Title'}
               </h4>
               <p className="text-white/70 text-[15px] font-body max-w-sm mx-auto mb-12 italic leading-relaxed">
-                {banner.subtitle || 'Promotional narrative details for front-facing exhibits.'}
+                {banner.subtitle || 'Description text for the offer banner.'}
               </p>
               <div className="bg-white text-[#1C1410] px-10 py-4 rounded-0 font-bold text-[12px] uppercase tracking-[3px] inline-block shadow-2xl active:scale-95 transition-all">
                 {banner.cta_text || 'DISCOVER'}

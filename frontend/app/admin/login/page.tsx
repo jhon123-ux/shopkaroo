@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
           </Link>
           <div className="h-px bg-[#1C1410]/10 w-24 mx-auto mb-6" />
           <h1 className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[5px] opacity-60">
-            Internal Archive Access
+            Admin Panel Access
           </h1>
         </div>
 
@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
           
           <form onSubmit={handleLogin} className="space-y-10">
             <div>
-              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Personnel Identifier</label>
+              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Email Address</label>
               <input 
                 type="email" 
                 required 
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Access Protocol (Password)</label>
+              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Password</label>
               <input 
                 type="password" 
                 required 
@@ -87,13 +87,13 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full bg-[#1C1410] text-white py-5 rounded-0 font-bold uppercase tracking-[4px] text-[12px] hover:bg-[#33221b] transition-all shadow-2xl active:scale-95 disabled:opacity-30"
             >
-              {loading ? 'AUTHENTICATING...' : 'AUTHORIZE ENTRY'}
+              {loading ? 'Logging In...' : 'Log In'}
             </button>
           </form>
 
           <div className="mt-12 pt-8 border-t border-[#FAF7F4] text-center">
              <p className="text-[#6B6058] text-[9px] font-bold uppercase tracking-[2px] opacity-30 leading-relaxed max-w-[240px] mx-auto">
-               RESTRICTED ACCESS PROTOCOL. UNAUTHORIZED ENTRY ATTEMPTS LOGGED BY SYSTEM.
+               Authorized access only. Unauthorized attempts will be logged.
              </p>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function AdminLoginPage() {
         {/* FOOTER LINK */}
         <div className="mt-12 text-center">
           <Link href="/" className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[3px] opacity-40 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-            <ArrowLeft className="w-3 h-3" /> Return to Public Showroom
+            <ArrowLeft className="w-3 h-3" /> Return to Store
           </Link>
         </div>
 

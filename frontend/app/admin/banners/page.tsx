@@ -5,6 +5,23 @@ import { Check, X, Menu, Camera } from 'lucide-react'
 import { bannerAPI } from '@/lib/api'
 import { Banner } from '@/types'
 
+const hexToRgba = (hex: string, opacity: number) => {
+  const r = parseInt(hex.slice(1,3), 16)
+  const g = parseInt(hex.slice(3,5), 16)
+  const b = parseInt(hex.slice(5,7), 16)
+  return `rgba(${r},${g},${b},${opacity / 100})`
+}
+
+const rgbaToHex = (rgba: string) => {
+  const match = rgba?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/)
+  if (!match) return { hex: '#1C1410', opacity: 40 }
+  const r = parseInt(match[1]).toString(16).padStart(2,'0')
+  const g = parseInt(match[2]).toString(16).padStart(2,'0')
+  const b = parseInt(match[3]).toString(16).padStart(2,'0')
+  const opacity = match[4] ? Math.round(parseFloat(match[4]) * 100) : 100
+  return { hex: `#${r}${g}${b}`, opacity }
+}
+
 export default function AdminBanners() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [loading, setLoading] = useState(true)
@@ -16,6 +33,8 @@ export default function AdminBanners() {
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
+
+  const { hex: overlayHex, opacity: overlayOpacity } = rgbaToHex(formData.bg_overlay || 'rgba(28,20,16,0.4)')
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type })
@@ -47,11 +66,11 @@ export default function AdminBanners() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Acknowledge: Final deletion of this exhibition banner?')) return
+    if (!confirm('Are you sure you want to delete this banner?')) return
     try {
       await bannerAPI.delete(id)
       fetchBanners()
-      showToast('Banner purged from archives.')
+      showToast('Banner deleted.')
     } catch (e) {
       console.error(e)
     }
@@ -76,21 +95,21 @@ export default function AdminBanners() {
   }
 
   const handleSave = async () => {
-    if (!formData.title) return showToast('Designation title required', 'error')
+    if (!formData.title) return showToast('Banner title required', 'error')
     setIsSaving(true)
     try {
       if (editingBanner) {
         await bannerAPI.update(editingBanner.id, formData)
-        showToast('Banner manifest updated.')
+        showToast('Banner saved.')
       } else {
         await bannerAPI.create(formData)
-        showToast('New exhibit banner created.')
+        showToast('Banner created.')
       }
       setIsModalOpen(false)
       fetchBanners()
     } catch (e) {
       console.error(e)
-      showToast('Error synchronizing manifest.', 'error')
+      showToast('Error saving banner.', 'error')
     } finally {
       setIsSaving(false)
     }
@@ -132,14 +151,14 @@ export default function AdminBanners() {
         {/* Header */}
         <div className="flex justify-between items-end mb-12">
           <div>
-            <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Curation Management</p>
-            <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Exhibition Banners</h2>
+            <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Manage Banners</p>
+            <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Hero Banners</h2>
           </div>
           <button 
             onClick={openNewModal}
             className="bg-[#1C1410] text-white px-8 py-4 rounded-0 font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#33221b] transition-all shadow-xl active:scale-95"
           >
-            + New Exhibit
+            + Add Banner
           </button>
         </div>
 
@@ -184,7 +203,7 @@ export default function AdminBanners() {
 
                 <div className="flex items-center gap-8 ml-auto border-l border-[#FAF7F4] pl-8 h-full shrink-0">
                   <div className="flex flex-col items-center">
-                     <span className="text-[9px] uppercase text-[#6B6058] mb-1 font-bold tracking-widest">Index</span>
+                     <span className="text-[9px] uppercase text-[#6B6058] mb-1 font-bold tracking-widest">Order</span>
                      <span className="font-heading text-[20px] font-bold text-[#1C1410]">{b.sort_order}</span>
                   </div>
                   
@@ -206,7 +225,7 @@ export default function AdminBanners() {
 
               </div>
             ))}
-            {banners.length === 0 && <div className="text-center py-24 opacity-40 uppercase tracking-[4px] font-bold text-[12px]">Registry contains no active banners.</div>}
+            {banners.length === 0 && <div className="text-center py-24 opacity-40 uppercase tracking-[4px] font-bold text-[12px]">No hero banners found.</div>}
           </div>
         )}
 
@@ -218,12 +237,12 @@ export default function AdminBanners() {
               {/* Form Fields */}
                 <div className="flex-1 space-y-8 border-r border-[#FAF7F4] pr-0 md:pr-16">
                 <div className="mb-12">
-                   <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] mb-2">Protocol Entry</p>
-                   <h2 className="text-[32px] font-bold font-heading text-text uppercase tracking-widest">{editingBanner ? 'Modify Exhibit' : 'New Exhibit'}</h2>
+                   <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] mb-2">New Banner</p>
+                   <h2 className="text-[32px] font-bold font-heading text-text uppercase tracking-widest">{editingBanner ? 'Edit Banner' : 'Add Banner'}</h2>
                 </div>
                 
                 <div>
-                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Primary Designation *</label>
+                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Banner Title *</label>
                   <input 
                     type="text" 
                     value={formData.title || ''} 
@@ -234,7 +253,7 @@ export default function AdminBanners() {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Descriptive Narrative</label>
+                  <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Subtitle / Description</label>
                   <textarea 
                     rows={3}
                     value={formData.subtitle || ''} 
@@ -246,7 +265,7 @@ export default function AdminBanners() {
 
                 <div className="flex gap-8">
                   <div className="flex-1">
-                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Badge Inscription</label>
+                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Badge Text</label>
                     <input 
                       type="text" 
                       value={formData.badge_text || ''} 
@@ -256,7 +275,7 @@ export default function AdminBanners() {
                     />
                   </div>
                   <div className="w-24 shrink-0">
-                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Tone</label>
+                    <label className="text-[10px] font-bold text-text uppercase tracking-[2px] block mb-3">Badge Color</label>
                     <div className="relative h-12 w-full border border-[#D4CCC2] rounded-0 overflow-hidden cursor-pointer shadow-sm">
                        <input 
                          type="color" 
@@ -270,7 +289,7 @@ export default function AdminBanners() {
 
                 <div className="grid grid-cols-2 gap-8 bg-[#FAF7F4] p-8 border border-[#E8E2D9] rounded-0">
                    <div>
-                     <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Master Asset</label>
+                     <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Background Image</label>
                      {formData.bg_image_url ? (
                        <div className="relative h-24 rounded-0 overflow-hidden border border-[#D4CCC2] shadow-inner group">
                          <Image 
@@ -296,14 +315,41 @@ export default function AdminBanners() {
                      )}
                    </div>
                    <div>
-                     <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-4 opacity-40">Atmospheric Filter</label>
-                     <input 
-                       type="text" 
-                       value={formData.bg_overlay || 'rgba(28,20,16,0.4)'} 
-                       onChange={e => setFormData({...formData, bg_overlay: e.target.value})}
-                       className="w-full border border-[#D4CCC2] bg-white rounded-0 px-4 py-3 focus:outline-none font-mono text-[11px] uppercase tracking-widest shadow-sm"
-                     />
-                     <p className="text-[9px] text-[#6B6058] mt-3 font-bold opacity-40 italic">RGBA FORMAT REQUIRED</p>
+                     <div className="flex items-end gap-4">
+                        <div>
+                          <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Overlay Color</label>
+                          <div className="relative h-10 w-[52px] border border-[#E8E2D9] rounded-[3px] overflow-hidden cursor-pointer shadow-sm">
+                             <input 
+                               type="color" 
+                               value={overlayHex} 
+                               onChange={e => {
+                                 const newRgba = hexToRgba(e.target.value, overlayOpacity)
+                                 setFormData({...formData, bg_overlay: newRgba})
+                               }}
+                               className="absolute inset-0 w-[150%] h-[150%] -translate-x-1/4 -translate-y-1/4 cursor-pointer"
+                             />
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <label className="flex justify-between text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] mb-3 opacity-40">
+                            <span>Overlay Opacity</span>
+                            <span>{overlayOpacity}%</span>
+                          </label>
+                          <input 
+                            type="range"
+                            min="0" max="100" step="5"
+                            value={overlayOpacity}
+                            onChange={e => {
+                              const newRgba = hexToRgba(overlayHex, parseInt(e.target.value))
+                              setFormData({...formData, bg_overlay: newRgba})
+                            }}
+                            className="w-full accent-[#4A2C6E] cursor-pointer"
+                          />
+                        </div>
+                     </div>
+                     <p className="text-[11px] text-[#6B6058] mt-4 font-body leading-relaxed opacity-60">
+                        The overlay darkens your banner image so text remains readable. 40–60% works best.
+                     </p>
                    </div>
                 </div>
               </div>
@@ -311,7 +357,7 @@ export default function AdminBanners() {
               {/* Live Preview & Actions */}
               <div className="w-full md:w-[40%] flex flex-col justify-between pt-12 md:pt-0 text-left">
                  <div>
-                    <h3 className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[4px] mb-8 opacity-40">Real-Time Visualization</h3>
+                    <h3 className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[4px] mb-8 opacity-40">Live Preview</h3>
                     <div className="relative w-full aspect-[4/5] rounded-0 overflow-hidden shadow-2xl flex flex-col justify-end p-12 border border-[#1C1410]/5" style={{ background: formData.bg_image_url ? 'transparent' : '#1C1410' }}>
                        {formData.bg_image_url && (
                          <Image 
@@ -347,7 +393,7 @@ export default function AdminBanners() {
                  <div className="space-y-6 mt-12">
                    <div className="flex gap-10 items-center justify-between py-6 border-t border-[#FAF7F4]">
                       <div className="flex items-center gap-4">
-                        <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px]">Index</label>
+                        <label className="text-[11px] font-bold text-[#1C1410] uppercase tracking-[2px]">Sort Order</label>
                         <input type="number" min={1} value={formData.sort_order || 1} onChange={e => setFormData({...formData, sort_order: parseInt(e.target.value)})} className="w-20 border border-[#D4CCC2] px-4 py-2 font-mono text-center appearance-none text-[14px]" />
                       </div>
                       
@@ -357,9 +403,9 @@ export default function AdminBanners() {
                    </div>
                    
                    <div className="flex gap-6 pt-6 border-t border-[#FAF7F4]">
-                     <button onClick={() => setIsModalOpen(false)} className="flex-1 px-8 py-5 text-[11px] font-bold uppercase tracking-[3px] opacity-40 hover:opacity-100 transition">Terminate</button>
+                     <button onClick={() => setIsModalOpen(false)} className="flex-1 px-8 py-5 text-[11px] font-bold uppercase tracking-[3px] opacity-40 hover:opacity-100 transition">Cancel</button>
                      <button onClick={handleSave} disabled={isSaving || isUploading} className="flex-[2] bg-[#1C1410] text-white px-10 py-5 font-bold uppercase tracking-[3px] text-[11px] shadow-2xl disabled:opacity-30 active:scale-95 transition-all">
-                       {isSaving ? 'SYNCING...' : 'SYNCHRONIZE MANIFEST'}
+                       {isSaving ? 'Saving...' : 'Save Banner'}
                      </button>
                    </div>
                  </div>

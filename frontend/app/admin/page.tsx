@@ -26,7 +26,7 @@ export default function AdminDashboardPage() {
           'Content-Type': 'application/json' 
         }
         
-        console.log('Initiating Dashboard Sync Protocol...')
+        console.log('Syncing dashboard...')
 
         const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
           fetch(`${backendUrl}/api/products?all=true`, { headers, cache: 'no-store' }),
@@ -40,7 +40,7 @@ export default function AdminDashboardPage() {
         const bannerData = bannerRes.ok ? await bannerRes.json() : { data: [] }
         const revData = revRes.ok ? await revRes.json() : { data: [] }
 
-        console.log('Order Sync Report:', { count: orderData.count, length: orderData.data?.length })
+        console.log('Order sync report:', { count: orderData.count, length: orderData.data?.length })
 
         const pendingOrders = (orderData.data || []).filter((o: any) => o.status === 'pending').length
         const activeBanners = (bannerData.data || []).filter((b: any) => b.is_active).length
@@ -56,7 +56,7 @@ export default function AdminDashboardPage() {
 
         setRecentOrders((orderData.data || []).slice(0, 5))
       } catch (err) {
-        console.error('Administrative Dashboard Sync Failed:', err)
+        console.error('Dashboard sync failed:', err)
       } finally {
         setLoading(false)
       }
@@ -73,7 +73,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-text">
             <Package size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Total Inventory</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Total Products</p>
           <p className="font-heading font-bold text-[48px] text-text leading-none">
             {loading ? '—' : stats.products}
           </p>
@@ -83,7 +83,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-primary">
             <ShoppingCart size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Revenue Cycles</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Total Orders</p>
           <p className="font-heading font-bold text-[48px] text-primary leading-none">
             {loading ? '—' : stats.orders}
           </p>
@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-orange-500">
             <Clock size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Queue</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Pending Orders</p>
           <p className="font-heading font-bold text-[48px] text-orange-500 leading-none">
             {loading ? '—' : stats.pending}
           </p>
@@ -103,7 +103,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-green-600 dark:text-green-500">
             <ImageIcon size={28} />
           </div>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Exhibits</p>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Banners</p>
           <p className="font-heading font-bold text-[48px] text-green-600 dark:text-green-500 leading-none">
             {loading ? '—' : stats.banners}
           </p>
@@ -113,7 +113,7 @@ export default function AdminDashboardPage() {
           <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity text-[#D97706]">
             <Star size={28} />
           </div>
-          <p className="text-[#D97706] text-[11px] font-bold uppercase tracking-[2px] mb-2">Sentiment Audit</p>
+          <p className="text-[#D97706] text-[11px] font-bold uppercase tracking-[2px] mb-2">Reviews</p>
           <p className="font-heading font-bold text-[48px] text-[#D97706] leading-none">
             {loading ? '—' : stats.pendingReviews}
           </p>
@@ -121,7 +121,7 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="flex justify-between items-center mb-8">
-        <h2 className="font-heading font-bold text-[22px] text-text uppercase tracking-widest leading-none">Latest Transactions</h2>
+        <h2 className="font-heading font-bold text-[22px] text-text uppercase tracking-widest leading-none">Recent Orders</h2>
         <div className="h-px bg-border flex-1 mx-8 opacity-40"></div>
       </div>
 
@@ -129,22 +129,22 @@ export default function AdminDashboardPage() {
         <table className="w-full text-sm">
           <thead className="bg-surface border-b border-border">
             <tr>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Identifier</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Order #</th>
               <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Customer</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Location</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Valuation</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">City</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Total</th>
               <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Status</th>
-              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Created</th>
+              <th className="px-8 py-5 text-left font-bold text-[10px] text-text uppercase tracking-[2px]">Date</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">Syncing live data...</td>
+                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">Loading orders...</td>
               </tr>
             ) : recentOrders.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">No active transactions found.</td>
+                <td colSpan={6} className="px-8 py-10 text-center text-[#6B6058] opacity-60 font-medium uppercase tracking-widest text-[11px]">No recent orders found.</td>
               </tr>
             ) : (
               recentOrders.map((o: any) => (

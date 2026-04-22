@@ -33,7 +33,7 @@ export default function AdminReviewsPage() {
       setReviews(data.data || [])
     } catch (err) {
       console.error(err)
-      showToast('Registry Sync Error', 'error')
+      showToast('Sync Error', 'error')
     } finally {
       setLoading(false)
     }
@@ -56,18 +56,18 @@ export default function AdminReviewsPage() {
         headers: { 'x-admin-auth': adminToken || '' }
       })
 
-      if (!res.ok) throw new Error('Authorization failed')
+      if (!res.ok) throw new Error('Approval failed')
       
       const { data } = await res.json()
       setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: true } : r))
-      showToast('Sentiment Authorized', 'success')
+      showToast('Review Approved', 'success')
     } catch (err) {
-      showToast('Protocol Error', 'error')
+      showToast('Error', 'error')
     }
   }
 
   const handleReject = async (id: string) => {
-    if (!confirm('Acknowledge: Final rejection of this record?')) return
+    if (!confirm('Are you sure you want to reject this review?')) return
     
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
@@ -79,9 +79,9 @@ export default function AdminReviewsPage() {
       if (!res.ok) throw new Error('Rejection failed')
       
       setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: false } : r))
-      showToast('Sentiment Restricted', 'success')
+      showToast('Review Rejected', 'success')
     } catch (err) {
-      showToast('Protocol Error', 'error')
+      showToast('Error', 'error')
     }
   }
 
@@ -108,7 +108,7 @@ export default function AdminReviewsPage() {
       {/* HEADER */}
       <div className="flex justify-between items-end mb-12">
         <div>
-          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Sentiment Curation</p>
+          <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Review Management</p>
           <h2 className="text-[28px] font-bold font-heading text-text uppercase tracking-widest leading-none">Reviews</h2>
         </div>
         <div className="flex flex-col items-end">
@@ -152,7 +152,7 @@ export default function AdminReviewsPage() {
                 <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Product</th>
                 <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Customer</th>
                 <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Rating</th>
-                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Statement</th>
+                <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Review Content</th>
                 <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px]">Status</th>
                 <th className="px-8 py-5 font-bold text-[10px] text-[#1C1410] uppercase tracking-[2px] text-right">Command</th>
               </tr>
@@ -167,7 +167,7 @@ export default function AdminReviewsPage() {
               ) : filteredReviews.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-8 py-24 text-center">
-                    <p className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[4px] opacity-20">No matching sentiment records</p>
+                    <p className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[4px] opacity-20">No matching review records</p>
                   </td>
                 </tr>
               ) : (
@@ -224,7 +224,7 @@ export default function AdminReviewsPage() {
                           <button 
                             onClick={() => handleApprove(review.id)}
                             className="w-9 h-9 bg-[#EBF7F0] text-[#2D6A4F] flex items-center justify-center rounded-[3px] border border-[rgba(45,106,79,0.1)] hover:bg-[#2D6A4F] hover:text-white transition-all active:scale-90"
-                            title="Authorize Sentiment"
+                            title="Approve Review"
                           >
                             <CheckCircle size={16} />
                           </button>
@@ -233,7 +233,7 @@ export default function AdminReviewsPage() {
                           <button 
                             onClick={() => handleReject(review.id)}
                             className="w-9 h-9 bg-[#FEF2F2] text-[#991B1B] flex items-center justify-center rounded-[3px] border border-[rgba(153,27,27,0.1)] hover:bg-[#991B1B] hover:text-white transition-all active:scale-90"
-                            title="Restrict Sentiment"
+                            title="Reject Review"
                           >
                             <Trash2 size={16} />
                           </button>
