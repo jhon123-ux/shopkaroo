@@ -19,6 +19,7 @@ export type CustomerOrderSummary = {
 // Returns a map of user_id -> CustomerOrderSummary for users with 2+ orders
 export async function getRecurringCustomers(): Promise<Map<string, CustomerOrderSummary>> {
   const supabase = createServerClient()
+  if (!supabase) return new Map()
 
   const { data: orders, error } = await supabase
     .from('orders')
