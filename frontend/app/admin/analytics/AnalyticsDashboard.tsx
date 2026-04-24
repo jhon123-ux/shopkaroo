@@ -1,5 +1,5 @@
 'use client'
-
+import Link from 'next/link'
 import { AnalyticsData } from '@/lib/analytics'
 import {
   TrendingUp, 
@@ -338,4 +338,3 @@ export default function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
     </div>
   )
 }
-import Link from 'next/link'
