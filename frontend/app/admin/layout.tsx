@@ -12,16 +12,19 @@ import {
   FolderOpen,
   ArrowLeft, 
   LogOut, 
-  ShieldCheck 
+  ShieldCheck,
+  BarChart2
 } from 'lucide-react'
 
 const sidebarLinks = [
   { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
+  { href: '/admin/analytics', label: 'Analytics', icon: <BarChart2 size={16} /> },
   { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={16} /> },
   { href: '/admin/categories', label: 'Categories', icon: <FolderOpen size={16} /> },
   { href: '/admin/offer-banner', label: 'Promotions', icon: <Percent size={16} /> },
   { href: '/admin/products', label: 'Products', icon: <Package size={16} /> },
   { href: '/admin/orders', label: 'Orders', icon: <ShoppingCart size={16} /> },
+  { href: '/admin/draft-orders', label: 'Draft Orders', icon: <ShoppingCart size={16} /> },
   { href: '/admin/reviews', label: 'Reviews', icon: <Star size={16} /> },
 ]
 
@@ -32,6 +35,37 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname()
   const router = useRouter()
+  const [draftCount, setDraftCount] = useState(0)
+
+  useEffect(() => {
+    // Initial fetch
+    const fetchDraftCount = async () => {
+      const { count } = await supabase
+        .from('draft_orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_recovered', false)
+      
+      if (count !== null) setDraftCount(count)
+    }
+
+    fetchDraftCount()
+
+    // Realtime subscription
+    const channel = supabase
+      .channel('draft-orders-count')
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'draft_orders' 
+      }, () => {
+        fetchDraftCount()
+      })
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -93,7 +127,13 @@ export default function AdminLayout({
                 <span className={isActive ? "opacity-100" : "opacity-40 group-hover:opacity-100"}>
                   {link.icon}
                 </span>
-                {link.label}
+                <span className="flex-1 text-left">{link.label}</span>
+                
+                {link.href === '/admin/draft-orders' && draftCount > 0 && (
+                  <span className="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+                    {draftCount}
+                  </span>
+                )}
               </Link>
             )
           })}
