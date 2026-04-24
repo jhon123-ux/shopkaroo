@@ -20,6 +20,7 @@ import {
   Box
 } from 'lucide-react'
 import { useDraftOrder } from '@/hooks/useDraftOrder'
+import { useEffect as useDraftEffect } from 'react'
 
 const formatPrice = (price: number) => 'Rs. ' + price.toLocaleString('en-PK')
 
@@ -40,14 +41,24 @@ export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart, getTotalItems, getTotalPrice } = useCartStore()
   const { saveDraft, saveDraftNow, removeDraft } = useDraftOrder()
 
-  useEffect(() => {
+  const total = getTotalPrice()
+  const draftItems = items.map(item => ({
+    product_id: item.id,
+    name: item.name,
+    price: item.sale_price ?? item.price_pkr,
+    quantity: item.quantity,
+    image_url: item.images?.[0]
+  }))
+
+  useDraftEffect(() => {
     setMounted(true)
   }, [])
 
-  // Trigger B — save on cart page mount
-  useEffect(() => {
+  // Trigger: user visits cart with items
+  useDraftEffect(() => {
     if (mounted && items.length > 0) {
-      saveDraftNow(items, getTotalPrice(), 'cart')
+      console.log('[CART PAGE] mounted, saving draft as cart')
+      saveDraftNow(draftItems, total, 'cart')
     }
   }, [mounted])
 
@@ -57,8 +68,8 @@ export default function CartPage() {
 
     const handleUnload = () => {
       const data = JSON.stringify({
-        cartItems: items,
-        cartTotal: getTotalPrice(),
+        cartItems: draftItems,
+        cartTotal: total,
         reachedStep: 'cart',
       })
       navigator.sendBeacon('/api/draft-save', data)
@@ -66,7 +77,7 @@ export default function CartPage() {
 
     window.addEventListener('beforeunload', handleUnload)
     return () => window.removeEventListener('beforeunload', handleUnload)
-  }, [mounted, items, getTotalPrice])
+  }, [mounted, items, total])
 
   if (!mounted) return null
 
@@ -156,8 +167,13 @@ export default function CartPage() {
                           const newQty = item.quantity - 1
                           if (newQty < 1) return
                           updateQuantity(item.id, newQty)
-                          const updated = items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i)
-                          saveDraft(updated, updated.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                          saveDraft(items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
+                            product_id: i.id,
+                            name: i.name,
+                            price: i.sale_price ?? i.price_pkr,
+                            quantity: i.quantity,
+                            image_url: i.images?.[0]
+                          })), total, 'cart')
                         }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-r border-border"
                       >
@@ -170,8 +186,13 @@ export default function CartPage() {
                         onClick={() => {
                           const newQty = item.quantity + 1
                           updateQuantity(item.id, newQty)
-                          const updated = items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i)
-                          saveDraft(updated, updated.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                          saveDraft(items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
+                            product_id: i.id,
+                            name: i.name,
+                            price: i.sale_price ?? i.price_pkr,
+                            quantity: i.quantity,
+                            image_url: i.images?.[0]
+                          })), total, 'cart')
                         }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-l border-border"
                       >
@@ -186,12 +207,18 @@ export default function CartPage() {
                       </p>
                       <button 
                         onClick={async () => {
-                          const remaining = items.filter(i => i.id !== item.id)
+                          const remainingItems = items.filter(i => i.id !== item.id)
                           removeItem(item.id)
-                          if (remaining.length === 0) {
+                          if (remainingItems.length === 0) {
                             await removeDraft()
                           } else {
-                            saveDraft(remaining, remaining.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                            saveDraft(remainingItems.map(i => ({
+                              product_id: i.id,
+                              name: i.name,
+                              price: i.sale_price ?? i.price_pkr,
+                              quantity: i.quantity,
+                              image_url: i.images?.[0]
+                            })), total, 'cart')
                           }
                         }}
                         className="text-text-muted text-[11px] hover:text-red-500 cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body flex items-center gap-1 group/remove"
@@ -256,8 +283,9 @@ export default function CartPage() {
 
               <button 
                 onClick={async () => {
-                  await saveDraftNow(items, getTotalPrice(), 'cart')
-                  router.push('/checkout')
+                   console.log('[CART PAGE] Complete Order clicked')
+                   await saveDraftNow(draftItems, total, 'cart')
+                   router.push('/checkout')
                 }}
                 className="hidden md:flex w-full bg-primary text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-lg active:scale-95 items-center justify-center gap-3"
               >
@@ -284,9 +312,8 @@ export default function CartPage() {
             <span className="text-text-muted font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
             <span className="font-heading font-bold text-[24px] text-primary">{formatPrice(getTotalPrice())}</span>
           </div>
-          <button 
             onClick={async () => {
-              await saveDraftNow(items, getTotalPrice(), 'cart')
+              await saveDraftNow(draftItems, total, 'cart')
               router.push('/checkout')
             }}
             className="bg-primary text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-md active:scale-95 flex items-center justify-center gap-2"
