@@ -49,6 +49,15 @@ export default function CheckoutPage() {
   const { user } = useAuthStore()
   const { saveDraftNow, removeDraft } = useDraftOrder()
 
+  const total = getTotalPrice()
+  const draftItems = items.map(item => ({
+    product_id: item.id,
+    name: item.name,
+    price: item.sale_price ?? item.price_pkr,
+    quantity: item.quantity,
+    image_url: item.images?.[0]
+  }))
+
   const [mounted, setMounted] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -64,21 +73,26 @@ export default function CheckoutPage() {
     setMounted(true)
   }, [])
 
-  // Trigger F — save on checkout page mount (High Intent)
+  // Trigger: user reached shipping form = high intent
   useEffect(() => {
-    if (mounted && items.length > 0) {
-      saveDraftNow(items, getTotalPrice(), 'checkout')
+    console.log('[CHECKOUT PAGE] mounted')
+    if (items && items.length > 0) {
+      saveDraftNow(draftItems, total, 'checkout')
     }
-  }, [mounted])
+  }, [])
 
   // Trigger G — save on tab close
   useEffect(() => {
     if (!mounted || items.length === 0) return
 
     const handleUnload = () => {
+      const userId = useAuthStore.getState().user?.id
+      if (!userId) return
+
       const data = JSON.stringify({
-        cartItems: items,
-        cartTotal: getTotalPrice(),
+        userId,
+        cartItems: draftItems,
+        cartTotal: total,
         reachedStep: 'checkout',
       })
       navigator.sendBeacon('/api/draft-save', data)
@@ -86,7 +100,7 @@ export default function CheckoutPage() {
 
     window.addEventListener('beforeunload', handleUnload)
     return () => window.removeEventListener('beforeunload', handleUnload)
-  }, [mounted, items, getTotalPrice])
+  }, [mounted, items, total])
 
   // Auto-fill from Auth and Last Order
   useEffect(() => {
@@ -199,6 +213,7 @@ export default function CheckoutPage() {
       const emailParam = (user?.email || email) ? `?email=${encodeURIComponent(user?.email || email)}` : ''
       
       // Trigger H — Clear Abandoned Draft
+      console.log('[CHECKOUT] order confirmed, clearing draft')
       await removeDraft()
       
       router.push(`/order-confirmed/${orderNumber}${emailParam}`)

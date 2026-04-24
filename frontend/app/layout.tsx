@@ -41,6 +41,8 @@ export const metadata: Metadata = {
   },
 }
 
+import DraftSync from '@/components/draft/DraftSync'
+
 export default function RootLayout({
   children,
 }: {
@@ -57,6 +59,7 @@ export default function RootLayout({
       <body className="flex flex-col min-h-screen font-body antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <AuthProvider>
+            <DraftSync />
             <ConditionalLayout>
               {children}
             </ConditionalLayout>

@@ -8,6 +8,7 @@ import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
 import useCartStore from '@/lib/cartStore'
 import useAuthStore from '@/lib/authStore'
+import { useDraftOrder } from '@/hooks/useDraftOrder'
 import { 
   Heart, 
   MessageCircle, 
@@ -190,9 +191,11 @@ export default function ProductDetailPage() {
     `Hi! I want to order: ${product.name}\nPrice: Rs. ${product.sale_price ?? product.price_pkr}\nLink: shopkarro.com/product/${product.slug}`
   )
 
+  const { saveDraftNow } = useDraftOrder()
+
   const handleAddToCart = () => {
     if (!product) return
-    addItem({
+    const newItem = {
       id: product.id,
       name: product.name,
       slug: product.slug,
@@ -201,7 +204,31 @@ export default function ProductDetailPage() {
       category: product.category,
       images: product.images || [],
       quantity: qty
-    })
+    }
+    addItem(newItem)
+    
+    // Trigger A: User adds item to cart
+    const draftItem = {
+      product_id: product.id,
+      name: product.name,
+      price: product.sale_price ?? product.price_pkr,
+      quantity: qty,
+      image_url: product.images?.[0]
+    }
+    // We pass the entire updated cart if possible, but here we just have the new item.
+    // Actually, useCartStore might not have updated yet.
+    // For now, saveDraftNow with just this item or get current cart.
+    const currentItems = useCartStore.getState().items
+    const updatedDraftItems = [...currentItems.map(item => ({
+      product_id: item.id,
+      name: item.name,
+      price: item.sale_price ?? item.price_pkr,
+      quantity: item.quantity,
+      image_url: item.images?.[0]
+    })), draftItem]
+    
+    saveDraftNow(updatedDraftItems, updatedDraftItems.reduce((acc, i) => acc + (i.price * i.quantity), 0), 'cart')
+
     setShowToast(true)
     setTimeout(() => setShowToast(false), 2000)
   }

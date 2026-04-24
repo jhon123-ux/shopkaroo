@@ -16,3 +16,5 @@ export const createServerClient = () => {
     return null
   }
 }
+
+export const createClient = createServerClient

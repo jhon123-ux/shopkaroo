@@ -55,19 +55,23 @@ export default function CartPage() {
   }, [])
 
   // Trigger: user visits cart with items
-  useDraftEffect(() => {
-    if (mounted && items.length > 0) {
-      console.log('[CART PAGE] mounted, saving draft as cart')
+  useEffect(() => {
+    console.log('[CART PAGE] mounted, items:', items?.length)
+    if (items && items.length > 0) {
       saveDraftNow(draftItems, total, 'cart')
     }
-  }, [mounted])
+  }, [])
 
   // Trigger G — save on tab close via beacon
   useEffect(() => {
     if (!mounted || items.length === 0) return
 
     const handleUnload = () => {
+      const userId = useAuthStore.getState().user?.id
+      if (!userId) return
+
       const data = JSON.stringify({
+        userId,
         cartItems: draftItems,
         cartTotal: total,
         reachedStep: 'cart',

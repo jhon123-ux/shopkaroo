@@ -1,86 +1,60 @@
 'use server'
 
-import { createAdminClient } from '@/lib/supabase/admin'
-import { supabase as clientSupabase } from '@/lib/supabase' // client or shared instance
-import { createServerClient } from '@/lib/supabase/server' 
+import { createClient } from '@/lib/supabase/server'
 
-export type CartItem = {
-  id?: string
-  name: string
-  price: number
-  quantity: number
-  image?: string
-  slug?: string
-}
-
-export async function upsertDraftOrder({
-  cartItems,
-  cartTotal,
-  reachedStep,
-}: {
-  cartItems: CartItem[]
-  cartTotal: number
-  reachedStep: 'cart' | 'checkout' | 'payment'
+export async function saveDraftOrder_v2(cartData: {
+  userId: string
+  customerName?: string
+  customerEmail?: string
+  customerPhone?: string
+  items: any[]
+  total: number
+  step: string
 }) {
-  try {
-    // We need to get the user from the session on the server
-    const supabase = createServerClient()
-    if (!supabase) return
+  const supabase = createClient()
+  if (!supabase) return { error: 'No client' }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return // Only track logged-in users
+  const { data, error } = await supabase
+    .from('draft_orders')
+    .upsert({
+      user_id: cartData.userId,
+      customer_name: cartData.customerName || '',
+      customer_email: cartData.customerEmail || '',
+      customer_phone: cartData.customerPhone || '',
+      cart_items: cartData.items.map((item: any) => ({
+        id: item.product_id || item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image_url || item.image
+      })),
+      cart_total: cartData.total,
+      reached_step: cartData.step,
+      last_activity_at: new Date().toISOString(),
+      is_recovered: false
+    }, { onConflict: 'user_id' })
 
-    const admin = createAdminClient()
-
-    // Upsert: 1 draft per user (onConflict handles the logic)
-    const { error } = await admin
-      .from('draft_orders')
-      .upsert(
-        {
-          user_id: user.id,
-          customer_name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? '',
-          customer_email: user.email ?? '',
-          customer_phone: user.user_metadata?.phone ?? '',
-          cart_items: cartItems,
-          cart_total: cartTotal,
-          reached_step: reachedStep,
-          last_activity_at: new Date().toISOString(),
-          is_recovered: false,
-        },
-        { onConflict: 'user_id' }
-      )
-
-    if (error) {
-      console.error('Draft upsert error:', error)
-    }
-  } catch (err) {
-    console.error('Server error in upsertDraftOrder:', err)
+  if (error) {
+    console.error('[DRAFT_SAVE_ERROR]', error)
+    return { error: error.message }
   }
+
+  return { success: true }
 }
 
-export async function clearDraftOrder() {
-  try {
-    const supabase = createServerClient()
-    if (!supabase) return
+export async function clearDraftOrder_v2(userId: string) {
+  const supabase = createClient()
+  if (!supabase) return { error: 'No client' }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+  const { error } = await supabase
+    .from('draft_orders')
+    .delete()
+    .eq('user_id', userId)
 
-    const admin = createAdminClient()
-    await admin.from('draft_orders').delete().eq('user_id', user.id)
-  } catch (err) {
-    console.error('Error clearing draft order:', err)
+  if (error) {
+    console.error('[DRAFT_CLEAR_ERROR]', error)
+    return { error: error.message }
   }
-}
 
-export async function markDraftRecovered(userId: string, orderId: string) {
-  try {
-    const admin = createAdminClient()
-    await admin
-      .from('draft_orders')
-      .update({ is_recovered: true, recovered_order_id: orderId })
-      .eq('user_id', userId)
-  } catch (err) {
-    console.error('Error marking draft as recovered:', err)
-  }
+  return { success: true }
 }

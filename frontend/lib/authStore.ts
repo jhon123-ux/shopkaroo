@@ -18,8 +18,11 @@ const useAuthStore = create<AuthStore>((set) => ({
   setLoading: (loading) => set({ loading }),
   signOut: async () => {
     try {
-      const { clearDraftOrder } = await import('@/app/actions/draft-orders')
-      await clearDraftOrder()
+      const userId = get().user?.id
+      if (userId) {
+        const { clearDraftOrder_v2 } = await import('@/app/actions/draft-orders')
+        await clearDraftOrder_v2(userId)
+      }
     } catch (e) {
       console.error('Draft clear failed on logout', e)
     }
