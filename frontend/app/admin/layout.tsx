@@ -1,7 +1,9 @@
 'use client'
+import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { supabase } from '@/lib/supabase'
 import { 
   LayoutDashboard, 
   Image as ImageIcon, 
