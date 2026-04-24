@@ -312,6 +312,7 @@ export default function CartPage() {
             <span className="text-text-muted font-bold text-[10px] uppercase tracking-[2px] opacity-60">Total</span>
             <span className="font-heading font-bold text-[24px] text-primary">{formatPrice(getTotalPrice())}</span>
           </div>
+          <button 
             onClick={async () => {
               await saveDraftNow(draftItems, total, 'cart')
               router.push('/checkout')
