@@ -22,34 +22,6 @@ interface CartStore {
   getTotalPrice: () => number
 }
 
-// Helper for debounced draft saving
-import { upsertDraftOrder } from '@/app/actions/draft-orders'
-
-let draftSaveTimeout: ReturnType<typeof setTimeout> | null = null
-
-function scheduleDraftSave(get: () => CartStore) {
-  if (typeof window === 'undefined') return
-  if (draftSaveTimeout) clearTimeout(draftSaveTimeout)
-  draftSaveTimeout = setTimeout(() => {
-    const items = get().items
-    const total = get().getTotalPrice()
-    if (items.length > 0) {
-      upsertDraftOrder({ 
-        cartItems: items.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.sale_price ?? item.price_pkr,
-          quantity: item.quantity,
-          image: item.images?.[0],
-          slug: item.slug
-        })), 
-        cartTotal: total, 
-        reachedStep: 'cart' 
-      })
-    }
-  }, 2000)
-}
-
 const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
@@ -71,14 +43,12 @@ const useCartStore = create<CartStore>()(
           }
           return { items: [...state.items, {...product, quantity: 1}] }
         })
-        scheduleDraftSave(get)
       },
 
       removeItem: (id) => {
         set((state) => ({
           items: state.items.filter(item => item.id !== id)
         }))
-        scheduleDraftSave(get)
       },
 
       updateQuantity: (id, quantity) => {
@@ -89,7 +59,6 @@ const useCartStore = create<CartStore>()(
                 item.id === id ? {...item, quantity} : item
               )
         }))
-        scheduleDraftSave(get)
       },
 
       clearCart: () => set({ items: [] }),

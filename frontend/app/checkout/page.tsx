@@ -22,7 +22,7 @@ import {
 import useCartStore from '@/lib/cartStore'
 import useAuthStore from '@/lib/authStore'
 import { supabase } from '@/lib/supabase'
-import { upsertDraftOrder, clearDraftOrder } from '@/app/actions/draft-orders'
+import { useDraftOrder } from '@/hooks/useDraftOrder'
 
 const getDeliveryEstimate = (city: string) => {
   const fast = ['Karachi', 'Lahore']
@@ -47,6 +47,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCartStore()
   const { user } = useAuthStore()
+  const { saveDraftNow, removeDraft } = useDraftOrder()
 
   const [mounted, setMounted] = useState(false)
   const [name, setName] = useState('')
@@ -63,23 +64,29 @@ export default function CheckoutPage() {
     setMounted(true)
   }, [])
 
-  // Draft Order: Save checkout progress
+  // Trigger F — save on checkout page mount (High Intent)
   useEffect(() => {
-    if (mounted && items.length > 0 && user) {
-      upsertDraftOrder({
-        cartItems: items.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: item.sale_price ?? item.price_pkr,
-          quantity: item.quantity,
-          image: item.images?.[0],
-          slug: item.slug
-        })),
-        cartTotal: getTotalPrice(),
-        reachedStep: 'checkout'
-      })
+    if (mounted && items.length > 0) {
+      saveDraftNow(items, getTotalPrice(), 'checkout')
     }
-  }, [mounted, user]) // only once when checkout mounts after login
+  }, [mounted])
+
+  // Trigger G — save on tab close
+  useEffect(() => {
+    if (!mounted || items.length === 0) return
+
+    const handleUnload = () => {
+      const data = JSON.stringify({
+        cartItems: items,
+        cartTotal: getTotalPrice(),
+        reachedStep: 'checkout',
+      })
+      navigator.sendBeacon('/api/draft-save', data)
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+    return () => window.removeEventListener('beforeunload', handleUnload)
+  }, [mounted, items, getTotalPrice])
 
   // Auto-fill from Auth and Last Order
   useEffect(() => {
@@ -191,8 +198,8 @@ export default function CheckoutPage() {
       const orderNumber = data.data.order_number
       const emailParam = (user?.email || email) ? `?email=${encodeURIComponent(user?.email || email)}` : ''
       
-      // Clear Abandoned Draft
-      await clearDraftOrder()
+      // Trigger H — Clear Abandoned Draft
+      await removeDraft()
       
       router.push(`/order-confirmed/${orderNumber}${emailParam}`)
       

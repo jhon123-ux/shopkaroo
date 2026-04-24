@@ -19,6 +19,7 @@ import {
   Utensils,
   Box
 } from 'lucide-react'
+import { useDraftOrder } from '@/hooks/useDraftOrder'
 
 const formatPrice = (price: number) => 'Rs. ' + price.toLocaleString('en-PK')
 
@@ -37,10 +38,35 @@ export default function CartPage() {
   const [mounted, setMounted] = useState(false)
   
   const { items, updateQuantity, removeItem, clearCart, getTotalItems, getTotalPrice } = useCartStore()
+  const { saveDraft, saveDraftNow, removeDraft } = useDraftOrder()
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Trigger B — save on cart page mount
+  useEffect(() => {
+    if (mounted && items.length > 0) {
+      saveDraftNow(items, getTotalPrice(), 'cart')
+    }
+  }, [mounted])
+
+  // Trigger G — save on tab close via beacon
+  useEffect(() => {
+    if (!mounted || items.length === 0) return
+
+    const handleUnload = () => {
+      const data = JSON.stringify({
+        cartItems: items,
+        cartTotal: getTotalPrice(),
+        reachedStep: 'cart',
+      })
+      navigator.sendBeacon('/api/draft-save', data)
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+    return () => window.removeEventListener('beforeunload', handleUnload)
+  }, [mounted, items, getTotalPrice])
 
   if (!mounted) return null
 
@@ -126,7 +152,13 @@ export default function CartPage() {
                     {/* Quantity controls */}
                     <div className="flex items-center border border-border rounded-[3px] overflow-hidden transition-colors">
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => {
+                          const newQty = item.quantity - 1
+                          if (newQty < 1) return
+                          updateQuantity(item.id, newQty)
+                          const updated = items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i)
+                          saveDraft(updated, updated.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                        }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-r border-border"
                       >
                         <Minus size={16} />
@@ -135,7 +167,12 @@ export default function CartPage() {
                         {item.quantity}
                       </div>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => {
+                          const newQty = item.quantity + 1
+                          updateQuantity(item.id, newQty)
+                          const updated = items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i)
+                          saveDraft(updated, updated.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                        }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-l border-border"
                       >
                         <Plus size={16} />
@@ -148,7 +185,15 @@ export default function CartPage() {
                         {formatPrice(price * item.quantity)}
                       </p>
                       <button 
-                        onClick={() => removeItem(item.id)}
+                        onClick={async () => {
+                          const remaining = items.filter(i => i.id !== item.id)
+                          removeItem(item.id)
+                          if (remaining.length === 0) {
+                            await removeDraft()
+                          } else {
+                            saveDraft(remaining, remaining.reduce((s, i) => s + (i.sale_price ?? i.price_pkr) * i.quantity, 0), 'cart')
+                          }
+                        }}
                         className="text-text-muted text-[11px] hover:text-red-500 cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body flex items-center gap-1 group/remove"
                       >
                         <Trash2 size={12} className="group-hover/remove:text-[#DC2626]" /> 
@@ -163,7 +208,10 @@ export default function CartPage() {
 
             {items.length > 0 && (
               <button 
-                onClick={clearCart}
+                onClick={async () => {
+                  clearCart()
+                  await removeDraft()
+                }}
                 className="text-text-muted text-[12px] font-bold hover:text-red-500 transition-colors cursor-pointer w-max uppercase tracking-[2px] font-body self-center md:self-start py-2 flex items-center gap-2 group/clear"
               >
                 <Trash2 size={14} className="group-hover/clear:text-red-500" /> Clear Collection
@@ -207,7 +255,10 @@ export default function CartPage() {
               </div>
 
               <button 
-                onClick={() => router.push('/checkout')}
+                onClick={async () => {
+                  await saveDraftNow(items, getTotalPrice(), 'cart')
+                  router.push('/checkout')
+                }}
                 className="hidden md:flex w-full bg-primary text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-lg active:scale-95 items-center justify-center gap-3"
               >
                 Complete Order
@@ -234,7 +285,10 @@ export default function CartPage() {
             <span className="font-heading font-bold text-[24px] text-primary">{formatPrice(getTotalPrice())}</span>
           </div>
           <button 
-            onClick={() => router.push('/checkout')}
+            onClick={async () => {
+              await saveDraftNow(items, getTotalPrice(), 'cart')
+              router.push('/checkout')
+            }}
             className="bg-primary text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-md active:scale-95 flex items-center justify-center gap-2"
           >
             Checkout

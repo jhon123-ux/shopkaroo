@@ -17,6 +17,12 @@ const useAuthStore = create<AuthStore>((set) => ({
   setUser: (user) => set({ user }),
   setLoading: (loading) => set({ loading }),
   signOut: async () => {
+    try {
+      const { clearDraftOrder } = await import('@/app/actions/draft-orders')
+      await clearDraftOrder()
+    } catch (e) {
+      console.error('Draft clear failed on logout', e)
+    }
     await supabase.auth.signOut()
     set({ user: null })
   }
