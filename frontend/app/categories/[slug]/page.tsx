@@ -5,17 +5,18 @@ import { ArrowRight, ChevronRight, Home, ArrowLeft, LayoutGrid } from 'lucide-re
 import { createClient } from '@/lib/supabase/server'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   const supabase = createClient()
   if (!supabase) return { title: 'Category' }
 
   const { data: category } = await supabase
     .from('categories')
     .select('name')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   return {
@@ -25,6 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SubcategoriesPage({ params }: Props) {
+  const { slug } = await params
   const supabase = createClient()
   if (!supabase) return null
 
@@ -32,7 +34,7 @@ export default async function SubcategoriesPage({ params }: Props) {
   const { data: parentCategory } = await supabase
     .from('categories')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   if (!parentCategory) {
