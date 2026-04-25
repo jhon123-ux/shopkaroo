@@ -97,7 +97,7 @@ export default async function SubcategoriesPage({ params }: Props) {
         <div className="bg-surface border border-border p-20 text-center rounded-[4px]">
            <p className="text-text-muted font-bold text-[14px] uppercase tracking-widest opacity-40 mb-8">No subcategories found</p>
            <Link 
-            href={`/products?category=${parentCategory.id}`}
+            href={`/furniture/${parentCategory.slug}`}
             className="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-[4px] text-[11px] font-bold uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-lg"
            >
              View All {parentCategory.name} products <ArrowRight size={16} />
@@ -108,7 +108,7 @@ export default async function SubcategoriesPage({ params }: Props) {
           {subcategories.map((sub) => (
             <Link 
               key={sub.id} 
-              href={`/products?category=${sub.id}`}
+              href={`/furniture/${sub.slug}`}
               className="group relative aspect-[3/4] rounded-[4px] overflow-hidden cursor-pointer block transition-all duration-500 bg-surface border border-border hover:border-primary/40 shadow-sm"
             >
               {/* Image Layer */}

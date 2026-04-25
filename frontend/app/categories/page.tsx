@@ -66,7 +66,7 @@ export default async function CategoriesPage() {
           return (
             <Link 
               key={cat.id} 
-              href={destination}
+              href={hasSubcategories ? `/categories/${cat.slug}` : `/furniture/${cat.slug}`}
               className="group relative aspect-[3/4] rounded-[4px] overflow-hidden cursor-pointer block transition-all duration-500 bg-surface border border-border hover:border-primary/40 shadow-sm"
             >
               {/* Image Layer */}
