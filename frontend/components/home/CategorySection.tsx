@@ -58,7 +58,7 @@ export default function CategorySection() {
              const hasSubcategories = cat.children && cat.children.length > 0
              const destination = hasSubcategories 
                ? `/categories/${cat.slug}`
-               : `/products?category=${cat.id}`
+               : `/furniture/${cat.slug}`
 
              return (
               <Link 
