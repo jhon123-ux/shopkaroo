@@ -220,7 +220,7 @@ export default function CartPage() {
                         onClick={async () => {
                           const remainingItems = items.filter(i => i.id !== item.id)
                           removeItem(item.id)
-                          if (remainingItems.length === 0) {
+                          
                           saveAbandonedCheckout({
                             sessionId: getSessionId(),
                             cartItems: remainingItems.map(i => ({
@@ -230,7 +230,7 @@ export default function CartPage() {
                               quantity: i.quantity,
                               image_url: i.images?.[0]
                             })),
-                            cartTotal: total,
+                            cartTotal: total - (price * item.quantity),
                             reachedStep: 'cart'
                           })
                         }}
