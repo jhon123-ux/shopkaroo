@@ -11,7 +11,7 @@ interface AuthStore {
   signOut: () => Promise<void>
 }
 
-const useAuthStore = create<AuthStore>((set) => ({
+const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   loading: true,
   setUser: (user) => set({ user }),
