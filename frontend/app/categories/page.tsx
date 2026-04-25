@@ -13,7 +13,6 @@ export default async function CategoriesPage() {
   const supabase = createClient()
   if (!supabase) return null
 
-  // Fetch all active categories to calculate hierarchy in one go
   const { data: allCategories, error } = await supabase
     .from('categories')
     .select('*')
@@ -34,7 +33,7 @@ export default async function CategoriesPage() {
         <p className="text-text-muted mb-10 max-w-sm mx-auto">Explore our collection soon. We're currently updating our catalog.</p>
         <Link 
           href="/admin/categories"
-          className="border border-border px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[2px] transition-all hover:bg-surface active:scale-95"
+          className="border border-border px-8 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-[2px] transition-all hover:bg-surface active:scale-95"
         >
           Go to Admin
         </Link>
@@ -43,11 +42,12 @@ export default async function CategoriesPage() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+    <main className="max-w-7xl mx-auto px-6 py-16 md:py-24 animate-fadeIn">
       {/* HEADER */}
       <div className="mb-16 text-center md:text-left">
+        <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[4px] mb-4 opacity-70">Catalog</p>
         <h1 className="text-[40px] md:text-[56px] font-bold font-heading text-text tracking-tight leading-tight mb-4">
-          All Categories
+          All Collections
         </h1>
         <p className="text-text-muted text-[16px] md:text-[18px] font-body max-w-2xl opacity-70">
           Find furniture by room or type. Discover handcrafted pieces designed for your home.
@@ -67,7 +67,7 @@ export default async function CategoriesPage() {
             <Link 
               key={cat.id} 
               href={destination}
-              className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer block transition-all duration-500 bg-surface border border-transparent hover:border-primary/20 shadow-sm"
+              className="group relative aspect-[3/4] rounded-[4px] overflow-hidden cursor-pointer block transition-all duration-500 bg-surface border border-border hover:border-primary/40 shadow-sm"
             >
               {/* Image Layer */}
               <div className="absolute inset-0 z-0">
@@ -83,23 +83,23 @@ export default async function CategoriesPage() {
                   <div className="absolute inset-0 bg-[#F5F2EF]" />
                 )}
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 opacity-90"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10 opacity-100"></div>
               </div>
 
               {/* Subcategories Badge */}
               {hasSubcategories && (
-                <div className="absolute top-4 right-4 z-30 bg-primary text-white text-[9px] font-bold uppercase tracking-[2px] px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg border border-white/10 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                  Subcategories <ChevronRight size={10} strokeWidth={3} />
+                <div className="absolute top-4 right-4 z-30 bg-primary text-white text-[9px] font-bold uppercase tracking-[2px] px-3 py-1.5 rounded-[2px] flex items-center gap-1.5 shadow-lg border border-white/10">
+                  Sub-collections <ChevronRight size={10} strokeWidth={3} />
                 </div>
               )}
 
               {/* Content */}
               <div className="absolute inset-0 p-6 flex flex-col justify-end text-white text-left z-20">
-                <h3 className="font-heading font-bold text-[18px] md:text-[24px] leading-tight mb-2 tracking-tight group-hover:translate-y-[-4px] transition-transform duration-300">
+                <h3 className="font-heading font-bold text-[18px] md:text-[24px] leading-tight mb-2 tracking-tight group-hover:translate-x-1 transition-transform duration-300">
                   {cat.name}
                 </h3>
-                <div className="overflow-hidden h-6">
-                  <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                <div className="overflow-hidden">
+                  <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                     EXPLORE <ArrowRight size={12} className="transform group-hover:translate-x-1 transition-transform" />
                   </p>
                 </div>

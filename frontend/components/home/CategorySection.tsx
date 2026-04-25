@@ -15,11 +15,8 @@ export default function CategorySection() {
     const fetchCategories = async () => {
       try {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
-        // Get all categories to compute hierarchy logic or use nested=true
         const res = await fetch(`${backendUrl}/api/categories?nested=true`)
         const data = await res.json()
-        
-        // Match Part 1 request: 3 category cards + 1 CTA card on desktop
         setCategories(data.data?.slice(0, 3) || [])
       } catch (err) {
         console.error('Category Sync Failed:', err)
@@ -37,7 +34,7 @@ export default function CategorySection() {
       <div className="max-w-7xl mx-auto px-0 md:px-6">
         
         <div className="px-6 md:px-0 mb-12 sm:mb-16">
-          <div className="text-primary text-[11px] font-bold uppercase tracking-[4px] mb-4 opacity-70">Collections</div>
+          <div className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[4px] mb-4 opacity-70">Collections</div>
           <h2 className="text-[36px] md:text-[56px] font-bold font-heading text-text tracking-tight leading-[1.1]">
             Shop by Room
           </h2>
@@ -67,7 +64,7 @@ export default function CategorySection() {
               <Link 
                 key={cat.id} 
                 href={destination}
-                className="group relative flex-[0_0_calc(50%-6px)] md:flex-1 min-w-0 aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer block snap-start transition-all duration-500 bg-surface border border-transparent hover:border-primary/20"
+                className="group relative flex-[0_0_calc(50%-6px)] md:flex-1 min-w-0 aspect-[3/4] rounded-[4px] border border-border overflow-hidden cursor-pointer block snap-start transition-all duration-500 hover:border-primary/40 bg-surface shadow-sm"
               >
                 {/* Image Layer */}
                 <div className="absolute inset-0 z-0">
@@ -77,22 +74,22 @@ export default function CategorySection() {
                       alt={cat.name}
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-[#F5F2EF]" />
                   )}
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-100"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10 transition-opacity"></div>
                 </div>
 
                 {/* Content */}
                 <div className="absolute inset-0 p-5 md:p-8 flex flex-col justify-end text-white text-left z-20">
-                  <h3 className="font-heading font-bold text-[20px] md:text-[32px] leading-tight mb-2 tracking-tight group-hover:translate-y-[-4px] transition-transform duration-300">
+                  <h3 className="font-heading font-bold text-[20px] md:text-[32px] leading-tight mb-2 tracking-tight group-hover:translate-x-1 transition-transform duration-300">
                     {cat.name}
                   </h3>
-                  <div className="overflow-hidden h-6">
-                    <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="overflow-hidden">
+                    <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                       EXPLORE <ArrowRight size={12} className="transform group-hover:translate-x-1 transition-transform" />
                     </p>
                   </div>
@@ -104,19 +101,19 @@ export default function CategorySection() {
           {/* CTA CARD */}
           <div 
             onClick={() => router.push('/categories')}
-            className="group relative flex-[0_0_calc(50%-6px)] md:flex-1 min-w-0 aspect-[3/4] snap-start rounded-2xl bg-primary hover:bg-primary-dark transition-all duration-300 flex flex-col items-center justify-center p-6 text-center cursor-pointer"
+            className="group relative flex-[0_0_calc(50%-6px)] md:flex-1 min-w-0 aspect-[3/4] snap-start rounded-[4px] bg-primary hover:bg-primary-dark transition-all duration-300 flex flex-col items-center justify-center p-6 text-center cursor-pointer shadow-sm border border-transparent hover:border-black/5"
           >
-            <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center mb-6 text-white/50 group-hover:text-white group-hover:border-white/40 transition-all">
+            <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center mb-6 text-white/50 group-hover:text-white group-hover:bg-white/5 transition-all">
               <ArrowUpRight size={24} />
             </div>
-            <h3 className="text-white font-heading font-bold text-[20px] md:text-[32px] mb-2 leading-[1.1]">
+            <h3 className="text-white font-heading font-bold text-[20px] md:text-[32px] mb-2 leading-[1.1] tracking-tight">
               All Categories
             </h3>
             <p className="text-white/60 text-[12px] md:text-[14px] font-body mb-8 max-w-[140px] mx-auto leading-relaxed">
               Browse the full collection
             </p>
             {/* Pill button matching existing primary style */}
-            <div className="bg-white text-primary px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[2px] hover:scale-105 transition-all shadow-lg active:scale-95">
+            <div className="bg-white text-primary px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[2px] hover:scale-105 transition-all shadow-xl active:scale-95">
               View All
             </div>
           </div>
