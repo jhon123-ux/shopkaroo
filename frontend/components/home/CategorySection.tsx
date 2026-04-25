@@ -1,12 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
 export default function CategorySection() {
+  const router = useRouter()
   const [categories, setCategories] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -14,7 +17,8 @@ export default function CategorySection() {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
         const res = await fetch(`${backendUrl}/api/categories`)
         const data = await res.json()
-        setCategories(data.data || [])
+        // We only want the first 3 categories for the desktop layout
+        setCategories(data.data?.slice(0, 3) || [])
       } catch (err) {
         console.error('Category Sync Failed:', err)
       } finally {
@@ -24,119 +28,78 @@ export default function CategorySection() {
     fetchCategories()
   }, [])
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current
-      const scrollTo = direction === 'left' 
-        ? scrollLeft - clientWidth * 0.8 
-        : scrollLeft + clientWidth * 0.8
-      
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' })
-    }
-  }
-
-  const getGradient = (slug: string) => {
-    switch (slug) {
-      case 'living-room': return 'linear-gradient(135deg, var(--color-primary), var(--color-brand-black))'
-      case 'bedroom': return 'linear-gradient(135deg, var(--color-primary-dark), #3D2B55)'
-      case 'office': return 'linear-gradient(135deg, var(--color-brand-black), var(--color-primary))'
-      case 'dining': return 'linear-gradient(135deg, #1C1410, var(--color-primary-dark))'
-      default: return 'linear-gradient(135deg, var(--color-text-muted), var(--color-border))'
-    }
-  }
-
   if (loading && categories.length === 0) return null
 
   return (
-    <section className="bg-bg-white py-20 md:py-28 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="bg-bg-white py-20 md:py-32 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-0 md:px-6">
         
-        <div className="flex justify-between items-end mb-12 sm:mb-16">
+        <div className="px-6 md:px-0 flex justify-between items-end mb-12 sm:mb-16">
           <div>
-            <div className="text-primary text-[10px] font-bold uppercase tracking-[3px] mb-3">Collections</div>
-            <h2 className="text-[36px] md:text-[48px] font-bold font-heading text-text tracking-tight leading-none">
+            <div className="text-primary text-[11px] font-bold uppercase tracking-[4px] mb-4 opacity-70">Collections</div>
+            <h2 className="text-[36px] md:text-[56px] font-bold font-heading text-text tracking-tight leading-[1.1]">
               Shop by Room
             </h2>
           </div>
-          
-          {/* Desktop/Tablet Nav Arrows */}
-          <div className="hidden sm:flex gap-3">
-            <button 
-              onClick={() => scroll('left')}
-              className="p-3 border border-border text-text-muted hover:border-primary hover:text-primary transition-all rounded-full"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button 
-              onClick={() => scroll('right')}
-              className="p-3 border border-border text-text-muted hover:border-primary hover:text-primary transition-all rounded-full"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
         </div>
 
+        {/* HORIZONTAL SCROLL ROW */}
         <div 
-          ref={scrollRef}
-          className="flex overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory gap-6"
+          className="flex overflow-x-auto md:overflow-x-hidden snap-x snap-mandatory gap-5 px-5 md:px-0 no-scrollbar [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {categories.map((cat) => (
             <Link 
               key={cat.id} 
               href={`/furniture/${cat.slug}`}
-              className="group relative h-[380px] w-[85vw] sm:w-[320px] flex-shrink-0 snap-start rounded-[4px] border border-border overflow-hidden cursor-pointer block transform transition-all duration-500 hover:border-primary"
+              className="group relative flex-shrink-0 w-[58%] md:flex-1 aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer block snap-start transition-all duration-500 bg-surface border border-transparent hover:border-primary/20"
             >
-              {/* Background layer */}
+              {/* Image Layer */}
               <div className="absolute inset-0 z-0">
                 {cat.image_url ? (
-                  <>
-                    <Image 
-                      src={cat.image_url} 
-                      alt={cat.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                      loading="lazy"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent z-10"></div>
-                  </>
+                  <Image 
+                    src={cat.image_url} 
+                    alt={cat.name}
+                    fill
+                    sizes="(max-width: 768px) 60vw, 25vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
                 ) : (
-                  <div 
-                    className="absolute inset-0 z-0"
-                    style={{ background: getGradient(cat.slug) }}
-                  ></div>
+                   <div className="absolute inset-0 bg-[#F5F2EF]" />
                 )}
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 opacity-90"></div>
               </div>
 
               {/* Content */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-end text-white text-left z-20">
-                <h3 className="font-heading font-bold text-[24px] md:text-[28px] leading-tight tracking-tight mb-2">
+              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white text-left z-20">
+                <h3 className="font-heading font-bold text-[24px] md:text-[32px] leading-tight mb-2 tracking-tight">
                   {cat.name}
                 </h3>
-                <div className="flex flex-col">
-                  <p className="text-white/60 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 group-hover:text-white transition-colors duration-300">
-                    Explore <ArrowRight size={10} className="transform group-hover:translate-x-1 transition-transform" />
-                  </p>
-                </div>
+                <p className="text-white/70 text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2 group-hover:text-white transition-colors">
+                  EXPLORE <ArrowRight size={12} className="transform group-hover:translate-x-1 transition-transform" />
+                </p>
               </div>
             </Link>
           ))}
-        </div>
-        
-        {/* Mobile Navigation Arrows */}
-        <div className="flex sm:hidden justify-center gap-6 mt-8">
-          <button 
-            onClick={() => scroll('left')}
-            className="w-12 h-12 flex items-center justify-center bg-surface text-text rounded-full shadow-sm active:scale-95"
+
+          {/* CTA CARD */}
+          <div 
+            onClick={() => router.push('/categories')}
+            className="flex-shrink-0 w-[52%] md:flex-1 aspect-[3/4] snap-start rounded-2xl bg-[#4A2C6E] hover:bg-[#3a2057] transition-all duration-300 flex flex-col items-center justify-center p-6 text-center cursor-pointer group"
           >
-            <ChevronLeft size={24} />
-          </button>
-          <button 
-            onClick={() => scroll('right')}
-            className="w-12 h-12 flex items-center justify-center bg-surface text-text rounded-full shadow-sm active:scale-95"
-          >
-            <ChevronRight size={24} />
-          </button>
+            <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center mb-6 text-white/50 group-hover:text-white group-hover:border-white/40 transition-all">
+              <ArrowUpRight size={24} />
+            </div>
+            <h3 className="text-white font-heading font-bold text-[22px] md:text-[28px] mb-2">
+              All Categories
+            </h3>
+            <p className="text-white/60 text-[12px] md:text-[14px] font-body mb-8 max-w-[120px] mx-auto leading-relaxed">
+              Browse the full collection
+            </p>
+            <div className="bg-white text-[#4A2C6E] px-6 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[2px] hover:scale-105 transition-transform">
+              View All
+            </div>
+          </div>
         </div>
 
       </div>
