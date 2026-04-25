@@ -11,23 +11,28 @@ export async function POST(req: Request) {
     const body = await req.json()
     const { userId, cartItems, cartTotal, reachedStep } = body
 
+    console.log('📡 [BEACON_API] Received payload for user:', userId)
+
     if (!userId) {
       return NextResponse.json({ message: 'No userId provided' }, { status: 400 })
     }
 
     const admin = createAdminClient()
-    if (!admin) return NextResponse.json({ error: 'Admin client init failed' }, { status: 500 })
+    if (!admin) {
+        console.error('❌ [BEACON_API] Admin client init failed')
+        return NextResponse.json({ error: 'Admin client init failed' }, { status: 500 })
+    }
 
     // Try to get user metadata for nicer admin display if possible
     const { data: { user } } = await admin.auth.admin.getUserById(userId)
 
-    const mappedItems = cartItems.map((item: any) => ({
+    const mappedItems = cartItems?.map((item: any) => ({
       id: item.id || item.product_id,
       name: item.name,
       price: item.price ?? item.sale_price ?? item.price_pkr,
       quantity: item.quantity,
       image: item.image || item.image_url || item.images?.[0]
-    }))
+    })) || []
 
     const { error } = await admin
       .from('draft_orders')
@@ -47,13 +52,14 @@ export async function POST(req: Request) {
       )
 
     if (error) {
-      console.error('[BEACON_SAVE_ERROR]', error)
+      console.error('❌ [BEACON_SAVE_ERROR]', error)
       throw error
     }
 
+    console.log('✅ [BEACON_API] Success for user:', userId)
     return NextResponse.json({ success: true })
   } catch (err: any) {
-    console.error('Beacon API error:', err.message)
+    console.error('❌ [BEACON_API_ERROR]:', err.message)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }

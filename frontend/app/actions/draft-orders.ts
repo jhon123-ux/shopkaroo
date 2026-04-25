@@ -11,8 +11,14 @@ export async function saveDraftOrder_v2(cartData: {
   total: number
   step: string
 }) {
+  console.log('🚀 [DRAFT_ACTION] Attempting save for user:', cartData.userId)
+  console.log('📦 [DRAFT_ACTION] Items count:', cartData.items?.length)
+
   const supabase = createClient()
-  if (!supabase) return { error: 'No client' }
+  if (!supabase) {
+    console.error('❌ [DRAFT_ACTION] Supabase client initialization failed')
+    return { error: 'No client' }
+  }
 
   const { data, error } = await supabase
     .from('draft_orders')
@@ -35,10 +41,11 @@ export async function saveDraftOrder_v2(cartData: {
     }, { onConflict: 'user_id' })
 
   if (error) {
-    console.error('[DRAFT_SAVE_ERROR]', error)
+    console.error('❌ [DRAFT_SAVE_ERROR]', error)
     return { error: error.message }
   }
 
+  console.log('✅ [DRAFT_ACTION] Save successful for:', cartData.userId)
   return { success: true }
 }
 

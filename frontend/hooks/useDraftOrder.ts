@@ -19,7 +19,14 @@ export function useDraftOrder() {
   const saveDraft = useCallback((
     items: CartItem[], total: number, step: 'cart' | 'checkout' = 'cart'
   ) => {
-    if (!user || !items || items.length === 0) return
+    if (!user) {
+      console.warn('[DRAFT HOOK] saveDraft skipped: No user session found')
+      return
+    }
+    if (!items || items.length === 0) {
+      console.warn('[DRAFT HOOK] saveDraft skipped: Cart is empty')
+      return
+    }
     
     if (timerRef.current) clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
@@ -38,7 +45,14 @@ export function useDraftOrder() {
   const saveDraftNow = useCallback(async (
     items: CartItem[], total: number, step: 'cart' | 'checkout' = 'cart'
   ) => {
-    if (!user || !items || items.length === 0) return
+    if (!user) {
+      console.warn('[DRAFT HOOK] saveDraftNow skipped: No user session found')
+      return
+    }
+    if (!items || items.length === 0) {
+      console.warn('[DRAFT HOOK] saveDraftNow skipped: Cart is empty')
+      return
+    }
     console.log('[DRAFT HOOK] saveDraftNow firing', items.length, 'items')
     await saveDraftOrder_v2({
       userId: user.id,

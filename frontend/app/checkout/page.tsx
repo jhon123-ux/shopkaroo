@@ -22,7 +22,9 @@ import {
 import useCartStore from '@/lib/cartStore'
 import useAuthStore from '@/lib/authStore'
 import { supabase } from '@/lib/supabase'
-import { useDraftOrder } from '@/hooks/useDraftOrder'
+import { getSessionId } from '@/lib/session-id'
+import { saveAbandonedCheckout, clearAbandonedCheckout } from '@/app/actions/abandoned-checkout'
+import { useRef } from 'react'
 
 const getDeliveryEstimate = (city: string) => {
   const fast = ['Karachi', 'Lahore']
@@ -47,7 +49,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCartStore()
   const { user } = useAuthStore()
-  const { saveDraftNow, removeDraft } = useDraftOrder()
+  const sessionId = useRef(getSessionId())
 
   const total = getTotalPrice()
   const draftItems = items.map(item => ({
@@ -73,34 +75,18 @@ export default function CheckoutPage() {
     setMounted(true)
   }, [])
 
-  // Trigger: user reached shipping form = high intent
+  // Trigger: user reached checkout = upgrade from 'cart' to 'checkout'
   useEffect(() => {
     console.log('[CHECKOUT PAGE] mounted')
     if (items && items.length > 0) {
-      saveDraftNow(draftItems, total, 'checkout')
-    }
-  }, [])
-
-  // Trigger G — save on tab close
-  useEffect(() => {
-    if (!mounted || items.length === 0) return
-
-    const handleUnload = () => {
-      const userId = useAuthStore.getState().user?.id
-      if (!userId) return
-
-      const data = JSON.stringify({
-        userId,
+      saveAbandonedCheckout({
+        sessionId: sessionId.current,
         cartItems: draftItems,
         cartTotal: total,
         reachedStep: 'checkout',
       })
-      navigator.sendBeacon('/api/draft-save', data)
     }
-
-    window.addEventListener('beforeunload', handleUnload)
-    return () => window.removeEventListener('beforeunload', handleUnload)
-  }, [mounted, items, total])
+  }, [])
 
   // Auto-fill from Auth and Last Order
   useEffect(() => {
@@ -212,9 +198,9 @@ export default function CheckoutPage() {
       const orderNumber = data.data.order_number
       const emailParam = (user?.email || email) ? `?email=${encodeURIComponent(user?.email || email)}` : ''
       
-      // Trigger H — Clear Abandoned Draft
+      // Trigger H — Clear Abandoned Checkout
       console.log('[CHECKOUT] order confirmed, clearing draft')
-      await removeDraft()
+      await clearAbandonedCheckout(sessionId.current)
       
       router.push(`/order-confirmed/${orderNumber}${emailParam}`)
       
@@ -289,6 +275,19 @@ Address: ${address}`
                   type="text" 
                   value={name} onChange={e => setName(e.target.value)}
                   placeholder="Enter your full name"
+                  onBlur={(e) => {
+                    if (e.target.value.trim()) {
+                      saveAbandonedCheckout({
+                        sessionId: sessionId.current,
+                        cartItems: draftItems,
+                        cartTotal: total,
+                        reachedStep: 'checkout',
+                        customerName: e.target.value.trim(),
+                        customerEmail: email,
+                        customerPhone: phone,
+                      })
+                    }
+                  }}
                   className={`w-full bg-surface border ${errors.name ? 'border-red-500' : 'border-border-input focus:border-primary'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] text-text placeholder:opacity-30`}
                 />
                 {errors.name && <p className="text-red-500 text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.name}</p>}
@@ -304,6 +303,19 @@ Address: ${address}`
                   type="email" 
                   value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
+                  onBlur={(e) => {
+                    if (e.target.value.trim()) {
+                      saveAbandonedCheckout({
+                        sessionId: sessionId.current,
+                        cartItems: draftItems,
+                        cartTotal: total,
+                        reachedStep: 'checkout',
+                        customerName: name,
+                        customerEmail: e.target.value.trim(),
+                        customerPhone: phone,
+                      })
+                    }
+                  }}
                   className={`w-full bg-surface border ${errors.email ? 'border-red-500' : 'border-border-input focus:border-primary'} rounded-[3px] px-5 py-4 outline-none transition-all font-body text-[15px] text-text placeholder:opacity-30`}
                 />
                 {errors.email && <p className="text-red-500 text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.email}</p>}
@@ -329,6 +341,21 @@ Address: ${address}`
                   value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
                   placeholder="03XXXXXXXXX"
                   maxLength={11}
+                  onBlur={(e) => {
+                    if (e.target.value.trim()) {
+                      saveAbandonedCheckout({
+                        sessionId: sessionId.current,
+                        cartItems: draftItems,
+                        cartTotal: total,
+                        reachedStep: 'phone',
+                        customerName: name,
+                        customerEmail: email,
+                        customerPhone: e.target.value.trim(),
+                        customerCity: city,
+                      })
+                      console.log('[CHECKOUT] phone captured — high value lead saved')
+                    }
+                  }}
                   className={`w-full bg-surface border ${errors.phone ? 'border-red-500' : 'border-border-input focus:border-primary'} rounded-[3px] px-5 py-4 outline-none transition-all font-mono text-[16px] text-text placeholder:opacity-30 tracking-widest`}
                 />
                 {errors.phone ? (
@@ -344,7 +371,19 @@ Address: ${address}`
                 <div className="relative">
                   <select 
                     value={city} 
-                    onChange={e => setCity(e.target.value)}
+                    onChange={e => {
+                      setCity(e.target.value)
+                      saveAbandonedCheckout({
+                        sessionId: sessionId.current,
+                        cartItems: draftItems,
+                        cartTotal: total,
+                        reachedStep: 'phone',
+                        customerName: name,
+                        customerEmail: email,
+                        customerPhone: phone,
+                        customerCity: e.target.value,
+                      })
+                    }}
                     className={`w-full bg-surface border ${errors.city ? 'border-red-500' : 'border-border-input focus:border-primary'} rounded-[3px] px-5 py-4 outline-none transition-all appearance-none pr-12 cursor-pointer font-body text-[15px] text-text`}
                   >
                     <option value="" disabled className="bg-bg-white">Select a city</option>
@@ -376,6 +415,22 @@ Address: ${address}`
                   rows={4}
                   value={address} onChange={e => setAddress(e.target.value)}
                   placeholder="Apartment, House No., Street, Area"
+                  onBlur={(e) => {
+                    if (e.target.value.trim()) {
+                      saveAbandonedCheckout({
+                        sessionId: sessionId.current,
+                        cartItems: draftItems,
+                        cartTotal: total,
+                        reachedStep: 'address',
+                        customerName: name,
+                        customerEmail: email,
+                        customerPhone: phone,
+                        customerCity: city,
+                        customerAddress: e.target.value.trim(),
+                      })
+                      console.log('[CHECKOUT] address captured — highest intent lead')
+                    }
+                  }}
                   className={`w-full bg-surface border ${errors.address ? 'border-red-500' : 'border-border-input focus:border-primary'} rounded-[3px] px-5 py-4 outline-none transition-all resize-none font-body text-[15px] text-text placeholder:opacity-30 leading-relaxed`}
                 />
                 {errors.address && <p className="text-red-500 text-[12px] mt-2 font-bold uppercase tracking-wide font-body">{errors.address}</p>}

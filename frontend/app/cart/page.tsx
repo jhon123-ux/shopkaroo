@@ -19,8 +19,8 @@ import {
   Utensils,
   Box
 } from 'lucide-react'
-import { useDraftOrder } from '@/hooks/useDraftOrder'
-import { useEffect as useDraftEffect } from 'react'
+import { getSessionId } from '@/lib/session-id'
+import { saveAbandonedCheckout } from '@/app/actions/abandoned-checkout'
 
 const formatPrice = (price: number) => 'Rs. ' + price.toLocaleString('en-PK')
 
@@ -39,7 +39,6 @@ export default function CartPage() {
   const [mounted, setMounted] = useState(false)
   
   const { items, updateQuantity, removeItem, clearCart, getTotalItems, getTotalPrice } = useCartStore()
-  const { saveDraft, saveDraftNow, removeDraft } = useDraftOrder()
 
   const total = getTotalPrice()
   const draftItems = items.map(item => ({
@@ -50,38 +49,36 @@ export default function CartPage() {
     image_url: item.images?.[0]
   }))
 
-  useDraftEffect(() => {
+  useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Trigger: user visits cart with items
+  // Trigger: user visits cart with items (works for guests too)
   useEffect(() => {
-    console.log('[CART PAGE] mounted, items:', items?.length)
     if (items && items.length > 0) {
-      saveDraftNow(draftItems, total, 'cart')
-    }
-  }, [])
-
-  // Trigger G — save on tab close via beacon
-  useEffect(() => {
-    if (!mounted || items.length === 0) return
-
-    const handleUnload = () => {
-      const userId = useAuthStore.getState().user?.id
-      if (!userId) return
-
-      const data = JSON.stringify({
-        userId,
+      const sessionId = getSessionId()
+      saveAbandonedCheckout({
+        sessionId,
         cartItems: draftItems,
         cartTotal: total,
         reachedStep: 'cart',
       })
-      navigator.sendBeacon('/api/draft-save', data)
+      console.log('[CART] abandoned checkout saved, session:', sessionId?.slice(0, 8))
     }
+  }, [])
 
-    window.addEventListener('beforeunload', handleUnload)
-    return () => window.removeEventListener('beforeunload', handleUnload)
-  }, [mounted, items, total])
+  // Also save when cart contents change
+  useEffect(() => {
+    if (items && items.length > 0) {
+      const sessionId = getSessionId()
+      saveAbandonedCheckout({
+        sessionId,
+        cartItems: draftItems,
+        cartTotal: total,
+        reachedStep: 'cart',
+      })
+    }
+  }, [items])
 
   if (!mounted) return null
 
@@ -171,13 +168,18 @@ export default function CartPage() {
                           const newQty = item.quantity - 1
                           if (newQty < 1) return
                           updateQuantity(item.id, newQty)
-                          saveDraft(items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
-                            product_id: i.id,
-                            name: i.name,
-                            price: i.sale_price ?? i.price_pkr,
-                            quantity: i.quantity,
-                            image_url: i.images?.[0]
-                          })), total, 'cart')
+                          saveAbandonedCheckout({
+                            sessionId: getSessionId(),
+                            cartItems: items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
+                              product_id: i.id,
+                              name: i.name,
+                              price: i.sale_price ?? i.price_pkr,
+                              quantity: i.quantity,
+                              image_url: i.images?.[0]
+                            })),
+                            cartTotal: total,
+                            reachedStep: 'cart'
+                          })
                         }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-r border-border"
                       >
@@ -190,13 +192,18 @@ export default function CartPage() {
                         onClick={() => {
                           const newQty = item.quantity + 1
                           updateQuantity(item.id, newQty)
-                          saveDraft(items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
-                            product_id: i.id,
-                            name: i.name,
-                            price: i.sale_price ?? i.price_pkr,
-                            quantity: i.quantity,
-                            image_url: i.images?.[0]
-                          })), total, 'cart')
+                          saveAbandonedCheckout({
+                            sessionId: getSessionId(),
+                            cartItems: items.map(i => i.id === item.id ? {...i, quantity: newQty} : i).map(i => ({
+                              product_id: i.id,
+                              name: i.name,
+                              price: i.sale_price ?? i.price_pkr,
+                              quantity: i.quantity,
+                              image_url: i.images?.[0]
+                            })),
+                            cartTotal: total,
+                            reachedStep: 'cart'
+                          })
                         }}
                         className="w-10 h-10 flex items-center justify-center hover:bg-background text-text transition-colors bg-bg-white font-body text-lg border-l border-border"
                       >
@@ -214,16 +221,18 @@ export default function CartPage() {
                           const remainingItems = items.filter(i => i.id !== item.id)
                           removeItem(item.id)
                           if (remainingItems.length === 0) {
-                            await removeDraft()
-                          } else {
-                            saveDraft(remainingItems.map(i => ({
+                          saveAbandonedCheckout({
+                            sessionId: getSessionId(),
+                            cartItems: remainingItems.map(i => ({
                               product_id: i.id,
                               name: i.name,
                               price: i.sale_price ?? i.price_pkr,
                               quantity: i.quantity,
                               image_url: i.images?.[0]
-                            })), total, 'cart')
-                          }
+                            })),
+                            cartTotal: total,
+                            reachedStep: 'cart'
+                          })
                         }}
                         className="text-text-muted text-[11px] hover:text-red-500 cursor-pointer font-bold mt-2 uppercase tracking-[2px] transition-colors font-body flex items-center gap-1 group/remove"
                       >
@@ -241,7 +250,8 @@ export default function CartPage() {
               <button 
                 onClick={async () => {
                   clearCart()
-                  await removeDraft()
+                  // Optional: clearAbandonedCheckout(getSessionId())? 
+                  // Usually we keep it until recovery or order.
                 }}
                 className="text-text-muted text-[12px] font-bold hover:text-red-500 transition-colors cursor-pointer w-max uppercase tracking-[2px] font-body self-center md:self-start py-2 flex items-center gap-2 group/clear"
               >
@@ -288,7 +298,12 @@ export default function CartPage() {
               <button 
                 onClick={async () => {
                    console.log('[CART PAGE] Complete Order clicked')
-                   await saveDraftNow(draftItems, total, 'cart')
+                   saveAbandonedCheckout({
+                    sessionId: getSessionId(),
+                    cartItems: draftItems,
+                    cartTotal: total,
+                    reachedStep: 'checkout'
+                   })
                    router.push('/checkout')
                 }}
                 className="hidden md:flex w-full bg-primary text-white py-5 rounded-[3px] font-bold text-[14px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-lg active:scale-95 items-center justify-center gap-3"
@@ -317,8 +332,13 @@ export default function CartPage() {
             <span className="font-heading font-bold text-[24px] text-primary">{formatPrice(getTotalPrice())}</span>
           </div>
           <button 
-            onClick={async () => {
-              await saveDraftNow(draftItems, total, 'cart')
+            onClick={() => {
+              saveAbandonedCheckout({
+                sessionId: getSessionId(),
+                cartItems: draftItems,
+                cartTotal: total,
+                reachedStep: 'checkout'
+              })
               router.push('/checkout')
             }}
             className="bg-primary text-white px-8 py-4 rounded-[3px] font-bold text-[13px] font-body uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-md active:scale-95 flex items-center justify-center gap-2"
