@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { 
+  Plus,
   Download, 
   Eye, 
   Check, 
@@ -19,17 +20,18 @@ import {
   Monitor,
   UserPlus
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
 import CustomerOrdersModal from '@/components/admin/CustomerOrdersModal'
 
-export default function AdminOrdersPage({ 
   recurringCount, 
   recurringCustomers 
 }: { 
   recurringCount: number, 
   recurringCustomers: Record<string, CustomerOrderSummary> 
 }) {
+  const router = useRouter()
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   
@@ -242,10 +244,19 @@ export default function AdminOrdersPage({
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] mb-1">Manage Orders</p>
           <h2 className="text-[28px] font-bold font-heading text-text leading-none uppercase tracking-widest">Transactions</h2>
         </div>
-        <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
-          <Download size={14} strokeWidth={2.5} />
-          Export CSV
-        </button>
+        <div className="flex items-center gap-4">
+          <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
+            <Download size={14} strokeWidth={2.5} />
+            Export CSV
+          </button>
+          <button 
+            onClick={() => router.push('/admin/orders/new')}
+            className="bg-[#783A3A] text-white px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#632f2f] transition-all shadow-xl active:scale-95"
+          >
+            <Plus size={14} strokeWidth={2.5} />
+            New Order
+          </button>
+        </div>
       </div>
 
       {/* TOP AGGREGATE STATS */}
