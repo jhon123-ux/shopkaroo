@@ -5,7 +5,8 @@ import {
   createOrder, 
   updateOrderStatus,
   adminCreateOrder,
-  adminDuplicateOrder
+  adminDuplicateOrder,
+  adminSearchCustomer
 } from '../controllers/orders.controller'
 import { adminAuth } from '../middleware/auth.middleware'
 
@@ -52,5 +53,6 @@ router.patch('/:id', adminAuth, updateOrderStatus)
  */
 router.post('/admin/orders/create', adminAuth, adminCreateOrder)
 router.post('/admin/orders/:id/duplicate', adminAuth, adminDuplicateOrder)
+router.get('/admin/customers/search', adminAuth, adminSearchCustomer)
 
 export default router

@@ -14,7 +14,10 @@ import {
   Search,
   Calendar,
   Package,
-  Repeat2
+  Repeat2,
+  Loader2,
+  Monitor,
+  UserPlus
 } from 'lucide-react'
 import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
@@ -169,6 +172,51 @@ export default function AdminOrdersPage({
       case 'delivered': return 'bg-[#EBF7F0] text-[#2D6A4F] border-[rgba(45,106,79,0.1)]'
       case 'cancelled': return 'bg-red-50 text-red-600 border-red-100'
       default: return 'bg-gray-50 text-gray-400 border-gray-100'
+    }
+  }
+ 
+  const getSourceBadge = (source: string) => {
+    switch (source) {
+      case 'admin_manual': return (
+        <span className="flex items-center gap-1.5 bg-blue-50 text-blue-600 px-2 py-1 rounded-sm text-[9px] font-bold uppercase tracking-wider border border-blue-100">
+          <UserPlus size={10} /> Admin — manual
+        </span>
+      )
+      case 'admin_duplicate': return (
+        <span className="flex items-center gap-1.5 bg-amber-50 text-amber-600 px-2 py-1 rounded-sm text-[9px] font-bold uppercase tracking-wider border border-amber-100">
+          <Repeat2 size={10} /> Admin — duplicate
+        </span>
+      )
+      default: return (
+        <span className="flex items-center gap-1.5 bg-gray-50 text-gray-400 px-2 py-1 rounded-sm text-[9px] font-bold uppercase tracking-wider border border-gray-100">
+          <Monitor size={10} /> Website
+        </span>
+      )
+    }
+  }
+
+  const [isDuplicating, setIsDuplicating] = useState(false)
+
+  const handleDuplicateOrder = async (orderId: string) => {
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    setIsDuplicating(true)
+    try {
+      const res = await fetch(`${backendUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
+        method: 'POST',
+        headers: { 
+          'x-admin-auth': adminToken || '',
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to duplicate order')
+
+      sessionStorage.setItem('duplicate_order_draft', JSON.stringify(data))
+      window.location.href = '/admin/orders/new'
+    } catch (err: any) {
+      showToast(err.message, 'error')
+    } finally {
+      setIsDuplicating(false)
     }
   }
 
@@ -353,6 +401,9 @@ export default function AdminOrdersPage({
                             onClick={setSelectedCustomer}
                           />
                         )}
+                        <div className="mt-2">
+                           {getSourceBadge(o.order_source)}
+                        </div>
                       </div>
                     </td>
                     <td className="px-8 py-6 text-[12px] font-bold text-[#1C1410] uppercase tracking-widest">{o.city}</td>
@@ -374,17 +425,25 @@ export default function AdminOrdersPage({
                       </p>
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <button
-                        onClick={() => setSelectedOrder(o)}
-                        className="flex items-center gap-1.5 bg-[#F0EBF8] text-[#4A2C6E] px-3 py-1.5 rounded-sm text-xs font-semibold hover:bg-[#4A2C6E] hover:text-white transition-colors shadow-sm"
-                      >
-                        {/* Eye icon */}
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                          <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        View
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedOrder(o)}
+                          className="flex items-center gap-1.5 bg-[#F0EBF8] text-[#4A2C6E] px-3 py-1.5 rounded-sm text-xs font-semibold hover:bg-[#4A2C6E] hover:text-white transition-colors shadow-sm"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                          </svg>
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleDuplicateOrder(o.id)}
+                          className="flex items-center justify-center w-8 h-8 bg-amber-50 text-amber-600 rounded-sm hover:bg-amber-600 hover:text-white transition-all shadow-sm"
+                          title="Duplicate Order"
+                        >
+                          <Repeat2 size={14} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -480,11 +539,22 @@ export default function AdminOrdersPage({
               <div className="text-left">
                 <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[3px] opacity-40 mb-2">Order Details</p>
                 <h2 className="font-heading font-bold text-[32px] text-[#1C1410] leading-none uppercase tracking-widest">{selectedOrder.order_number}</h2>
-                <p className="text-[12px] text-[#6B6058] mt-4 opacity-80 font-bold uppercase tracking-widest">
-                  Placed on {new Date(selectedOrder.created_at).toLocaleString('en-PK', { dateStyle: 'full', timeStyle: 'short' })}
-                </p>
+                <div className="flex items-center gap-4 mt-4">
+                  <p className="text-[12px] text-[#6B6058] opacity-80 font-bold uppercase tracking-widest">
+                    Placed on {new Date(selectedOrder.created_at).toLocaleString('en-PK', { dateStyle: 'full', timeStyle: 'short' })}
+                  </p>
+                  {getSourceBadge(selectedOrder.order_source)}
+                </div>
               </div>
               <div className="flex items-center gap-6">
+                <button
+                  onClick={() => handleDuplicateOrder(selectedOrder.id)}
+                  disabled={isDuplicating}
+                  className="flex items-center gap-2 border border-[#E8E2D9] text-[#1C1410] px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-[#FAF7F4] transition-all"
+                >
+                  {isDuplicating ? <Loader2 size={14} className="animate-spin" /> : <Repeat2 size={14} />}
+                  Duplicate
+                </button>
                 <span className={`text-[10px] uppercase tracking-[2px] font-bold px-5 py-2.5 rounded-0 border ${getStatusStyle(selectedOrder.status)}`}>
                   {selectedOrder.status}
                 </span>
