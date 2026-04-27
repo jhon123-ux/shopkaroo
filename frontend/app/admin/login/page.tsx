@@ -3,14 +3,15 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { X, ArrowLeft } from 'lucide-react'
+import { Lock, User, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
-export default function AdminLoginPage() {
+export default function AdminLogin() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,93 +19,113 @@ export default function AdminLoginPage() {
     setError(null)
 
     try {
-      if (email.trim().toLowerCase() === 'admin@shopkarro.com' && password.trim() === 'shopkarro2025') {
-        localStorage.setItem('admin_token', 'shopkarro_admin_secure_v1_2025')
-        document.cookie = "admin_auth=true; path=/;"
+      // 🔐 SECURE AUTHENTICATION: Using Supabase Auth instead of hardcoded strings
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
+      })
+
+      if (authError) throw authError
+
+      // Verify the user is an admin (Optional but recommended: check metadata or email)
+      // Since this is the admin login page, we can enforce a specific email here 
+      // or rely on RLS/Backend checks. 
+      const ADMIN_EMAIL = 'admin@shopkarro.com' 
+      
+      if (data.user.email !== ADMIN_EMAIL) {
+        await supabase.auth.signOut()
+        throw new Error('Access denied. This account does not have administrative privileges.')
+      }
+
+      // Store token securely. 
+      // Note: Low Fix 8 recommends httpOnly cookies, which requires a custom API route.
+      // For now, we use the Supabase session which is already managed securely by the client.
+      const session = data.session
+      if (session) {
+        localStorage.setItem('admin_token', session.access_token)
         router.push('/admin')
-      } else {
-        throw new Error('Credential mismatch detected.')
       }
     } catch (err: any) {
-      setError(err.message)
+      setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center p-8 font-body text-left">
-      <div className="max-w-md w-full relative z-10">
+    <div className="min-h-screen bg-bg-white flex items-center justify-center px-6">
+      <div className="max-w-md w-full bg-white border border-border p-10 md:p-14 shadow-sm animate-fadeIn">
         
-        {/* LOGO AREA */}
-        <div className="text-center mb-16">
-          <Link href="/" className="inline-block mb-10 group">
-            <span className="text-[42px] font-heading font-bold text-[#1C1410] uppercase tracking-[12px] transition-all group-hover:tracking-[16px]">SHOPKARRO</span>
-          </Link>
-          <div className="h-px bg-[#1C1410]/10 w-24 mx-auto mb-6" />
-          <h1 className="text-[11px] font-bold text-[#6B6058] uppercase tracking-[5px] opacity-60">
-            Admin Panel Access
-          </h1>
-        </div>
-
-        {/* LOGIN CARD */}
-        <div className="bg-white rounded-0 p-12 shadow-[0_40px_100px_rgba(28,20,16,0.08)] border border-[#E8E2D9]">
-          <h2 className="text-[20px] font-bold text-[#1C1410] mb-12 font-heading uppercase tracking-[4px]">Sign In</h2>
-          
-          <form onSubmit={handleLogin} className="space-y-10">
-            <div>
-              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Email Address</label>
-              <input 
-                type="email" 
-                required 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@shopkarro.com"
-                className="w-full border-b border-[#D4CCC2] bg-transparent rounded-0 px-0 py-4 text-[14px] focus:border-[#1C1410] outline-none transition-all placeholder:opacity-20"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-bold text-[#6B6058] mb-4 uppercase tracking-[2px] opacity-40">Password</label>
-              <input 
-                type="password" 
-                required 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full border-b border-[#D4CCC2] bg-transparent rounded-0 px-0 py-4 text-[14px] focus:border-[#1C1410] outline-none transition-all placeholder:opacity-20"
-              />
-            </div>
-
-            {error && (
-              <div className="bg-white text-[#DC2626] py-4 border-l-2 border-l-[#DC2626] px-4 text-[11px] font-bold uppercase tracking-[1px] flex items-center gap-3">
-                <X className="w-4 h-4" /> {error}
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-[#1C1410] text-white py-5 rounded-0 font-bold uppercase tracking-[4px] text-[12px] hover:bg-[#33221b] transition-all shadow-2xl active:scale-95 disabled:opacity-30"
-            >
-              {loading ? 'Logging In...' : 'Log In'}
-            </button>
-          </form>
-
-          <div className="mt-12 pt-8 border-t border-[#FAF7F4] text-center">
-             <p className="text-[#6B6058] text-[9px] font-bold uppercase tracking-[2px] opacity-30 leading-relaxed max-w-[240px] mx-auto">
-               Authorized access only. Unauthorized attempts will be logged.
-             </p>
+        <div className="text-center mb-12">
+          <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-8">
+            <ShieldCheck size={32} className="text-primary" />
           </div>
+          <h1 className="text-[32px] font-bold font-heading text-text mb-2">Internal Access</h1>
+          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[4px] opacity-60">
+            Administrative Registry
+          </p>
         </div>
 
-        {/* FOOTER LINK */}
-        <div className="mt-12 text-center">
-          <Link href="/" className="text-[10px] font-bold text-[#6B6058] uppercase tracking-[3px] opacity-40 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-            <ArrowLeft className="w-3 h-3" /> Return to Store
+        {error && (
+          <div className="mb-8 p-4 bg-red-50 border border-red-100 rounded-[3px] flex gap-3 text-red-600">
+            <AlertCircle size={18} className="shrink-0" />
+            <p className="text-[13px] font-medium leading-relaxed">{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-8">
+          <div>
+            <label className="block text-[11px] font-bold text-text mb-3 uppercase tracking-[2px]">Admin Identifier</label>
+            <div className="relative">
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-text opacity-30">
+                <User size={18} />
+              </span>
+              <input 
+                required
+                type="email" 
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="admin@shopkarro.com"
+                className="w-full bg-surface border border-border-input rounded-[3px] pl-14 pr-5 py-4 text-[15px] outline-none focus:border-primary transition-all font-body text-text" 
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold text-text mb-3 uppercase tracking-[2px]">Security Code</label>
+            <div className="relative">
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-text opacity-30">
+                <Lock size={18} />
+              </span>
+              <input 
+                required
+                type="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full bg-surface border border-border-input rounded-[3px] pl-14 pr-5 py-4 text-[15px] outline-none focus:border-primary transition-all font-body text-text" 
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary text-white py-5 rounded-[3px] text-[13px] font-bold uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-xl active:scale-95 flex items-center justify-center gap-3"
+          >
+            {loading ? 'Validating Registry...' : (
+              <>
+                Unseal Dashboard <ArrowRight size={18} />
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="mt-12 text-center pt-8 border-t border-border">
+          <Link href="/" className="text-text-muted text-[12px] font-bold uppercase tracking-widest hover:text-primary transition-colors inline-flex items-center gap-2">
+            Return to Storefront
           </Link>
         </div>
-
       </div>
     </div>
   )

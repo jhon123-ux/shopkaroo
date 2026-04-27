@@ -35,15 +35,7 @@ export async function saveAbandonedCheckout(payload: AbandonedCheckoutPayload) {
     customerAddress = '',
   } = payload
 
-  console.log('[ABANDONED] saving:', { 
-    sessionId: sessionId?.slice(0, 8), 
-    reachedStep, 
-    phone: customerPhone,
-    items: cartItems?.length 
-  })
-
   if (!sessionId || !cartItems || cartItems.length === 0) {
-    console.log('[ABANDONED] skipped — no session or empty cart')
     return
   }
 
@@ -74,10 +66,8 @@ export async function saveAbandonedCheckout(payload: AbandonedCheckoutPayload) {
     )
 
   if (error) {
-    console.error('[ABANDONED] error:', error.message, error.code)
-  } else {
-    console.log('[ABANDONED] ✅ saved for step:', reachedStep, 
-      customerPhone ? `phone: ${customerPhone}` : '(no phone yet)')
+    // We log only the error code and message for server tracking, no PII
+    console.error('[ABANDONED] Database error:', error.code)
   }
 }
 
@@ -91,6 +81,7 @@ export async function clearAbandonedCheckout(sessionId: string) {
     .delete()
     .eq('session_id', sessionId)
   
-  if (error) console.error('[ABANDONED] clear error:', error.message)
-  else console.log('[ABANDONED] ✅ cleared — order was confirmed')
+  if (error) {
+    console.error('[ABANDONED] Clear error:', error.code)
+  }
 }

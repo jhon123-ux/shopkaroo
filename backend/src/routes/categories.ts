@@ -6,6 +6,9 @@ import {
   deleteCategory, 
   toggleCategory 
 } from '../controllers/categories.controller'
+import { adminAuth } from '../middleware/auth.middleware'
+import { validate } from '../middleware/validate'
+import { categorySchema } from '../schemas'
 
 const router = Router()
 
@@ -16,55 +19,14 @@ const router = Router()
  *   description: CMS-Controlled Classifications
  */
 
-/**
- * @swagger
- * /api/categories:
- *   get:
- *     summary: Retrieve active or all categories
- *     tags: [Categories]
- *     parameters:
- *       - in: query
- *         name: all
- *         schema:
- *           type: boolean
- *         description: Include inactive categories (Administrative view)
- */
 router.get('/', getCategories)
 
-/**
- * @swagger
- * /api/categories:
- *   post:
- *     summary: Create a new category exhibit
- *     tags: [Categories]
- */
-router.post('/', createCategory)
+router.post('/', adminAuth, validate(categorySchema), createCategory)
 
-/**
- * @swagger
- * /api/categories/{id}:
- *   patch:
- *     summary: Update an existing classification manifest
- *     tags: [Categories]
- */
-router.patch('/:id', updateCategory)
+router.patch('/:id', adminAuth, validate(categorySchema.partial()), updateCategory)
 
-/**
- * @swagger
- * /api/categories/{id}:
- *   delete:
- *     summary: Expunge classification from registry
- *     tags: [Categories]
- */
-router.delete('/:id', deleteCategory)
+router.delete('/:id', adminAuth, deleteCategory)
 
-/**
- * @swagger
- * /api/categories/{id}/toggle:
- *   patch:
- *     summary: Toggle visibility status of classification
- *     tags: [Categories]
- */
-router.patch('/:id/toggle', toggleCategory)
+router.patch('/:id/toggle', adminAuth, toggleCategory)
 
 export default router
