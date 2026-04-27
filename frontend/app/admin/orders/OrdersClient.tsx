@@ -25,6 +25,7 @@ import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
 import CustomerOrdersModal from '@/components/admin/CustomerOrdersModal'
 
+export default function AdminOrdersPage({ 
   recurringCount, 
   recurringCustomers 
 }: { 
