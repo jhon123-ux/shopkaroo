@@ -6,7 +6,8 @@ import {
   updateOrderStatus,
   adminCreateOrder,
   adminDuplicateOrder,
-  adminSearchCustomer
+  adminSearchCustomer,
+  exportOrdersExcel
 } from '../controllers/orders.controller'
 import { adminAuth } from '../middleware/auth.middleware'
 
@@ -51,6 +52,7 @@ router.patch('/:id', adminAuth, updateOrderStatus)
 /**
  * 🏭 Administrative Routes
  */
+router.get('/admin/orders/export/excel', adminAuth, exportOrdersExcel)
 router.post('/admin/orders/create', adminAuth, adminCreateOrder)
 router.post('/admin/orders/:id/duplicate', adminAuth, adminDuplicateOrder)
 router.get('/admin/customers/search', adminAuth, adminSearchCustomer)

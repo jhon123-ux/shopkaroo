@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { 
   Plus,
-  Download, 
+  FileSpreadsheet,
   Eye, 
   Check, 
   Truck, 
@@ -24,6 +24,7 @@ import { useRouter } from 'next/navigation'
 import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
 import CustomerOrdersModal from '@/components/admin/CustomerOrdersModal'
+import CustomExportModal from '@/components/admin/CustomExportModal'
 
 export default function AdminOrdersPage({ 
   recurringCount, 
@@ -50,7 +51,108 @@ export default function AdminOrdersPage({
   const [currentPage, setCurrentPage] = useState(1)
   const [ordersPerPage, setOrdersPerPage] = useState(20)
 
+  // Export state
+  const [exportLoading, setExportLoading] = useState(false)
+  const [showExportDropdown, setShowExportDropdown] = useState(false)
+  const [showCustomExport, setShowCustomExport] = useState(false)
+  const exportDropdownRef = useRef<HTMLDivElement>(null)
+
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+
+  // Close export dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (exportDropdownRef.current && !exportDropdownRef.current.contains(e.target as Node)) {
+        setShowExportDropdown(false)
+      }
+    }
+    if (showExportDropdown) document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [showExportDropdown])
+
+  const handleExportExcel = () => {
+    const params = new URLSearchParams()
+    if (statusFilter && statusFilter !== 'all') params.append('status', statusFilter)
+    if (cityFilter && cityFilter !== 'all') params.append('city', cityFilter)
+    if (dateFilter === 'today') {
+      const today = new Date().toISOString().slice(0, 10)
+      params.append('startDate', today)
+      params.append('endDate', today)
+    } else if (dateFilter === 'week') {
+      const end = new Date()
+      const start = new Date(); start.setDate(start.getDate() - 7)
+      params.append('startDate', start.toISOString().slice(0, 10))
+      params.append('endDate', end.toISOString().slice(0, 10))
+    } else if (dateFilter === 'month') {
+      const end = new Date()
+      const start = new Date(end.getFullYear(), end.getMonth(), 1)
+      params.append('startDate', start.toISOString().slice(0, 10))
+      params.append('endDate', end.toISOString().slice(0, 10))
+    }
+    if (searchQuery) params.append('search', searchQuery)
+
+    setExportLoading(true)
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') || '' : ''
+
+    fetch(`${backendUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
+      headers: { 'x-admin-auth': adminToken }
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Export failed')
+        const disposition = response.headers.get('Content-Disposition')
+        const filename = disposition?.match(/filename="(.+)"/)?.[1] || 'shopkarro-orders.xlsx'
+        return response.blob().then(blob => ({ blob, filename }))
+      })
+      .then(({ blob, filename }) => {
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+        showToast('Excel exported successfully', 'success')
+      })
+      .catch(err => {
+        console.error('Export error:', err)
+        showToast('Export failed. Please try again.', 'error')
+      })
+      .finally(() => {
+        setExportLoading(false)
+      })
+  }
+
+  const handleExportCsv = () => {
+    if (orders.length === 0) return showToast('No data to export', 'error')
+    
+    const headers = ['Order #', 'Date', 'Customer', 'Phone', 'City', 'Total', 'Status']
+    const csvRows = [headers.join(',')]
+    
+    filteredOrders.forEach(o => {
+      const row = [
+        o.order_number,
+        new Date(o.created_at).toLocaleDateString(),
+        `"${o.customer_name?.replace(/"/g, '""')}"`,
+        o.phone,
+        o.city,
+        o.total_pkr,
+        o.status
+      ]
+      csvRows.push(row.join(','))
+    })
+    
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `shopkarro-orders-${new Date().toISOString().slice(0, 10)}.csv`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+    showToast('CSV exported successfully', 'success')
+  }
 
   const [error, setError] = useState('')
 
@@ -246,10 +348,48 @@ export default function AdminOrdersPage({
           <h2 className="text-[28px] font-bold font-heading text-text leading-none uppercase tracking-widest">Transactions</h2>
         </div>
         <div className="flex items-center gap-4">
-          <button className="border border-[#E8E2D9] bg-white text-[#1C1410] px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#FAF7F4] transition-all shadow-sm active:scale-95">
-            <Download size={14} strokeWidth={2.5} />
-            Export CSV
-          </button>
+          {/* ── Excel Export Split Button ── */}
+          <div className="relative" ref={exportDropdownRef}>
+            <div className="flex items-center">
+              {/* Left: Primary Export Action */}
+              <button
+                onClick={handleExportExcel}
+                disabled={exportLoading}
+                className="flex items-center gap-2 border border-[#783A3A] bg-[#783A3A] text-white px-5 py-3 rounded-l-[2px] text-[11px] font-bold uppercase tracking-widest hover:bg-[#632f2f] transition-all shadow-sm active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {exportLoading
+                  ? <><Loader2 size={13} className="animate-spin" /> Exporting...</>
+                  : <><FileSpreadsheet size={13} strokeWidth={2.5} /> Export Excel ({filteredOrders.length})</>
+                }
+              </button>
+              {/* Right: Dropdown Trigger */}
+              <button
+                onClick={() => setShowExportDropdown(v => !v)}
+                disabled={exportLoading}
+                className="flex items-center justify-center border-l border-[#5B2C2C] border-t border-r border-b border-[#783A3A] bg-[#783A3A] text-white px-2.5 py-3 rounded-r-[2px] hover:bg-[#632f2f] transition-all disabled:opacity-60"
+              >
+                <ChevronDown size={13} strokeWidth={2.5} />
+              </button>
+            </div>
+
+            {/* Dropdown Menu */}
+            {showExportDropdown && (
+              <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-[#E8E2D9] rounded-[2px] shadow-xl z-50 overflow-hidden animate-slideDown">
+                <button
+                  onClick={() => { setShowExportDropdown(false); handleExportCsv() }}
+                  className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors border-b border-[#E8E2D9] flex items-center gap-2"
+                >
+                  Export CSV (legacy)
+                </button>
+                <button
+                  onClick={() => { setShowExportDropdown(false); setShowCustomExport(true) }}
+                  className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors flex items-center gap-2"
+                >
+                  Custom Export...
+                </button>
+              </div>
+            )}
+          </div>
           <button 
             onClick={() => router.push('/admin/orders/new')}
             className="bg-[#783A3A] text-white px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#632f2f] transition-all shadow-xl active:scale-95"
@@ -660,6 +800,13 @@ export default function AdminOrdersPage({
           onClose={() => setSelectedCustomer(null)}
         />
       )}
+
+      {/* CUSTOM EXPORT MODAL */}
+      <CustomExportModal
+        isOpen={showCustomExport}
+        onClose={() => setShowCustomExport(false)}
+        currentFilters={{ statusFilter, cityFilter, dateFilter, searchQuery }}
+      />
 
     </div>
   )
