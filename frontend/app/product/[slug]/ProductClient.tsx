@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -75,6 +75,7 @@ export default function ProductDetailPage() {
   const [isZoomed, setIsZoomed] = useState(false)
   
   const { user } = useAuthStore()
+  const { saveDraftNow } = useDraftOrder()
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
 
@@ -191,7 +192,6 @@ export default function ProductDetailPage() {
     `Hi! I want to order: ${product.name}\nPrice: Rs. ${product.sale_price ?? product.price_pkr}\nLink: shopkarro.com/product/${product.slug}`
   )
 
-  const { saveDraftNow } = useDraftOrder()
 
   const handleAddToCart = () => {
     if (!product) return
