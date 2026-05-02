@@ -104,6 +104,7 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
       const inviteLink = linkData?.properties?.action_link
 
       if (inviteLink) {
+        console.log('RESEND API KEY exists:', !!process.env.RESEND_API_KEY)
         await resend.emails.send({
           from: 'Shopkarro Admin <onboarding@resend.dev>',
           to: email.trim(),
@@ -141,9 +142,14 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
             </div>
           `
         })
-        console.log(`Invite email sent to ${email}`)
+        console.log('=== INVITE EMAIL RESULT ===')
+        console.log('To:', email)
+        console.log('Invite link generated:', !!inviteLink)
+        console.log('Link:', inviteLink)
       }
     } catch (emailErr) {
+      console.error('=== INVITE EMAIL ERROR ===')
+      console.error('Full error:', JSON.stringify(emailErr))
       console.error('Invite email failed:', emailErr)
       // Don't fail the invite if email fails — user is already created
     }
