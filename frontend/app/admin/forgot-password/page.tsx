@@ -15,11 +15,13 @@ export default function ForgotPassword() {
     setLoading(true)
     setError(null)
 
-    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
+    console.log('=== FORGOT PASSWORD DEBUG ===')
+    console.log('API URL from env:', apiUrl)
+    console.log('Full endpoint:', `${apiUrl}/api/admin/auth/forgot-password`)
 
     if (!apiUrl) {
-      setError('API URL not configured. Contact support.')
+      setError('NEXT_PUBLIC_API_URL is not set. Check Vercel environment variables.')
       setLoading(false)
       return
     }
@@ -29,6 +31,8 @@ export default function ForgotPassword() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
+        mode: 'cors',
+        credentials: 'include',
       })
 
       if (!res.ok) {
@@ -38,7 +42,12 @@ export default function ForgotPassword() {
 
       setSuccess(true)
     } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.')
+      console.error('Fetch error details:', err)
+      if (err.message === 'Failed to fetch') {
+        setError('Cannot reach the backend server. Check: 1) Railway is running 2) CORS allows shopkarro.com 3) NEXT_PUBLIC_API_URL is correct in Vercel')
+      } else {
+        setError(err.message || 'Something went wrong. Please try again.')
+      }
     } finally {
       setLoading(false)
     }

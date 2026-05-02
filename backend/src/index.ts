@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+const listEndpoints = require('express-list-endpoints')
 import swaggerSetup from './swagger'
 
 import productRoutes from './routes/products'
@@ -24,47 +25,55 @@ const PORT = process.env.PORT || 5000
 
 app.use(helmet())
 
-// Robust CORS Configuration
+// FIX 2 — CORS COMPLETELY
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'https://shopkarro.com',
-  'https://www.shopkarro.com'
+  'https://www.shopkarro.com',
 ]
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // 1. Allow no origin (server-to-server)
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true)
     
-    // 2. Allow explicit list
+    // Allow any Vercel preview deployment
+    if (origin.endsWith('.vercel.app')) return callback(null, true)
+    
+    // Allow listed origins
     if (allowedOrigins.includes(origin)) return callback(null, true)
     
-    // 3. Allow Vercel preview deployments
-    if (/https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true)
-    
-    console.error(`CORS blocked for origin: ${origin}`)
-    callback(new Error('Not allowed by CORS'))
+    console.log('CORS blocked origin:', origin)
+    return callback(new Error('Not allowed by CORS'))
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-auth']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  exposedHeaders: ['set-cookie'],
 }))
 
-// Handle preflight OPTIONS requests for all routes
+// Handle preflight for ALL routes — must be before all other routes
 app.options('*', cors())
+
+// FIX 3 — ADD HEALTH CHECK ROUTE
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV 
+  })
+})
+
+// FIX 4 — ADD REQUEST LOGGING
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} — Origin: ${req.headers.origin || 'none'}`)
+  next()
+})
 
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
-
-// Health check (MUST be before routes)
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: new Date(),
-    service: 'Shopkaroo Backend API'
-  })
-})
 
 // Routes
 app.use('/api/products', productRoutes)
@@ -78,9 +87,11 @@ app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/admin/auth', authRoutes)
 app.use('/api/admin/team', teamRoutes)
 
+// STEP 5 — VERIFY ROUTE IS REGISTERED
+console.log('Registered routes:', JSON.stringify(listEndpoints(app), null, 2))
+
 // Swagger
 swaggerSetup(app)
-
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled error:', err);
