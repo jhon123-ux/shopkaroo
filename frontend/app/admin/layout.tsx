@@ -48,6 +48,7 @@ export default function AdminLayout({
   // ─── Auth: run ONCE on mount via ref guard ───────────────────────────────
   useEffect(() => {
     const run = async () => {
+      console.log('LAYOUT: running auth check, pathname:', pathname)
       if (hasRestored.current) return
       hasRestored.current = true
 
@@ -61,6 +62,7 @@ export default function AdminLayout({
       setLoading(true)
 
       const token = localStorage.getItem('skr_admin_token')
+      console.log('LAYOUT: token found:', !!token)
 
       if (!token) {
         setLoading(false)
@@ -75,11 +77,13 @@ export default function AdminLayout({
           headers: { Authorization: `Bearer ${token}` }
         })
         const data = await res.json()
+        console.log('LAYOUT: me response:', data)
 
         if (data.admin) {
           setAdmin(data.admin, token)
           setLoading(false)
         } else {
+          console.log('LAYOUT: no admin in response, redirecting')
           localStorage.removeItem('skr_admin_token')
           setLoading(false)
           router.replace('/admin/login')
