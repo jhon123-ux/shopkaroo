@@ -35,13 +35,21 @@ export default function AdminLogin() {
       const data = await res.json()
 
       if (!res.ok) {
-        throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
+        setError(data.message || data.error || 'Login failed')
+        setLoading(false)
+        return
       }
 
-      // 1. Save token  2. Save admin  3. Navigate — in this exact order
+      // Step 1 — persist token first
       localStorage.setItem('skr_admin_token', data.token)
+
+      // Step 2 — update store
       setAdmin(data.admin, data.token)
-      router.replace('/admin')
+
+      // Step 3 — wait one tick then navigate
+      setTimeout(() => {
+        router.replace('/admin')
+      }, 50)
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
