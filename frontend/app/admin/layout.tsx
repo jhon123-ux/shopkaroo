@@ -137,7 +137,12 @@ export default function AdminLayout({
   }
 
   if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
-     return <>{children}</>
+    // If already authenticated, redirect to dashboard
+    if (admin) {
+      if (typeof window !== 'undefined') window.location.href = '/admin'
+      return null
+    }
+    return <>{children}</>
   }
 
   // Optional: show loading state while checking session
