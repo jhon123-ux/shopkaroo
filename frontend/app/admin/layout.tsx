@@ -61,6 +61,8 @@ export default function AdminLayout({
         console.error('localStorage not accessible', e)
       }
 
+      window.alert(`[LAYOUT] Token found: ${!!token} | URL: ${apiUrl} | Path: ${pathname}`)
+
       // If no token and not on a public page, redirect to login
       if (!token) {
         if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
@@ -77,9 +79,11 @@ export default function AdminLayout({
           },
           credentials: 'include' 
         })
+        window.alert(`[LAYOUT] /me response: ${res.status}`)
         if (res.ok) {
           const data = await res.json()
           setAdmin(data.admin, token)
+          window.alert(`[LAYOUT] Admin set: ${data.admin?.email}`)
         } else {
           // Token is invalid — clear it and redirect
           try { localStorage.removeItem('skr_admin_token') } catch (_) {}
@@ -87,7 +91,8 @@ export default function AdminLayout({
             router.push('/admin/login')
           }
         }
-      } catch (e) {
+      } catch (e: any) {
+        window.alert(`[LAYOUT] fetch error: ${e.message}`)
         console.error('Session restoration failed', e)
       } finally {
         setLoading(false)
@@ -96,6 +101,7 @@ export default function AdminLayout({
 
     restoreSession()
   }, [pathname])
+
 
   useEffect(() => {
     if (!admin) return
