@@ -47,46 +47,54 @@ export default function AdminLayout({
 
   // ─── Auth: run ONCE on mount via ref guard ───────────────────────────────
   useEffect(() => {
-    if (hasRestored.current) return
-    hasRestored.current = true
-    console.log('LAYOUT EFFECT RUNNING, pathname:', pathname)
+    const run = async () => {
+      if (hasRestored.current) return
+      hasRestored.current = true
+      console.log('LAYOUT EFFECT RUNNING, pathname:', pathname)
 
-    const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
-    if (isPublic) {
-      setLoading(false)
-      return
-    }
+      const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
+      if (isPublic) {
+        setLoading(false)
+        return
+      }
 
-    const token = localStorage.getItem('skr_admin_token')
-    console.log('TOKEN FROM STORAGE:', token)
-    if (!token) {
-      setLoading(false)
-      router.replace('/admin/login')
-      return
-    }
+      const token = localStorage.getItem('skr_admin_token')
+      console.log('TOKEN FROM STORAGE:', token)
+      
+      if (!token) {
+        setLoading(false)
+        router.replace('/admin/login')
+        return
+      }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://shopkaroo-production.up.railway.app'
+      // Add this delay before fetch to let localStorage settle
+      await new Promise(resolve => setTimeout(resolve, 100))
 
-    fetch(`${apiUrl}/api/admin/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => {
-        console.log('ME RESPONSE:', data)
-        if (data.admin) {
-          setAdmin(data.admin, token)
-          setLoading(false)
-        } else {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://shopkaroo-production.up.railway.app'
+
+      fetch(`${apiUrl}/api/admin/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(r => r.json())
+        .then(data => {
+          console.log('ME RESPONSE STATUS:', data)
+          if (data.admin) {
+            setAdmin(data.admin, token)
+            setLoading(false)
+          } else {
+            localStorage.removeItem('skr_admin_token')
+            setLoading(false)
+            router.replace('/admin/login')
+          }
+        })
+        .catch((err) => {
+          console.log('ME FETCH ERROR:', err)
           localStorage.removeItem('skr_admin_token')
           setLoading(false)
           router.replace('/admin/login')
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('skr_admin_token')
-        setLoading(false)
-        router.replace('/admin/login')
-      })
+        })
+    }
+    run()
   }, []) // empty deps — run ONCE only
 
   // ─── Draft order count ───────────────────────────────────────────────────
