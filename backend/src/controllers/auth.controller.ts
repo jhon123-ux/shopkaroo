@@ -27,18 +27,33 @@ export const adminLogin = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid email or password' })
     }
 
-    console.log(`[Admin Login] Attempt for email: ${email.trim()}`)
+    console.log(`[Admin Login] Authenticated with Supabase Auth: ${authData.user.id}`)
 
-    // 2. Find admin user in our table (case-insensitive email lookup)
-    let { data: adminUser, error: adminError } = await supabaseAdmin
+    // 2. Find admin user in our table
+    const { data: adminUser, error: adminError } = await supabaseAdmin
       .from('admin_users')
       .select('*')
-      .or(`supabase_user_id.eq.${authData.user.id},email.ilike.${email.trim()}`)
+      .ilike('email', email.trim())
       .single()
 
-    if (adminError || !adminUser) {
-      console.log(`[Admin Login] No admin_users record found for: ${email.trim()}`)
+    if (adminError) {
+      console.error('[Admin Login] Supabase Query Error:', adminError)
+    }
+
+    if (!adminUser) {
+      console.log(`[Admin Login] Record not found in admin_users for: ${email.trim()}`)
       return res.status(403).json({ error: 'No admin account found for this email' })
+    }
+
+    console.log(`[Admin Login] Found admin record for: ${adminUser.email} (ID: ${adminUser.id})`)
+
+    // 3. Link Supabase ID if not already linked
+    if (!adminUser.supabase_user_id) {
+      console.log(`[Admin Login] Linking Supabase ID ${authData.user.id} to admin ${adminUser.id}`)
+      await supabaseAdmin
+        .from('admin_users')
+        .update({ supabase_user_id: authData.user.id })
+        .eq('id', adminUser.id)
     }
 
     if (!adminUser.is_active) {
