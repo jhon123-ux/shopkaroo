@@ -172,7 +172,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // 2. Send the link via Resend API
     const { error: resendError } = await resend.emails.send({
-      from: 'Shopkarro Security <onboarding@resend.dev>',
+      from: 'Shopkarro Security <security@shopkarro.com>',
       to: admin.email,
       subject: 'Shopkarro Admin: Password Reset Request',
       html: `

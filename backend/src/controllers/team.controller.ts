@@ -111,7 +111,7 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
 
       if (inviteLink) {
         const emailResult = await resend.emails.send({
-          from: 'Shopkarro Admin <onboarding@resend.dev>',
+          from: 'Shopkarro Admin <admin@shopkarro.com>',
           to: email.trim(),
           subject: `You've been invited to Shopkarro Admin Panel`,
           html: `<p>Hi ${name}, click here to activate: <a href="${inviteLink}">Activate Account</a></p>`
@@ -200,7 +200,7 @@ export const resendInvite = async (req: Request, res: Response) => {
 
     // Send via Resend
     await resend.emails.send({
-      from: 'Shopkarro Registry <onboarding@resend.dev>', // In prod use verified domain
+      from: 'Shopkarro Admin <admin@shopkarro.com>', // In prod use verified domain
       to: admin.email,
       subject: 'Administrative Access: Action Required',
       html: `
