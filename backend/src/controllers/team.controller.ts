@@ -3,8 +3,6 @@ import { supabaseAdmin } from '../lib/supabase'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const FRONTEND_URL = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
-
 const ROLE_PERMISSIONS: Record<string, any> = {
   superadmin: {
     dashboard_view: true, analytics_view: true, orders_view: true, orders_create: true, 
@@ -153,10 +151,12 @@ export const resendInvite = async (req: Request, res: Response) => {
 
     if (!admin) return res.status(404).json({ error: 'Member not found' })
 
+    const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+
     const { data, error } = await supabaseAdmin.auth.admin.generateLink({
       type: 'invite',
       email: admin.email,
-      options: { redirectTo: `${FRONTEND_URL}/admin/reset-password` }
+      options: { redirectTo: `${frontendUrl}/admin/reset-password` }
     })
 
     if (error) throw error

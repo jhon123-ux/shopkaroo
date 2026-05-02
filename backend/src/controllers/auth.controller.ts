@@ -127,8 +127,15 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     console.log(`[Forgot Password] Generating recovery link for: ${admin.email}`)
     
-    // Get live FRONTEND_URL from environment
-    const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+    // Get live FRONTEND_URL from environment with failsafe
+    let frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+    
+    // Failsafe for production
+    if (process.env.NODE_ENV === 'production' && frontendUrl.includes('localhost')) {
+      frontendUrl = 'https://shopkarro.com'
+    }
+
+    console.log(`[Forgot Password] Using Frontend URL for Reset: ${frontendUrl}`)
 
     // 1. Generate a recovery link via Supabase Admin (bypasses Supabase SMTP)
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
