@@ -27,7 +27,7 @@ export default function AdminLogin() {
       apiUrl = 'https://shopkaroo-production.up.railway.app'
     }
 
-    console.log('Calling API URL:', apiUrl)
+    if (typeof window !== 'undefined') window.alert('Calling URL: ' + apiUrl)
 
     try {
       // 🔐 SECURE AUTHENTICATION: Using httpOnly cookie via Backend API
@@ -38,9 +38,10 @@ export default function AdminLogin() {
         credentials: 'include'
       })
 
-      console.log('Response Status:', res.status)
+      if (typeof window !== 'undefined') window.alert('Response Status: ' + res.status)
 
       const data = await res.json()
+      if (typeof window !== 'undefined') window.alert('Data Received: ' + JSON.stringify(data))
 
       if (!res.ok) {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
