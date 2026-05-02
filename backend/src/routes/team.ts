@@ -8,5 +8,5 @@ router.get('/', adminAuth, requirePermission('team_view'), teamController.getTea
 router.post('/invite', adminAuth, requirePermission('team_manage'), teamController.inviteTeamMember)
 router.patch('/:id', adminAuth, requirePermission('team_manage'), teamController.updateTeamMember)
 router.post('/:id/resend-invite', adminAuth, requirePermission('team_manage'), teamController.resendInvite)
-
+router.delete('/:id', adminAuth, requirePermission('team_manage'), teamController.deleteTeamMember)
 export default router

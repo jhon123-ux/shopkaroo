@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, X, Shield, UserPlus, Mail, ShieldAlert, MoreVertical, RefreshCw, Power } from 'lucide-react'
+import { Check, X, Shield, UserPlus, Mail, ShieldAlert, MoreVertical, RefreshCw, Power, Trash2 } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
 
 export default function TeamManagement() {
@@ -11,6 +11,8 @@ export default function TeamManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [targetId, setTargetId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null)
   
   const [formData, setFormData] = useState({
@@ -213,6 +215,13 @@ export default function TeamManagement() {
                         <RefreshCw size={14} />
                       </button>
                     )}
+                    <button
+                      onClick={() => setConfirmDeleteId(m.id)}
+                      className="p-2 text-red-500 hover:bg-red-50 border border-red-200 hover:border-red-400 transition-all"
+                      title="Delete member"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -285,6 +294,59 @@ export default function TeamManagement() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {confirmDeleteId && (
+        <div className="fixed inset-0 bg-[#1C1410]/60 z-50 flex items-center justify-center backdrop-blur-md">
+          <div className="bg-white p-8 max-w-md w-full mx-4 border border-[#E8E2D9] shadow-2xl animate-slideUp text-left">
+            <h3 className="text-[20px] font-bold font-heading text-[#1C1410] uppercase tracking-widest mb-2">Delete Team Member</h3>
+            <p className="text-[#6B6058] text-[13px] mb-6 leading-relaxed">
+              This will permanently remove this team member and revoke their access. 
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-4 justify-end">
+              <button
+                onClick={() => setConfirmDeleteId(null)}
+                className="px-6 py-3 border border-[#E8E2D9] text-[11px] font-bold uppercase tracking-[2px] text-[#6B6058] hover:bg-[#FAF7F4] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  setDeletingId(confirmDeleteId)
+                  const token = localStorage.getItem('skr_admin_token')
+                  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+                  try {
+                    const res = await fetch(
+                      `${apiUrl}/api/admin/team/${confirmDeleteId}`,
+                      {
+                        method: 'DELETE',
+                        headers: { Authorization: `Bearer ${token}` }
+                      }
+                    )
+                    if (res.ok) {
+                      setMembers(prev => prev.filter(m => m.id !== confirmDeleteId))
+                      showToast('Team member deleted successfully')
+                    } else {
+                      const data = await res.json()
+                      throw new Error(data.error || 'Delete failed')
+                    }
+                  } catch (err: any) {
+                    console.error('Delete failed:', err)
+                    showToast(err.message, 'error')
+                  } finally {
+                    setDeletingId(null)
+                    setConfirmDeleteId(null)
+                  }
+                }}
+                disabled={deletingId === confirmDeleteId}
+                className="px-6 py-3 bg-red-600 text-white text-[11px] font-bold uppercase tracking-[2px] shadow-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+              >
+                {deletingId === confirmDeleteId ? 'Deleting...' : 'Delete Member'}
+              </button>
+            </div>
           </div>
         </div>
       )}

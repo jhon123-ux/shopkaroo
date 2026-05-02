@@ -249,3 +249,43 @@ export const resendInvite = async (req: Request, res: Response) => {
     return res.status(500).json({ error: err.message })
   }
 }
+
+export const deleteTeamMember = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  try {
+    // Get the team member first
+    const { data: member, error: fetchError } = await supabaseAdmin
+      .from('admin_users')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (fetchError || !member) {
+      return res.status(404).json({ error: 'Team member not found' })
+    }
+
+    // Prevent deleting yourself
+    if (member.id === (req as any).adminUser.id) {
+      return res.status(400).json({ error: 'You cannot delete your own account' })
+    }
+
+    // Delete from admin_users table
+    const { error: deleteError } = await supabaseAdmin
+      .from('admin_users')
+      .delete()
+      .eq('id', id)
+
+    if (deleteError) throw deleteError
+
+    // Also delete from Supabase Auth
+    if (member.supabase_user_id) {
+      await supabaseAdmin.auth.admin.deleteUser(member.supabase_user_id)
+    }
+
+    return res.status(200).json({ message: 'Team member deleted successfully' })
+  } catch (err: any) {
+    console.error('Delete team member error:', err)
+    return res.status(500).json({ error: err.message })
+  }
+}
