@@ -16,21 +16,15 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (typeof window !== 'undefined') window.alert('--- ATTEMPTING LOGIN ---')
-    console.log('--- LOGIN ATTEMPT START ---')
     setLoading(true)
     setError(null)
 
-    // Failsafe: Ensure we use the production API URL if env var is missing on the live site
     let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
       apiUrl = 'https://shopkaroo-production.up.railway.app'
     }
 
-    if (typeof window !== 'undefined') window.alert('Calling URL: ' + apiUrl)
-
     try {
-      // 🔐 SECURE AUTHENTICATION: Using httpOnly cookie via Backend API
       const res = await fetch(`${apiUrl}/api/admin/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,30 +32,18 @@ export default function AdminLogin() {
         credentials: 'include'
       })
 
-      if (typeof window !== 'undefined') window.alert('Response Status: ' + res.status)
-
       const data = await res.json()
 
       if (!res.ok) {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          window.alert('Data Received (Token check): ' + !!data.token)
-          setAdmin(data.admin, data.token)
-          window.alert('--- REDIRECTING NOW ---')
-          window.location.href = '/admin'
-        } catch (redirectErr: any) {
-          window.alert('REDIRECT CRASH: ' + redirectErr.message)
-          console.error(redirectErr)
-        }
-      }
+      // Save token and admin state, then redirect
+      setAdmin(data.admin, data.token)
+      window.location.href = '/admin'
     } catch (err: any) {
-      if (typeof window !== 'undefined') window.alert('Login Error: ' + err.message)
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
-      if (typeof window !== 'undefined') window.alert('--- PROCESS FINISHED ---')
       setLoading(false)
     }
   }

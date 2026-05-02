@@ -43,17 +43,14 @@ export default function AdminLayout({
   ]
 
   useEffect(() => {
-    // Restore session
     const restoreSession = async () => {
       if (admin) return
 
-      // Failsafe API URL for production
       let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
       if (window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
         apiUrl = 'https://shopkaroo-production.up.railway.app'
       }
 
-      // Safely read token from localStorage
       let token: string | null = null
       try {
         token = localStorage.getItem('skr_admin_token')
@@ -61,9 +58,6 @@ export default function AdminLayout({
         console.error('localStorage not accessible', e)
       }
 
-      window.alert(`[LAYOUT] Token found: ${!!token} | URL: ${apiUrl} | Path: ${pathname}`)
-
-      // If no token and not on a public page, redirect to login
       if (!token) {
         if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
           router.push('/admin/login')
@@ -79,11 +73,14 @@ export default function AdminLayout({
           },
           credentials: 'include' 
         })
-        window.alert(`[LAYOUT] /me response: ${res.status}`)
         if (res.ok) {
           const data = await res.json()
           setAdmin(data.admin, token)
-          window.alert(`[LAYOUT] Admin set: ${data.admin?.email}`)
+          // ✅ Redirect to dashboard immediately after successful auth
+          if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
+            window.location.href = '/admin'
+            return
+          }
         } else {
           // Token is invalid — clear it and redirect
           try { localStorage.removeItem('skr_admin_token') } catch (_) {}
@@ -91,8 +88,7 @@ export default function AdminLayout({
             router.push('/admin/login')
           }
         }
-      } catch (e: any) {
-        window.alert(`[LAYOUT] fetch error: ${e.message}`)
+      } catch (e) {
         console.error('Session restoration failed', e)
       } finally {
         setLoading(false)
