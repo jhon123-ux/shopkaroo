@@ -89,7 +89,69 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
 
     if (insertError) throw insertError
 
-    return res.status(201).json({ data: newAdmin })
+    // Auto-send invite email
+    try {
+      const frontendUrl = process.env.FRONTEND_URL || 'https://shopkarro.com'
+      
+      const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
+        type: 'invite',
+        email: email.trim(),
+        options: {
+          redirectTo: `${frontendUrl}/admin/reset-password`
+        }
+      })
+
+      const inviteLink = linkData?.properties?.action_link
+
+      if (inviteLink) {
+        await resend.emails.send({
+          from: 'Shopkarro Admin <onboarding@resend.dev>',
+          to: email.trim(),
+          subject: `You've been invited to Shopkarro Admin Panel`,
+          html: `
+            <div style="max-width:600px;margin:40px auto;font-family:sans-serif;">
+              <div style="background:#1C1410;padding:32px 40px;">
+                <h1 style="color:#fff;font-size:24px;margin:0;">Shopkarro</h1>
+                <p style="color:rgba(255,255,255,0.5);font-size:11px;margin:8px 0 0;letter-spacing:3px;text-transform:uppercase;">Admin Panel Invitation</p>
+              </div>
+              <div style="padding:40px;background:#fff;border:1px solid #E8E2D9;">
+                <h2 style="color:#1C1410;font-size:20px;margin:0 0 16px;">Hi ${name},</h2>
+                <p style="color:#6B6058;font-size:15px;line-height:1.6;">
+                  You have been invited to join the Shopkarro admin panel as <strong>${role}</strong>.
+                </p>
+                <p style="color:#6B6058;font-size:15px;line-height:1.6;">
+                  Click the button below to set your password and activate your account.
+                  This link expires in 24 hours.
+                </p>
+                <div style="text-align:center;margin:32px 0;">
+                  <a href="${inviteLink}" 
+                     style="background:#4A2C6E;color:#fff;padding:14px 36px;
+                     text-decoration:none;font-size:14px;font-weight:700;
+                     letter-spacing:1px;text-transform:uppercase;">
+                    Activate Account
+                  </a>
+                </div>
+                <p style="color:#A89890;font-size:12px;">
+                  If you did not expect this invitation, you can safely ignore this email.
+                </p>
+              </div>
+              <div style="padding:20px 40px;text-align:center;">
+                <p style="color:#A89890;font-size:11px;">© 2025 Shopkarro Admin System</p>
+              </div>
+            </div>
+          `
+        })
+        console.log(`Invite email sent to ${email}`)
+      }
+    } catch (emailErr) {
+      console.error('Invite email failed:', emailErr)
+      // Don't fail the invite if email fails — user is already created
+    }
+
+    return res.status(201).json({ 
+      data: newAdmin,
+      message: 'Team member invited successfully. An email has been sent.'
+    })
   } catch (err: any) {
     console.error('Invite Error:', err)
     return res.status(500).json({ error: err.message })
