@@ -48,17 +48,17 @@ export default function AdminProductsPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchInitialData = async () => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    const headers = { 'x-admin-auth': adminToken || '' }
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
+    const headers = { 'Authorization': `Bearer ${adminToken}` }
     setLoading(true)
     try {
       // 1. Fetch Products
-      const prodRes = await fetch(`${apiUrl}/api/products?all=true&limit=100`, { credentials: 'include' })
+      const prodRes = await fetch(`${apiUrl}/api/products?all=true&limit=100`, { headers, credentials: 'include' })
       const prodData = await prodRes.json()
       setProducts(prodData.data || [])
 
       // 2. Fetch Categories for selection
-      const catRes = await fetch(`${apiUrl}/api/categories?all=true`, { credentials: 'include' })
+      const catRes = await fetch(`${apiUrl}/api/categories?all=true`, { headers, credentials: 'include' })
       const catData = await catRes.json()
       const rawCats = catData.data || []
       setAllCategories(rawCats)
@@ -134,9 +134,9 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       try {
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
         const res = await fetch(`${apiUrl}/api/products/${id}`, { 
-          method: 'DELETE', credentials: 'include'
+          method: 'DELETE', headers: { 'Authorization': `Bearer ${adminToken}` }, credentials: 'include'
         })
         if (!res.ok) throw new Error('Delete failed')
         setProducts(products.filter(p => p.id !== id))
@@ -149,9 +149,9 @@ export default function AdminProductsPage() {
 
   const handleToggle = async (id: string) => {
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
       const res = await fetch(`${apiUrl}/api/products/${id}/toggle`, { 
-        method: 'PATCH', credentials: 'include'
+        method: 'PATCH', headers: { 'Authorization': `Bearer ${adminToken}` }, credentials: 'include'
       })
       const { data } = await res.json()
       setProducts(products.map(p => p.id === id ? data : p))
@@ -201,11 +201,12 @@ export default function AdminProductsPage() {
       const fData = new FormData()
       fData.append('image', filesToUpload[i])
       try {
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
         // IMPORTANT: Do NOT set Content-Type header manually when sending FormData.
         // The browser must auto-generate the multipart/form-data boundary.
         const res = await fetch(`${apiUrl}/api/upload/product`, {
           method: 'POST',
+          headers: { 'Authorization': `Bearer ${adminToken}` },
           credentials: 'include',
           body: fData
         })
@@ -251,9 +252,9 @@ export default function AdminProductsPage() {
     try {
       const url = isEditMode ? `${apiUrl}/api/products/${currentProductId}` : `${apiUrl}/api/products`
       const method = isEditMode ? 'PATCH' : 'POST'
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
       const res = await fetch(url, {
-        method, headers: { 'Content-Type': 'application/json' },
+        method, headers: { 'Authorization': `Bearer ${adminToken}`, 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(payload)
       })

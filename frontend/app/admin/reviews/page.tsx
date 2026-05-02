@@ -24,8 +24,8 @@ export default function AdminReviewsPage() {
 
   const fetchReviews = async () => {
     setLoading(true)
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    const headers = { 'x-admin-auth': adminToken || '' }
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
+    const headers = { 'Authorization': `Bearer ${adminToken}` }
 
     try {
       const res = await fetch(`${apiUrl}/api/reviews/admin`, { headers })
@@ -49,11 +49,11 @@ export default function AdminReviewsPage() {
   }
 
   const handleApprove = async (id: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
       const res = await fetch(`${apiUrl}/api/reviews/${id}/approve`, {
         method: 'PATCH',
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { 'Authorization': `Bearer ${adminToken}` }
       })
 
       if (!res.ok) throw new Error('Approval failed')
@@ -69,11 +69,11 @@ export default function AdminReviewsPage() {
   const handleReject = async (id: string) => {
     if (!confirm('Are you sure you want to reject this review?')) return
     
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
       const res = await fetch(`${apiUrl}/api/reviews/${id}/reject`, {
         method: 'PATCH',
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { 'Authorization': `Bearer ${adminToken}` }
       })
 
       if (!res.ok) throw new Error('Rejection failed')

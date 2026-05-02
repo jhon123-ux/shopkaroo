@@ -20,9 +20,9 @@ export default function AdminDashboardPage() {
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
         
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
         const headers = { 
-          'x-admin-auth': adminToken || '',
+          'Authorization': `Bearer ${adminToken}`,
           'Content-Type': 'application/json' 
         }
         

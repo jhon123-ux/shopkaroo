@@ -87,12 +87,12 @@ export default function AdminOfferBannerPage() {
 
     setSaving(true)
     try {
-      const adminToken = localStorage.getItem('admin_token')
+      const adminToken = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/offer-banner/${banner.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || ''
+          'Authorization': `Bearer ${adminToken}`
         },
         body: JSON.stringify({
           ...banner,

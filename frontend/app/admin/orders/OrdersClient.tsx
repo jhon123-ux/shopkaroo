@@ -95,9 +95,10 @@ export default function AdminOrdersPage({
     if (searchQuery) params.append('search', searchQuery)
 
     setExportLoading(true)
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') || '' : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') || '' : ''
 
     fetch(`${apiUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
+      headers: { 'Authorization': `Bearer ${adminToken}` },
       credentials: 'include'
     })
       .then(response => {
@@ -160,9 +161,9 @@ export default function AdminOrdersPage({
   const [error, setError] = useState('')
 
   const fetchOrders = async () => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     const headers = { 
-      'x-admin-auth': adminToken || '',
+      'Authorization': `Bearer ${adminToken}`,
       'Content-Type': 'application/json'
     }
 
@@ -172,6 +173,7 @@ export default function AdminOrdersPage({
       console.log('Fetching orders...', apiUrl)
       const res = await fetch(`${apiUrl}/api/orders?all=true`, { 
         method: 'GET',
+        headers,
         credentials: 'include',
         cache: 'no-store'
       })
@@ -207,11 +209,14 @@ export default function AdminOrdersPage({
 
   const updateOrderStatus = async (status: string) => {
     if (!selectedOrder) return
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
       const res = await fetch(`${apiUrl}/api/orders/${selectedOrder.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json' 
+        },
         credentials: 'include',
         body: JSON.stringify({ status })
       })
@@ -304,12 +309,15 @@ export default function AdminOrdersPage({
   const [isDuplicating, setIsDuplicating] = useState(false)
 
   const handleDuplicateOrder = async (orderId: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     setIsDuplicating(true)
     try {
       const res = await fetch(`${apiUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json' 
+        },
         credentials: 'include'
       })
       const data = await res.json()

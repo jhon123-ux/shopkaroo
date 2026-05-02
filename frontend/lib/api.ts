@@ -8,9 +8,9 @@ const api = axios.create({
 // Add admin auth header to all requests
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('admin_token')
+    const token = localStorage.getItem('skr_admin_token')
     if (token) {
-      config.headers['x-admin-auth'] = token
+      config.headers['Authorization'] = `Bearer ${token}`
     }
   }
   return config
