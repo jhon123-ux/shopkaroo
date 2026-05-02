@@ -50,6 +50,7 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
   }
 
   try {
+    console.log('=== INVITE FUNCTION CALLED ===')
     // 1. Check if exists
     const { data: existing } = await supabaseAdmin
       .from('admin_users')
@@ -154,6 +155,7 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
       // Don't fail the invite if email fails — user is already created
     }
 
+    console.log('=== ABOUT TO SEND EMAIL ===', email)
     return res.status(201).json({ 
       data: newAdmin,
       message: 'Team member invited successfully. An email has been sent.'
