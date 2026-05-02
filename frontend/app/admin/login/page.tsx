@@ -16,10 +16,17 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('--- LOGIN ATTEMPT START ---')
     setLoading(true)
     setError(null)
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+    // Failsafe: Ensure we use the production API URL if env var is missing on the live site
+    let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
+      apiUrl = 'https://shopkaroo-production.up.railway.app'
+    }
+
+    console.log('Calling API URL:', apiUrl)
 
     try {
       // 🔐 SECURE AUTHENTICATION: Using httpOnly cookie via Backend API
@@ -29,6 +36,8 @@ export default function AdminLogin() {
         body: JSON.stringify({ email: email.trim(), password: password.trim() }),
         credentials: 'include'
       })
+
+      console.log('Response Status:', res.status)
 
       const data = await res.json()
 
