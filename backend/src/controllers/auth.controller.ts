@@ -8,7 +8,6 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const JWT_SECRET = process.env.JWT_SECRET || 'secret'
 const JWT_EXPIRY = process.env.JWT_EXPIRY || '8h'
 const ADMIN_COOKIE_NAME = process.env.ADMIN_COOKIE_NAME || 'skr_admin_token'
-const FRONTEND_URL = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
 
 export const adminLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body
@@ -128,11 +127,14 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     console.log(`[Forgot Password] Generating recovery link for: ${admin.email}`)
     
+    // Get live FRONTEND_URL from environment
+    const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+
     // 1. Generate a recovery link via Supabase Admin (bypasses Supabase SMTP)
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'recovery',
       email: admin.email,
-      options: { redirectTo: `${FRONTEND_URL}/admin/reset-password` }
+      options: { redirectTo: `${frontendUrl}/admin/reset-password` }
     })
 
     if (linkError) {
