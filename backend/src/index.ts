@@ -4,7 +4,6 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-import listEndpoints from 'express-list-endpoints'
 import swaggerSetup from './swagger'
 
 import productRoutes from './routes/products'
@@ -89,8 +88,6 @@ app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/admin/auth', authRoutes)
 app.use('/api/admin/team', teamRoutes)
 
-// STEP 5 — VERIFY ROUTE IS REGISTERED
-console.log('Registered routes:', JSON.stringify(listEndpoints(app), null, 2))
 
 // Swagger
 swaggerSetup(app)
