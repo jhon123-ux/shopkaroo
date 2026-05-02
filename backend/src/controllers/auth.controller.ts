@@ -113,44 +113,62 @@ export const forgotPassword = async (req: Request, res: Response) => {
   }
 
   try {
-    // Check if admin exists (security note: we return success regardless)
-    const { data: admin } = await supabaseAdmin
+    // Check if admin exists (case-insensitive)
+    const { data: admin, error: adminError } = await supabaseAdmin
       .from('admin_users')
-      .select('id')
-      .eq('email', email.trim())
+      .select('id, email, name')
+      .ilike('email', email.trim())
       .single()
 
-    if (admin) {
-      // 1. Generate a recovery link via Supabase Admin (bypasses Supabase SMTP)
-      const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-        type: 'recovery',
-        email: email.trim(),
-        options: { redirectTo: `${FRONTEND_URL}/admin/reset-password` }
-      })
-
-      if (linkError) throw linkError
-
-      // 2. Send the link via Resend API
-      await resend.emails.send({
-        from: 'Shopkarro Security <onboarding@resend.dev>', // In prod use your verified domain
-        to: email.trim(),
-        subject: 'Shopkarro Admin: Password Reset Request',
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #eee;">
-            <h2 style="color: #1a1a1a;">Password Reset Requested</h2>
-            <p>Hello,</p>
-            <p>A password reset was requested for your administrative account at Shopkarro.</p>
-            <p>If you did not make this request, you can safely ignore this email. Otherwise, click the button below to set a new password:</p>
-            <div style="margin: 30px 0;">
-              <a href="${linkData.properties.action_link}" style="background-color: #783A3A; color: white; padding: 14px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">Reset Password</a>
-            </div>
-            <p style="color: #666; font-size: 13px;">This link will expire in 24 hours.</p>
-            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;" />
-            <p style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 2px;">Shopkarro Administrative Protocol</p>
-          </div>
-        `
-      })
+    if (adminError || !admin) {
+      console.log(`[Forgot Password] Admin not found for email: ${email.trim()}`)
+      // We still return success to prevent email enumeration
+      return res.json({ message: 'If an account exists for this email, you will receive a reset link shortly.' })
     }
+
+    console.log(`[Forgot Password] Generating recovery link for: ${admin.email}`)
+    
+    // 1. Generate a recovery link via Supabase Admin (bypasses Supabase SMTP)
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'recovery',
+      email: admin.email,
+      options: { redirectTo: `${FRONTEND_URL}/admin/reset-password` }
+    })
+
+    if (linkError) {
+      console.error('[Forgot Password] Link Generation Error:', linkError)
+      throw linkError
+    }
+
+    console.log(`[Forgot Password] Sending email via Resend to: ${admin.email}`)
+
+    // 2. Send the link via Resend API
+    const { error: resendError } = await resend.emails.send({
+      from: 'Shopkarro Security <onboarding@resend.dev>',
+      to: admin.email,
+      subject: 'Shopkarro Admin: Password Reset Request',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #eee;">
+          <h2 style="color: #1a1a1a;">Password Reset Requested</h2>
+          <p>Hello ${admin.name || 'Admin'},</p>
+          <p>A password reset was requested for your administrative account at Shopkarro.</p>
+          <p>If you did not make this request, you can safely ignore this email. Otherwise, click the button below to set a new password:</p>
+          <div style="margin: 30px 0;">
+            <a href="${linkData.properties.action_link}" style="background-color: #783A3A; color: white; padding: 14px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">Reset Password</a>
+          </div>
+          <p style="color: #666; font-size: 13px;">This link will expire in 24 hours.</p>
+          <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;" />
+          <p style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 2px;">Shopkarro Administrative Protocol</p>
+        </div>
+      `
+    })
+
+    if (resendError) {
+      console.error('[Forgot Password] Resend API Error:', resendError)
+      throw resendError
+    }
+
+    console.log(`[Forgot Password] Success: Reset email sent to ${admin.email}`)
 
     return res.json({ message: 'If an account exists for this email, you will receive a reset link shortly.' })
   } catch (err) {
