@@ -119,28 +119,42 @@ export default function ProductDetailPage() {
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!product?.id || !user) return
+    if (!product?.id) return
 
     setIsSubmitting(true)
     try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 
+        'https://shopkaroo-production.up.railway.app'
+
+      const reviewerName = user?.user_metadata?.full_name || 
+        user?.email || 
+        'Anonymous'
+
       const res = await fetch(`${backendUrl}/api/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           product_id: product.id,
-          name: user.user_metadata?.full_name || user.email || 'Anonymous Collector',
+          name: reviewerName,
           rating: revRating,
           comment: revComment
         })
       })
 
+      const data = await res.json()
+      console.log('Review response:', res.status, data)
+
       if (res.ok) {
         setRevSubmitted(true)
         setRevComment('')
         setRevRating(5)
+      } else {
+        console.error('Review failed:', data)
+        alert('Failed to submit review: ' + (data.error || 'Unknown error'))
       }
     } catch (err) {
-      console.error('Review submission failed:', err)
+      console.error('Review submission error:', err)
+      alert('Network error. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -698,16 +712,14 @@ export default function ProductDetailPage() {
                 <h3 className="font-heading font-bold text-text text-[24px] mb-8">Share Your Experience</h3>
                 
                 {!user ? (
-                  <div className="bg-bg-white border border-border p-10 text-center rounded-[3px] shadow-sm">
-                    <p className="text-text-muted mb-8 font-body leading-relaxed">
-                      Only verified members can leave reviews. Please sign in to join the conversation and share your feedback.
+                  <div className="bg-[#F2EDE6] border border-[#E8E2D9] p-6 text-center">
+                    <p className="text-[#6B6058] text-sm mb-3">
+                      Please sign in to leave a review
                     </p>
-                    <Link 
-                      href="/login" 
-                      className="bg-primary text-white px-12 py-4 rounded-[3px] font-bold font-body uppercase tracking-widest text-[13px] hover:bg-primary-dark transition-all shadow-lg active:scale-95 inline-block"
-                    >
-                      Sign In to Review
-                    </Link>
+                    <a href="/login" 
+                      className="bg-[#4A2C6E] text-white px-6 py-2 text-sm font-semibold">
+                      Sign In
+                    </a>
                   </div>
                 ) : revSubmitted ? (
                   <div className="bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-500 p-8 rounded-[3px] font-bold font-body text-[14px] border border-green-200 dark:border-green-800/30 uppercase tracking-[2px] flex items-center gap-4 animate-slideUp">
