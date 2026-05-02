@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { supabaseAdmin } from '../lib/supabase'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret'
 const JWT_EXPIRY = process.env.JWT_EXPIRY || '8h'
@@ -118,8 +121,34 @@ export const forgotPassword = async (req: Request, res: Response) => {
       .single()
 
     if (admin) {
-      await supabaseAdmin.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${FRONTEND_URL}/admin/reset-password`
+      // 1. Generate a recovery link via Supabase Admin (bypasses Supabase SMTP)
+      const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+        type: 'recovery',
+        email: email.trim(),
+        options: { redirectTo: `${FRONTEND_URL}/admin/reset-password` }
+      })
+
+      if (linkError) throw linkError
+
+      // 2. Send the link via Resend API
+      await resend.emails.send({
+        from: 'Shopkarro Security <onboarding@resend.dev>', // In prod use your verified domain
+        to: email.trim(),
+        subject: 'Shopkarro Admin: Password Reset Request',
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #eee;">
+            <h2 style="color: #1a1a1a;">Password Reset Requested</h2>
+            <p>Hello,</p>
+            <p>A password reset was requested for your administrative account at Shopkarro.</p>
+            <p>If you did not make this request, you can safely ignore this email. Otherwise, click the button below to set a new password:</p>
+            <div style="margin: 30px 0;">
+              <a href="${linkData.properties.action_link}" style="background-color: #783A3A; color: white; padding: 14px 24px; text-decoration: none; font-weight: bold; border-radius: 4px; display: inline-block;">Reset Password</a>
+            </div>
+            <p style="color: #666; font-size: 13px;">This link will expire in 24 hours.</p>
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;" />
+            <p style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 2px;">Shopkarro Administrative Protocol</p>
+          </div>
+        `
       })
     }
 
