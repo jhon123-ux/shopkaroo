@@ -191,7 +191,7 @@ export const resendInvite = async (req: Request, res: Response) => {
     const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
 
     const { data, error } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'invite',
+      type: 'recovery',
       email: admin.email,
       options: { redirectTo: `${frontendUrl}/admin/reset-password` }
     })
