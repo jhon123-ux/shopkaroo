@@ -41,15 +41,14 @@ export default function AdminLogin() {
       if (typeof window !== 'undefined') window.alert('Response Status: ' + res.status)
 
       const data = await res.json()
-      if (typeof window !== 'undefined') window.alert('Data Received: ' + JSON.stringify(data))
 
       if (!res.ok) {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
-      console.log('Login Response:', data)
       if (typeof window !== 'undefined') {
-        setAdmin(data.admin)
+        window.alert('Data Received: ' + JSON.stringify(data))
+        setAdmin(data.admin, data.token)
         window.alert('--- REDIRECTING NOW ---')
         window.location.href = '/admin'
       }

@@ -97,6 +97,7 @@ export const adminLogin = async (req: Request, res: Response) => {
 
     return res.json({
       message: 'Login successful',
+      token, // Send token to frontend
       admin: {
         id: finalAdmin.id,
         email: finalAdmin.email,

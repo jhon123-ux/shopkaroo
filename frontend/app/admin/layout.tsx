@@ -48,8 +48,15 @@ export default function AdminLayout({
       if (admin) return
       
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+      const token = localStorage.getItem('skr_admin_token')
+      
       try {
-        const res = await fetch(`${apiUrl}/api/admin/auth/me`, { credentials: 'include' })
+        const res = await fetch(`${apiUrl}/api/admin/auth/me`, { 
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          credentials: 'include' 
+        })
         if (res.ok) {
           const data = await res.json()
           console.log('Session Data:', data)

@@ -10,8 +10,9 @@ export interface AdminUser {
 
 interface AdminAuthStore {
   admin: AdminUser | null
+  token: string | null
   loading: boolean
-  setAdmin: (admin: AdminUser | null) => void
+  setAdmin: (admin: AdminUser | null, token?: string | null) => void
   setLoading: (loading: boolean) => void
   hasPermission: (permission: string) => boolean
   logout: () => Promise<void>
@@ -19,8 +20,13 @@ interface AdminAuthStore {
 
 const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
   admin: null,
+  token: typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : null,
   loading: true,
-  setAdmin: (admin) => set({ admin, loading: false }),
+  setAdmin: (admin, token) => {
+    if (token) localStorage.setItem('skr_admin_token', token)
+    if (token === null) localStorage.removeItem('skr_admin_token')
+    set({ admin, token: token !== undefined ? token : get().token, loading: false })
+  },
   setLoading: (loading) => set({ loading }),
   hasPermission: (permission) => {
     const admin = get().admin
@@ -39,7 +45,8 @@ const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
     } catch (e) {
       console.error('Logout API call failed', e)
     }
-    set({ admin: null, loading: false })
+    set({ admin: null, token: null, loading: false })
+    if (typeof window !== 'undefined') localStorage.removeItem('skr_admin_token')
     window.location.href = '/admin/login'
   }
 }))
