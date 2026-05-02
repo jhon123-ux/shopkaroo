@@ -49,6 +49,7 @@ export default function AdminLogin() {
 
       console.log('Login Response:', data)
       if (typeof window !== 'undefined') {
+        setAdmin(data.admin)
         window.alert('--- REDIRECTING NOW ---')
         window.location.href = '/admin'
       }
