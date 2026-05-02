@@ -90,8 +90,8 @@ export const adminLogin = async (req: Request, res: Response) => {
     // 5. Set cookie
     res.cookie(ADMIN_COOKIE_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      secure: true, // Always true for cross-site cookies
+      sameSite: 'none', // Required for cross-site cookies (Vercel to Railway)
       maxAge: 8 * 60 * 60 * 1000 // 8 hours
     })
 
