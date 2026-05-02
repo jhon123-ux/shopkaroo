@@ -57,7 +57,7 @@ export default function TeamManagement() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Invitation failed')
       
-      showToast(`Invited ${formData.name} successfully`)
+      showToast('Invitation sent! Team member will receive an email to set their password.')
       setIsModalOpen(false)
       fetchMembers()
     } catch (err: any) {
@@ -209,7 +209,7 @@ export default function TeamManagement() {
                       <Shield size={14} />
                     </button>
                     {m.role !== 'superadmin' && !m.last_login_at && (
-                      <button onClick={() => handleResend(m.id)} className="p-2 border border-[#E8E2D9] text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
+                      <button title="Resend Email" onClick={() => handleResend(m.id)} className="p-2 border border-[#E8E2D9] text-blue-600 hover:bg-blue-600 hover:text-white transition-all">
                         <RefreshCw size={14} />
                       </button>
                     )}
