@@ -38,9 +38,10 @@ export default function AdminLogin() {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
-      // Save token and admin state, then soft-navigate to dashboard
+      // 1. Save token  2. Save admin  3. Navigate — in this exact order
+      localStorage.setItem('skr_admin_token', data.token)
       setAdmin(data.admin, data.token)
-      router.push('/admin')
+      router.replace('/admin')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {

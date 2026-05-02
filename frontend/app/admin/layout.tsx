@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -19,6 +19,8 @@ import {
   Users
 } from 'lucide-react'
 
+const PUBLIC_PATHS = ['/admin/login', '/admin/forgot-password', '/admin/reset-password']
+
 export default function AdminLayout({
   children,
 }: {
@@ -26,11 +28,12 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname()
   const router = useRouter()
-  const { admin, setAdmin, setLoading, logout, hasPermission } = useAdminAuthStore()
+  const { admin, setAdmin, setLoading, loading, logout, hasPermission } = useAdminAuthStore()
   const [draftCount, setDraftCount] = useState(0)
+  const hasRestored = useRef(false)
 
   const sidebarLinks = [
-    { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={16} /> }, // Dashboard usually public to all staff
+    { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
     { href: '/admin/analytics', label: 'Analytics', icon: <BarChart2 size={16} />, permission: 'analytics_view' },
     { href: '/admin/banners', label: 'Hero Banners', icon: <ImageIcon size={16} />, permission: 'banners_view' },
     { href: '/admin/categories', label: 'Categories', icon: <FolderOpen size={16} />, permission: 'categories_view' },
@@ -42,55 +45,48 @@ export default function AdminLayout({
     { href: '/admin/team', label: 'Team', icon: <Users size={16} />, role: 'superadmin' },
   ]
 
-  const isPublicPath = pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password'
-
+  // ─── Auth: run ONCE on mount via ref guard ───────────────────────────────
   useEffect(() => {
-    const restoreSession = async () => {
-      if (admin) return
+    if (hasRestored.current) return
+    hasRestored.current = true
 
-      let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      if (window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
-        apiUrl = 'https://shopkaroo-production.up.railway.app'
-      }
+    const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
+    if (isPublic) {
+      setLoading(false)
+      return
+    }
 
-      let token: string | null = null
-      try { token = localStorage.getItem('skr_admin_token') } catch (e) {}
+    const token = localStorage.getItem('skr_admin_token')
+    if (!token) {
+      setLoading(false)
+      router.replace('/admin/login')
+      return
+    }
 
-      if (!token) {
-        setLoading(false)
-        if (!isPublicPath) router.push('/admin/login')
-        return
-      }
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://shopkaroo-production.up.railway.app'
 
-      try {
-        const res = await fetch(`${apiUrl}/api/admin/auth/me`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          credentials: 'include'
-        })
-        if (res.ok) {
-          const data = await res.json()
+    fetch(`${apiUrl}/api/admin/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.admin) {
           setAdmin(data.admin, token)
-        } else {
-          try { localStorage.removeItem('skr_admin_token') } catch (_) {}
           setLoading(false)
-          if (!isPublicPath) router.push('/admin/login')
+        } else {
+          localStorage.removeItem('skr_admin_token')
+          setLoading(false)
+          router.replace('/admin/login')
         }
-      } catch (e) {
-        console.error('Session restoration failed', e)
+      })
+      .catch(() => {
+        localStorage.removeItem('skr_admin_token')
         setLoading(false)
-      }
-    }
-    restoreSession()
-  }, []) // ← Run ONCE on mount only
+        router.replace('/admin/login')
+      })
+  }, []) // empty deps — run ONCE only
 
-  // Redirect to dashboard if authenticated and on a public path
-  useEffect(() => {
-    if (admin && isPublicPath) {
-      router.push('/admin')
-    }
-  }, [admin, pathname])
-
-
+  // ─── Draft order count ───────────────────────────────────────────────────
   useEffect(() => {
     if (!admin) return
 
@@ -124,13 +120,21 @@ export default function AdminLayout({
     return 'Admin'
   }
 
-  if (isPublicPath) {
+  // ─── Public paths: render children directly ──────────────────────────────
+  if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) {
     return <>{children}</>
   }
 
-  // Optional: show loading state while checking session
-  // if (loading && !admin) return <div className="min-h-screen flex items-center justify-center bg-background">Loading...</div>
+  // ─── Loading state ───────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F4] flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
+      </div>
+    )
+  }
 
+  // ─── Dashboard shell ─────────────────────────────────────────────────────
   return (
     <div className="flex min-h-screen bg-background font-body transition-colors duration-300">
       
