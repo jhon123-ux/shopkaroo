@@ -50,7 +50,6 @@ export default function AdminLayout({
     const run = async () => {
       if (hasRestored.current) return
       hasRestored.current = true
-      console.log('LAYOUT EFFECT RUNNING, pathname:', pathname)
 
       const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
       if (isPublic) {
@@ -58,44 +57,41 @@ export default function AdminLayout({
         return
       }
 
+      // Keep loading TRUE while we check
+      setLoading(true)
+
       const token = localStorage.getItem('skr_admin_token')
-      console.log('TOKEN FROM STORAGE:', token)
-      
+
       if (!token) {
         setLoading(false)
         router.replace('/admin/login')
         return
       }
 
-      // Add this delay before fetch to let localStorage settle
-      await new Promise(resolve => setTimeout(resolve, 100))
+      const apiUrl = 'https://shopkaroo-production.up.railway.app'
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://shopkaroo-production.up.railway.app'
-
-      fetch(`${apiUrl}/api/admin/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(r => r.json())
-        .then(data => {
-          console.log('ME RESPONSE STATUS:', data)
-          if (data.admin) {
-            setAdmin(data.admin, token)
-            setLoading(false)
-          } else {
-            localStorage.removeItem('skr_admin_token')
-            setLoading(false)
-            router.replace('/admin/login')
-          }
+      try {
+        const res = await fetch(`${apiUrl}/api/admin/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
         })
-        .catch((err) => {
-          console.log('ME FETCH ERROR:', err)
+        const data = await res.json()
+
+        if (data.admin) {
+          setAdmin(data.admin, token)
+          setLoading(false)
+        } else {
           localStorage.removeItem('skr_admin_token')
           setLoading(false)
           router.replace('/admin/login')
-        })
+        }
+      } catch {
+        localStorage.removeItem('skr_admin_token')
+        setLoading(false)
+        router.replace('/admin/login')
+      }
     }
     run()
-  }, []) // empty deps — run ONCE only
+  }, [])
 
 
   // ─── Draft order count ───────────────────────────────────────────────────
