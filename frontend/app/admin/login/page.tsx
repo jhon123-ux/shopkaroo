@@ -48,12 +48,15 @@ export default function AdminLogin() {
       }
 
       console.log('Login Response:', data)
-      // Store admin data in Zustand (The JWT is securely stored in httpOnly cookie by the browser)
-      setAdmin(data.admin)
-      router.push('/admin')
+      if (typeof window !== 'undefined') {
+        window.alert('--- REDIRECTING NOW ---')
+        window.location.href = '/admin'
+      }
     } catch (err: any) {
+      if (typeof window !== 'undefined') window.alert('Login Error: ' + err.message)
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
+      if (typeof window !== 'undefined') window.alert('--- PROCESS FINISHED ---')
       setLoading(false)
     }
   }
