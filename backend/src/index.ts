@@ -24,23 +24,47 @@ const PORT = process.env.PORT || 5000
 
 app.use(helmet())
 
-// Flexible CORS support for multiple origins (comma-separated FRONTEND_URL)
-const allowedOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : ['http://localhost:3000']
+// Robust CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://shopkarro.com',
+  'https://www.shopkarro.com'
+]
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      console.error(`CORS blocked for origin: ${origin}`)
-      callback(new Error('Not allowed by CORS'))
-    }
+    // 1. Allow no origin (server-to-server)
+    if (!origin) return callback(null, true)
+    
+    // 2. Allow explicit list
+    if (allowedOrigins.includes(origin)) return callback(null, true)
+    
+    // 3. Allow Vercel preview deployments
+    if (/https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true)
+    
+    console.error(`CORS blocked for origin: ${origin}`)
+    callback(new Error('Not allowed by CORS'))
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-auth']
 }))
+
+// Handle preflight OPTIONS requests for all routes
+app.options('*', cors())
+
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
+
+// Health check (MUST be before routes)
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date(),
+    service: 'Shopkaroo Backend API'
+  })
+})
 
 // Routes
 app.use('/api/products', productRoutes)
@@ -57,10 +81,6 @@ app.use('/api/admin/team', teamRoutes)
 // Swagger
 swaggerSetup(app)
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', project: 'Shopkaroo API', version: '1.0.0' })
-})
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled error:', err);

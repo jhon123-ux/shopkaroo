@@ -15,7 +15,14 @@ export default function ForgotPassword() {
     setLoading(true)
     setError(null)
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+    console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+    if (!apiUrl) {
+      setError('API URL not configured. Contact support.')
+      setLoading(false)
+      return
+    }
 
     try {
       const res = await fetch(`${apiUrl}/api/admin/auth/forgot-password`, {
