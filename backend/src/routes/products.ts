@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { getProducts, getProductById, createProduct, updateProduct, deleteProduct, toggleProduct } from '../controllers/products.controller'
-import { adminAuth } from '../middleware/auth.middleware'
+import { adminAuth, requirePermission } from '../middleware/auth.middleware'
 import { validate } from '../middleware/validate'
 import { productSchema } from '../schemas'
 
@@ -22,7 +22,7 @@ router.get('/', getProducts)
  *     summary: Create a product
  *     tags: [Products]
  */
-router.post('/', adminAuth, validate(productSchema), createProduct)
+router.post('/', adminAuth, requirePermission('products_edit'), validate(productSchema), createProduct)
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ router.get('/:id', getProductById)
  *     summary: Update a product
  *     tags: [Products]
  */
-router.patch('/:id', adminAuth, validate(productSchema.partial()), updateProduct)
+router.patch('/:id', adminAuth, requirePermission('products_edit'), validate(productSchema.partial()), updateProduct)
 
 /**
  * @swagger
@@ -49,7 +49,7 @@ router.patch('/:id', adminAuth, validate(productSchema.partial()), updateProduct
  *     summary: Delete a product
  *     tags: [Products]
  */
-router.delete('/:id', adminAuth, deleteProduct)
+router.delete('/:id', adminAuth, requirePermission('products_delete'), deleteProduct)
 
 /**
  * @swagger
@@ -58,6 +58,6 @@ router.delete('/:id', adminAuth, deleteProduct)
  *     summary: Toggle product active status
  *     tags: [Products]
  */
-router.patch('/:id/toggle', adminAuth, toggleProduct)
+router.patch('/:id/toggle', adminAuth, requirePermission('products_edit'), toggleProduct)
 
 export default router

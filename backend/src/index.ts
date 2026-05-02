@@ -3,6 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 import swaggerSetup from './swagger'
 
 import productRoutes from './routes/products'
@@ -13,6 +14,8 @@ import bannerRoutes from './routes/banners'
 import uploadRoutes from './routes/upload'
 import offerBannerRoutes from './routes/offerBanner'
 import wishlistRoutes from './routes/wishlist.routes'
+import authRoutes from './routes/auth'
+import teamRoutes from './routes/team'
 
 dotenv.config()
 
@@ -37,6 +40,7 @@ app.use(cors({
 }))
 app.use(morgan('dev'))
 app.use(express.json())
+app.use(cookieParser())
 
 // Routes
 app.use('/api/products', productRoutes)
@@ -47,6 +51,8 @@ app.use('/api/banners', bannerRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/offer-banner', offerBannerRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/admin/auth', authRoutes)
+app.use('/api/admin/team', teamRoutes)
 
 // Swagger
 swaggerSetup(app)

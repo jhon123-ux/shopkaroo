@@ -1,0 +1,31 @@
+# Shopkarro
+> Pakistan's premium online furniture store with Cash on Delivery
+
+- Domain: shopkarro.com
+- Phone: 03706905835
+- Email: shopkarro.ecom@gmail.com
+- Payment: COD only
+- Delivery: Nationwide Pakistan
+- Cities: Lahore, Karachi, Islamabad and more
+
+## Key Pages
+- [Home](https://shopkarro.com/): Browse our latest collections and featured furniture pieces.
+- [Products](https://shopkarro.com/furniture): Explore our full catalog of premium furniture for every room.
+- [Categories](https://shopkarro.com/categories): Shop by category to find exactly what you need.
+- [Cart](https://shopkarro.com/cart): View and manage items you've added to your shopping cart.
+- [Checkout](https://shopkarro.com/checkout): Complete your purchase with our secure and easy checkout process.
+- [My Orders](https://shopkarro.com/my-orders): Track your orders and view your purchase history.
+- [Login](https://shopkarro.com/login) / [Signup](https://shopkarro.com/signup): Create an account or sign in to manage your orders.
+
+## Categories
+- Living room
+- Bedroom
+- Dining
+- Office furniture
+- Storage solutions
+
+## Why Shopkarro
+- **Cash on Delivery (COD)**: Pay only when you receive your furniture at your doorstep.
+- **Quality Catalog**: Handpicked, high-quality furniture pieces for premium homes.
+- **Nationwide Delivery**: We deliver to Lahore, Karachi, Islamabad, and across Pakistan.
+- **Email Order Tracking**: Receive real-time updates and tracking details via email.

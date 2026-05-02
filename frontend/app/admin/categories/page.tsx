@@ -40,9 +40,8 @@ export default function AdminCategoriesPage() {
   const fetchCategories = async () => {
     setLoading(true)
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
       const res = await fetch(`${backendUrl}/api/categories?all=true`, {
-        headers: { 'x-admin-auth': adminToken || '' }
+        credentials: 'include'
       })
       const data = await res.json()
       setCategories(data.data || [])
@@ -106,10 +105,9 @@ export default function AdminCategoriesPage() {
     fData.append('image', file)
 
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
       const res = await fetch(`${backendUrl}/api/upload/category`, {
         method: 'POST',
-        headers: { 'x-admin-auth': adminToken || '' },
+        credentials: 'include',
         body: fData
       })
 
@@ -140,10 +138,8 @@ export default function AdminCategoriesPage() {
     try {
       const res = await fetch(url, {
         method,
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || '' 
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData)
       })
 
@@ -164,12 +160,10 @@ export default function AdminCategoriesPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to expunge this category?')) return
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-
     try {
       const res = await fetch(`${backendUrl}/api/categories/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-auth': adminToken || '' }
+        credentials: 'include'
       })
       if (res.ok) {
         showToast('Category expunged')
@@ -181,11 +175,10 @@ export default function AdminCategoriesPage() {
   }
 
   const handleToggle = async (id: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
       const res = await fetch(`${backendUrl}/api/categories/${id}/toggle`, {
         method: 'PATCH',
-        headers: { 'x-admin-auth': adminToken || '' }
+        credentials: 'include'
       })
       if (res.ok) fetchCategories()
     } catch (err) {

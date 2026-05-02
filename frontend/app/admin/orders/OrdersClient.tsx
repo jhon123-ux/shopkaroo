@@ -18,8 +18,10 @@ import {
   Repeat2,
   Loader2,
   Monitor,
-  UserPlus
+  UserPlus,
+  Edit2
 } from 'lucide-react'
+import useAdminAuthStore from '@/lib/adminAuthStore'
 import { useRouter } from 'next/navigation'
 import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
@@ -33,6 +35,7 @@ export default function AdminOrdersPage({
   recurringCount: number, 
   recurringCustomers: Record<string, CustomerOrderSummary> 
 }) {
+  const { hasPermission } = useAdminAuthStore()
   const router = useRouter()
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -95,7 +98,7 @@ export default function AdminOrdersPage({
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') || '' : ''
 
     fetch(`${backendUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
-      headers: { 'x-admin-auth': adminToken }
+      credentials: 'include'
     })
       .then(response => {
         if (!response.ok) throw new Error('Export failed')
@@ -169,7 +172,7 @@ export default function AdminOrdersPage({
       console.log('Fetching orders...', backendUrl)
       const res = await fetch(`${backendUrl}/api/orders?all=true`, { 
         method: 'GET',
-        headers,
+        credentials: 'include',
         cache: 'no-store'
       })
       
@@ -208,10 +211,8 @@ export default function AdminOrdersPage({
     try {
       const res = await fetch(`${backendUrl}/api/orders/${selectedOrder.id}`, {
         method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || ''
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status })
       })
 
@@ -308,10 +309,8 @@ export default function AdminOrdersPage({
     try {
       const res = await fetch(`${backendUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
         method: 'POST',
-        headers: { 
-          'x-admin-auth': adminToken || '',
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to duplicate order')
@@ -349,54 +348,56 @@ export default function AdminOrdersPage({
         </div>
         <div className="flex items-center gap-4">
           {/* ── Excel Export Split Button ── */}
-          <div className="relative" ref={exportDropdownRef}>
-            <div className="flex items-center">
-              {/* Left: Primary Export Action */}
-              <button
-                onClick={handleExportExcel}
-                disabled={exportLoading}
-                className="flex items-center gap-2 border border-[#783A3A] bg-[#783A3A] text-white px-5 py-3 rounded-l-[2px] text-[11px] font-bold uppercase tracking-widest hover:bg-[#632f2f] transition-all shadow-sm active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {exportLoading
-                  ? <><Loader2 size={13} className="animate-spin" /> Exporting...</>
-                  : <><FileSpreadsheet size={13} strokeWidth={2.5} /> Export Excel ({filteredOrders.length})</>
-                }
-              </button>
-              {/* Right: Dropdown Trigger */}
-              <button
-                onClick={() => setShowExportDropdown(v => !v)}
-                disabled={exportLoading}
-                className="flex items-center justify-center border-l border-[#5B2C2C] border-t border-r border-b border-[#783A3A] bg-[#783A3A] text-white px-2.5 py-3 rounded-r-[2px] hover:bg-[#632f2f] transition-all disabled:opacity-60"
-              >
-                <ChevronDown size={13} strokeWidth={2.5} />
-              </button>
-            </div>
-
-            {/* Dropdown Menu */}
-            {showExportDropdown && (
-              <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-[#E8E2D9] rounded-[2px] shadow-xl z-50 overflow-hidden animate-slideDown">
+          {hasPermission('orders_export') && (
+            <div className="relative" ref={exportDropdownRef}>
+              <div className="flex items-center">
                 <button
-                  onClick={() => { setShowExportDropdown(false); handleExportCsv() }}
-                  className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors border-b border-[#E8E2D9] flex items-center gap-2"
+                  onClick={handleExportExcel}
+                  disabled={exportLoading}
+                  className="flex items-center gap-2 border border-[#783A3A] bg-[#783A3A] text-white px-5 py-3 rounded-l-[2px] text-[11px] font-bold uppercase tracking-widest hover:bg-[#632f2f] transition-all shadow-sm active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Export CSV (legacy)
+                  {exportLoading
+                    ? <><Loader2 size={13} className="animate-spin" /> Exporting...</>
+                    : <><FileSpreadsheet size={13} strokeWidth={2.5} /> Export Excel ({filteredOrders.length})</>
+                  }
                 </button>
                 <button
-                  onClick={() => { setShowExportDropdown(false); setShowCustomExport(true) }}
-                  className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors flex items-center gap-2"
+                  onClick={() => setShowExportDropdown(v => !v)}
+                  disabled={exportLoading}
+                  className="flex items-center justify-center border-l border-[#5B2C2C] border-t border-r border-b border-[#783A3A] bg-[#783A3A] text-white px-2.5 py-3 rounded-r-[2px] hover:bg-[#632f2f] transition-all disabled:opacity-60"
                 >
-                  Custom Export...
+                  <ChevronDown size={13} strokeWidth={2.5} />
                 </button>
               </div>
-            )}
-          </div>
-          <button 
-            onClick={() => router.push('/admin/orders/new')}
-            className="bg-[#783A3A] text-white px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#632f2f] transition-all shadow-xl active:scale-95"
-          >
-            <Plus size={14} strokeWidth={2.5} />
-            New Order
-          </button>
+
+              {showExportDropdown && (
+                <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-[#E8E2D9] rounded-[2px] shadow-xl z-50 overflow-hidden animate-slideDown">
+                  <button
+                    onClick={() => { setShowExportDropdown(false); handleExportCsv() }}
+                    className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors border-b border-[#E8E2D9] flex items-center gap-2"
+                  >
+                    Export CSV (legacy)
+                  </button>
+                  <button
+                    onClick={() => { setShowExportDropdown(false); setShowCustomExport(true) }}
+                    className="w-full text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#6B6058] hover:bg-[#FAF7F4] hover:text-[#1C1410] transition-colors flex items-center gap-2"
+                  >
+                    Custom Export...
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {hasPermission('orders_create') && (
+            <button 
+              onClick={() => router.push('/admin/orders/new')}
+              className="bg-[#783A3A] text-white px-6 py-3 rounded-[2px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#632f2f] transition-all shadow-xl active:scale-95"
+            >
+              <Plus size={14} strokeWidth={2.5} />
+              New Order
+            </button>
+          )}
         </div>
       </div>
 
@@ -582,19 +583,18 @@ export default function AdminOrdersPage({
                           onClick={() => setSelectedOrder(o)}
                           className="flex items-center gap-1.5 bg-[#F0EBF8] text-[#4A2C6E] px-3 py-1.5 rounded-sm text-xs font-semibold hover:bg-[#4A2C6E] hover:text-white transition-colors shadow-sm"
                         >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                          </svg>
+                          <Eye size={14} />
                           View
                         </button>
-                        <button
-                          onClick={() => handleDuplicateOrder(o.id)}
-                          className="flex items-center justify-center w-8 h-8 bg-amber-50 text-amber-600 rounded-sm hover:bg-amber-600 hover:text-white transition-all shadow-sm"
-                          title="Duplicate Order"
-                        >
-                          <Repeat2 size={14} />
-                        </button>
+                        {hasPermission('orders_create') && (
+                          <button
+                            onClick={() => handleDuplicateOrder(o.id)}
+                            className="flex items-center justify-center w-8 h-8 bg-amber-50 text-amber-600 rounded-sm hover:bg-amber-600 hover:text-white transition-all shadow-sm"
+                            title="Duplicate Order"
+                          >
+                            <Repeat2 size={14} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -717,24 +717,26 @@ export default function AdminOrdersPage({
             </div>
 
             {/* STATUS MUTATION SUITE */}
-            <div className="bg-[#FAF7F4] rounded-0 p-8 mb-10 border border-[#E8E2D9] text-left">
-              <p className="text-[10px] font-bold tracking-[3px] text-[#783A3A] uppercase mb-6 opacity-60">Update Status</p>
-              <div className="flex gap-4 flex-wrap">
-                {['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(st => (
-                  <button
-                    key={st}
-                    onClick={() => updateOrderStatus(st)}
-                    className={`px-6 py-3 rounded-0 text-[10px] font-bold uppercase tracking-[2px] transition-all border ${
-                      selectedOrder.status === st 
-                        ? 'bg-[#783A3A] text-white border-[#783A3A] shadow-lg scale-105'
-                        : 'border-[#E8E2D9] bg-white text-[#6B6058] hover:border-[#1C1410] hover:text-[#1C1410]'
-                    }`}
-                  >
-                    {st}
-                  </button>
-                ))}
+            {hasPermission('orders_status_update') && (
+              <div className="bg-[#FAF7F4] rounded-0 p-8 mb-10 border border-[#E8E2D9] text-left">
+                <p className="text-[10px] font-bold tracking-[3px] text-[#783A3A] uppercase mb-6 opacity-60">Update Status</p>
+                <div className="flex gap-4 flex-wrap">
+                  {['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(st => (
+                    <button
+                      key={st}
+                      onClick={() => updateOrderStatus(st)}
+                      className={`px-6 py-3 rounded-0 text-[10px] font-bold uppercase tracking-[2px] transition-all border ${
+                        selectedOrder.status === st 
+                          ? 'bg-[#783A3A] text-white border-[#783A3A] shadow-lg scale-105'
+                          : 'border-[#E8E2D9] bg-white text-[#6B6058] hover:border-[#1C1410] hover:text-[#1C1410]'
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* CUSTOMER META INFO */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12 text-left">

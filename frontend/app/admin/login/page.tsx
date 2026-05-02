@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Lock, User, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import useAdminAuthStore from '@/lib/adminAuthStore'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -12,39 +12,33 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const setAdmin = useAdminAuthStore(state => state.setAdmin)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+
     try {
-      // 🔐 SECURE AUTHENTICATION: Using Supabase Auth instead of hardcoded strings
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password.trim(),
+      // 🔐 SECURE AUTHENTICATION: Using httpOnly cookie via Backend API
+      const res = await fetch(`${backendUrl}/api/admin/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
+        credentials: 'include'
       })
 
-      if (authError) throw authError
+      const data = await res.json()
 
-      // Verify the user is an admin (Optional but recommended: check metadata or email)
-      // Since this is the admin login page, we can enforce a specific email here 
-      // or rely on RLS/Backend checks. 
-      const ADMIN_EMAIL = 'admin@shopkarro.com' 
-      
-      if (data.user.email !== ADMIN_EMAIL) {
-        await supabase.auth.signOut()
-        throw new Error('Access denied. This account does not have administrative privileges.')
+      if (!res.ok) {
+        throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
-      // Store token securely. 
-      // Note: Low Fix 8 recommends httpOnly cookies, which requires a custom API route.
-      // For now, we use the Supabase session which is already managed securely by the client.
-      const session = data.session
-      if (session) {
-        localStorage.setItem('admin_token', session.access_token)
-        router.push('/admin')
-      }
+      // Store admin data in Zustand (The JWT is securely stored in httpOnly cookie by the browser)
+      setAdmin(data.admin)
+      router.push('/admin')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
@@ -92,7 +86,12 @@ export default function AdminLogin() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-text mb-3 uppercase tracking-[2px]">Security Code</label>
+            <div className="flex justify-between items-center mb-3">
+              <label className="block text-[11px] font-bold text-text uppercase tracking-[2px]">Security Code</label>
+              <Link href="/admin/forgot-password" size="sm" className="text-[11px] font-bold text-primary uppercase tracking-[1px] hover:underline">
+                Forgot password?
+              </Link>
+            </div>
             <div className="relative">
               <span className="absolute left-5 top-1/2 -translate-y-1/2 text-text opacity-30">
                 <Lock size={18} />

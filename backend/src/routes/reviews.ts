@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { getReviews, createReview, getAllReviewsAdmin, updateReviewStatus, deleteReview, approveReview, rejectReview } from '../controllers/reviews.controller'
+import { adminAuth, requirePermission } from '../middleware/auth.middleware'
 
 const router = Router()
 
@@ -42,7 +43,7 @@ router.post('/', createReview)
  *       200:
  *         description: List of all reviews
  */
-router.get('/admin', getAllReviewsAdmin)
+router.get('/admin', adminAuth, requirePermission('reviews_manage'), getAllReviewsAdmin)
 
 /**
  * @swagger
@@ -67,7 +68,7 @@ router.get('/admin', getAllReviewsAdmin)
  *       200:
  *         description: Updated review
  */
-router.patch('/:id', updateReviewStatus)
+router.patch('/:id', adminAuth, requirePermission('reviews_manage'), updateReviewStatus)
 
 /**
  * @swagger
@@ -84,7 +85,7 @@ router.patch('/:id', updateReviewStatus)
  *       200:
  *         description: Approved review
  */
-router.patch('/:id/approve', approveReview)
+router.patch('/:id/approve', adminAuth, requirePermission('reviews_manage'), approveReview)
 
 /**
  * @swagger
@@ -101,7 +102,7 @@ router.patch('/:id/approve', approveReview)
  *       200:
  *         description: Message and rejected review
  */
-router.patch('/:id/reject', rejectReview)
+router.patch('/:id/reject', adminAuth, requirePermission('reviews_manage'), rejectReview)
 
 /**
  * @swagger
@@ -118,6 +119,6 @@ router.patch('/:id/reject', rejectReview)
  *       204:
  *         description: No content
  */
-router.delete('/:id', deleteReview)
+router.delete('/:id', adminAuth, requirePermission('reviews_manage'), deleteReview)
 
 export default router

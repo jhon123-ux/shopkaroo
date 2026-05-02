@@ -9,7 +9,7 @@ import {
   adminSearchCustomer,
   exportOrdersExcel
 } from '../controllers/orders.controller'
-import { adminAuth } from '../middleware/auth.middleware'
+import { adminAuth, requirePermission } from '../middleware/auth.middleware'
 
 const router = Router()
 
@@ -20,7 +20,7 @@ const router = Router()
  *     summary: Get all orders
  *     tags: [Orders]
  */
-router.get('/', adminAuth, getOrders)
+router.get('/', adminAuth, requirePermission('orders_view'), getOrders)
 
 /**
  * @swagger
@@ -38,7 +38,7 @@ router.post('/', createOrder)
  *     summary: Get order by ID
  *     tags: [Orders]
  */
-router.get('/:id', adminAuth, getOrderById)
+router.get('/:id', adminAuth, requirePermission('orders_view'), getOrderById)
 
 /**
  * @swagger
@@ -47,14 +47,14 @@ router.get('/:id', adminAuth, getOrderById)
  *     summary: Update order status
  *     tags: [Orders]
  */
-router.patch('/:id', adminAuth, updateOrderStatus)
+router.patch('/:id', adminAuth, requirePermission('orders_status_update'), updateOrderStatus)
 
 /**
  * 🏭 Administrative Routes
  */
-router.get('/admin/orders/export/excel', adminAuth, exportOrdersExcel)
-router.post('/admin/orders/create', adminAuth, adminCreateOrder)
-router.post('/admin/orders/:id/duplicate', adminAuth, adminDuplicateOrder)
-router.get('/admin/customers/search', adminAuth, adminSearchCustomer)
+router.get('/admin/orders/export/excel', adminAuth, requirePermission('orders_export'), exportOrdersExcel)
+router.post('/admin/orders/create', adminAuth, requirePermission('orders_create'), adminCreateOrder)
+router.post('/admin/orders/:id/duplicate', adminAuth, requirePermission('orders_create'), adminDuplicateOrder)
+router.get('/admin/customers/search', adminAuth, requirePermission('orders_view'), adminSearchCustomer)
 
 export default router

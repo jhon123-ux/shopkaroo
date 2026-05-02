@@ -8,7 +8,7 @@ import {
   toggleBanner, 
   reorderBanners 
 } from '../controllers/banners.controller'
-import { adminAuth } from '../middleware/auth.middleware'
+import { adminAuth, requirePermission } from '../middleware/auth.middleware'
 
 const router = Router()
 
@@ -60,7 +60,7 @@ router.get('/', getAllBanners as RequestHandler)
  *       201:
  *         description: Created banner
  */
-router.post('/', adminAuth, createBanner as RequestHandler)
+router.post('/', adminAuth, requirePermission('banners_manage'), createBanner as RequestHandler)
 
 /**
  * @swagger
@@ -86,7 +86,7 @@ router.post('/', adminAuth, createBanner as RequestHandler)
  *       200:
  *         description: Banners reordered
  */
-router.patch('/reorder', adminAuth, reorderBanners as RequestHandler)
+router.patch('/reorder', adminAuth, requirePermission('banners_manage'), reorderBanners as RequestHandler)
 
 /**
  * @swagger
@@ -126,7 +126,7 @@ router.get('/:id', getBannerById as RequestHandler)
  *       200:
  *         description: Updated banner
  */
-router.patch('/:id', adminAuth, updateBanner as RequestHandler)
+router.patch('/:id', adminAuth, requirePermission('banners_manage'), updateBanner as RequestHandler)
 
 /**
  * @swagger
@@ -143,7 +143,7 @@ router.patch('/:id', adminAuth, updateBanner as RequestHandler)
  *       204:
  *         description: Banner deleted
  */
-router.delete('/:id', adminAuth, deleteBanner as RequestHandler)
+router.delete('/:id', adminAuth, requirePermission('banners_manage'), deleteBanner as RequestHandler)
 
 /**
  * @swagger
@@ -160,7 +160,7 @@ router.delete('/:id', adminAuth, deleteBanner as RequestHandler)
  *       200:
  *         description: Updated banner
  */
-router.patch('/:id/toggle', adminAuth, toggleBanner as RequestHandler)
+router.patch('/:id/toggle', adminAuth, requirePermission('banners_manage'), toggleBanner as RequestHandler)
 
 
 export default router

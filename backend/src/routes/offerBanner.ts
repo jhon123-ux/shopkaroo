@@ -1,6 +1,6 @@
 import { Router, RequestHandler } from 'express'
 import { getOfferBanner, updateOfferBanner } from '../controllers/offerBanner.controller'
-import { adminAuth } from '../middleware/auth.middleware'
+import { adminAuth, requirePermission } from '../middleware/auth.middleware'
 
 const router = Router()
 
@@ -53,6 +53,6 @@ router.get('/', getOfferBanner as RequestHandler)
  *       200:
  *         description: Updated offer banner
  */
-router.patch('/:id', adminAuth, updateOfferBanner as RequestHandler)
+router.patch('/:id', adminAuth, requirePermission('banners_manage'), updateOfferBanner as RequestHandler)
 
 export default router

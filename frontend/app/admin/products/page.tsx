@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Check, X, Camera, Hourglass, Sofa, Bed, Archive, Utensils, Box } from 'lucide-react'
+import { Check, X, Camera, Hourglass, Sofa, Bed, Archive, Utensils, Box, Plus, Edit2, Trash2 } from 'lucide-react'
+import useAdminAuthStore from '@/lib/adminAuthStore'
 
 const getCategoryEmoji = (category: string) => {
   switch (category) {
@@ -15,6 +16,7 @@ const getCategoryEmoji = (category: string) => {
 }
 
 export default function AdminProductsPage() {
+  const { hasPermission } = useAdminAuthStore()
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -51,12 +53,12 @@ export default function AdminProductsPage() {
     setLoading(true)
     try {
       // 1. Fetch Products
-      const prodRes = await fetch(`${backendUrl}/api/products?all=true&limit=100`, { headers })
+      const prodRes = await fetch(`${backendUrl}/api/products?all=true&limit=100`, { credentials: 'include' })
       const prodData = await prodRes.json()
       setProducts(prodData.data || [])
 
       // 2. Fetch Categories for selection
-      const catRes = await fetch(`${backendUrl}/api/categories?all=true`, { headers })
+      const catRes = await fetch(`${backendUrl}/api/categories?all=true`, { credentials: 'include' })
       const catData = await catRes.json()
       const rawCats = catData.data || []
       setAllCategories(rawCats)
@@ -134,7 +136,7 @@ export default function AdminProductsPage() {
       try {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         const res = await fetch(`${backendUrl}/api/products/${id}`, { 
-          method: 'DELETE', headers: { 'x-admin-auth': adminToken || '' }
+          method: 'DELETE', credentials: 'include'
         })
         if (!res.ok) throw new Error('Delete failed')
         setProducts(products.filter(p => p.id !== id))
@@ -149,7 +151,7 @@ export default function AdminProductsPage() {
     try {
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
       const res = await fetch(`${backendUrl}/api/products/${id}/toggle`, { 
-        method: 'PATCH', headers: { 'x-admin-auth': adminToken || '' }
+        method: 'PATCH', credentials: 'include'
       })
       const { data } = await res.json()
       setProducts(products.map(p => p.id === id ? data : p))
@@ -204,8 +206,7 @@ export default function AdminProductsPage() {
         // The browser must auto-generate the multipart/form-data boundary.
         const res = await fetch(`${backendUrl}/api/upload/product`, {
           method: 'POST',
-          headers: { 'x-admin-auth': adminToken || '' },
-          // body is FormData — browser sets correct Content-Type with boundary automatically
+          credentials: 'include',
           body: fData
         })
         const data = await res.json()
@@ -252,7 +253,8 @@ export default function AdminProductsPage() {
       const method = isEditMode ? 'PATCH' : 'POST'
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
       const res = await fetch(url, {
-        method, headers: { 'Content-Type': 'application/json', 'x-admin-auth': adminToken || '' },
+        method, headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(payload)
       })
       
@@ -284,9 +286,11 @@ export default function AdminProductsPage() {
           <p className="text-[#6B6058] text-[11px] font-bold uppercase tracking-[2px] opacity-40 mb-1">Manage Products</p>
           <h2 className="text-[28px] font-bold font-heading text-[#1C1410] uppercase tracking-widest leading-none">Products</h2>
         </div>
-        <button onClick={openAddModal} className="bg-[#1C1410] text-white px-8 py-4 rounded-0 font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#33221b] transition-all shadow-xl active:scale-95">
-          + Add Product
-        </button>
+        {hasPermission('products_edit') && (
+          <button onClick={openAddModal} className="bg-[#1C1410] text-white px-8 py-4 rounded-0 font-bold uppercase tracking-[3px] text-[12px] hover:bg-[#33221b] transition-all shadow-xl active:scale-95">
+            + Add Product
+          </button>
+        )}
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-10">
@@ -352,11 +356,32 @@ export default function AdminProductsPage() {
                   {p.sale_price ? <><p className="font-bold text-[#783A3A] font-heading text-[16px]">{p.sale_price.toLocaleString()} PKR</p><p className="text-[10px] line-through text-[#6B6058] opacity-40">Was {p.price_pkr.toLocaleString()} PKR</p></> : <p className="font-bold text-[#1C1410] font-heading text-[16px]">{p.price_pkr?.toLocaleString()} PKR</p>}
                 </td>
                 <td className="px-8 py-6"><p className={`text-[12px] font-bold uppercase tracking-widest ${p.stock_qty > 5 ? 'text-[#2D6A4F]' : 'text-red-500'}`}>{p.stock_qty} Items</p></td>
-                <td className="px-8 py-6"><button onClick={() => handleToggle(p.id)} className={`w-11 h-6 rounded-full relative transition-all shadow-inner ${p.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}><div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${p.is_active ? 'left-6' : 'left-1'}`}></div></button></td>
+                <td className="px-8 py-6">
+                  {hasPermission('products_edit') ? (
+                    <button onClick={() => handleToggle(p.id)} className={`w-11 h-6 rounded-full relative transition-all shadow-inner ${p.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}>
+                      <div className={`w-4 h-4 bg-white shadow-md rounded-full absolute top-1 transition-all ${p.is_active ? 'left-6' : 'left-1'}`}></div>
+                    </button>
+                  ) : (
+                    <div className={`w-11 h-6 rounded-full relative opacity-40 ${p.is_active ? 'bg-[#2D6A4F]' : 'bg-[#E8E2D9]'}`}>
+                      <div className={`w-4 h-4 bg-white rounded-full absolute top-1 ${p.is_active ? 'left-6' : 'left-1'}`}></div>
+                    </div>
+                  )}
+                </td>
                 <td className="px-8 py-6">
                   <div className="flex gap-4">
-                    <button onClick={() => openEditModal(p)} className="p-2 border border-[#E8E2D9] text-[#1C1410] hover:bg-[#1C1410] hover:text-white transition-all"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
-                    <button onClick={() => handleDelete(p.id, p.name)} className="p-2 border border-[#E8E2D9] text-red-500 hover:bg-red-500 hover:text-white transition-all"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    {hasPermission('products_edit') && (
+                      <button onClick={() => openEditModal(p)} className="p-2 border border-[#E8E2D9] text-[#1C1410] hover:bg-[#1C1410] hover:text-white transition-all">
+                        <Edit2 size={14} />
+                      </button>
+                    )}
+                    {hasPermission('products_delete') && (
+                      <button onClick={() => handleDelete(p.id, p.name)} className="p-2 border border-[#E8E2D9] text-red-500 hover:bg-red-500 hover:text-white transition-all">
+                        <Trash2 size={14} />
+                      </button>
+                    )}
+                    {!hasPermission('products_edit') && !hasPermission('products_delete') && (
+                      <span className="text-[10px] uppercase font-bold opacity-20">No Auth</span>
+                    )}
                   </div>
                 </td>
               </tr>
