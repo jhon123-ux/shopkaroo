@@ -31,6 +31,8 @@ const allowedOrigins = [
   'http://localhost:3001',
   'https://shopkarro.com',
   'https://www.shopkarro.com',
+  'https://shopkaroo.com',
+  'https://www.shopkaroo.com',
 ]
 
 app.use(cors({
