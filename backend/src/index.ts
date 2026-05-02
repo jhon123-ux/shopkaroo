@@ -1,8 +1,10 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import swaggerSetup from './swagger'
 
@@ -16,8 +18,6 @@ import offerBannerRoutes from './routes/offerBanner'
 import wishlistRoutes from './routes/wishlist.routes'
 import authRoutes from './routes/auth'
 import teamRoutes from './routes/team'
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 5000
