@@ -33,7 +33,7 @@ export const createReview = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'All fields are required' })
     }
 
-    const { data, error } = await supabase.from('reviews').insert({
+    const { data, error } = await supabaseAdmin.from('reviews').insert({
       product_id,
       name,
       rating,
