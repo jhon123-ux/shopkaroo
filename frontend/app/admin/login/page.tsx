@@ -33,6 +33,7 @@ export default function AdminLogin() {
       })
 
       const data = await res.json()
+      console.log('LOGIN RESPONSE:', res.status, data)
 
       if (!res.ok) {
         setError(data.message || data.error || 'Login failed')
@@ -42,12 +43,15 @@ export default function AdminLogin() {
 
       // Step 1 — persist token first
       localStorage.setItem('skr_admin_token', data.token)
+      console.log('TOKEN SAVED:', localStorage.getItem('skr_admin_token'))
 
       // Step 2 — update store
       setAdmin(data.admin, data.token)
+      console.log('STORE UPDATED:', data.admin)
 
       // Step 3 — wait one tick then navigate
       setTimeout(() => {
+        console.log('NAVIGATING TO /admin')
         router.replace('/admin')
       }, 50)
     } catch (err: any) {

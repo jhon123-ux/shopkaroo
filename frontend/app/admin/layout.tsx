@@ -49,6 +49,7 @@ export default function AdminLayout({
   useEffect(() => {
     if (hasRestored.current) return
     hasRestored.current = true
+    console.log('LAYOUT EFFECT RUNNING, pathname:', pathname)
 
     const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
     if (isPublic) {
@@ -57,6 +58,7 @@ export default function AdminLayout({
     }
 
     const token = localStorage.getItem('skr_admin_token')
+    console.log('TOKEN FROM STORAGE:', token)
     if (!token) {
       setLoading(false)
       router.replace('/admin/login')
@@ -70,6 +72,7 @@ export default function AdminLayout({
     })
       .then(r => r.json())
       .then(data => {
+        console.log('ME RESPONSE:', data)
         if (data.admin) {
           setAdmin(data.admin, token)
           setLoading(false)
