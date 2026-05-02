@@ -141,6 +141,9 @@ export default function SubcategoryManagementPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const method = editingCat ? 'PATCH' : 'POST'
+    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
+
     try {
       const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(url, {
@@ -163,6 +166,8 @@ export default function SubcategoryManagementPage() {
     }
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to expunge this subcategory?')) return
     try {
       const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/categories/${id}`, {
@@ -178,6 +183,7 @@ export default function SubcategoryManagementPage() {
     }
   }
 
+  const handleToggle = async (id: string) => {
     try {
       const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
