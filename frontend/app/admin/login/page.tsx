@@ -38,6 +38,7 @@ export default function AdminLogin() {
       }
 
       localStorage.setItem('skr_admin_token', data.token)
+      document.cookie = `skr_admin_token=${data.token}; path=/; max-age=28800; SameSite=Lax`
       setAdmin(data.admin, data.token)
       window.location.href = '/admin'
 
