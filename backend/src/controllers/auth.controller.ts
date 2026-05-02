@@ -63,8 +63,8 @@ export const adminLogin = async (req: Request, res: Response) => {
         role: finalAdmin.role,
         permissions: finalAdmin.permissions 
       },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRY }
+      JWT_SECRET as string,
+      { expiresIn: JWT_EXPIRY as any }
     )
 
     // 5. Set cookie
