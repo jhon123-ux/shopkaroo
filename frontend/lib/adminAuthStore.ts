@@ -30,7 +30,7 @@ const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
     return !!admin.permissions[permission]
   },
   logout: async () => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
     try {
       await fetch(`${backendUrl}/api/admin/auth/logout`, { 
         method: 'POST', 
