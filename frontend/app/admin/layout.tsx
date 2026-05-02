@@ -97,6 +97,48 @@ export default function AdminLayout({
     run()
   }, []) // empty deps — run ONCE only
 
+  useEffect(() => {
+    const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
+    if (isPublic) return
+
+    const token = localStorage.getItem('skr_admin_token')
+    if (!token) {
+      setLoading(false)
+      router.replace('/admin/login')
+      return
+    }
+
+    // admin already in store from login — just verify token exists
+    const { admin } = useAdminAuthStore.getState()
+    if (admin) {
+      setLoading(false)
+      return
+    }
+
+    // token exists but no admin in store — fetch /me
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
+      'https://shopkaroo-production.up.railway.app'
+
+    fetch(`${apiUrl}/api/admin/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.admin) {
+          setAdmin(data.admin, token)
+        } else {
+          localStorage.removeItem('skr_admin_token')
+          router.replace('/admin/login')
+        }
+        setLoading(false)
+      })
+      .catch(() => {
+        localStorage.removeItem('skr_admin_token')
+        setLoading(false)
+        router.replace('/admin/login')
+      })
+  }, [pathname])
+
   // ─── Draft order count ───────────────────────────────────────────────────
   useEffect(() => {
     if (!admin) return
