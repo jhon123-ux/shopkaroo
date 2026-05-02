@@ -20,7 +20,7 @@ interface AdminAuthStore {
 
 const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
   admin: null,
-  token: typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : null,
+  token: (() => { try { return typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : null } catch { return null } })(),
   loading: true,
   setAdmin: (admin, token) => {
     try {

@@ -46,10 +46,30 @@ export default function AdminLayout({
     // Restore session
     const restoreSession = async () => {
       if (admin) return
-      
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const token = localStorage.getItem('skr_admin_token')
-      
+
+      // Failsafe API URL for production
+      let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+      if (window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
+        apiUrl = 'https://shopkaroo-production.up.railway.app'
+      }
+
+      // Safely read token from localStorage
+      let token: string | null = null
+      try {
+        token = localStorage.getItem('skr_admin_token')
+      } catch (e) {
+        console.error('localStorage not accessible', e)
+      }
+
+      // If no token and not on a public page, redirect to login
+      if (!token) {
+        if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
+          router.push('/admin/login')
+        }
+        setLoading(false)
+        return
+      }
+
       try {
         const res = await fetch(`${apiUrl}/api/admin/auth/me`, { 
           headers: {
@@ -59,10 +79,13 @@ export default function AdminLayout({
         })
         if (res.ok) {
           const data = await res.json()
-          console.log('Session Data:', data)
-          setAdmin(data.admin)
-        } else if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
-          router.push('/admin/login')
+          setAdmin(data.admin, token)
+        } else {
+          // Token is invalid — clear it and redirect
+          try { localStorage.removeItem('skr_admin_token') } catch (_) {}
+          if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
+            router.push('/admin/login')
+          }
         }
       } catch (e) {
         console.error('Session restoration failed', e)
