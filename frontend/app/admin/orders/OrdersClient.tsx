@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
 import { useRouter } from 'next/navigation'
+import api from '@/lib/api'
 import { CustomerOrderSummary } from '@/lib/recurring-customers'
 import RecurringBadge from '@/components/admin/RecurringBadge'
 import CustomerOrdersModal from '@/components/admin/CustomerOrdersModal'
@@ -95,17 +96,15 @@ export default function AdminOrdersPage({
     if (searchQuery) params.append('search', searchQuery)
 
     setExportLoading(true)
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') || '' : ''
-
-    fetch(`${apiUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
-      headers: { 'Authorization': `Bearer ${adminToken}` },
-      credentials: 'include'
+    
+    api.get(`/api/orders/admin/orders/export/excel?${params.toString()}`, {
+      responseType: 'blob'
     })
       .then(response => {
-        if (!response.ok) throw new Error('Export failed')
-        const disposition = response.headers.get('Content-Disposition')
+        const disposition = response.headers['content-disposition']
         const filename = disposition?.match(/filename="(.+)"/)?.[1] || 'shopkarro-orders.xlsx'
-        return response.blob().then(blob => ({ blob, filename }))
+        const blob = new Blob([response.data], { type: response.headers['content-type'] })
+        return { blob, filename }
       })
       .then(({ blob, filename }) => {
         const url = window.URL.createObjectURL(blob)
@@ -161,33 +160,17 @@ export default function AdminOrdersPage({
   const [error, setError] = useState('')
 
   const fetchOrders = async () => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-    const headers = { 
-      'Authorization': `Bearer ${adminToken}`,
-      'Content-Type': 'application/json'
-    }
-
     setLoading(true)
     setError('')
     try {
-      console.log('Fetching orders...', apiUrl)
-      const res = await fetch(`${apiUrl}/api/orders?all=true`, { 
-        method: 'GET',
-        headers,
-        credentials: 'include',
-        cache: 'no-store'
-      })
+      console.log('Fetching orders...')
+      const res = await api.get('/api/orders?all=true')
       
-      console.log('Response status:', res.status)
-      const data = await res.json()
-      
-      if (!res.ok) throw new Error(data.error || 'Connection Failed')
-      
-      console.log('Orders fetched:', data)
-      setOrders(data.data || [])
+      console.log('Orders fetched:', res.data)
+      setOrders(res.data.data || [])
     } catch (err: any) {
       console.error('Failed to fetch orders:', err)
-      setError(err.message)
+      setError(err.response?.data?.error || err.message)
       showToast('Failed to sync data', 'error')
     } finally {
       setLoading(false)
@@ -211,19 +194,9 @@ export default function AdminOrdersPage({
     if (!selectedOrder) return
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
-      const res = await fetch(`${apiUrl}/api/orders/${selectedOrder.id}`, {
-        method: 'PATCH',
-        headers: { 
-          'Authorization': `Bearer ${adminToken}`,
-          'Content-Type': 'application/json' 
-        },
-        credentials: 'include',
-        body: JSON.stringify({ status })
-      })
-
-      if (!res.ok) throw new Error('Failed to update status')
+      const res = await api.patch(`/api/orders/${selectedOrder.id}`, { status })
       
-      const { data } = await res.json()
+      const { data } = res.data
       
       setSelectedOrder(data)
       setOrders(orders.map(o => o.id === data.id ? data : o))
@@ -309,24 +282,15 @@ export default function AdminOrdersPage({
   const [isDuplicating, setIsDuplicating] = useState(false)
 
   const handleDuplicateOrder = async (orderId: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     setIsDuplicating(true)
     try {
-      const res = await fetch(`${apiUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
-        method: 'POST',
-        headers: { 
-          'Authorization': `Bearer ${adminToken}`,
-          'Content-Type': 'application/json' 
-        },
-        credentials: 'include'
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to duplicate order')
-
+      const res = await api.post(`/api/orders/admin/orders/${orderId}/duplicate`)
+      const data = res.data
+      
       sessionStorage.setItem('duplicate_order_draft', JSON.stringify(data))
       window.location.href = '/admin/orders/new'
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     } finally {
       setIsDuplicating(false)
     }

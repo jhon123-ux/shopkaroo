@@ -18,6 +18,7 @@ import {
   BarChart2,
   Users
 } from 'lucide-react'
+import api from '@/lib/api'
 
 const PUBLIC_PATHS = ['/admin/login', '/admin/forgot-password', '/admin/reset-password']
 
@@ -70,13 +71,9 @@ export default function AdminLayout({
         return
       }
 
-      const apiUrl = 'https://shopkaroo-production.up.railway.app'
-
       try {
-        const res = await fetch(`${apiUrl}/api/admin/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        const data = await res.json()
+        const res = await api.get('/api/admin/auth/me')
+        const data = res.data
         console.log('LAYOUT: me response:', data)
 
         if (data.admin) {
@@ -88,7 +85,8 @@ export default function AdminLayout({
           setLoading(false)
           router.replace('/admin/login')
         }
-      } catch {
+      } catch (err) {
+        console.error('LAYOUT: auth check failed:', err)
         localStorage.removeItem('skr_admin_token')
         setLoading(false)
         router.replace('/admin/login')

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Check, X } from 'lucide-react'
+import api from '@/lib/api'
 
 interface OfferBannerData {
   id: string
@@ -38,9 +39,9 @@ export default function AdminOfferBannerPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/offer-banner`)
-      .then(r => r.json())
-      .then(data => {
+    api.get('/api/offer-banner')
+      .then(res => {
+        const data = res.data
         if (data.data) {
           const formattedDate = new Date(data.data.end_date).toISOString().slice(0, 16)
           setBanner({ ...data.data, end_date: formattedDate })
@@ -48,7 +49,7 @@ export default function AdminOfferBannerPage() {
       })
       .catch(err => console.error('Fetch failed:', err))
       .finally(() => setLoading(false))
-  }, [apiUrl])
+  }, [])
 
   useEffect(() => {
     const calculatePreview = () => {
@@ -87,23 +88,14 @@ export default function AdminOfferBannerPage() {
 
     setSaving(true)
     try {
-      const adminToken = localStorage.getItem('skr_admin_token')
-      const res = await fetch(`${apiUrl}/api/offer-banner/${banner.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
-        },
-        body: JSON.stringify({
-          ...banner,
-          end_date: new Date(banner.end_date).toISOString()
-        })
+      await api.patch(`/api/offer-banner/${banner.id}`, {
+        ...banner,
+        end_date: new Date(banner.end_date).toISOString()
       })
 
-      if (!res.ok) throw new Error('Save failed')
       showToast('Promotion updated.')
-    } catch (err) {
-      showToast('Save failed.', 'error')
+    } catch (err: any) {
+      showToast(err.response?.data?.error || 'Save failed.', 'error')
       console.error(err)
     } finally {
       setSaving(false)

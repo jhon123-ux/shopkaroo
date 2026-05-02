@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Check, X, Camera, Hourglass, Sofa, Bed, Archive, Utensils, Box, Plus, Edit2, Trash2 } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
+import api from '@/lib/api'
 
 const getCategoryEmoji = (category: string) => {
   switch (category) {
@@ -48,19 +49,15 @@ export default function AdminProductsPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchInitialData = async () => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-    const headers = { 'Authorization': `Bearer ${adminToken}` }
     setLoading(true)
     try {
       // 1. Fetch Products
-      const prodRes = await fetch(`${apiUrl}/api/products?all=true&limit=100`, { headers, credentials: 'include' })
-      const prodData = await prodRes.json()
-      setProducts(prodData.data || [])
+      const prodRes = await api.get('/api/products?all=true&limit=100')
+      setProducts(prodRes.data.data || [])
 
       // 2. Fetch Categories for selection
-      const catRes = await fetch(`${apiUrl}/api/categories?all=true`, { headers, credentials: 'include' })
-      const catData = await catRes.json()
-      const rawCats = catData.data || []
+      const catRes = await api.get('/api/categories?all=true')
+      const rawCats = catRes.data.data || []
       setAllCategories(rawCats)
 
       // 3. Flatten for dropdowns (Parent > Child)
@@ -134,11 +131,7 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       try {
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-        const res = await fetch(`${apiUrl}/api/products/${id}`, { 
-          method: 'DELETE', headers: { 'Authorization': `Bearer ${adminToken}` }, credentials: 'include'
-        })
-        if (!res.ok) throw new Error('Delete failed')
+        await api.delete(`/api/products/${id}`)
         setProducts(products.filter(p => p.id !== id))
         showToast('Product deleted.', 'success')
       } catch (err) {
@@ -149,11 +142,8 @@ export default function AdminProductsPage() {
 
   const handleToggle = async (id: string) => {
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-      const res = await fetch(`${apiUrl}/api/products/${id}/toggle`, { 
-        method: 'PATCH', headers: { 'Authorization': `Bearer ${adminToken}` }, credentials: 'include'
-      })
-      const { data } = await res.json()
+      const res = await api.patch(`/api/products/${id}/toggle`)
+      const { data } = res.data
       setProducts(products.map(p => p.id === id ? data : p))
       showToast(data.is_active ? 'Status: Active' : 'Status: Inactive', 'success')
     } catch (err) {
@@ -201,25 +191,19 @@ export default function AdminProductsPage() {
       const fData = new FormData()
       fData.append('image', filesToUpload[i])
       try {
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-        // IMPORTANT: Do NOT set Content-Type header manually when sending FormData.
-        // The browser must auto-generate the multipart/form-data boundary.
-        const res = await fetch(`${apiUrl}/api/upload/product`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${adminToken}` },
-          credentials: 'include',
-          body: fData
+        const res = await api.post('/api/upload/product', fData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
         })
-        const data = await res.json()
-        if (res.ok && data.url) {
+        const data = res.data
+        if (data.url) {
           setFormData(prev => ({ ...prev, images: [...prev.images, data.url] }))
         } else {
           console.error('Upload error response:', data)
-          showToast(data.error || `Upload failed (${res.status})`, 'error')
+          showToast(data.error || 'Upload failed', 'error')
         }
-      } catch (err) { 
+      } catch (err: any) { 
         console.error('Upload network error:', err)
-        showToast('Network error during upload', 'error')
+        showToast(err.response?.data?.error || 'Network error during upload', 'error')
       }
       setUploadingCount(prev => prev - 1)
     }
@@ -250,24 +234,16 @@ export default function AdminProductsPage() {
       image_alts: formData.image_alts
     }
     try {
-      const url = isEditMode ? `${apiUrl}/api/products/${currentProductId}` : `${apiUrl}/api/products`
-      const method = isEditMode ? 'PATCH' : 'POST'
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-      const res = await fetch(url, {
-        method, headers: { 'Authorization': `Bearer ${adminToken}`, 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(payload)
-      })
+      const url = isEditMode ? `/api/products/${currentProductId}` : '/api/products'
       
-      if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.error || 'Submission failed')
-      }
-
+      const res = isEditMode 
+        ? await api.patch(url, payload)
+        : await api.post(url, payload)
+      
       showToast(`Product saved: ${formData.name}`)
       setIsModalOpen(false); fetchInitialData()
     } catch (err: any) {
-      showToast(err.message || 'Save failed.', 'error')
+      showToast(err.response?.data?.error || err.message || 'Save failed.', 'error')
     }
   }
 

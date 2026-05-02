@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import api from '@/lib/api'
 
 export interface AdminUser {
   id: string
@@ -40,12 +41,8 @@ const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
     return !!admin.permissions[permission]
   },
   logout: async () => {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
     try {
-      await fetch(`${backendUrl}/api/admin/auth/logout`, { 
-        method: 'POST', 
-        credentials: 'include' 
-      })
+      await api.post('/api/admin/auth/logout')
     } catch (e) {
       console.error('Logout API call failed', e)
     }

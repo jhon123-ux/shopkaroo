@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import api from '@/lib/api'
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<any[]>([])
@@ -39,13 +40,9 @@ export default function AdminCategoriesPage() {
 
   const fetchCategories = async () => {
     setLoading(true)
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/categories?all=true`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const data = await res.json()
-      setCategories(data.data || [])
+      const res = await api.get('/api/categories?all=true')
+      setCategories(res.data.data || [])
     } catch (err) {
       console.error(err)
     } finally {
@@ -105,19 +102,12 @@ export default function AdminCategoriesPage() {
     const fData = new FormData()
     fData.append('image', file)
 
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/upload/category`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: fData
+      const res = await api.post('/api/upload/category', fData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Upload failed')
-      }
+      const data = res.data
 
       if (data.url) {
         setFormData(prev => ({ ...prev, image_url: data.url }))
@@ -125,7 +115,7 @@ export default function AdminCategoriesPage() {
       }
     } catch (err: any) {
       console.error('Image Upload Error:', err)
-      showToast(err.message || 'Asset synchronization failed', 'error')
+      showToast(err.response?.data?.error || 'Asset synchronization failed', 'error')
     } finally {
       setIsUploading(false)
     }
@@ -133,60 +123,38 @@ export default function AdminCategoriesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const token = localStorage.getItem('skr_admin_token')
     const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
+    const url = editingCat ? `/api/categories/${editingCat.id}` : '/api/categories'
 
     try {
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      })
+      const res = method === 'PATCH' 
+        ? await api.patch(url, formData)
+        : await api.post(url, formData)
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to save category manifest')
-      }
-      
       showToast(`Category ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
       fetchCategories()
     } catch (err: any) {
       console.error('Save Category Error:', err)
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to expunge this category?')) return
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/categories/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) {
-        showToast('Category expunged')
-        fetchCategories()
-      }
+      await api.delete(`/api/categories/${id}`)
+      showToast('Category expunged')
+      fetchCategories()
     } catch (err) {
       showToast('Deletion failed', 'error')
     }
   }
 
   const handleToggle = async (id: string) => {
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) fetchCategories()
+      await api.patch(`/api/categories/${id}/toggle`)
+      fetchCategories()
     } catch (err) {
       showToast('Toggle failed', 'error')
     }

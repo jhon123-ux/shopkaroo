@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Check, X, Shield, UserPlus, Mail, ShieldAlert, MoreVertical, RefreshCw, Power, Trash2 } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
+import api from '@/lib/api'
 
 export default function TeamManagement() {
   const { admin, hasPermission } = useAdminAuthStore()
@@ -27,13 +28,9 @@ export default function TeamManagement() {
 
   const fetchMembers = async () => {
     setLoading(true)
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/admin/team`, { 
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const data = await res.json()
-      if (res.ok) setMembers(data.data || [])
+      const res = await api.get('/api/admin/team')
+      setMembers(res.data.data || [])
     } catch (err) {
       showToast('Registry sync failed', 'error')
     } finally {
@@ -52,61 +49,36 @@ export default function TeamManagement() {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault()
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/admin/team/invite`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Invitation failed')
+      await api.post('/api/admin/team/invite', formData)
       
       showToast('Invitation sent! Team member will receive an email to set their password.')
       setIsModalOpen(false)
       fetchMembers()
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     }
   }
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/admin/team/${targetId}`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Update failed')
+      await api.patch(`/api/admin/team/${targetId}`, formData)
       
       showToast(`Registry updated for ${formData.name}`)
       setIsModalOpen(false)
       fetchMembers()
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     }
   }
 
   const handleResend = async (id: string) => {
-    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/admin/team/${id}/resend-invite`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) showToast('Invitation link resent')
-      else throw new Error('Resend failed')
+      await api.post(`/api/admin/team/${id}/resend-invite`)
+      showToast('Invitation link resent')
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     }
   }
 
@@ -326,26 +298,13 @@ export default function TeamManagement() {
               <button
                 onClick={async () => {
                   setDeletingId(confirmDeleteId)
-                  const token = localStorage.getItem('skr_admin_token')
-                  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
                   try {
-                    const res = await fetch(
-                      `${apiUrl}/api/admin/team/${confirmDeleteId}`,
-                      {
-                        method: 'DELETE',
-                        headers: { Authorization: `Bearer ${token}` }
-                      }
-                    )
-                    if (res.ok) {
-                      setMembers(prev => prev.filter(m => m.id !== confirmDeleteId))
-                      showToast('Team member deleted successfully')
-                    } else {
-                      const data = await res.json()
-                      throw new Error(data.error || 'Delete failed')
-                    }
+                    await api.delete(`/api/admin/team/${confirmDeleteId}`)
+                    setMembers(prev => prev.filter(m => m.id !== confirmDeleteId))
+                    showToast('Team member deleted successfully')
                   } catch (err: any) {
                     console.error('Delete failed:', err)
-                    showToast(err.message, 'error')
+                    showToast(err.response?.data?.error || err.message, 'error')
                   } finally {
                     setDeletingId(null)
                     setConfirmDeleteId(null)

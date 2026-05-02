@@ -13,6 +13,7 @@ import {
   Search,
   XCircle
 } from 'lucide-react'
+import api from '@/lib/api'
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([])
@@ -24,13 +25,9 @@ export default function AdminReviewsPage() {
 
   const fetchReviews = async () => {
     setLoading(true)
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-    const headers = { 'Authorization': `Bearer ${adminToken}` }
-
     try {
-      const res = await fetch(`${apiUrl}/api/reviews/admin`, { headers })
-      const data = await res.json()
-      setReviews(data.data || [])
+      const res = await api.get('/api/reviews/admin')
+      setReviews(res.data.data || [])
     } catch (err) {
       console.error(err)
       showToast('Sync Error', 'error')
@@ -49,16 +46,9 @@ export default function AdminReviewsPage() {
   }
 
   const handleApprove = async (id: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
-      const res = await fetch(`${apiUrl}/api/reviews/${id}/approve`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${adminToken}` }
-      })
-
-      if (!res.ok) throw new Error('Approval failed')
-      
-      const { data } = await res.json()
+      const res = await api.patch(`/api/reviews/${id}/approve`)
+      const { data } = res.data
       setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: true } : r))
       showToast('Review Approved', 'success')
     } catch (err) {
@@ -69,15 +59,8 @@ export default function AdminReviewsPage() {
   const handleReject = async (id: string) => {
     if (!confirm('Are you sure you want to reject this review?')) return
     
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
     try {
-      const res = await fetch(`${apiUrl}/api/reviews/${id}/reject`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${adminToken}` }
-      })
-
-      if (!res.ok) throw new Error('Rejection failed')
-      
+      await api.patch(`/api/reviews/${id}/reject`)
       setReviews(reviews.map(r => r.id === id ? { ...r, is_approved: false } : r))
       showToast('Review Rejected', 'success')
     } catch (err) {

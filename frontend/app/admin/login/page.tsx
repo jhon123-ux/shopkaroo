@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Lock, User, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
+import api from '@/lib/api'
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
@@ -17,25 +18,15 @@ export default function AdminLogin() {
     setLoading(true)
     setError(null)
 
-    const apiUrl = 'https://shopkaroo-production.up.railway.app'
-
     try {
-      const res = await fetch(`${apiUrl}/api/admin/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
-        credentials: 'include'
+      const res = await api.post('/api/admin/auth/login', { 
+        email: email.trim(), 
+        password: password.trim() 
       })
 
-      console.log('FETCH DONE', res.status)
+      console.log('API DONE', res.status)
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.message || data.error || 'Login failed')
-        setLoading(false)
-        return
-      }
+      const data = res.data
 
       localStorage.setItem('skr_admin_token', data.token)
       document.cookie = `skr_admin_token=${data.token}; path=/; max-age=28800; SameSite=Lax`
@@ -43,7 +34,7 @@ export default function AdminLogin() {
       window.location.href = '/admin'
 
     } catch (err: any) {
-      setError('Login failed. Please check your credentials.')
+      setError(err.response?.data?.message || err.response?.data?.error || 'Login failed. Please check your credentials.')
       setLoading(false)
     }
   }

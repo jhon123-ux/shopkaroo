@@ -19,6 +19,7 @@ import {
   X
 } from 'lucide-react'
 import Link from 'next/link'
+import api from '@/lib/api'
 
 const PAKISTAN_CITIES = [
   'Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Faisalabad', 
@@ -125,18 +126,16 @@ export default function CreateOrderPage() {
     setCustomerLookupLoading(true)
     setLookupMessage(null)
     try {
-      const res = await fetch(`${apiUrl}/api/orders/admin/customers/search?phone=${customer.phone}`, {
-        headers: { 'Authorization': `Bearer ${adminToken}` }
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setCustomer({ ...data.customer, phone: customer.phone })
-        setLookupMessage({ text: 'Customer Found — Record sync successful', type: 'success' })
-      } else {
+      const res = await api.get(`/api/orders/admin/customers/search?phone=${customer.phone}`)
+      const data = res.data
+      setCustomer({ ...data.customer, phone: customer.phone })
+      setLookupMessage({ text: 'Customer Found — Record sync successful', type: 'success' })
+    } catch (err: any) {
+      if (err.response?.status === 404) {
         setLookupMessage({ text: 'New Customer — Manual entry required', type: 'info' })
+      } else {
+        setLookupMessage({ text: 'Lookup failed', type: 'error' })
       }
-    } catch (err) {
-      setLookupMessage({ text: 'Lookup failed', type: 'error' })
     } finally {
       setCustomerLookupLoading(false)
     }
@@ -154,8 +153,8 @@ export default function CreateOrderPage() {
     searchTimeout.current = setTimeout(async () => {
       setSearchLoading(true)
       try {
-        const res = await fetch(`${apiUrl}/api/products?search=${productSearch}`)
-        const data = await res.json()
+        const res = await api.get(`/api/products?search=${productSearch}`)
+        const data = res.data
         setSearchResults(data.data || [])
         setShowSearchResults(true)
       } catch (e) {
@@ -200,21 +199,11 @@ export default function CreateOrderPage() {
         order_source: warnings.length > 0 ? "admin_duplicate" : "admin_manual"
       }
 
-      const res = await fetch(`${apiUrl}/api/orders/admin/orders/create`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${adminToken}`
-        },
-        body: JSON.stringify(payload)
-      })
-
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to create order')
+      await api.post('/api/orders/admin/orders/create', payload)
 
       router.push(`/admin/orders`)
     } catch (err: any) {
-      alert(err.message)
+      alert(err.response?.data?.error || err.message)
     } finally {
       setLoading(false)
     }

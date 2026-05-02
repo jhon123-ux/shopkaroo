@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import api from '@/lib/api'
 
 export default function SubcategoryManagementPage() {
   const params = useParams()
@@ -47,12 +48,8 @@ export default function SubcategoryManagementPage() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('skr_admin_token')
-      const res = await fetch(`${apiUrl}/api/categories?all=true`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      const data = await res.json()
-      const allCats = data.data || []
+      const res = await api.get('/api/categories?all=true')
+      const allCats = res.data.data || []
       
       setCategories(allCats)
       
@@ -118,22 +115,17 @@ export default function SubcategoryManagementPage() {
     fData.append('image', file)
 
     try {
-      const token = localStorage.getItem('skr_admin_token')
-      const res = await fetch(`${apiUrl}/api/upload/category`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: fData
+      const res = await api.post('/api/upload/category', fData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
 
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Upload failed')
-
+      const data = res.data
       if (data.url) {
         setFormData(prev => ({ ...prev, image_url: data.url }))
         showToast('Image uploaded successfully')
       }
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     } finally {
       setIsUploading(false)
     }
@@ -142,42 +134,27 @@ export default function SubcategoryManagementPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
+    const url = editingCat ? `/api/categories/${editingCat.id}` : '/api/categories'
 
     try {
-      const token = localStorage.getItem('skr_admin_token')
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      })
-
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to save category')
+      const res = method === 'PATCH'
+        ? await api.patch(url, formData)
+        : await api.post(url, formData)
       
       showToast(`Subcategory ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
       fetchData()
     } catch (err: any) {
-      showToast(err.message, 'error')
+      showToast(err.response?.data?.error || err.message, 'error')
     }
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to expunge this subcategory?')) return
     try {
-      const token = localStorage.getItem('skr_admin_token')
-      const res = await fetch(`${apiUrl}/api/categories/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) {
-        showToast('Subcategory expunged')
-        fetchData()
-      }
+      await api.delete(`/api/categories/${id}`)
+      showToast('Subcategory expunged')
+      fetchData()
     } catch (err) {
       showToast('Deletion failed', 'error')
     }
@@ -185,12 +162,8 @@ export default function SubcategoryManagementPage() {
 
   const handleToggle = async (id: string) => {
     try {
-      const token = localStorage.getItem('skr_admin_token')
-      const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      if (res.ok) fetchData()
+      await api.patch(`/api/categories/${id}/toggle`)
+      fetchData()
     } catch (err) {
       showToast('Toggle failed', 'error')
     }

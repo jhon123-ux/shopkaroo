@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Package, ShoppingCart, Clock, ImageIcon, Star } from 'lucide-react'
+import api from '@/lib/api'
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -18,27 +19,19 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-        
-        const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
-        const headers = { 
-          'Authorization': `Bearer ${adminToken}`,
-          'Content-Type': 'application/json' 
-        }
-        
         console.log('Syncing dashboard...')
 
         const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
-          fetch(`${apiUrl}/api/products?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${apiUrl}/api/orders?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${apiUrl}/api/banners?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${apiUrl}/api/reviews/admin`, { headers, cache: 'no-store' })
+          api.get('/api/products?all=true'),
+          api.get('/api/orders?all=true'),
+          api.get('/api/banners?all=true'),
+          api.get('/api/reviews/admin')
         ])
 
-        const prodData = prodRes.ok ? await prodRes.json() : { count: 0, data: [] }
-        const orderData = orderRes.ok ? await orderRes.json() : { data: [], count: 0 }
-        const bannerData = bannerRes.ok ? await bannerRes.json() : { data: [] }
-        const revData = revRes.ok ? await revRes.json() : { data: [] }
+        const prodData = prodRes.data
+        const orderData = orderRes.data
+        const bannerData = bannerRes.data
+        const revData = revRes.data
 
         console.log('Order sync report:', { count: orderData.count, length: orderData.data?.length })
 

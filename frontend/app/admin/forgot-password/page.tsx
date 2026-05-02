@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Mail, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react'
+import api from '@/lib/api'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -15,39 +16,12 @@ export default function ForgotPassword() {
     setLoading(true)
     setError(null)
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
-    console.log('=== FORGOT PASSWORD DEBUG ===')
-    console.log('API URL from env:', apiUrl)
-    console.log('Full endpoint:', `${apiUrl}/api/admin/auth/forgot-password`)
-
-    if (!apiUrl) {
-      setError('NEXT_PUBLIC_API_URL is not set. Check Vercel environment variables.')
-      setLoading(false)
-      return
-    }
-
     try {
-      const res = await fetch(`${apiUrl}/api/admin/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
-        mode: 'cors',
-        credentials: 'include',
-      })
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({ error: 'Communication error' }))
-        throw new Error(errorData.error || 'Failed to send reset link')
-      }
-
+      await api.post('/api/admin/auth/forgot-password', { email: email.trim() })
       setSuccess(true)
     } catch (err: any) {
-      console.error('Fetch error details:', err)
-      if (err.message === 'Failed to fetch') {
-        setError('Cannot reach the backend server. Check: 1) Railway is running 2) CORS allows shopkarro.com 3) NEXT_PUBLIC_API_URL is correct in Vercel')
-      } else {
-        setError(err.message || 'Something went wrong. Please try again.')
-      }
+      console.error('API error details:', err)
+      setError(err.response?.data?.error || err.message || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
