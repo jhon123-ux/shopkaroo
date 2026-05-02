@@ -99,12 +99,12 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
       const frontendUrl = process.env.FRONTEND_URL || 'https://shopkarro.com'
       
       const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-        type: 'invite',
+        type: 'recovery',
         email: email.trim(),
         options: { redirectTo: `${frontendUrl}/admin/reset-password` }
       })
 
-      console.log('LINK GENERATED:', !!linkData, 'LINK ERROR:', linkError)
+      console.log('LINK GENERATED:', !!linkData, 'LINK ERROR:', linkError?.message)
 
       const inviteLink = linkData?.properties?.action_link
       console.log('INVITE LINK:', inviteLink ? 'EXISTS' : 'MISSING')
