@@ -13,6 +13,7 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('SUBMIT FIRED', email, password)
     setLoading(true)
     setError(null)
 
@@ -25,6 +26,8 @@ export default function AdminLogin() {
         body: JSON.stringify({ email: email.trim(), password: password.trim() }),
         credentials: 'include'
       })
+
+      console.log('FETCH DONE', res.status)
 
       const data = await res.json()
 
