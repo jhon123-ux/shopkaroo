@@ -64,7 +64,7 @@ export default function CreateOrderPage() {
   const [sendEmail, setSendEmail] = useState(false)
   const [internalNote, setInternalNote] = useState('')
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
   const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
 
   // Pre-fill from Duplicate Draft
@@ -125,7 +125,7 @@ export default function CreateOrderPage() {
     setCustomerLookupLoading(true)
     setLookupMessage(null)
     try {
-      const res = await fetch(`${backendUrl}/api/orders/admin/customers/search?phone=${customer.phone}`, {
+      const res = await fetch(`${apiUrl}/api/orders/admin/customers/search?phone=${customer.phone}`, {
         headers: { 'x-admin-auth': adminToken || '' }
       })
       const data = await res.json()
@@ -154,7 +154,7 @@ export default function CreateOrderPage() {
     searchTimeout.current = setTimeout(async () => {
       setSearchLoading(true)
       try {
-        const res = await fetch(`${backendUrl}/api/products?search=${productSearch}`)
+        const res = await fetch(`${apiUrl}/api/products?search=${productSearch}`)
         const data = await res.json()
         setSearchResults(data.data || [])
         setShowSearchResults(true)
@@ -200,7 +200,7 @@ export default function CreateOrderPage() {
         order_source: warnings.length > 0 ? "admin_duplicate" : "admin_manual"
       }
 
-      const res = await fetch(`${backendUrl}/api/orders/admin/orders/create`, {
+      const res = await fetch(`${apiUrl}/api/orders/admin/orders/create`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

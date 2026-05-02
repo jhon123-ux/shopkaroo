@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadingCount, setUploadingCount] = useState(0)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchInitialData = async () => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
@@ -53,12 +53,12 @@ export default function AdminProductsPage() {
     setLoading(true)
     try {
       // 1. Fetch Products
-      const prodRes = await fetch(`${backendUrl}/api/products?all=true&limit=100`, { credentials: 'include' })
+      const prodRes = await fetch(`${apiUrl}/api/products?all=true&limit=100`, { credentials: 'include' })
       const prodData = await prodRes.json()
       setProducts(prodData.data || [])
 
       // 2. Fetch Categories for selection
-      const catRes = await fetch(`${backendUrl}/api/categories?all=true`, { credentials: 'include' })
+      const catRes = await fetch(`${apiUrl}/api/categories?all=true`, { credentials: 'include' })
       const catData = await catRes.json()
       const rawCats = catData.data || []
       setAllCategories(rawCats)
@@ -135,7 +135,7 @@ export default function AdminProductsPage() {
     if (confirm(`Are you sure you want to delete "${name}"?`)) {
       try {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-        const res = await fetch(`${backendUrl}/api/products/${id}`, { 
+        const res = await fetch(`${apiUrl}/api/products/${id}`, { 
           method: 'DELETE', credentials: 'include'
         })
         if (!res.ok) throw new Error('Delete failed')
@@ -150,7 +150,7 @@ export default function AdminProductsPage() {
   const handleToggle = async (id: string) => {
     try {
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-      const res = await fetch(`${backendUrl}/api/products/${id}/toggle`, { 
+      const res = await fetch(`${apiUrl}/api/products/${id}/toggle`, { 
         method: 'PATCH', credentials: 'include'
       })
       const { data } = await res.json()
@@ -204,7 +204,7 @@ export default function AdminProductsPage() {
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         // IMPORTANT: Do NOT set Content-Type header manually when sending FormData.
         // The browser must auto-generate the multipart/form-data boundary.
-        const res = await fetch(`${backendUrl}/api/upload/product`, {
+        const res = await fetch(`${apiUrl}/api/upload/product`, {
           method: 'POST',
           credentials: 'include',
           body: fData
@@ -249,7 +249,7 @@ export default function AdminProductsPage() {
       image_alts: formData.image_alts
     }
     try {
-      const url = isEditMode ? `${backendUrl}/api/products/${currentProductId}` : `${backendUrl}/api/products`
+      const url = isEditMode ? `${apiUrl}/api/products/${currentProductId}` : `${apiUrl}/api/products`
       const method = isEditMode ? 'PATCH' : 'POST'
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
       const res = await fetch(url, {

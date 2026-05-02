@@ -35,10 +35,10 @@ export default function AdminOfferBannerPage() {
     days: 0, hours: 0, minutes: 0, seconds: 0
   })
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   useEffect(() => {
-    fetch(`${backendUrl}/api/offer-banner`)
+    fetch(`${apiUrl}/api/offer-banner`)
       .then(r => r.json())
       .then(data => {
         if (data.data) {
@@ -48,7 +48,7 @@ export default function AdminOfferBannerPage() {
       })
       .catch(err => console.error('Fetch failed:', err))
       .finally(() => setLoading(false))
-  }, [backendUrl])
+  }, [apiUrl])
 
   useEffect(() => {
     const calculatePreview = () => {
@@ -88,7 +88,7 @@ export default function AdminOfferBannerPage() {
     setSaving(true)
     try {
       const adminToken = localStorage.getItem('admin_token')
-      const res = await fetch(`${backendUrl}/api/offer-banner/${banner.id}`, {
+      const res = await fetch(`${apiUrl}/api/offer-banner/${banner.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

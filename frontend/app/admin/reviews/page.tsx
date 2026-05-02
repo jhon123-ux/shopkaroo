@@ -20,7 +20,7 @@ export default function AdminReviewsPage() {
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
   const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null)
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchReviews = async () => {
     setLoading(true)
@@ -28,7 +28,7 @@ export default function AdminReviewsPage() {
     const headers = { 'x-admin-auth': adminToken || '' }
 
     try {
-      const res = await fetch(`${backendUrl}/api/reviews/admin`, { headers })
+      const res = await fetch(`${apiUrl}/api/reviews/admin`, { headers })
       const data = await res.json()
       setReviews(data.data || [])
     } catch (err) {
@@ -51,7 +51,7 @@ export default function AdminReviewsPage() {
   const handleApprove = async (id: string) => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
-      const res = await fetch(`${backendUrl}/api/reviews/${id}/approve`, {
+      const res = await fetch(`${apiUrl}/api/reviews/${id}/approve`, {
         method: 'PATCH',
         headers: { 'x-admin-auth': adminToken || '' }
       })
@@ -71,7 +71,7 @@ export default function AdminReviewsPage() {
     
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
-      const res = await fetch(`${backendUrl}/api/reviews/${id}/reject`, {
+      const res = await fetch(`${apiUrl}/api/reviews/${id}/reject`, {
         method: 'PATCH',
         headers: { 'x-admin-auth': adminToken || '' }
       })

@@ -47,9 +47,9 @@ export default function AdminLayout({
     const restoreSession = async () => {
       if (admin) return
       
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
       try {
-        const res = await fetch(`${backendUrl}/api/admin/auth/me`, { credentials: 'include' })
+        const res = await fetch(`${apiUrl}/api/admin/auth/me`, { credentials: 'include' })
         if (res.ok) {
           const data = await res.json()
           setAdmin(data.admin)

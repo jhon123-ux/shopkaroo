@@ -35,12 +35,12 @@ export default function AdminCategoriesPage() {
 
   const [isUploading, setIsUploading] = useState(false)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchCategories = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`${backendUrl}/api/categories?all=true`, {
+      const res = await fetch(`${apiUrl}/api/categories?all=true`, {
         credentials: 'include'
       })
       const data = await res.json()
@@ -105,7 +105,7 @@ export default function AdminCategoriesPage() {
     fData.append('image', file)
 
     try {
-      const res = await fetch(`${backendUrl}/api/upload/category`, {
+      const res = await fetch(`${apiUrl}/api/upload/category`, {
         method: 'POST',
         credentials: 'include',
         body: fData
@@ -133,7 +133,7 @@ export default function AdminCategoriesPage() {
     e.preventDefault()
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${backendUrl}/api/categories/${editingCat.id}` : `${backendUrl}/api/categories`
+    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
 
     try {
       const res = await fetch(url, {
@@ -161,7 +161,7 @@ export default function AdminCategoriesPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to expunge this category?')) return
     try {
-      const res = await fetch(`${backendUrl}/api/categories/${id}`, {
+      const res = await fetch(`${apiUrl}/api/categories/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       })
@@ -176,7 +176,7 @@ export default function AdminCategoriesPage() {
 
   const handleToggle = async (id: string) => {
     try {
-      const res = await fetch(`${backendUrl}/api/categories/${id}/toggle`, {
+      const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
         method: 'PATCH',
         credentials: 'include'
       })

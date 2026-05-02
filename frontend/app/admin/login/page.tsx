@@ -19,11 +19,11 @@ export default function AdminLogin() {
     setLoading(true)
     setError(null)
 
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
     try {
       // 🔐 SECURE AUTHENTICATION: Using httpOnly cookie via Backend API
-      const res = await fetch(`${backendUrl}/api/admin/auth/login`, {
+      const res = await fetch(`${apiUrl}/api/admin/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password: password.trim() }),

@@ -18,7 +18,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
         
         const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
         const headers = { 
@@ -29,10 +29,10 @@ export default function AdminDashboardPage() {
         console.log('Syncing dashboard...')
 
         const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
-          fetch(`${backendUrl}/api/products?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${backendUrl}/api/orders?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${backendUrl}/api/banners?all=true`, { headers, cache: 'no-store' }),
-          fetch(`${backendUrl}/api/reviews/admin`, { headers, cache: 'no-store' })
+          fetch(`${apiUrl}/api/products?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${apiUrl}/api/orders?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${apiUrl}/api/banners?all=true`, { headers, cache: 'no-store' }),
+          fetch(`${apiUrl}/api/reviews/admin`, { headers, cache: 'no-store' })
         ])
 
         const prodData = prodRes.ok ? await prodRes.json() : { count: 0, data: [] }

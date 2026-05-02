@@ -21,12 +21,12 @@ export default function TeamManagement() {
     permissions: {} as Record<string, boolean>
   })
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchMembers = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`${backendUrl}/api/admin/team`, { credentials: 'include' })
+      const res = await fetch(`${apiUrl}/api/admin/team`, { credentials: 'include' })
       const data = await res.json()
       if (res.ok) setMembers(data.data || [])
     } catch (err) {
@@ -48,7 +48,7 @@ export default function TeamManagement() {
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch(`${backendUrl}/api/admin/team/invite`, {
+      const res = await fetch(`${apiUrl}/api/admin/team/invite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -68,7 +68,7 @@ export default function TeamManagement() {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch(`${backendUrl}/api/admin/team/${targetId}`, {
+      const res = await fetch(`${apiUrl}/api/admin/team/${targetId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -87,7 +87,7 @@ export default function TeamManagement() {
 
   const handleResend = async (id: string) => {
     try {
-      const res = await fetch(`${backendUrl}/api/admin/team/${id}/resend-invite`, {
+      const res = await fetch(`${apiUrl}/api/admin/team/${id}/resend-invite`, {
         method: 'POST',
         credentials: 'include'
       })

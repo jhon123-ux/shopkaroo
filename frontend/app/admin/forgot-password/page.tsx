@@ -15,18 +15,18 @@ export default function ForgotPassword() {
     setLoading(true)
     setError(null)
 
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
     try {
-      const res = await fetch(`${backendUrl}/api/admin/auth/forgot-password`, {
+      const res = await fetch(`${apiUrl}/api/admin/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
       })
 
       if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.error || 'Failed to send reset link')
+        const errorData = await res.json().catch(() => ({ error: 'Communication error' }))
+        throw new Error(errorData.error || 'Failed to send reset link')
       }
 
       setSuccess(true)

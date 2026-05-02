@@ -42,13 +42,13 @@ export default function SubcategoryManagementPage() {
 
   const [isUploading, setIsUploading] = useState(false)
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   const fetchData = async () => {
     setLoading(true)
     try {
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-      const res = await fetch(`${backendUrl}/api/categories?all=true`, {
+      const res = await fetch(`${apiUrl}/api/categories?all=true`, {
         headers: { 'x-admin-auth': adminToken || '' }
       })
       const data = await res.json()
@@ -119,7 +119,7 @@ export default function SubcategoryManagementPage() {
 
     try {
       const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-      const res = await fetch(`${backendUrl}/api/upload/category`, {
+      const res = await fetch(`${apiUrl}/api/upload/category`, {
         method: 'POST',
         headers: { 'x-admin-auth': adminToken || '' },
         body: fData
@@ -143,7 +143,7 @@ export default function SubcategoryManagementPage() {
     e.preventDefault()
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${backendUrl}/api/categories/${editingCat.id}` : `${backendUrl}/api/categories`
+    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
 
     try {
       const res = await fetch(url, {
@@ -171,7 +171,7 @@ export default function SubcategoryManagementPage() {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
 
     try {
-      const res = await fetch(`${backendUrl}/api/categories/${id}`, {
+      const res = await fetch(`${apiUrl}/api/categories/${id}`, {
         method: 'DELETE',
         headers: { 'x-admin-auth': adminToken || '' }
       })
@@ -187,7 +187,7 @@ export default function SubcategoryManagementPage() {
   const handleToggle = async (id: string) => {
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
-      const res = await fetch(`${backendUrl}/api/categories/${id}/toggle`, {
+      const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
         method: 'PATCH',
         headers: { 'x-admin-auth': adminToken || '' }
       })

@@ -60,7 +60,7 @@ export default function AdminOrdersPage({
   const [showCustomExport, setShowCustomExport] = useState(false)
   const exportDropdownRef = useRef<HTMLDivElement>(null)
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
   // Close export dropdown when clicking outside
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function AdminOrdersPage({
     setExportLoading(true)
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') || '' : ''
 
-    fetch(`${backendUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
+    fetch(`${apiUrl}/api/orders/admin/orders/export/excel?${params.toString()}`, {
       credentials: 'include'
     })
       .then(response => {
@@ -169,8 +169,8 @@ export default function AdminOrdersPage({
     setLoading(true)
     setError('')
     try {
-      console.log('Fetching orders...', backendUrl)
-      const res = await fetch(`${backendUrl}/api/orders?all=true`, { 
+      console.log('Fetching orders...', apiUrl)
+      const res = await fetch(`${apiUrl}/api/orders?all=true`, { 
         method: 'GET',
         credentials: 'include',
         cache: 'no-store'
@@ -209,7 +209,7 @@ export default function AdminOrdersPage({
     if (!selectedOrder) return
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
-      const res = await fetch(`${backendUrl}/api/orders/${selectedOrder.id}`, {
+      const res = await fetch(`${apiUrl}/api/orders/${selectedOrder.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -307,7 +307,7 @@ export default function AdminOrdersPage({
     const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     setIsDuplicating(true)
     try {
-      const res = await fetch(`${backendUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
+      const res = await fetch(`${apiUrl}/api/orders/admin/orders/${orderId}/duplicate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include'
