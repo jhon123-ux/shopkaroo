@@ -88,7 +88,7 @@ export default function AdminLogin() {
           <div>
             <div className="flex justify-between items-center mb-3">
               <label className="block text-[11px] font-bold text-text uppercase tracking-[2px]">Security Code</label>
-              <Link href="/admin/forgot-password" size="sm" className="text-[11px] font-bold text-primary uppercase tracking-[1px] hover:underline">
+              <Link href="/admin/forgot-password" className="text-[11px] font-bold text-primary uppercase tracking-[1px] hover:underline">
                 Forgot password?
               </Link>
             </div>

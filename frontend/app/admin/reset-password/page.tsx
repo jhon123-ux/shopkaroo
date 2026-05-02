@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Lock, Eye, EyeOff, AlertCircle, ShieldCheck, CheckCircle2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 
 export default function ResetPassword() {
   const router = useRouter()
@@ -100,7 +101,7 @@ export default function ResetPassword() {
             <div className="flex flex-col gap-2">
                <p className="text-[13px] font-medium leading-relaxed">{error}</p>
                {error.includes('expired') && (
-                 <Link href="/admin/forgot-password" size="sm" className="text-[11px] font-bold uppercase underline">
+                 <Link href="/admin/forgot-password" className="text-[11px] font-bold uppercase underline">
                     Request new link
                  </Link>
                )}
