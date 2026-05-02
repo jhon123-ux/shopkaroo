@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-const listEndpoints = require('express-list-endpoints')
+import listEndpoints from 'express-list-endpoints'
 import swaggerSetup from './swagger'
 
 import productRoutes from './routes/products'
