@@ -42,6 +42,8 @@ export default function AdminLayout({
     { href: '/admin/team', label: 'Team', icon: <Users size={16} />, role: 'superadmin' },
   ]
 
+  const isPublicPath = pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password'
+
   useEffect(() => {
     const restoreSession = async () => {
       if (admin) return
@@ -52,51 +54,41 @@ export default function AdminLayout({
       }
 
       let token: string | null = null
-      try {
-        token = localStorage.getItem('skr_admin_token')
-      } catch (e) {
-        console.error('localStorage not accessible', e)
-      }
+      try { token = localStorage.getItem('skr_admin_token') } catch (e) {}
 
       if (!token) {
-        if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
-          router.push('/admin/login')
-        }
         setLoading(false)
+        if (!isPublicPath) router.push('/admin/login')
         return
       }
 
       try {
-        const res = await fetch(`${apiUrl}/api/admin/auth/me`, { 
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          credentials: 'include' 
+        const res = await fetch(`${apiUrl}/api/admin/auth/me`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          credentials: 'include'
         })
         if (res.ok) {
           const data = await res.json()
           setAdmin(data.admin, token)
-          // ✅ Redirect to dashboard immediately after successful auth
-          if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
-            window.location.href = '/admin'
-            return
-          }
         } else {
-          // Token is invalid — clear it and redirect
           try { localStorage.removeItem('skr_admin_token') } catch (_) {}
-          if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
-            router.push('/admin/login')
-          }
+          setLoading(false)
+          if (!isPublicPath) router.push('/admin/login')
         }
       } catch (e) {
         console.error('Session restoration failed', e)
-      } finally {
         setLoading(false)
       }
     }
-
     restoreSession()
-  }, [pathname])
+  }, []) // ← Run ONCE on mount only
+
+  // Redirect to dashboard if authenticated and on a public path
+  useEffect(() => {
+    if (admin && isPublicPath) {
+      router.push('/admin')
+    }
+  }, [admin, pathname])
 
 
   useEffect(() => {
@@ -132,12 +124,7 @@ export default function AdminLayout({
     return 'Admin'
   }
 
-  if (pathname === '/admin/login' || pathname === '/admin/forgot-password' || pathname === '/admin/reset-password') {
-    // If already authenticated, redirect to dashboard
-    if (admin) {
-      if (typeof window !== 'undefined') window.location.href = '/admin'
-      return null
-    }
+  if (isPublicPath) {
     return <>{children}</>
   }
 

@@ -38,9 +38,9 @@ export default function AdminLogin() {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
-      // Save token and admin state, then redirect
+      // Save token and admin state, then soft-navigate to dashboard
       setAdmin(data.admin, data.token)
-      window.location.href = '/admin'
+      router.push('/admin')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
