@@ -27,14 +27,17 @@ export const adminLogin = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid email or password' })
     }
 
-    // 2. Find admin user in our table
+    console.log(`[Admin Login] Attempt for email: ${email.trim()}`)
+
+    // 2. Find admin user in our table (case-insensitive email lookup)
     let { data: adminUser, error: adminError } = await supabaseAdmin
       .from('admin_users')
       .select('*')
-      .or(`supabase_user_id.eq.${authData.user.id},email.eq.${email.trim()}`)
+      .or(`supabase_user_id.eq.${authData.user.id},email.ilike.${email.trim()}`)
       .single()
 
     if (adminError || !adminUser) {
+      console.log(`[Admin Login] No admin_users record found for: ${email.trim()}`)
       return res.status(403).json({ error: 'No admin account found for this email' })
     }
 
