@@ -37,7 +37,7 @@ export default function AdminLogin() {
       }
 
       // Store admin data in Zustand (The JWT is securely stored in httpOnly cookie by the browser)
-      setAdmin(data.admin)
+      setAdmin(data.user)
       router.push('/admin')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
