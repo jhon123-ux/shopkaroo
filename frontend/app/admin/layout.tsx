@@ -52,7 +52,7 @@ export default function AdminLayout({
         const res = await fetch(`${apiUrl}/api/admin/auth/me`, { credentials: 'include' })
         if (res.ok) {
           const data = await res.json()
-          setAdmin(data.admin)
+          setAdmin(data.user)
         } else if (pathname !== '/admin/login' && pathname !== '/admin/forgot-password' && pathname !== '/admin/reset-password') {
           router.push('/admin/login')
         }
