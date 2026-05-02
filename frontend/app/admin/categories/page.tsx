@@ -39,9 +39,10 @@ export default function AdminCategoriesPage() {
 
   const fetchCategories = async () => {
     setLoading(true)
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/categories?all=true`, {
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${token}` }
       })
       const data = await res.json()
       setCategories(data.data || [])
@@ -104,10 +105,11 @@ export default function AdminCategoriesPage() {
     const fData = new FormData()
     fData.append('image', file)
 
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/upload/category`, {
         method: 'POST',
-        credentials: 'include',
+        headers: { Authorization: `Bearer ${token}` },
         body: fData
       })
 
@@ -131,15 +133,14 @@ export default function AdminCategoriesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
-
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(formData)
       })
 
@@ -160,10 +161,11 @@ export default function AdminCategoriesPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to expunge this category?')) return
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/categories/${id}`, {
         method: 'DELETE',
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) {
         showToast('Category expunged')
@@ -175,10 +177,11 @@ export default function AdminCategoriesPage() {
   }
 
   const handleToggle = async (id: string) => {
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
         method: 'PATCH',
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) fetchCategories()
     } catch (err) {

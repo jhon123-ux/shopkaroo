@@ -65,7 +65,7 @@ export default function CreateOrderPage() {
   const [internalNote, setInternalNote] = useState('')
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-  const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+  const adminToken = typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : ''
 
   // Pre-fill from Duplicate Draft
   useEffect(() => {
@@ -126,7 +126,7 @@ export default function CreateOrderPage() {
     setLookupMessage(null)
     try {
       const res = await fetch(`${apiUrl}/api/orders/admin/customers/search?phone=${customer.phone}`, {
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { 'Authorization': `Bearer ${adminToken}` }
       })
       const data = await res.json()
       if (res.ok) {
@@ -204,7 +204,7 @@ export default function CreateOrderPage() {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || ''
+          'Authorization': `Bearer ${adminToken}`
         },
         body: JSON.stringify(payload)
       })

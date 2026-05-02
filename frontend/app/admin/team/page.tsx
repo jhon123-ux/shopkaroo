@@ -27,8 +27,11 @@ export default function TeamManagement() {
 
   const fetchMembers = async () => {
     setLoading(true)
+    const token = localStorage.getItem('skr_admin_token')
     try {
-      const res = await fetch(`${apiUrl}/api/admin/team`, { credentials: 'include' })
+      const res = await fetch(`${apiUrl}/api/admin/team`, { 
+        headers: { Authorization: `Bearer ${token}` }
+      })
       const data = await res.json()
       if (res.ok) setMembers(data.data || [])
     } catch (err) {
@@ -49,12 +52,15 @@ export default function TeamManagement() {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault()
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/admin/team/invite`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Invitation failed')
@@ -69,12 +75,15 @@ export default function TeamManagement() {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/admin/team/${targetId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-        credentials: 'include'
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Update failed')
@@ -88,10 +97,11 @@ export default function TeamManagement() {
   }
 
   const handleResend = async (id: string) => {
+    const token = localStorage.getItem('skr_admin_token')
     try {
       const res = await fetch(`${apiUrl}/api/admin/team/${id}/resend-invite`, {
         method: 'POST',
-        credentials: 'include'
+        headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) showToast('Invitation link resent')
       else throw new Error('Resend failed')

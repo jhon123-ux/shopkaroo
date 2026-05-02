@@ -47,9 +47,9 @@ export default function SubcategoryManagementPage() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+      const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/categories?all=true`, {
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { Authorization: `Bearer ${token}` }
       })
       const data = await res.json()
       const allCats = data.data || []
@@ -118,10 +118,10 @@ export default function SubcategoryManagementPage() {
     fData.append('image', file)
 
     try {
-      const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
+      const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/upload/category`, {
         method: 'POST',
-        headers: { 'x-admin-auth': adminToken || '' },
+        headers: { Authorization: `Bearer ${token}` },
         body: fData
       })
 
@@ -141,16 +141,13 @@ export default function SubcategoryManagementPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-    const method = editingCat ? 'PATCH' : 'POST'
-    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
-
     try {
+      const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(url, {
         method,
         headers: { 
           'Content-Type': 'application/json',
-          'x-admin-auth': adminToken || '' 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       })
@@ -166,14 +163,11 @@ export default function SubcategoryManagementPage() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to expunge this subcategory?')) return
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
-
     try {
+      const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/categories/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) {
         showToast('Subcategory expunged')
@@ -184,12 +178,11 @@ export default function SubcategoryManagementPage() {
     }
   }
 
-  const handleToggle = async (id: string) => {
-    const adminToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : ''
     try {
+      const token = localStorage.getItem('skr_admin_token')
       const res = await fetch(`${apiUrl}/api/categories/${id}/toggle`, {
         method: 'PATCH',
-        headers: { 'x-admin-auth': adminToken || '' }
+        headers: { Authorization: `Bearer ${token}` }
       })
       if (res.ok) fetchData()
     } catch (err) {
