@@ -1,13 +1,10 @@
 'use client'
-
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Lock, User, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react'
 import useAdminAuthStore from '@/lib/adminAuthStore'
 
 export default function AdminLogin() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -19,10 +16,7 @@ export default function AdminLogin() {
     setLoading(true)
     setError(null)
 
-    let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && apiUrl.includes('localhost')) {
-      apiUrl = 'https://shopkaroo-production.up.railway.app'
-    }
+    const apiUrl = 'https://shopkaroo-production.up.railway.app'
 
     try {
       const res = await fetch(`${apiUrl}/api/admin/auth/login`, {
@@ -33,7 +27,6 @@ export default function AdminLogin() {
       })
 
       const data = await res.json()
-      console.log('LOGIN RESPONSE:', res.status, data)
 
       if (!res.ok) {
         setError(data.message || data.error || 'Login failed')
@@ -41,102 +34,90 @@ export default function AdminLogin() {
         return
       }
 
-      // Step 1 — persist token first
       localStorage.setItem('skr_admin_token', data.token)
-      console.log('TOKEN SAVED:', localStorage.getItem('skr_admin_token'))
-
-      // Step 2 — update store
       setAdmin(data.admin, data.token)
-      console.log('STORE UPDATED:', data.admin)
-
-      // Step 3 — hard redirect to force fresh layout mount
       window.location.href = '/admin'
+
     } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.')
-    } finally {
+      setError('Login failed. Please check your credentials.')
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-bg-white flex items-center justify-center px-6">
-      <div className="max-w-md w-full bg-white border border-border p-10 md:p-14 shadow-sm animate-fadeIn">
+    <div className="min-h-screen bg-white flex items-center justify-center px-6">
+      <div className="max-w-md w-full bg-white border border-gray-200 p-10 shadow-sm">
         
         <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-8">
-            <ShieldCheck size={32} className="text-primary" />
+          <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-8">
+            <ShieldCheck size={32} className="text-purple-700" />
           </div>
-          <h1 className="text-[32px] font-bold font-heading text-text mb-2">Internal Access</h1>
-          <p className="text-text-muted text-[11px] font-bold uppercase tracking-[4px] opacity-60">
-            Administrative Registry
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Login</h1>
+          <p className="text-gray-500 text-sm">Shopkaroo Admin Panel</p>
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-100 rounded-[3px] flex gap-3 text-red-600">
-            <AlertCircle size={18} className="shrink-0" />
-            <p className="text-[13px] font-medium leading-relaxed">{error}</p>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded flex gap-3 text-red-600">
+            <AlertCircle size={18} className="shrink-0 mt-0.5" />
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-8">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-[11px] font-bold text-text mb-3 uppercase tracking-[2px]">Admin Identifier</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-text opacity-30">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 <User size={18} />
               </span>
-              <input 
+              <input
                 required
-                type="email" 
+                type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@shopkarro.com"
-                className="w-full bg-surface border border-border-input rounded-[3px] pl-14 pr-5 py-4 text-[15px] outline-none focus:border-primary transition-all font-body text-text" 
+                className="w-full border border-gray-300 rounded pl-12 pr-4 py-3 text-sm outline-none focus:border-purple-700 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <div className="flex justify-between items-center mb-3">
-              <label className="block text-[11px] font-bold text-text uppercase tracking-[2px]">Security Code</label>
-              <Link href="/admin/forgot-password" className="text-[11px] font-bold text-primary uppercase tracking-[1px] hover:underline">
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <Link href="/admin/forgot-password" className="text-xs text-purple-700 hover:underline">
                 Forgot password?
               </Link>
             </div>
             <div className="relative">
-              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-text opacity-30">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 <Lock size={18} />
               </span>
-              <input 
+              <input
                 required
-                type="password" 
+                type="password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-surface border border-border-input rounded-[3px] pl-14 pr-5 py-4 text-[15px] outline-none focus:border-primary transition-all font-body text-text" 
+                className="w-full border border-gray-300 rounded pl-12 pr-4 py-3 text-sm outline-none focus:border-purple-700 transition-colors"
               />
             </div>
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white py-5 rounded-[3px] text-[13px] font-bold uppercase tracking-[2px] transition-all hover:bg-primary-dark shadow-xl active:scale-95 flex items-center justify-center gap-3"
+            className="w-full bg-purple-700 text-white py-3 rounded text-sm font-semibold hover:bg-purple-900 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
           >
-            {loading ? 'Validating Registry...' : (
-              <>
-                Unseal Dashboard <ArrowRight size={18} />
-              </>
+            {loading ? 'Signing in...' : (
+              <>Sign In <ArrowRight size={16} /></>
             )}
           </button>
         </form>
 
-        <div className="mt-12 text-center pt-8 border-t border-border">
-          <Link href="/" className="text-text-muted text-[12px] font-bold uppercase tracking-widest hover:text-primary transition-colors inline-flex items-center gap-2">
-            Return to Storefront
+        <div className="mt-8 text-center">
+          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
+            ← Back to Store
           </Link>
-          <p className="text-[10px] text-text opacity-20 mt-6 tracking-[2px] uppercase font-bold">System v1.0.5</p>
         </div>
       </div>
     </div>
