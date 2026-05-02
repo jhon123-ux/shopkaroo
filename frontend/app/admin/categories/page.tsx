@@ -134,6 +134,9 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const token = localStorage.getItem('skr_admin_token')
+    const method = editingCat ? 'PATCH' : 'POST'
+    const url = editingCat ? `${apiUrl}/api/categories/${editingCat.id}` : `${apiUrl}/api/categories`
+
     try {
       const res = await fetch(url, {
         method,
