@@ -49,11 +49,8 @@ export default function AdminLogin() {
       setAdmin(data.admin, data.token)
       console.log('STORE UPDATED:', data.admin)
 
-      // Step 3 — wait one tick then navigate
-      setTimeout(() => {
-        console.log('NAVIGATING TO /admin')
-        router.replace('/admin')
-      }, 50)
+      // Step 3 — hard redirect to force fresh layout mount
+      window.location.href = '/admin'
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
