@@ -47,10 +47,15 @@ export default function AdminLogin() {
       }
 
       if (typeof window !== 'undefined') {
-        window.alert('Data Received: ' + JSON.stringify(data))
-        setAdmin(data.admin, data.token)
-        window.alert('--- REDIRECTING NOW ---')
-        window.location.href = '/admin'
+        try {
+          window.alert('Data Received (Token check): ' + !!data.token)
+          setAdmin(data.admin, data.token)
+          window.alert('--- REDIRECTING NOW ---')
+          window.location.href = '/admin'
+        } catch (redirectErr: any) {
+          window.alert('REDIRECT CRASH: ' + redirectErr.message)
+          console.error(redirectErr)
+        }
       }
     } catch (err: any) {
       if (typeof window !== 'undefined') window.alert('Login Error: ' + err.message)

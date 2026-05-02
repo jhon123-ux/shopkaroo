@@ -23,8 +23,12 @@ const useAdminAuthStore = create<AdminAuthStore>((set, get) => ({
   token: typeof window !== 'undefined' ? localStorage.getItem('skr_admin_token') : null,
   loading: true,
   setAdmin: (admin, token) => {
-    if (token) localStorage.setItem('skr_admin_token', token)
-    if (token === null) localStorage.removeItem('skr_admin_token')
+    try {
+      if (token) localStorage.setItem('skr_admin_token', token)
+      if (token === null) localStorage.removeItem('skr_admin_token')
+    } catch (e) {
+      console.error('Storage access denied', e)
+    }
     set({ admin, token: token !== undefined ? token : get().token, loading: false })
   },
   setLoading: (loading) => set({ loading }),
