@@ -16,6 +16,7 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (typeof window !== 'undefined') window.alert('--- ATTEMPTING LOGIN ---')
     console.log('--- LOGIN ATTEMPT START ---')
     setLoading(true)
     setError(null)
@@ -134,6 +135,7 @@ export default function AdminLogin() {
           <Link href="/" className="text-text-muted text-[12px] font-bold uppercase tracking-widest hover:text-primary transition-colors inline-flex items-center gap-2">
             Return to Storefront
           </Link>
+          <p className="text-[10px] text-text opacity-20 mt-6 tracking-[2px] uppercase font-bold">System v1.0.5</p>
         </div>
       </div>
     </div>
