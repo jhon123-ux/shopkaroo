@@ -22,31 +22,28 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// 1. Core Middlewares
+// 1. Middlewares
 app.use(helmet())
 app.use(cors({
-  origin: true, // Temporarily allow all for diagnosis
+  origin: true, // Allow all for diagnosis
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'x-admin-auth'],
 }))
-app.options('*', cors())
 
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
 
-// 2. Critical Diagnostic Routes (Must be before others)
+// 2. Diagnostic Routes
 app.get('/', (req, res) => {
-  res.send('Shopkaroo API is live and stable.')
+  res.send('Shopkaroo API is live')
 })
 
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
-    timestamp: new Date().toISOString(),
-    service: 'Shopkaroo',
-    env: process.env.NODE_ENV || 'production'
+    timestamp: new Date().toISOString()
   })
 })
 
@@ -62,19 +59,19 @@ app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/admin/auth', authRoutes)
 app.use('/api/admin/team', teamRoutes)
 
-// 4. Swagger & Error Handling
+// 4. Documentation
 swaggerSetup(app)
 
+// 5. Error Handling
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled error:', err);
-  const status = err.status || 500;
-  res.status(status).json({ 
+  res.status(err.status || 500).json({ 
     error: err.message || 'Internal Server Error'
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Shopkaroo API running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
 
 export default app
