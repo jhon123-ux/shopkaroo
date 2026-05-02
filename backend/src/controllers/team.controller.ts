@@ -92,6 +92,7 @@ export const inviteTeamMember = async (req: Request, res: Response) => {
 
     // Auto-send invite email
     try {
+      console.log('=== EMAIL BLOCK ENTERED ===')
       const frontendUrl = process.env.FRONTEND_URL || 'https://shopkarro.com'
       
       const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
