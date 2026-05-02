@@ -36,8 +36,9 @@ export default function AdminLogin() {
         throw new Error(data.error || 'Access denied. Please check your administrative credentials.')
       }
 
+      console.log('Login Response:', data)
       // Store admin data in Zustand (The JWT is securely stored in httpOnly cookie by the browser)
-      setAdmin(data.user)
+      setAdmin(data.admin)
       router.push('/admin')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check your credentials.')
