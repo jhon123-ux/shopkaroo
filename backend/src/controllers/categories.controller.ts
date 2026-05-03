@@ -66,6 +66,7 @@ export const createCategory = async (req: Request, res: Response) => {
     if (error) throw error
     return res.status(201).json({ data })
   } catch (error: any) {
+    console.error('Create Category Error:', JSON.stringify(error), error.message)
     return res.status(500).json({ error: error.message })
   }
 }
