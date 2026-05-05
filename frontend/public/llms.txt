@@ -1,31 +1,72 @@
 # Shopkarro
-> Pakistan's premium online furniture store with Cash on Delivery
+> Pakistan's premium handcrafted furniture store with Cash on Delivery nationwide.
 
 - Domain: shopkarro.com
 - Phone: 03706905835
 - Email: shopkarro.ecom@gmail.com
-- Payment: COD only
+- Payment: COD (Cash on Delivery) only — no advance payment required
 - Delivery: Nationwide Pakistan
-- Cities: Lahore, Karachi, Islamabad and more
+- Cities: Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan and 30+ more cities
+- Returns: 7-day hassle-free returns
+- Quality: Every piece inspected before dispatch
+- Working Hours: Mon-Sat, 9am-6pm PKT
 
 ## Key Pages
-- [Home](https://shopkarro.com/): Browse our latest collections and featured furniture pieces.
-- [Products](https://shopkarro.com/furniture): Explore our full catalog of premium furniture for every room.
-- [Categories](https://shopkarro.com/categories): Shop by category to find exactly what you need.
-- [Cart](https://shopkarro.com/cart): View and manage items you've added to your shopping cart.
-- [Checkout](https://shopkarro.com/checkout): Complete your purchase with our secure and easy checkout process.
-- [My Orders](https://shopkarro.com/my-orders): Track your orders and view your purchase history.
-- [Login](https://shopkarro.com/login) / [Signup](https://shopkarro.com/signup): Create an account or sign in to manage your orders.
+- [Home](https://shopkarro.com/): Browse latest collections and featured furniture.
+- [All Collections](https://shopkarro.com/categories): Browse all furniture categories.
+- [Hand Painted Furniture](https://shopkarro.com/categories/hand-painted-furniture): Artisan hand-painted furniture collections.
+- [Console Tables](https://shopkarro.com/furniture/console): Hand-painted and carved console tables for entryways.
+- [Jaye Namaz Box](https://shopkarro.com/furniture/jaye-namaz-box): Hand-painted decorative Jaye Namaz boxes.
+- [Shoe Racks](https://shopkarro.com/furniture/shoe-racks): Premium shoe rack furniture.
+- [Study Tables](https://shopkarro.com/furniture/study-tables): Study and work tables.
+- [Cart](https://shopkarro.com/cart): View and manage your shopping cart.
+- [Checkout](https://shopkarro.com/checkout): Place your order with Cash on Delivery.
+- [My Orders](https://shopkarro.com/my-orders): Track your orders and view purchase history.
+- [Login](https://shopkarro.com/login): Sign in to your Shopkarro account.
+- [Signup](https://shopkarro.com/signup): Create a free account to track orders.
+- [FAQ](https://shopkarro.com/faqs): Frequently asked questions.
 
-## Categories
-- Living room
-- Bedroom
-- Dining
+## Active Product Categories
+- Console Tables (Hand Painted): Artisan hand-painted console tables for entryways, hallways, living rooms, bedrooms and home offices
+- Jaye Namaz Box (Hand Painted): Decorative hand-painted Jaye Namaz boxes
+- Shoe Racks: Premium quality shoe rack furniture
+- Study Tables: Study and work tables for home and office
+
+## Coming Soon Categories
+- Living Room furniture
+- Bedroom furniture
+- Dining furniture
 - Office furniture
-- Storage solutions
+
+## Console Table Products
+All console tables: 48in Length x 16in Width x 32in Height
+Cash on Delivery available. Delivers in 2-3 business days to Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad and Multan.
+
+- **Royal Amber Console Table** — Rs. 28,000 (Sale from Rs. 30,000). Antique brown finish, heavy ornate carvings, hand-painted golden bouquet. Hand-painted golden floral bouquet artwork on tabletop, rich antique brown finish with deep shaded borders, elegantly sculpted gold metallic cabriole legs.
+- **Vogue Bloom Console Table** — Rs. 26,000 (Sale from Rs. 30,000). Midnight black silhouette with hand-painted turquoise birds and blooming florals. Textured metallic bronze cabriole legs with elegant curved frame, protective lacquer coating for long-lasting durability.
+- **Nautical Azure Console Table** — Rs. 26,000 (Sale from Rs. 30,000). Hand-painted nautical scene of traditional sailing boats and rolling waves. Rich teal deep black artwork with high-gloss lacquer coat, 2 functional drawers with smooth glide for everyday storage.
+- **Nova Console Table** — Rs. 26,000 (Sale from Rs. 30,000). Nature-inspired hand-painted scene with graceful birds, blooming spring branches and blossoms. Rich walnut woodgrain surface, 3 functional drawers with hand-painted floral motifs and decorative brasswork.
+- **Emperor Noir Console Table** — Rs. 26,000 (Sale from Rs. 30,000). Deep gloss black lacquer finish with ornate gold baroque hardware. Ornamented gold baroque hardware throughout, carved acanthus leaf leg mounts, 2 functional gold-front drawers with antique-style round knobs.
 
 ## Why Shopkarro
-- **Cash on Delivery (COD)**: Pay only when you receive your furniture at your doorstep.
-- **Quality Catalog**: Handpicked, high-quality furniture pieces for premium homes.
-- **Nationwide Delivery**: We deliver to Lahore, Karachi, Islamabad, and across Pakistan.
-- **Email Order Tracking**: Receive real-time updates and tracking details via email.
+- **Cash on Delivery**: Pay only when your furniture arrives at your doorstep. No card or online payment needed.
+- **Handcrafted Quality**: Every piece is crafted by skilled Pakistani artisans using premium materials.
+- **Nationwide Delivery**: We deliver to Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan and 30+ cities across Pakistan.
+- **7-Day Returns**: Hassle-free return policy on all orders.
+- **Pre-Dispatch Inspection**: Every item is inspected before it leaves our warehouse.
+- **Order Tracking**: Real-time order status updates via email and user account dashboard.
+- **Artisan Collections**: Hand-painted floral artwork, baroque carvings, nautical scenes, gold metallic finishes — unique pieces not available in regular furniture stores.
+- **Skilled Artisans**: Every piece built by skilled Pakistani craftsmen with long-lasting build quality.
+
+## FAQ
+- Does Shopkarro offer Cash on Delivery? Yes, COD is available on all orders across Pakistan. No advance payment required.
+- Which cities does Shopkarro deliver to? We deliver to Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Multan and 30+ more cities across Pakistan.
+- How long does delivery take? Karachi and Lahore: 2-3 business days. Other major cities: 3-5 business days. Remote areas: 5-7 business days.
+- Can I return furniture? Yes, Shopkarro offers 7-day hassle-free returns on all orders.
+- Is Shopkarro furniture handcrafted? Yes, all pieces are handcrafted by skilled Pakistani artisans.
+- How do I track my order? Log into your account at shopkarro.com/my-orders or check email updates sent after every status change.
+- Does Shopkarro sell hand-painted furniture? Yes, Shopkarro specialises in hand-painted console tables and decorative furniture with floral artwork, baroque carvings, nautical scenes and gold metallic finishes.
+- What are the console table dimensions? All console tables are 48 inches length, 16 inches width and 32 inches height.
+- How much do console tables cost? Console tables are priced between Rs. 26,000 and Rs. 28,000 with Cash on Delivery available.
+- Can I contact Shopkarro on WhatsApp? Yes, WhatsApp us at 03706905835 for order assistance.
+- What are Shopkarro working hours? Mon-Sat, 9am-6pm PKT.
