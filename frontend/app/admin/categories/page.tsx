@@ -127,9 +127,13 @@ export default function AdminCategoriesPage() {
     const url = editingCat ? `/api/categories/${editingCat.id}` : '/api/categories'
 
     try {
-      const res = method === 'PATCH' 
-        ? await api.patch(url, formData)
-        : await api.post(url, formData)
+      const payload = {
+        ...formData,
+        parent_id: formData.parent_id || null,
+        image_url: formData.image_url || null,
+      }
+
+      await api[method.toLowerCase() as 'post' | 'patch'](url, payload)
 
       showToast(`Category ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
