@@ -43,89 +43,68 @@ export const getTeamMembers = async (req: Request, res: Response) => {
 }
 
 export const inviteTeamMember = async (req: Request, res: Response) => {
-  const { email, name, role, permissions: customPermissions } = req.body
+  const { email, name, role = 'admin', permissions = {} } = req.body
 
-  if (!email || !name || !role) {
-    return res.status(400).json({ error: 'Email, name and role are required' })
+  // Validation
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Valid email is required' })
+  }
+  if (!name || name.trim().length < 2) {
+    return res.status(400).json({ error: 'Name is required (min 2 characters)' })
   }
 
   try {
-    console.log('=== INVITE FUNCTION CALLED ===')
-    // 1. Check if exists
-    const { data: existing } = await supabaseAdmin
+    // 1. Check admin_users table first — prevent duplicate admins
+    const { data: existingAdmin } = await supabaseAdmin
       .from('admin_users')
       .select('id')
-      .eq('email', email.trim())
+      .ilike('email', email.trim())
       .single()
 
-    if (existing) {
-      return res.status(400).json({ error: 'A team member with this email already exists' })
+    if (existingAdmin) {
+      return res.status(400).json({ error: 'This email is already registered as an admin.' })
     }
 
-    // 2. Create Supabase Auth user
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email: email.trim(),
-      email_confirm: true,
-      user_metadata: { full_name: name }
-    })
+    // 2. Check if email already exists in Supabase Auth (e.g. consumer account)
+    const { data: { users } } = await supabaseAdmin.auth.admin.listUsers()
+    const existingAuthUser = users.find(u => u.email?.toLowerCase() === email.trim().toLowerCase())
 
-    if (authError) throw authError
+    let supabaseUserId: string
 
-    // 3. Prepare permissions
-    const permissions = role === 'custom' ? customPermissions : ROLE_PERMISSIONS[role]
+    // 3. If auth user exists, reuse their ID — do not create a new auth user
+    if (existingAuthUser) {
+      supabaseUserId = existingAuthUser.id
+    } else {
+      // 4. If no auth user, invite them via Supabase (they'll receive a setup email)
+      const { data: invited, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(email.trim())
+      if (inviteError || !invited.user) {
+        return res.status(500).json({ error: 'Failed to create auth account for new admin.' })
+      }
+      supabaseUserId = invited.user.id
+    }
 
-    // 4. Insert into admin_users
+    // 5. Insert into admin_users
     const { data: newAdmin, error: insertError } = await supabaseAdmin
       .from('admin_users')
       .insert({
-        supabase_user_id: authUser.user.id,
-        email: email.trim(),
-        name,
-        role,
-        permissions,
-        created_by: (req as any).adminUser.id
+        email: email.trim().toLowerCase(),
+        name: name.trim(),
+        role: role,
+        permissions: permissions,
+        is_active: true,
+        supabase_user_id: supabaseUserId,
+        created_by: (req as any).adminUser?.id
       })
       .select()
       .single()
 
-    if (insertError) throw insertError
-
-    // Auto-send invite email
-    try {
-      console.log('=== EMAIL BLOCK ENTERED ===')
-      console.log('RESEND KEY VALUE:', process.env.RESEND_API_KEY ? 
-        process.env.RESEND_API_KEY.substring(0, 10) + '...' : 'UNDEFINED')
-      
-      const frontendUrl = process.env.FRONTEND_URL || 'https://shopkarro.com'
-      
-      const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-        type: 'recovery',
-        email: email.trim(),
-        options: { redirectTo: `${frontendUrl}/admin/reset-password` }
-      })
-
-      console.log('LINK GENERATED:', !!linkData, 'LINK ERROR:', linkError?.message)
-
-      const inviteLink = linkData?.properties?.action_link
-      console.log('INVITE LINK:', inviteLink ? 'EXISTS' : 'MISSING')
-
-      if (inviteLink) {
-        const emailResult = await resend.emails.send({
-          from: 'Shopkarro Admin <admin@shopkarro.com>',
-          to: email.trim(),
-          subject: `You've been invited to Shopkarro Admin Panel`,
-          html: `<p>Hi ${name}, click here to activate: <a href="${inviteLink}">Activate Account</a></p>`
-        })
-        console.log('EMAIL SEND RESULT:', JSON.stringify(emailResult))
-      }
-    } catch (emailErr: any) {
-      console.error('EMAIL ERROR:', emailErr.message, JSON.stringify(emailErr))
+    if (insertError) {
+      return res.status(500).json({ error: insertError.message })
     }
 
-    console.log('=== ABOUT TO SEND EMAIL ===', email)
     return res.status(201).json({ 
       data: newAdmin,
-      message: 'Team member invited successfully. An email has been sent.'
+      message: existingAuthUser ? 'Admin linked to existing account.' : 'Invitation email sent.'
     })
   } catch (err: any) {
     console.error('Invite Error:', err)
