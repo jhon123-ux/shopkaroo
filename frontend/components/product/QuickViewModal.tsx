@@ -157,7 +157,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
               <a 
                 href={`https://wa.me/923706905835?text=${whatsappMessage}`}
                 target="_blank" rel="noopener noreferrer"
-                className="w-full border border-green-500 text-green-600 dark:text-green-400 py-3.5 rounded-[3px] font-bold text-[13px] uppercase tracking-wider flex items-center justify-center gap-3 hover:bg-green-500 hover:text-white transition-all"
+                className="w-full border border-green-500 text-green-600  py-3.5 rounded-[3px] font-bold text-[13px] uppercase tracking-wider flex items-center justify-center gap-3 hover:bg-green-500 hover:text-white transition-all"
               >
                 <MessageCircle size={18} /> WhatsApp Enquiry
               </a>

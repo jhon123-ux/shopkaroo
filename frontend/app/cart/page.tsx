@@ -273,7 +273,7 @@ export default function CartPage() {
                 
                 <div className="flex justify-between text-[14px] font-body">
                   <span className="text-text-muted font-semibold opacity-70">Premium Delivery</span>
-                  <span className="text-green-600 dark:text-green-400 font-bold uppercase tracking-wider text-[11px]">Complimentary</span>
+                  <span className="text-green-600  font-bold uppercase tracking-wider text-[11px]">Complimentary</span>
                 </div>
               </div>
 
@@ -286,10 +286,10 @@ export default function CartPage() {
 
               {/* COD notice */}
               <div className="bg-green-500/10 border border-green-500/20 rounded-[3px] p-5 mb-8 flex items-start gap-4 transition-colors">
-                <Check size={18} className="text-green-600 dark:text-green-400 mt-0.5" strokeWidth={3} />
+                <Check size={18} className="text-green-600  mt-0.5" strokeWidth={3} />
                 <div>
-                  <p className="font-bold text-green-600 dark:text-green-400 text-[12px] font-body uppercase tracking-wider">Cash on Delivery</p>
-                  <p className="text-green-600/70 dark:text-green-400/70 text-[13px] mt-1 leading-relaxed font-body">
+                  <p className="font-bold text-green-600  text-[12px] font-body uppercase tracking-wider">Cash on Delivery</p>
+                  <p className="text-green-600/70  text-[13px] mt-1 leading-relaxed font-body">
                     Pay at your doorstep. No prepayment required.
                   </p>
                 </div>

@@ -467,7 +467,7 @@ function FilterContent({
       {hasActiveFilters && (
         <button 
           onClick={clearAllFilters}
-          className="w-full border border-red-500 text-red-500 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+          className="w-full border border-red-500 text-red-500 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-red-50  transition-colors"
         >
           Reset All Attributes
         </button>

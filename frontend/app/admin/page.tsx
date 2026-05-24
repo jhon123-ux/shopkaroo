@@ -93,11 +93,11 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="bg-bg-white rounded-0 p-8 border border-border shadow-sm relative overflow-hidden group transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-green-600 dark:text-green-500">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-green-600 ">
             <ImageIcon size={28} />
           </div>
           <p className="text-text-muted text-[11px] font-bold uppercase tracking-[2px] mb-2">Active Banners</p>
-          <p className="font-heading font-bold text-[48px] text-green-600 dark:text-green-500 leading-none">
+          <p className="font-heading font-bold text-[48px] text-green-600  leading-none">
             {loading ? '—' : stats.banners}
           </p>
         </div>

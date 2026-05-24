@@ -5,8 +5,6 @@ import useAuthStore from '@/lib/authStore'
 import useCartStore from '@/lib/cartStore'
 import { useState, useRef, useEffect } from 'react'
 import { Search, ShoppingBag, Menu, X, User, ChevronDown, Package, LogOut, Archive } from 'lucide-react'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { useTheme } from 'next-themes'
 import { Product } from '@/types'
 
 export default function Navbar() {
@@ -17,7 +15,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
-  const { resolvedTheme } = useTheme()
 
   // Search State
   const [searchOpen, setSearchOpen] = useState(false)
@@ -100,7 +97,7 @@ export default function Navbar() {
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex flex-row items-center gap-2 font-body font-bold text-[22px] text-primary tracking-[-0.3px]">
               <Image 
-                src={mounted && resolvedTheme === 'dark' ? '/logo-symbol-light.svg' : '/logo-symbol.svg'} 
+                src="/logo-symbol.svg" 
                 alt="Shopkarro Logo" 
                 width={28} 
                 height={28} 
@@ -157,11 +154,6 @@ export default function Navbar() {
 
            {/* Icons (Search, Cart, Auth, Mobile Menu) */}
           <div className="flex items-center space-x-4">
-            {/* Theme Toggle */}
-            <div className="hidden sm:block">
-              <ThemeToggle />
-            </div>
-
             {/* Search Icon */}
             <button 
               onClick={() => setSearchOpen(true)}
@@ -223,7 +215,7 @@ export default function Navbar() {
                     <div className="border-t border-border pt-1 pb-1">
                       <button 
                         onClick={() => { signOut(); setDropdownOpen(false); }}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50  transition-colors"
                       >
                         <LogOut size={16} /> Sign Out
                       </button>
@@ -235,9 +227,6 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="flex items-center md:hidden ml-2 gap-3">
-              <div className="sm:hidden">
-                <ThemeToggle />
-              </div>
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-text-muted hover:text-primary p-1 focus:outline-none transition-colors"

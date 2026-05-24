@@ -164,7 +164,7 @@ export default function ProfilePage() {
             {/* Success/Error Message */}
             {message && (
               <div className={`${
-                message.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-500'
+                message.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600 ' : 'bg-red-500/10 border-red-500/20 text-red-600 '
               } border text-[12px] font-bold uppercase tracking-wide rounded-[2px] p-5 animate-slideUp text-center transition-colors`}>
                 {message.text}
               </div>

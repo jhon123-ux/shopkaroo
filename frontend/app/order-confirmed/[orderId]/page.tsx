@@ -42,7 +42,7 @@ function OrderConfirmedContent() {
       <div className="max-w-3xl w-full bg-bg-white rounded-0 border border-border shadow-sm p-10 md:p-20 relative z-10 animate-slideUp transition-colors duration-300">
         
         {/* Success Icon */}
-        <div className="mx-auto w-24 h-24 bg-green-500/10 border border-green-500/20 rounded-0 flex items-center justify-center mb-10 shadow-sm text-green-600 dark:text-green-400 transition-colors">
+        <div className="mx-auto w-24 h-24 bg-green-500/10 border border-green-500/20 rounded-0 flex items-center justify-center mb-10 shadow-sm text-green-600  transition-colors">
           <CheckCircle size={48} strokeWidth={1.5} />
         </div>
 
@@ -131,7 +131,7 @@ function OrderConfirmedContent() {
             <a 
               href={`https://wa.me/923706905835?text=Hi! I just placed order ${orderId} and want to track its status.`}
               target="_blank" rel="noopener noreferrer"
-              className="w-full sm:w-auto px-10 py-5 border border-green-600/30 text-green-600 dark:text-green-400 bg-green-500/10 rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-green-600 hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
+              className="w-full sm:w-auto px-10 py-5 border border-green-600/30 text-green-600  bg-green-500/10 rounded-[3px] font-bold font-body uppercase tracking-[2px] text-[14px] hover:bg-green-600 hover:text-white transition-all shadow-sm active:scale-95 flex items-center justify-center gap-3"
             >
               <MessageCircle size={18} /> Concierge WhatsApp
             </a>

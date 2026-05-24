@@ -317,7 +317,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Zoom Hint */}
-            <div className={`absolute bottom-4 right-4 bg-bg-white/90 dark:bg-bg-white/50 backdrop-blur-sm border border-border rounded-[3px] px-3 py-1.5 z-10 shadow-sm transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`absolute bottom-4 right-4 bg-bg-white/90  backdrop-blur-sm border border-border rounded-[3px] px-3 py-1.5 z-10 shadow-sm transition-opacity duration-300 ${isZoomed ? 'opacity-0' : 'opacity-100'}`}>
               <span className="text-[11px] text-text-muted font-semibold tracking-wide uppercase font-body flex items-center gap-1.5">
                 <Search size={14} className="opacity-40" /> Zoom
               </span>
@@ -364,7 +364,7 @@ export default function ProductDetailPage() {
             </div>
             <span className="text-text-muted text-[13px] font-body">({reviews.length} Verified Reviews)</span>
             <span className="text-border-input mx-1 opacity-40">|</span>
-            <span className={`text-[12px] font-bold font-body uppercase tracking-wider ${product.stock_qty > 0 ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500'}`}>
+            <span className={`text-[12px] font-bold font-body uppercase tracking-wider ${product.stock_qty > 0 ? 'text-green-600 ' : 'text-red-600 '}`}>
               {product.stock_qty > 0 ? 'In Stock — Ready to Ship' : 'Out of Stock'}
             </span>
           </div>
@@ -385,11 +385,11 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-3 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800/30 rounded-[3px] px-5 py-4 mb-8">
-            <Check size={20} className="text-green-600 dark:text-green-500" strokeWidth={3} />
+          <div className="flex items-center gap-3 bg-green-50  border border-green-200  rounded-[3px] px-5 py-4 mb-8">
+            <Check size={20} className="text-green-600 " strokeWidth={3} />
             <div>
-              <p className="font-bold text-green-700 dark:text-green-400 text-[14px] font-body uppercase tracking-wide">Cash on Delivery Available</p>
-              <p className="text-green-700/80 dark:text-green-400/80 text-[13px] font-body mt-0.5">Pay only when you receive your furniture at your doorstep.</p>
+              <p className="font-bold text-green-700  text-[14px] font-body uppercase tracking-wide">Cash on Delivery Available</p>
+              <p className="text-green-700/80  text-[13px] font-body mt-0.5">Pay only when you receive your furniture at your doorstep.</p>
             </div>
           </div>
 
@@ -548,10 +548,10 @@ export default function ProductDetailPage() {
 
               {/* Default trust badges */}
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Premium Materials</div>
-                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Skilled Artisans</div>
-                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Long-lasting Build</div>
-                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 dark:text-green-500" strokeWidth={3} /> Secure Delivery</div>
+                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 " strokeWidth={3} /> Premium Materials</div>
+                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 " strokeWidth={3} /> Skilled Artisans</div>
+                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 " strokeWidth={3} /> Long-lasting Build</div>
+                <div className="flex items-center gap-3 text-text font-semibold text-[13px] font-body uppercase tracking-wide"><Check size={18} className="text-green-600 " strokeWidth={3} /> Secure Delivery</div>
               </div>
 
               {/* SEO Paragraph */}
@@ -608,7 +608,7 @@ export default function ProductDetailPage() {
               </div>
               <div className="px-6 py-4 flex justify-between bg-surface">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Payment</span>
-                <span className="text-green-600 dark:text-green-500 text-[13px] font-bold font-body">CASH ON DELIVERY</span>
+                <span className="text-green-600  text-[13px] font-bold font-body">CASH ON DELIVERY</span>
               </div>
             </div>
           </div>
@@ -722,7 +722,7 @@ export default function ProductDetailPage() {
                     </a>
                   </div>
                 ) : revSubmitted ? (
-                  <div className="bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-500 p-8 rounded-[3px] font-bold font-body text-[14px] border border-green-200 dark:border-green-800/30 uppercase tracking-[2px] flex items-center gap-4 animate-slideUp">
+                  <div className="bg-green-50  text-green-600  p-8 rounded-[3px] font-bold font-body text-[14px] border border-green-200  uppercase tracking-[2px] flex items-center gap-4 animate-slideUp">
                     <Check size={20} strokeWidth={3} /> Success: Review submitted for verification.
                   </div>
                 ) : (
@@ -793,7 +793,7 @@ export default function ProductDetailPage() {
       )}
 
       {/* PART 6 — STICKY MOBILE BUY BAR */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-bg-white/80 dark:bg-bg-white/95 backdrop-blur-md border-t border-border px-6 py-4 flex items-center gap-4 md:hidden shadow-lg animate-slideUp">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-bg-white/80  backdrop-blur-md border-t border-border px-6 py-4 flex items-center gap-4 md:hidden shadow-lg animate-slideUp">
         <div className="flex-shrink-0">
           <p className="text-[10px] text-text-muted uppercase tracking-wider font-bold mb-1 opacity-60">Price</p>
           <p className="text-lg font-bold text-primary font-heading leading-none">

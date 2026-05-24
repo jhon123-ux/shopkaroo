@@ -239,7 +239,7 @@ Address: ${address}`
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-green-600 dark:text-green-400 opacity-60">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-green-600  opacity-60">
               <span className="w-5 h-5 bg-green-500/10 rounded-full flex items-center justify-center text-[10px]"><Check className="w-3 h-3" /></span> Cart
             </div>
             <div className="w-8 h-px bg-border"></div>
@@ -454,12 +454,12 @@ Address: ${address}`
           </div>
 
           <div className="mt-8 bg-green-500/10 border border-green-500/20 rounded-[3px] p-6 flex items-center gap-5 shadow-sm transition-colors">
-            <div className="w-14 h-14 bg-bg-white/50 rounded-0 flex items-center justify-center text-green-600 dark:text-green-400 flex-shrink-0 border border-green-500/10">
+            <div className="w-14 h-14 bg-bg-white/50 rounded-0 flex items-center justify-center text-green-600  flex-shrink-0 border border-green-500/10">
               <Banknote size={28} />
             </div>
             <div>
-              <h3 className="font-body font-bold text-green-600 dark:text-green-400 text-[12px] uppercase tracking-[2px]">Cash on Delivery Available</h3>
-              <p className="text-green-600/80 dark:text-green-400/80 text-[14px] mt-1 font-body leading-relaxed">
+              <h3 className="font-body font-bold text-green-600  text-[12px] uppercase tracking-[2px]">Cash on Delivery Available</h3>
+              <p className="text-green-600/80  text-[14px] mt-1 font-body leading-relaxed">
                 Experience risk-free shopping. Pay only when your premium furniture arrives at your doorstep.
               </p>
             </div>
@@ -486,7 +486,7 @@ Address: ${address}`
                <a 
                  href={whatsappOrderUrl()} 
                  target="_blank" rel="noopener noreferrer"
-                 className="text-green-600 dark:text-green-400 font-bold text-[12px] mt-4 uppercase tracking-[2px] inline-flex items-center gap-2 hover:underline font-body"
+                 className="text-green-600  font-bold text-[12px] mt-4 uppercase tracking-[2px] inline-flex items-center gap-2 hover:underline font-body"
                >
                  Order via WhatsApp <ArrowRight size={14} strokeWidth={3} />
                </a>
@@ -539,7 +539,7 @@ Address: ${address}`
               </div>
               <div className="flex justify-between text-[14px] mb-4 font-body">
                 <span className="text-text-muted font-semibold opacity-60">Premium Shipping</span>
-                <span className="text-green-600 dark:text-green-400 font-bold uppercase tracking-widest text-[11px]">Free</span>
+                <span className="text-green-600  font-bold uppercase tracking-widest text-[11px]">Free</span>
               </div>
               <div className="border-t border-border my-4"></div>
               <div className="flex justify-between items-center mb-6">

@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
         {/* Message */}
         {message && (
           <div className={`${
-            message.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-500' : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-500'
+            message.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600 ' : 'bg-red-500/10 border-red-500/20 text-red-600 '
           } border text-sm rounded-xl p-4 mb-6 animate-slideUp flex items-center gap-2 transition-colors`}>
             {message.type === 'success' && <Mail className="w-4 h-4" />}
             {message.text}

@@ -38,14 +38,14 @@ export default function Footer() {
                 alt="Shopkarro" 
                 width={36} 
                 height={36}
-                className="dark:hidden"
+                className=""
               />
               <Image 
                 src="/logo-symbol-light.svg" 
                 alt="Shopkarro" 
                 width={36} 
                 height={36}
-                className="hidden dark:block"
+                className="hidden "
               />
               <h3 className="font-body font-bold text-[28px] text-text m-0">
                 Shopkarro
@@ -128,7 +128,7 @@ export default function Footer() {
           <p>© {currentYear} Shopkarro. All rights reserved.</p>
           <div className="mt-6 sm:mt-0 flex items-center space-x-6">
             <span>Designed for Pakistan</span> 
-            <span className="text-green-600 dark:text-green-500 font-semibold tracking-wide uppercase text-[10px] flex items-center gap-1">
+            <span className="text-green-600  font-semibold tracking-wide uppercase text-[10px] flex items-center gap-1">
               <Check className="w-3.5 h-3.5" strokeWidth={3} /> Cash on Delivery Only
             </span>
           </div>

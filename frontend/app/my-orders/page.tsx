@@ -32,7 +32,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending: 'text-primary bg-primary-tint border-primary/10',
   confirmed: 'text-primary bg-primary-tint border-primary/10',
   shipped: 'text-primary bg-primary-tint border-primary/10',
-  delivered: 'text-green-600 bg-green-500/10 border-green-500/20 dark:text-green-400',
+  delivered: 'text-green-600 bg-green-500/10 border-green-500/20 ',
   cancelled: 'text-red-500 bg-red-500/10 border-red-500/20'
 }
 
@@ -209,8 +209,8 @@ export default function MyOrdersPage() {
                   <div className="bg-red-500/10 rounded-0 p-6 text-center border border-red-500/20 flex flex-col items-center gap-3 transition-colors">
                     <div className="w-10 h-10 bg-bg-white rounded-full flex items-center justify-center text-red-600 shadow-sm"><X className="w-5 h-5" /></div>
                     <div>
-                      <p className="text-red-600 dark:text-red-500 text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
-                      <p className="text-red-600/60 dark:text-red-500/60 text-[11px] mt-1 font-body">
+                      <p className="text-red-600  text-[12px] font-bold uppercase tracking-widest">Transaction Deactivated</p>
+                      <p className="text-red-600/60  text-[11px] mt-1 font-body">
                         Please contact Concierge via WhatsApp for clarification.
                       </p>
                     </div>

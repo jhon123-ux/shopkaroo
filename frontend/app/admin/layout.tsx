@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { supabase } from '@/lib/supabase'
 import useAdminAuthStore from '@/lib/adminAuthStore'
 import { 
@@ -230,7 +229,6 @@ export default function AdminLayout({
               </Link>
             </div>
             <div className="h-8 w-px bg-border mx-2" />
-            <ThemeToggle />
           </div>
         </header>
 

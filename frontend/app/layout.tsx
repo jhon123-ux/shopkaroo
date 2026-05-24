@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import './globals.css'
 import ConditionalLayout from '@/components/layout/ConditionalLayout'
 import AuthProvider from '@/components/auth/AuthProvider'
-import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
@@ -47,21 +46,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://xxhnilswsukipjfbgiec.supabase.co" />
         <link rel="preconnect" href="https://shopkaroo-production.up.railway.app" />
       </head>
-      <body className="flex flex-col min-h-screen font-body antialiased" suppressHydrationWarning>
-        <ThemeProvider>
-          <AuthProvider>
-            <ConditionalLayout>
-              {children}
-            </ConditionalLayout>
-          </AuthProvider>
-        </ThemeProvider>
+      <body className="flex flex-col min-h-screen font-body antialiased">
+        <AuthProvider>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+        </AuthProvider>
         <GoogleAnalytics gaId="G-TTR2LMCV6K" />
       </body>
     </html>
