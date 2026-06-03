@@ -13,8 +13,14 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   icons: {
-    icon: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: [
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
   openGraph: {
     title: 'Buy Furniture Online Pakistan | Handcrafted & Premium — Shopkarro',
@@ -40,6 +46,37 @@ export const metadata: Metadata = {
   },
 }
 
+import Script from 'next/script'
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Shopkarro",
+  "url": "https://shopkarro.com",
+  "logo": "https://shopkarro.com/logo-symbol.svg",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+92-370-6905835",
+    "contactType": "customer service"
+  },
+  "sameAs": [
+    "https://www.facebook.com/shopkarro",
+    "https://www.instagram.com/shopkarro"
+  ]
+}
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Shopkarro",
+  "url": "https://shopkarro.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://shopkarro.com/furniture?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -54,6 +91,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://shopkaroo-production.up.railway.app" />
       </head>
       <body className="flex flex-col min-h-screen font-body antialiased">
+        <Script id="org-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        <Script id="website-schema" type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
         <AuthProvider>
           <ConditionalLayout>
             {children}
