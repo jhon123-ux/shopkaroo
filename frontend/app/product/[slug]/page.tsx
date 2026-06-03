@@ -61,9 +61,9 @@ export default async function Page({ params }: Props) {
   const { slug } = await params
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
   
-  let initialProduct = null
-  let initialReviews = []
-  let initialRelated = []
+  let initialProduct: any = null
+  let initialReviews: any[] = []
+  let initialRelated: any[] = []
 
   try {
     const prodRes = await fetch(`${backendUrl}/api/products?slug=${slug}`, { cache: 'no-store' })
