@@ -8,7 +8,6 @@ import FeaturedProducts from '@/components/home/FeaturedProducts'
 const OfferBanner = dynamic(() => import('@/components/home/OfferBanner'), { ssr: false })
 const WhyShopkarro = dynamic(() => import('@/components/home/WhyShopkarro'), { ssr: false })
 const CustomerReviews = dynamic(() => import('@/components/home/CustomerReviews'), { ssr: false })
-const WhatsAppCTA = dynamic(() => import('@/components/home/WhatsAppCTA'), { ssr: false })
 
 export default async function HomePage() {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
@@ -38,7 +37,6 @@ export default async function HomePage() {
       <OfferBanner />
       <WhyShopkarro />
       <CustomerReviews />
-      <WhatsAppCTA />
     </main>
   )
 }
