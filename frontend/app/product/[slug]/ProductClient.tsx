@@ -47,15 +47,14 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 
 const CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan', 'Other']
 
-export default function ProductDetailPage() {
+export default function ProductDetailPage({ initialProduct, initialReviews, initialRelated }: any) {
   const params = useParams()
   const router = useRouter()
   const slug = params?.slug ? (params.slug as string) : ''
-  
-  const [product, setProduct] = useState<Product | null>(null)
-  const [related, setRelated] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const [product, setProduct] = useState<Product | null>(initialProduct || null)
+  const [related, setRelated] = useState<Product[]>(initialRelated || [])
+  const [loading, setLoading] = useState(false)
+  const [notFound, setNotFound] = useState(!initialProduct)
   
   const { addItem } = useCartStore()
   const [showToast, setShowToast] = useState(false)
@@ -69,7 +68,7 @@ export default function ProductDetailPage() {
   const [revRating, setRevRating] = useState(5)
   const [revComment, setRevComment] = useState('')
   const [revSubmitted, setRevSubmitted] = useState(false)
-  const [reviews, setReviews] = useState<any[]>([])
+  const [reviews, setReviews] = useState<any[]>(initialReviews || [])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
   const [isZoomed, setIsZoomed] = useState(false)
@@ -78,44 +77,6 @@ export default function ProductDetailPage() {
   const { saveDraftNow } = useDraftOrder()
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
-
-  useEffect(() => {
-    if (!slug) return
-
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        // 1. Fetch Product by slug
-        const prodRes = await fetch(`${backendUrl}/api/products?slug=${slug}`, { cache: 'no-store' })
-        const prodData = await prodRes.json()
-        
-        if (prodData.data && prodData.data.length > 0) {
-          const found = prodData.data[0]
-          setProduct(found)
-          
-          // 2. Fetch Reviews once product ID is known
-          const revRes = await fetch(`${backendUrl}/api/reviews?product_id=${found.id}&approved=true`)
-          const revData = await revRes.json()
-          setReviews(revData.data || [])
-
-          // 3. Fetch Related Products
-          const relRes = await fetch(`${backendUrl}/api/products?category=${found.category}&limit=4`)
-          const relData = await relRes.json()
-          // Filter out the current product from related
-          setRelated((relData.data || []).filter((p: Product) => p.id !== found.id))
-        } else {
-          setNotFound(true)
-        }
-      } catch (err) {
-        console.error('Fetch error:', err)
-        setNotFound(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [slug, backendUrl])
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

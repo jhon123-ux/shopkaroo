@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
@@ -44,19 +44,19 @@ const ALL_CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi'
 
 import { Suspense } from 'react'
 
-export default function CategoryPage() {
+export default function CategoryPage({ initialCategoryData, initialProducts, initialTotalCount }: any) {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-bg-white flex items-center justify-center transition-colors">
         <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full" />
       </div>
     }>
-      <CategoryContent />
+      <CategoryContent initialCategoryData={initialCategoryData} initialProducts={initialProducts} initialTotalCount={initialTotalCount} />
     </Suspense>
   )
 }
 
-function CategoryContent() {
+function CategoryContent({ initialCategoryData, initialProducts, initialTotalCount }: any) {
   const params = useParams()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -65,28 +65,11 @@ function CategoryContent() {
   const isAllFurniture = !categorySlug || categorySlug === 'all'
   
   // CMS Category Metadata
-  const [categoryData, setCategoryData] = useState<any>(null)
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [totalCount, setTotalCount] = useState(0)
+  const [categoryData, setCategoryData] = useState<any>(initialCategoryData)
+  const [products, setProducts] = useState<Product[]>(initialProducts || [])
+  const [loading, setLoading] = useState(false)
+  const [totalCount, setTotalCount] = useState(initialTotalCount || 0)
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
-
-  // Fetch Category Details
-  useEffect(() => {
-    const fetchCategoryMetadata = async () => {
-      if (isAllFurniture) return
-      try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
-        const res = await fetch(`${backendUrl}/api/categories?all=true`)
-        const data = await res.json()
-        const meta = data.data?.find((c: any) => c.slug === categorySlug)
-        if (meta) setCategoryData(meta)
-      } catch (err) {
-        console.error('Metadata fetch error:', err)
-      }
-    }
-    fetchCategoryMetadata()
-  }, [categorySlug])
 
   // Filter State mapped from URL
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest')
@@ -114,7 +97,14 @@ function CategoryContent() {
   }, [sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, categorySlug, isAllFurniture, router])
 
   // Fetch Data
+  const isFirstRender = useRef(true)
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
     const fetchProducts = async () => {
       setLoading(true)
       try {

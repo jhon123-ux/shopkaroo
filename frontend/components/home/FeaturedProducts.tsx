@@ -1,49 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/product/ProductCard'
 import { Product } from '@/types'
 import { Package, ArrowRight } from 'lucide-react'
 
-export default function FeaturedProducts() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
-    fetch(`${backendUrl}/api/products?limit=8&is_active=true`)
-      .then(r => r.json())
-      .then(data => {
-        setProducts(data.data || [])
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [])
-
-  if (loading) {
-    return (
-      <section className="bg-background py-24 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-6">
-          <FeaturedHeader />
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={`skeleton-${i}`} className="bg-bg-white rounded-[4px] border border-border overflow-hidden animate-pulse">
-                <div className="aspect-square bg-surface"></div>
-                <div className="p-4 flex flex-col h-full">
-                  <div className="h-4 bg-surface rounded-[2px] w-3/4 mb-4"></div>
-                  <div className="h-6 bg-surface rounded-[2px] w-1/3 mb-4 mt-auto"></div>
-                  <div className="h-[40px] bg-surface rounded-[3px] w-full mt-auto"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  if (products.length === 0) {
+export default function FeaturedProducts({ initialProducts = [] }: { initialProducts?: Product[] }) {
+  if (initialProducts.length === 0) {
     return (
       <section className="bg-background py-24 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
@@ -69,7 +32,7 @@ export default function FeaturedProducts() {
       <div className="max-w-7xl mx-auto px-6">
         <FeaturedHeader />
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-          {products.map((product) => (
+          {initialProducts.map((product) => (
             <div key={product.id} className="h-full">
                <ProductCard product={product} />
             </div>

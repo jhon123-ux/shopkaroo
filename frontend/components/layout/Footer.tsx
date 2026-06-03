@@ -70,7 +70,7 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-              {categories.length === 0 && ['living-room', 'bedroom', 'office', 'dining'].map((slug) => (
+              {categories.length === 0 && ['living-room', 'office-chair', 'console', 'jaye-namaz-box', 'shoe-racks', 'study-tables', 'hand-painted-furniture', 'nesting-tables'].map((slug) => (
                 <li key={slug}>
                   <Link 
                     href={`/furniture/${slug}`} 
