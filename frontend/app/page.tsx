@@ -5,9 +5,9 @@ import CategorySection from '@/components/home/CategorySection'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 
 // Lazy load below-the-fold sections
-const OfferBanner = dynamic(() => import('@/components/home/OfferBanner'), { ssr: false })
-const WhyShopkarro = dynamic(() => import('@/components/home/WhyShopkarro'), { ssr: false })
-const CustomerReviews = dynamic(() => import('@/components/home/CustomerReviews'), { ssr: false })
+const OfferBanner = dynamic(() => import('@/components/home/OfferBanner'))
+const WhyShopkarro = dynamic(() => import('@/components/home/WhyShopkarro'))
+const CustomerReviews = dynamic(() => import('@/components/home/CustomerReviews'))
 
 export default async function HomePage() {
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
