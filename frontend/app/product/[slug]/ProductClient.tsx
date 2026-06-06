@@ -346,13 +346,6 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
             )}
           </div>
 
-          <div className="flex items-center gap-3 bg-green-50  border border-green-200  rounded-[3px] px-5 py-4 mb-8">
-            <Check size={20} className="text-green-600 " strokeWidth={3} />
-            <div>
-              <p className="font-bold text-green-700  text-[14px] font-body uppercase tracking-wide">Cash on Delivery Available</p>
-              <p className="text-green-700/80  text-[13px] font-body mt-0.5">Pay only when you receive your furniture at your doorstep.</p>
-            </div>
-          </div>
 
           {product.dimensions && (
             <div className="mb-10">
@@ -446,7 +439,7 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
             </div>
             
             <div className="grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-border">
-              <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Lock size={14} className="opacity-60 mb-1" /> Secure COD</div>
+              <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Lock size={14} className="opacity-60 mb-1" /> Secure Checkout</div>
               <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Package size={14} className="opacity-60 mb-1" /> Packaging</div>
               <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><RotateCcw size={14} className="opacity-60 mb-1" /> 7-Day Return</div>
             </div>
@@ -563,13 +556,9 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Category</span>
                 <span className="text-text text-[14px] font-bold font-body capitalize">{categoryNameDisplay}</span>
               </div>
-              <div className="px-6 py-4 flex justify-between bg-bg-white border-b border-border">
+              <div className="px-6 py-4 flex justify-between bg-bg-white">
                 <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Delivery</span>
                 <span className="text-text text-[14px] font-bold font-body">2-7 business days</span>
-              </div>
-              <div className="px-6 py-4 flex justify-between bg-surface">
-                <span className="text-text-muted text-[13px] font-bold uppercase tracking-wider font-body">Payment</span>
-                <span className="text-green-600  text-[13px] font-bold font-body">CASH ON DELIVERY</span>
               </div>
             </div>
           </div>

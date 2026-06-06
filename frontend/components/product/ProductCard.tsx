@@ -167,9 +167,6 @@ export default function ProductCard({ product }: { product: ProductCardProps }) 
               NEW
             </span>
           ) : null}
-          <div className="inline-flex items-center gap-1.5 bg-[#2D6A4F] text-white text-[9px] px-2 py-1 rounded-[1px] font-body font-bold mt-1 shadow-sm">
-            <Check size={9} strokeWidth={4} className="text-white" /> COD Available
-          </div>
         </div>
       </div>
 
