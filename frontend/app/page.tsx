@@ -28,11 +28,6 @@ export default async function HomePage() {
       <HeroSlider />
       <TrustBar />
       <CategorySection />
-      <div className="bg-background pt-16 pb-4 border-b border-border text-center px-6">
-        <h1 className="text-text font-heading text-[28px] md:text-[36px] font-bold uppercase tracking-wide">
-          Premium Handcrafted Furniture in Pakistan <span className="block md:inline text-primary">— Cash on Delivery</span>
-        </h1>
-      </div>
       <FeaturedProducts initialProducts={initialProducts} />
       <OfferBanner />
       <WhyShopkarro />
