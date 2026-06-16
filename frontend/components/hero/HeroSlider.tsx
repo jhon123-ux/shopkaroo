@@ -68,24 +68,11 @@ export default function HeroSlider() {
     )
   }
 
-  // Fallback if no active banners returned from DB
-  const displayBanners = banners.length > 0 ? banners : [{
-    id: 'fallback',
-    title: 'Furnish Your Home With Style',
-    subtitle: 'Premium quality furniture delivered to your door. Pay cash on delivery.',
-    badge_text: 'New Arrivals',
-    badge_color: 'var(--color-primary)',
-    cta_primary_text: 'Shop Now',
-    cta_primary_link: '/furniture',
-    cta_secondary_text: 'WhatsApp Us',
-    cta_secondary_link: 'https://wa.me/923001234567',
-    bg_image_url: null,
-    bg_overlay: 'rgba(0,0,0,0.4)',
-    sort_order: 1,
-    is_active: true
-  }]
+  if (banners.length === 0) {
+    return null
+  }
 
-  const banner = displayBanners[currentSlide]
+  const banner = banners[currentSlide]
 
   return (
     <div className="bg-background px-4 py-4 md:px-5 md:py-5 w-full transition-colors duration-300">
@@ -95,7 +82,7 @@ export default function HeroSlider() {
         onMouseLeave={() => setIsPaused(false)}
       >
       {/* Background Layers */}
-      {displayBanners.map((b, idx) => (
+      {banners.map((b, idx) => (
         <div
           key={`bg-${b.id}`}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === currentSlide ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
@@ -189,7 +176,7 @@ export default function HeroSlider() {
       </div>
 
       {/* Navigation Arrows */}
-      {displayBanners.length > 1 && (
+      {banners.length > 1 && (
         <>
           <button 
             onClick={prevSlide}
@@ -210,9 +197,9 @@ export default function HeroSlider() {
       )}
 
       {/* Dots Indicator */}
-      {displayBanners.length > 1 && (
+      {banners.length > 1 && (
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
-          {displayBanners.map((_, idx) => (
+          {banners.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentSlide(idx)}
