@@ -3,6 +3,9 @@ import { supabase, supabaseAdmin } from '../lib/supabase'
 
 export const getAllBanners = async (req: Request, res: Response): Promise<void> => {
   try {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
     const { all } = req.query
     
     let query = supabase.from('banners').select('*').order('sort_order', { ascending: true })
@@ -91,6 +94,21 @@ export const deleteBanner = async (req: Request, res: Response): Promise<void> =
       res.status(400).json({ error: error.message })
       return
     }
+
+    // Trigger Next.js revalidation for banners (homepage)
+    const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+    const secret = process.env.REVALIDATE_SECRET || 'fallback-revalidate-secret'
+    const url = `${frontendUrl.replace(/\/$/, '')}/api/revalidate?secret=${secret}&path=${encodeURIComponent('/')}`
+    
+    fetch(url).then(res => {
+      if (!res.ok) {
+        console.error(`Banner revalidation failed: ${res.statusText}`)
+      } else {
+        console.log('Banner revalidation triggered successfully')
+      }
+    }).catch((err: any) => {
+      console.error('Banner revalidation fetch error:', err.message)
+    })
 
     res.status(204).send()
   } catch (error) {

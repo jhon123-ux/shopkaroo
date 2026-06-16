@@ -10,6 +10,9 @@ import { supabaseAdmin } from '../lib/supabase'
 
 export const getCategories = async (req: Request, res: Response) => {
   try {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
     const { all, nested } = req.query
     
     let query = supabaseAdmin
@@ -93,9 +96,42 @@ export const updateCategory = async (req: Request, res: Response) => {
 export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const { error } = await supabaseAdmin.from('categories').delete().eq('id', id)
+    const { data: deletedRows, error } = await supabaseAdmin.from('categories').delete().eq('id', id).select()
     
-    if (error) throw error
+    if (error) {
+      if (error.code === '23503') {
+        return res.status(409).json({ 
+          error: 'Cannot delete category: it has linked products. Reassign or delete those products first.' 
+        })
+      }
+      throw error
+    }
+
+    if (deletedRows && deletedRows.length > 0) {
+      const deletedCat = deletedRows[0]
+      const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+      const secret = process.env.REVALIDATE_SECRET || 'fallback-revalidate-secret'
+      
+      const pathsToRevalidate = [
+        '/',
+        '/categories',
+        `/categories/${deletedCat.slug}`
+      ]
+
+      pathsToRevalidate.forEach(path => {
+        const url = `${frontendUrl.replace(/\/$/, '')}/api/revalidate?secret=${secret}&path=${encodeURIComponent(path)}`
+        fetch(url).then(res => {
+          if (!res.ok) {
+            console.error(`Category revalidation failed for path ${path}: ${res.statusText}`)
+          } else {
+            console.log(`Category revalidation triggered successfully for path: ${path}`)
+          }
+        }).catch((err: any) => {
+          console.error(`Category revalidation fetch error for path ${path}:`, err.message)
+        })
+      })
+    }
+
     return res.json({ message: 'Category expunged from registry.' })
   } catch (error: any) {
     return res.status(500).json({ error: error.message })

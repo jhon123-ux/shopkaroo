@@ -150,8 +150,9 @@ export default function AdminCategoriesPage() {
       await api.delete(`/api/categories/${id}`)
       showToast('Category expunged')
       fetchCategories()
-    } catch (err) {
-      showToast('Deletion failed', 'error')
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.error || 'Deletion failed'
+      showToast(errorMsg, 'error')
     }
   }
 
