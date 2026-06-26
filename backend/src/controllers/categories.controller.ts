@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { supabaseAdmin } from '../lib/supabase'
+import axios from 'axios'
 
 /**
  * 🏛️ Administrative Category Registry Controller
@@ -124,32 +125,36 @@ export const deleteCategory = async (req: Request, res: Response) => {
     
     if (error) throw error
 
-    if (deletedRows && deletedRows.length > 0) {
-      const deletedCat = deletedRows[0]
-      const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
-      const secret = process.env.REVALIDATE_SECRET || 'fallback-revalidate-secret'
-      
-      const pathsToRevalidate = [
-        '/',
-        '/categories',
-        `/categories/${deletedCat.slug}`
-      ]
+    // 4. Send success response immediately
+    res.json({ message: 'Category expunged from registry.' })
 
-      pathsToRevalidate.forEach(path => {
-        const url = `${frontendUrl.replace(/\/$/, '')}/api/revalidate?secret=${secret}&path=${encodeURIComponent(path)}`
-        fetch(url).then(res => {
-          if (!res.ok) {
-            console.error(`Category revalidation failed for path ${path}: ${res.statusText}`)
-          } else {
+    // 5. Trigger revalidation after (fire and forget, wrapped in try/catch)
+    try {
+      if (deletedRows && deletedRows.length > 0) {
+        const deletedCat = deletedRows[0]
+        const frontendUrl = process.env.FRONTEND_URL?.split(',')[0] || 'http://localhost:3000'
+        const secret = process.env.REVALIDATE_SECRET || 'fallback-revalidate-secret'
+        
+        const pathsToRevalidate = [
+          '/',
+          '/categories',
+          `/categories/${deletedCat.slug}`
+        ]
+
+        pathsToRevalidate.forEach(path => {
+          const url = `${frontendUrl.replace(/\/$/, '')}/api/revalidate?secret=${secret}&path=${encodeURIComponent(path)}`
+          axios.get(url).then((response: any) => {
             console.log(`Category revalidation triggered successfully for path: ${path}`)
-          }
-        }).catch((err: any) => {
-          console.error(`Category revalidation fetch error for path ${path}:`, err.message)
+          }).catch((err: any) => {
+            console.error(`Category revalidation fetch error for path ${path}:`, err.message)
+          })
         })
-      })
+      }
+    } catch (revalError: any) {
+      console.error('Revalidation process failed:', revalError.message)
     }
 
-    return res.json({ message: 'Category expunged from registry.' })
+    return
   } catch (error: any) {
     return res.status(500).json({ error: error.message })
   }
