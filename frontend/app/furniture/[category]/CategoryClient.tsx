@@ -119,7 +119,7 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
         if (maxPrice) queryParams.set('max_price', maxPrice.toString())
         if (selectedMaterials.length > 0) queryParams.set('material', selectedMaterials.join(','))
         
-        const res = await fetch(`${backendUrl}/api/products?${queryParams.toString()}`)
+        const res = await fetch(`${backendUrl}/api/products?${queryParams.toString()}&is_active=true`)
         if (!res.ok) throw new Error()
         
         const json = await res.json()

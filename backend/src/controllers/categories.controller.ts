@@ -96,16 +96,33 @@ export const updateCategory = async (req: Request, res: Response) => {
 export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
+
+    // 1. Fetch category slug first
+    const { data: categoryData, error: fetchError } = await supabaseAdmin
+      .from('categories')
+      .select('slug')
+      .eq('id', id)
+      .single()
+
+    if (fetchError) throw fetchError
+    if (!categoryData) {
+      return res.status(404).json({ error: 'Category not found' })
+    }
+
+    const { slug } = categoryData
+
+    // 2. Set referencing products category field to null using supabaseAdmin
+    const { error: updateError } = await supabaseAdmin
+      .from('products')
+      .update({ category: null })
+      .eq('category', slug)
+
+    if (updateError) throw updateError
+
+    // 3. Run the category delete
     const { data: deletedRows, error } = await supabaseAdmin.from('categories').delete().eq('id', id).select()
     
-    if (error) {
-      if (error.code === '23503') {
-        return res.status(409).json({ 
-          error: 'Cannot delete category: it has linked products. Reassign or delete those products first.' 
-        })
-      }
-      throw error
-    }
+    if (error) throw error
 
     if (deletedRows && deletedRows.length > 0) {
       const deletedCat = deletedRows[0]

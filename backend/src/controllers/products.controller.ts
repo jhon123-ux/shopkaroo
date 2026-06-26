@@ -1,9 +1,38 @@
 import { Request, Response } from 'express'
 import { supabase, supabaseAdmin } from '../lib/supabase'
+import jwt from 'jsonwebtoken'
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
+    let isAdmin = false
+    try {
+      const ADMIN_COOKIE_NAME = process.env.ADMIN_COOKIE_NAME || 'skr_admin_token'
+      const JWT_SECRET = process.env.JWT_SECRET || 'secret'
+      
+      let token = req.cookies?.[ADMIN_COOKIE_NAME]
+      if (!token) {
+        const authHeader = req.headers.authorization || req.headers['x-admin-auth']
+        if (typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
+          token = authHeader.split(' ')[1]
+        } else if (typeof authHeader === 'string') {
+          token = authHeader
+        }
+      }
+
+      if (token) {
+        const decoded: any = jwt.verify(token, JWT_SECRET)
+        if (decoded && decoded.adminId) {
+          isAdmin = true
+        }
+      }
+    } catch (err) {
+      isAdmin = false
+    }
+
     let query = supabase.from('products').select('*', { count: 'exact' })
+    if (!isAdmin) {
+      query = query.eq('is_active', true)
+    }
     
     // Filter by slug (used by product detail page)
     if (req.query.slug) {
