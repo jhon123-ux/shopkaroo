@@ -39,8 +39,7 @@ const CATEGORY_ICONS: Record<string, any> = {
   'sale': <Tag size={40} strokeWidth={1.5} />
 }
 
-const ALL_MATERIALS = ['Sheesham Wood', 'Engineered Wood', 'Fabric', 'Metal', 'Glass', 'Leather']
-const ALL_CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan']
+const ALL_MATERIALS = ['Sheesham Wood', 'MDF', 'Keekar Wood', 'Fabric', 'Metal', 'Glass', 'Leather']
 
 import { Suspense } from 'react'
 
@@ -77,7 +76,6 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
   const [minPrice, setMinPrice] = useState<number | null>(searchParams.get('min_price') ? parseInt(searchParams.get('min_price')!) : null)
   const [maxPrice, setMaxPrice] = useState<number | null>(searchParams.get('max_price') ? parseInt(searchParams.get('max_price')!) : null)
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>(searchParams.get('material') ? searchParams.get('material')!.split(',') : [])
-  const [selectedCities, setSelectedCities] = useState<string[]>(searchParams.get('city') ? searchParams.get('city')!.split(',') : [])
 
   // Local inputs for pure price typing before applying
   const [localMinPrice, setLocalMinPrice] = useState(minPrice?.toString() || '')
@@ -90,11 +88,10 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
     if (minPrice) params.set('min_price', minPrice.toString())
     if (maxPrice) params.set('max_price', maxPrice.toString())
     if (selectedMaterials.length > 0) params.set('material', selectedMaterials.join(','))
-    if (selectedCities.length > 0) params.set('city', selectedCities.join(','))
     
     const baseUrl = isAllFurniture ? '/furniture' : `/furniture/${categorySlug}`
     router.push(`${baseUrl}?${params.toString()}`, { scroll: false })
-  }, [sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, categorySlug, isAllFurniture, router])
+  }, [sort, currentPage, minPrice, maxPrice, selectedMaterials, categorySlug, isAllFurniture, router])
 
   // Fetch Data
   const isFirstRender = useRef(true)
@@ -144,19 +141,12 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
     return () => {
       clearTimeout(debounceRef.current)
     }
-  }, [categorySlug, sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, updateURL])
+  }, [categorySlug, sort, currentPage, minPrice, maxPrice, selectedMaterials, updateURL])
 
   // Handlers
   const handleMaterialToggle = (material: string) => {
     setSelectedMaterials(prev => 
       prev.includes(material) ? prev.filter(m => m !== material) : [...prev, material]
-    )
-    setCurrentPage(1)
-  }
-
-  const handleCityToggle = (city: string) => {
-    setSelectedCities(prev => 
-      prev.includes(city) ? prev.filter(c => c !== city) : [...prev, city]
     )
     setCurrentPage(1)
   }
@@ -178,23 +168,20 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
     setLocalMinPrice('')
     setLocalMaxPrice('')
     setSelectedMaterials([])
-    setSelectedCities([])
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = minPrice !== null || maxPrice !== null || selectedMaterials.length > 0 || selectedCities.length > 0
+  const hasActiveFilters = minPrice !== null || maxPrice !== null || selectedMaterials.length > 0
   const activeFiltersTags = [
     ...(minPrice ? [`Min: Rs.${minPrice}`] : []),
     ...(maxPrice ? [`Max: Rs.${maxPrice}`] : []),
-    ...selectedMaterials,
-    ...selectedCities
+    ...selectedMaterials
   ]
 
   const removeFilterTag = (tag: string) => {
     if (tag.startsWith('Min:')) { setMinPrice(null); setLocalMinPrice('') }
     else if (tag.startsWith('Max:')) { setMaxPrice(null); setLocalMaxPrice('') }
     else if (ALL_MATERIALS.includes(tag)) handleMaterialToggle(tag)
-    else if (ALL_CITIES.includes(tag)) handleCityToggle(tag)
   }
 
   const catName = categoryData?.name || categorySlug.replace('-', ' ')
@@ -240,7 +227,6 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
                 localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
                 applyPriceRange={applyPriceRange}
                 selectedMaterials={selectedMaterials} handleMaterialToggle={handleMaterialToggle}
-                selectedCities={selectedCities} handleCityToggle={handleCityToggle}
                 hasActiveFilters={hasActiveFilters} clearAllFilters={clearAllFilters}
               />
             </div>
@@ -378,7 +364,6 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
                 localMaxPrice={localMaxPrice} setLocalMaxPrice={setLocalMaxPrice}
                 applyPriceRange={() => { applyPriceRange(); setIsMobileFilterOpen(false); }}
                 selectedMaterials={selectedMaterials} handleMaterialToggle={handleMaterialToggle}
-                selectedCities={selectedCities} handleCityToggle={handleCityToggle}
                 hasActiveFilters={hasActiveFilters} clearAllFilters={() => { clearAllFilters(); setIsMobileFilterOpen(false); }}
               />
           </div>
@@ -392,7 +377,6 @@ function FilterContent({
   localMinPrice, setLocalMinPrice,
   localMaxPrice, setLocalMaxPrice, applyPriceRange,
   selectedMaterials, handleMaterialToggle,
-  selectedCities, handleCityToggle,
   hasActiveFilters, clearAllFilters
 }: any) {
   return (
@@ -441,23 +425,6 @@ function FilterContent({
                 className="w-4 h-4 rounded-0 border-border text-primary focus:ring-0 accent-primary" 
               />
               <span className="text-[13px] text-text font-medium group-hover:text-primary transition-colors">{mat}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h4 className="text-text-muted text-[10px] font-bold uppercase tracking-[2px] opacity-40 mb-6 font-body">Dispatch Cities</h4>
-        <div className="space-y-3">
-          {ALL_CITIES.map(city => (
-            <label key={city} className="flex items-center gap-4 cursor-pointer group">
-              <input 
-                type="checkbox" 
-                checked={selectedCities.includes(city)}
-                onChange={() => handleCityToggle(city)}
-                className="w-4 h-4 rounded-0 border-border text-primary focus:ring-0 accent-primary" 
-              />
-              <span className="text-[13px] text-text font-medium group-hover:text-primary transition-colors">{city}</span>
             </label>
           ))}
         </div>

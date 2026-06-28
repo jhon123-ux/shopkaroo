@@ -46,6 +46,21 @@ export const getProducts = async (req: Request, res: Response) => {
     if (!isAdmin) {
       query = query.eq('is_active', true)
     }
+
+    // Material filter (partial match, case-insensitive)
+    const material = req.query.material as string
+    if (material) {
+      const materials = material.split(',')
+      // Use ilike for partial match on each material
+      const materialFilter = materials.map(m => `material.ilike.%${m}%`).join(',')
+      query = query.or(materialFilter)
+    }
+
+    // Price filter
+    const minPrice = req.query.min_price ? parseFloat(req.query.min_price as string) : null
+    const maxPrice = req.query.max_price ? parseFloat(req.query.max_price as string) : null
+    if (minPrice !== null) query = query.gte('price_pkr', minPrice)
+    if (maxPrice !== null) query = query.lte('price_pkr', maxPrice)
     
     // Filter by slug (used by product detail page)
     if (req.query.slug) {
@@ -80,7 +95,11 @@ export const getProducts = async (req: Request, res: Response) => {
       query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`)
     }
 
-    query = query.order('created_at', { ascending: false })
+    // Sort handling
+    const sort = req.query.sort as string
+    if (sort === 'price_asc') query = query.order('price_pkr', { ascending: true })
+    else if (sort === 'price_desc') query = query.order('price_pkr', { ascending: false })
+    else query = query.order('created_at', { ascending: false })
 
     if (!isAll || req.query.limit) {
       query = query.range(offset, offset + limit - 1)
