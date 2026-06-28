@@ -13,16 +13,12 @@ import {
   Heart, 
   MessageCircle, 
   ShoppingCart, 
-  Truck, 
-  Lock, 
   Package, 
-  RotateCcw, 
   Search, 
   Star, 
   Check, 
   Plus, 
   Minus,
-  ChevronDown,
   Sofa,
   Bed,
   Archive,
@@ -45,7 +41,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   'dining': <Utensils className="w-10 h-10" />
 }
 
-const CITIES = ['Karachi', 'Lahore', 'Islamabad', 'Faisalabad', 'Rawalpindi', 'Multan', 'Other']
+
 
 export default function ProductDetailPage({ initialProduct, initialReviews, initialRelated }: any) {
   const params = useParams()
@@ -60,7 +56,7 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
   const [showToast, setShowToast] = useState(false)
   
   const [qty, setQty] = useState(1)
-  const [city, setCity] = useState("Karachi")
+
   const [activeTab, setActiveTab] = useState<'desc'|'specs'|'reviews'>('desc')
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
@@ -157,11 +153,7 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
   const createdDate = new Date(product.created_at || Date.now())
   const isNew = (Date.now() - createdDate.getTime()) < 7 * 24 * 60 * 60 * 1000
 
-  const getDeliveryEstimate = () => {
-    if (city === 'Karachi' || city === 'Lahore') return "Delivers in 2-3 business days"
-    if (city === 'Other') return "Delivers in 5-7 business days"
-    return "Delivers in 3-5 business days"
-  }
+
 
   const whatsappMessage = encodeURIComponent(
     `Hi! I want to order: ${product.name}\nPrice: Rs. ${product.sale_price ?? product.price_pkr}\nLink: shopkarro.com/product/${product.slug}`
@@ -420,30 +412,7 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
             </a>
           </div>
 
-          <div className="bg-background rounded-[3px] p-6 border border-border">
-            <h4 className="text-[10px] tracking-[3px] text-text-muted font-bold mb-4 uppercase font-body">Delivery Information</h4>
-            <div className="relative mb-4">
-              <select 
-                value={city}
-                onChange={e => setCity(e.target.value)}
-                className="w-full border border-border-input rounded-[3px] px-4 py-3 text-[14px] font-medium outline-none focus:border-primary bg-bg-white text-text transition-colors appearance-none pr-10 cursor-pointer font-body"
-              >
-                {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                <ChevronDown size={16} className="text-text" />
-              </div>
-            </div>
-            <div className="bg-bg-white rounded-[2px] p-4 border border-border text-text text-[14px] font-bold flex items-center gap-3 font-body">
-              <Truck size={18} className="opacity-60" /> {getDeliveryEstimate()}
-            </div>
-            
-            <div className="grid grid-cols-3 gap-2 mt-6 pt-6 border-t border-border">
-              <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Lock size={14} className="opacity-60 mb-1" /> Secure Checkout</div>
-              <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><Package size={14} className="opacity-60 mb-1" /> Packaging</div>
-              <div className="text-[10px] font-bold text-text-muted uppercase tracking-wider text-center flex flex-col gap-1 items-center"><RotateCcw size={14} className="opacity-60 mb-1" /> 7-Day Return</div>
-            </div>
-          </div>
+
         </div>
       </div>
 
