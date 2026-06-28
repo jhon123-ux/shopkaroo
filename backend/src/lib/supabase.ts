@@ -10,4 +10,10 @@ console.log('Service role key exists:', !!supabaseServiceKey)
 console.log('Service key starts with:', supabaseServiceKey.substring(0, 20))
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  }
+})
