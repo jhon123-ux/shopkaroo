@@ -486,15 +486,7 @@ export default function ProductDetailPage({ initialProduct, initialReviews, init
                 </div>
               )}
 
-              {/* Closing CTA */}
-              {product.closing_cta && (
-                <div className="bg-primary/5 border border-primary/20 rounded-[3px] px-6 py-4 flex items-center gap-4">
-                  <Sparkles size={18} className="text-primary flex-shrink-0" />
-                  <p className="text-primary font-bold font-body text-[14px] tracking-wide">
-                    {product.closing_cta}
-                  </p>
-                </div>
-              )}
+
 
             </div>
           )}

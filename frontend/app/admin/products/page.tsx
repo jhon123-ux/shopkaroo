@@ -38,7 +38,7 @@ export default function AdminProductsPage() {
     // Rich content
     opening_paragraph: '',
     features: '',  // newline-separated, converted to array on submit
-    seo_paragraph: '', closing_cta: '',
+    seo_paragraph: '',
     // Per-image alt texts (parallel to images[])
     image_alts: [] as string[]
   })
@@ -103,7 +103,7 @@ export default function AdminProductsPage() {
       sale_price: '', stock_qty: '10', weight_kg: '', dim_l: '', dim_w: '', dim_h: '',
       description: '', name_urdu: '', is_active: true, images: [],
       meta_title: '', meta_description: '',
-      opening_paragraph: '', features: '', seo_paragraph: '', closing_cta: '',
+      opening_paragraph: '', features: '', seo_paragraph: '',
       image_alts: []
     })
     setIsModalOpen(true)
@@ -122,7 +122,7 @@ export default function AdminProductsPage() {
       meta_title: product.meta_title || '', meta_description: product.meta_description || '',
       opening_paragraph: product.opening_paragraph || '',
       features: (product.features || []).join('\n'),
-      seo_paragraph: product.seo_paragraph || '', closing_cta: product.closing_cta || '',
+      seo_paragraph: product.seo_paragraph || '',
       image_alts: product.image_alts || []
     })
     setIsModalOpen(true)
@@ -230,7 +230,6 @@ export default function AdminProductsPage() {
       opening_paragraph: formData.opening_paragraph || null,
       features: featuresArray,
       seo_paragraph: formData.seo_paragraph || null,
-      closing_cta: formData.closing_cta || null,
       image_alts: formData.image_alts
     }
     try {
@@ -488,15 +487,6 @@ export default function AdminProductsPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="text-[10px] font-bold text-[#1C1410] uppercase tracking-[2px] block mb-3 opacity-40">Closing CTA Text</label>
-                  <input
-                    value={formData.closing_cta}
-                    onChange={e => setFormData({...formData, closing_cta: e.target.value})}
-                    placeholder="Order now and pay on delivery — no card, no compromise."
-                    className="w-full border border-[#D4CCC2] rounded-0 px-5 py-4 text-[13px] outline-none font-body focus:border-[#1C1410]"
-                  />
-                </div>
               </div>
               {/* ── SECTION 5: IMAGES ── */}
               <div className="col-span-2 py-8 bg-[#FAF7F4] p-8 -mx-1 border-t border-b border-[#E8E2D9]">
