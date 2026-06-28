@@ -137,9 +137,11 @@ export default function SubcategoryManagementPage() {
     const url = editingCat ? `/api/categories/${editingCat.id}` : '/api/categories'
 
     try {
+      const payload = { ...formData, image_url: formData.image_url || null }
+
       const res = method === 'PATCH'
-        ? await api.patch(url, formData)
-        : await api.post(url, formData)
+        ? await api.patch(url, payload)
+        : await api.post(url, payload)
       
       showToast(`Subcategory ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)

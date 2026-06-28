@@ -37,7 +37,7 @@ export const productSchema = z.object({
 export const categorySchema = z.object({
   name: z.string().min(2),
   slug: z.string().min(2),
-  image_url: z.string().url().optional().nullable(),
+  image_url: z.union([z.string().url(), z.literal('')]).optional().nullable(),
   description: z.string().optional(),
   parent_id: z.string().uuid().optional().nullable(),
   sort_order: z.number().int().optional(),
