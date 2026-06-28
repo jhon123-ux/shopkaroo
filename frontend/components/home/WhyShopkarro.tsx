@@ -10,7 +10,7 @@ export default function WhyShopkarro() {
     {
       icon: <Banknote size={28} className="text-primary" />,
       title: 'Cash on Delivery',
-      desc: 'No online payment required. Browse, order, and pay cash when your furniture arrives at your home.'
+      desc: "Pay cash at your door on most orders. Some items may require a small advance — we'll let you know before you order."
     },
     {
       icon: <BadgeCheck size={28} className="text-primary" />,
