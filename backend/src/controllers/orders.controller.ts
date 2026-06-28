@@ -14,10 +14,20 @@ const ADMIN_CC = 'shopkarro.ecom@gmail.com'
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
-    const { data, count, error } = await supabaseAdmin
+    const limit = parseInt(req.query.limit as string) || 20
+    const offset = parseInt(req.query.offset as string) || 0
+    const isAll = req.query.all === 'true'
+
+    let query = supabaseAdmin
       .from('orders')
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
+
+    if (!isAll) {
+      query = query.range(offset, offset + limit - 1)
+    }
+
+    const { data, count, error } = await query
     
     if (error) throw error
     return res.json({ data: data || [], count: count || 0 })

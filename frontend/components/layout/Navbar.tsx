@@ -28,10 +28,16 @@ export default function Navbar() {
 
     const fetchNavCategories = async () => {
       try {
+        const cached = sessionStorage.getItem('cached_categories_nested')
+        if (cached) {
+          setNavLinks([{ name: 'Home', slug: '', children: [] }, ...JSON.parse(cached)])
+          return
+        }
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories?nested=true`)
         const data = await res.json()
         if (data.data) {
           setNavLinks([{ name: 'Home', slug: '', children: [] }, ...data.data])
+          sessionStorage.setItem('cached_categories_nested', JSON.stringify(data.data))
         }
       } catch (err) {
         console.error('Navbar category fetch error:', err)

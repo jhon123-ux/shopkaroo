@@ -22,8 +22,8 @@ export default function AdminDashboardPage() {
         console.log('Syncing dashboard...')
 
         const [prodRes, orderRes, bannerRes, revRes] = await Promise.all([
-          api.get('/api/products?all=true'),
-          api.get('/api/orders?all=true'),
+          api.get('/api/products?all=true&limit=50'),
+          api.get('/api/orders?limit=50'),
           api.get('/api/banners?all=true'),
           api.get('/api/reviews/admin')
         ])

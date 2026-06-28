@@ -10,13 +10,20 @@ export default function Footer() {
   useEffect(() => {
     const fetchFooterCats = async () => {
       try {
+        const cached = sessionStorage.getItem('cached_categories')
+        if (cached) {
+          setCategories(JSON.parse(cached))
+          return
+        }
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`)
         const data = await res.json()
         if (data.data) {
-          setCategories(data.data.map((cat: any) => ({
+          const mapped = data.data.map((cat: any) => ({
             name: cat.name,
             slug: cat.slug
-          })))
+          }))
+          setCategories(mapped)
+          sessionStorage.setItem('cached_categories', JSON.stringify(mapped))
         }
       } catch (err) {
         console.error('Footer category fetch error:', err)

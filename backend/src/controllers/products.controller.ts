@@ -29,7 +29,20 @@ export const getProducts = async (req: Request, res: Response) => {
       isAdmin = false
     }
 
-    let query = supabase.from('products').select('*', { count: 'exact' })
+    const limit = parseInt(req.query.limit as string) || 12
+    const offset = parseInt(req.query.offset as string) || 0
+    const isAll = req.query.all === 'true'
+
+    let query
+    if (isAll) {
+      query = supabase.from('products').select('*', { count: 'exact' })
+    } else {
+      query = supabase.from('products').select(
+        'id, name, slug, price_pkr, images, is_active, sale_price, category, material, stock_qty, created_at',
+        { count: 'exact' }
+      )
+    }
+
     if (!isAdmin) {
       query = query.eq('is_active', true)
     }
@@ -68,9 +81,16 @@ export const getProducts = async (req: Request, res: Response) => {
     }
 
     query = query.order('created_at', { ascending: false })
+
+    if (!isAll || req.query.limit) {
+      query = query.range(offset, offset + limit - 1)
+    }
+
     const { data, count, error } = await query
     
     if (error) throw error
+
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
     res.json({ data: data || [], count: count || 0 })
   } catch (error: any) {
     res.status(500).json({ error: error.message })

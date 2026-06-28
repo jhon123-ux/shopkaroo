@@ -98,6 +98,7 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
 
   // Fetch Data
   const isFirstRender = useRef(true)
+  const debounceRef = useRef<any>(null)
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -134,7 +135,15 @@ function CategoryContent({ initialCategoryData, initialProducts, initialTotalCou
         updateURL()
       }
     }
-    fetchProducts()
+
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      fetchProducts()
+    }, 300)
+
+    return () => {
+      clearTimeout(debounceRef.current)
+    }
   }, [categorySlug, sort, currentPage, minPrice, maxPrice, selectedMaterials, selectedCities, updateURL])
 
   // Handlers
