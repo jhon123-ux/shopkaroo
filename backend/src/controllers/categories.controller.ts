@@ -125,10 +125,15 @@ export const deleteCategory = async (req: Request, res: Response) => {
     
     if (error) throw error
 
-    // 4. Send success response immediately
+    // 4. Validate that rows were actually deleted before sending success
+    if (!deletedRows || deletedRows.length === 0) {
+      return res.status(404).json({ error: 'Category not found or already deleted' })
+    }
+
+    // 5. Send success response only after validation
     res.json({ message: 'Category expunged from registry.' })
 
-    // 5. Trigger revalidation after (fire and forget, wrapped in try/catch)
+    // 6. Trigger revalidation after (fire and forget, wrapped in try/catch)
     try {
       if (deletedRows && deletedRows.length > 0) {
         const deletedCat = deletedRows[0]
