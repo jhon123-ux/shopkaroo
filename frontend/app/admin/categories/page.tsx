@@ -38,6 +38,11 @@ export default function AdminCategoriesPage() {
   const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 
+  const clearCategoryCache = () => {
+    sessionStorage.removeItem('cached_categories_nested')
+    sessionStorage.removeItem('cached_categories')
+  }
+
   const fetchCategories = async () => {
     setLoading(true)
     try {
@@ -137,6 +142,7 @@ export default function AdminCategoriesPage() {
 
       showToast(`Category ${editingCat ? 'updated' : 'created'} successfully`)
       setShowModal(false)
+      clearCategoryCache()
       fetchCategories()
     } catch (err: any) {
       console.error('Save Category Error:', err)
@@ -149,6 +155,7 @@ export default function AdminCategoriesPage() {
     try {
       await api.delete(`/api/categories/${id}`)
       showToast('Category expunged')
+      clearCategoryCache()
       fetchCategories()
     } catch (err: any) {
       const errorMsg = err.response?.data?.error || 'Deletion failed'
@@ -159,6 +166,7 @@ export default function AdminCategoriesPage() {
   const handleToggle = async (id: string) => {
     try {
       await api.patch(`/api/categories/${id}/toggle`)
+      clearCategoryCache()
       fetchCategories()
     } catch (err) {
       showToast('Toggle failed', 'error')
@@ -195,7 +203,7 @@ export default function AdminCategoriesPage() {
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="bg-[#783A3A] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#5B2C2C] transition-all shadow-sm active:scale-95"
+          className="bg-[#783A3A] text-white px-6 py-3 rounded-[3px] text-[11px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-[#5B2C2C] transition-all shadow-sm active:sca[...]
         >
           <Plus size={14} strokeWidth={2.5} />
           Add Category
@@ -355,7 +363,7 @@ export default function AdminCategoriesPage() {
                     </button>
                   </div>
                 ) : (
-                  <label className={`cursor-pointer border-2 border-dashed border-[#D4CCC2] rounded-0 h-48 flex flex-col items-center justify-center hover:border-[#783A3A] transition group relative ${isUploading ? 'opacity-50' : ''}`}>
+                  <label className={`cursor-pointer border-2 border-dashed border-[#D4CCC2] rounded-0 h-48 flex flex-col items-center justify-center hover:border-[#783A3A] transition group relati[...]
                     <Upload size={32} className="text-[#6B6058] opacity-20 group-hover:opacity-40 transition-opacity mb-4" />
                     <span className="text-[11px] font-bold uppercase tracking-widest text-text">
                       {isUploading ? 'Synchronizing Asset...' : 'Upload Visual Exhibit'}
