@@ -93,6 +93,11 @@ export default function Navbar() {
     }, 300)
   }
 
+  const clearCategoryCache = () => {
+    sessionStorage.removeItem('cached_categories_nested')
+    sessionStorage.removeItem('cached_categories')
+  }
+
   const totalItems = useCartStore(state => state.getTotalItems())
 
   return (
@@ -127,7 +132,7 @@ export default function Navbar() {
                 Categories <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-200" />
               </button>
               
-              <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] translate-y-2 group-hover:translate-y-0">
+              <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100] translate-y-2 group-hover:translate[...]
                 <div className="w-[480px] bg-bg-white border border-border rounded-[4px] shadow-2xl overflow-hidden p-6 grid grid-cols-2 gap-8">
                   {navLinks.filter(link => link.name !== 'Home').map((link: any) => (
                     <div key={link.id || link.name} className="flex flex-col gap-3">
@@ -182,7 +187,7 @@ export default function Navbar() {
             {/* Auth section */}
             {!user ? (
               <div className="hidden md:flex items-center gap-3">
-                <Link href="/login" className="text-[13px] font-semibold font-body text-primary border-[1.5px] border-primary px-[18px] py-[7px] rounded-[3px] hover:bg-primary-tint transition-colors">
+                <Link href="/login" className="text-[13px] font-semibold font-body text-primary border-[1.5px] border-primary px-[18px] py-[7px] rounded-[3px] hover:bg-primary-tint transition-col[...]
                   Sign In
                 </Link>
                 <Link href="/signup" className="bg-primary text-white px-[18px] py-[7px] rounded-[3px] text-[13px] font-semibold font-body hover:bg-primary-dark transition-all">
@@ -220,7 +225,7 @@ export default function Navbar() {
                     </div>
                     <div className="border-t border-border pt-1 pb-1">
                       <button 
-                        onClick={() => { signOut(); setDropdownOpen(false); }}
+                        onClick={() => { signOut(); setDropdownOpen(false); clearCategoryCache(); }}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50  transition-colors"
                       >
                         <LogOut size={16} /> Sign Out
@@ -310,14 +315,14 @@ export default function Navbar() {
                     <Link 
                       href="/login" 
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full h-12 flex items-center justify-center border-[1.5px] border-primary text-primary text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-primary-tint transition-colors"
+                      className="w-full h-12 flex items-center justify-center border-[1.5px] border-primary text-primary text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-pri[...]
                     >
                       Sign In
                     </Link>
                     <Link 
                       href="/signup" 
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="w-full h-12 flex items-center justify-center bg-primary text-white text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-primary-dark transition-all"
+                      className="w-full h-12 flex items-center justify-center bg-primary text-white text-[13px] font-bold uppercase tracking-widest rounded-[3px] hover:bg-primary-dark transition-[...]
                     >
                       Create Account
                     </Link>
@@ -341,7 +346,7 @@ export default function Navbar() {
                     <User size={18} className="text-text-muted" /> My Profile
                   </Link>
                   <button 
-                    onClick={() => { signOut(); setIsMobileMenuOpen(false); }}
+                    onClick={() => { signOut(); setIsMobileMenuOpen(false); clearCategoryCache(); }}
                     className="flex items-center gap-4 py-4 text-red-600 font-bold text-[14px] uppercase tracking-widest mt-2"
                   >
                     <LogOut size={18} /> Sign Out Protocol
