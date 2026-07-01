@@ -35,9 +35,9 @@ export const getProducts = async (req: Request, res: Response) => {
 
     let query
     if (isAll) {
-      query = supabase.from('products').select('*', { count: 'exact' })
+      query = supabaseAdmin.from('products').select('*', { count: 'exact' })
     } else {
-      query = supabase.from('products').select(
+      query = supabaseAdmin.from('products').select(
         'id, name, slug, price_pkr, images, is_active, sale_price, category, material, stock_qty, created_at',
         { count: 'exact' }
       )
@@ -140,6 +140,11 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabaseAdmin.from('products').update(req.body).eq('id', req.params.id).select().single()
     if (error) throw error
+    
+    if (!data) {
+      return res.status(400).json({ error: 'Update failed — no rows affected' })
+    }
+    
     res.json({ data })
   } catch (error: any) {
     res.status(500).json({ error: error.message })
